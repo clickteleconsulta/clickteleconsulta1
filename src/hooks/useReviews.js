@@ -2,6 +2,11 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 
+// HOTFIX-04: Unified to use 'avaliacoes' table consistently across the entire app.
+// Previously this hook used 'reviews' while all page-level code used 'avaliacoes'.
+// The canonical table is 'avaliacoes'.
+const REVIEWS_TABLE = 'avaliacoes';
+
 export const useReviews = () => {
   const { user } = useAuth();
   const [reviews, setReviews] = useState([]);
@@ -13,7 +18,7 @@ export const useReviews = () => {
     setLoading(true);
     setError(null);
     try {
-      let query = supabase.from('reviews').select(`
+      let query = supabase.from(REVIEWS_TABLE).select(`
         *,
         agendamentos ( id, appointment_date, appointment_time ),
         review_disputes ( id, reason, status )
@@ -59,7 +64,7 @@ export const useReviews = () => {
 
       // 2. Insert Review
       const { data, error: insertError } = await supabase
-        .from('reviews')
+        .from(REVIEWS_TABLE)
         .insert({
           appointment_id: appointmentId,
           patient_id: user.id,
@@ -82,7 +87,7 @@ export const useReviews = () => {
   const updateReview = async (reviewId, rating, comment) => {
     try {
       const { data, error: updateError } = await supabase
-        .from('reviews')
+        .from(REVIEWS_TABLE)
         .update({ rating, comment, updated_at: new Date().toISOString() })
         .eq('id', reviewId)
         .eq('patient_id', user.id)
@@ -114,7 +119,7 @@ export const useReviews = () => {
 
       // Update review status
       const { error: updateError } = await supabase
-        .from('reviews')
+        .from(REVIEWS_TABLE)
         .update({ status: 'disputed', updated_at: new Date().toISOString() })
         .eq('id', reviewId)
         .eq('doctor_user_id', user.id);

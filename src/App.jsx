@@ -51,24 +51,15 @@ import AdminReviewsPage from '@/pages/admin/AdminReviewsPage';
 // Memed Integration
 import MemedPrescriptionPage from '@/integrations/memed/MemedPrescriptionPage';
 
+// New Sprint Pages (21/03)
+import DoctorSchedulePage from '@/pages/doctor/DoctorSchedulePage';
+import ConsultaEncerradaPage from '@/pages/ConsultaEncerradaPage';
+
 // Components
 import AiChatWidget from '@/components/AiChatWidget';
 import GuestAppointmentPage from '@/pages/GuestAppointmentPage';
 import Preloader from '@/components/Preloader';
-
-// Páginas adicionais (P2 — rotas criadas em 2026-03-19)
-import StorePage from '@/pages/StorePage';
-import PaymentPage from '@/pages/PaymentPage';
-import CheckoutRedirect from '@/pages/CheckoutRedirect';
-import SuccessPage from '@/pages/SuccessPage';
-import AdminCleanupPage from '@/pages/AdminCleanupPage';
-import AdminSetupPage from '@/pages/AdminSetupPage';
-import HandleApplicationPage from '@/pages/HandleApplicationPage';
-import DoctorInterestPage from '@/pages/DoctorInterestPage';
-import DoctorDashboardPage from '@/pages/DoctorDashboardPage';
-import DoctorGoogleCalendarPage from '@/pages/DoctorGoogleCalendarPage';
-import DoctorSignUpPage from '@/pages/DoctorSignUpPage';
-import DoctorProfilePage from '@/pages/DoctorProfilePage';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Public Layout Component
 const AppLayout = () => {
@@ -88,20 +79,21 @@ const AuthRedirect = ({ role }) => {
   const { session, profile, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  if (loading || (session && !profile)) {
     return (
       <div className="w-full h-[60vh] flex flex-col items-center justify-center bg-background gap-4">
         <Loader2 className="w-12 h-12 text-primary animate-spin" />
-        <p className="text-muted-foreground text-sm animate-pulse">Carregando...</p>
+        <p className="text-muted-foreground text-sm animate-pulse">
+           {session && !profile ? 'Finalizando configuração da conta...' : 'Carregando...'}
+        </p>
       </div>
     );
   }
 
-  if (session) {
-    // Usa profile do contexto, ou fallback direto dos metadados do token
-    const userRole = profile?.role ?? session.user?.user_metadata?.role ?? 'paciente';
-    if (userRole === 'admin') return <Navigate to="/admin/dashboard/agendamentos" replace />;
-    const from = location.state?.from?.pathname || (userRole === 'medico' ? '/medico/dashboard' : '/paciente/dashboard');
+  if (session && profile) {
+    if (profile.role === 'admin') return <Navigate to="/admin/dashboard/agendamentos" replace />;
+    
+    const from = location.state?.from?.pathname || (profile.role === 'medico' ? '/medico/dashboard' : '/paciente/dashboard');
     return <Navigate to={from} replace />;
   }
   
@@ -134,15 +126,13 @@ function App() {
       <TooltipProvider>
         <Preloader />
         
+        <ErrorBoundary>
         <Routes>
           {/* Dashboard Route Aliases */}
           <Route path="/area-medico/avaliacoes" element={<Navigate to="/medico/dashboard/avaliacoes" replace />} />
           <Route path="/area-paciente/avaliacoes" element={<Navigate to="/paciente/dashboard/avaliacoes" replace />} />
           <Route path="/doctor/reviews" element={<Navigate to="/medico/dashboard/avaliacoes" replace />} />
           <Route path="/patient/reviews" element={<Navigate to="/paciente/dashboard/avaliacoes" replace />} />
-
-          {/* Auth Routes fora do DoctorRouteGuard */}
-          <Route path="/acesso-medico" element={<AuthRedirect role="medico" />} />
 
           {/* 1. Doctor Dashboard Routes */}
           {/* All dashboard routes including procedimentos are properly nested inside DoctorArea */}
@@ -189,10 +179,23 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* Rota JaaS — videochamada inline (8x8.vc) */}
+          {/* Consulta Routes */}
           <Route path="/consulta/:appointmentId" element={
             <ProtectedRoute allowedRoles={['medico', 'paciente']}>
               <VideoCallPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/consulta/:id/encerrada" element={
+            <ProtectedRoute allowedRoles={['medico', 'paciente']}>
+              <ConsultaEncerradaPage />
+            </ProtectedRoute>
+          } />
+
+          {/* Doctor Schedule */}
+          <Route path="/medico/agenda" element={
+            <ProtectedRoute allowedRoles={['medico']}>
+              <DoctorSchedulePage />
             </ProtectedRoute>
           } />
 
@@ -224,10 +227,11 @@ function App() {
             </ProtectedRoute>
           } />
           
+          {/* HOTFIX-06: Protected with ProtectedRoute instead of DoctorRouteGuard (which only redirects, doesn't block) */}
           <Route path="/prescricao/memed" element={
-            <DoctorRouteGuard>
+            <ProtectedRoute allowedRoles={['medico']}>
                <MemedPrescricaoPage />
-            </DoctorRouteGuard>
+            </ProtectedRoute>
           } />
 
           {/* 4. Public & Patient Routes */}
@@ -243,6 +247,7 @@ function App() {
             
             {/* Auth Routes */}
             <Route path="/acesso-paciente" element={<AuthRedirect role="paciente" />} />
+            <Route path="/acesso-medico" element={<AuthRedirect role="medico" />} />
             
             <Route path="/recuperar-senha" element={<PasswordRecoveryPage />} />
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
@@ -300,63 +305,11 @@ function App() {
 
             {/* Dynamic Routes */}
             <Route path="/medico/:id" element={<DoctorPublicProfilePage />} />
-
-            {/* Rotas adicionais — P2 (2026-03-19) */}
-            {/* Loja */}
-            <Route path="/loja" element={<StorePage />} />
-
-            {/* Pagamento */}
-            <Route path="/pagamento" element={
-              <ProtectedRoute allowedRoles={['paciente']}>
-                <PaymentPage />
-              </ProtectedRoute>
-            } />
-
-            {/* Redirects legados */}
-            <Route path="/checkout-redirect" element={<CheckoutRedirect />} />
-            <Route path="/sucesso" element={<SuccessPage />} />
-
-            {/* Cadastro e perfil de médico (público) */}
-            <Route path="/seja-medico" element={<DoctorInterestPage />} />
-            <Route path="/cadastro-medico" element={<DoctorSignUpPage />} />
-            <Route path="/perfil-medico/:id" element={<DoctorProfilePage />} />
-
-            {/* Dashboard alternativo de médico (protegido) */}
-            <Route path="/medico/painel" element={
-              <ProtectedRoute allowedRoles={['medico']}>
-                <DoctorDashboardPage />
-              </ProtectedRoute>
-            } />
-
-            {/* Google Calendar do médico (protegido) */}
-            <Route path="/medico/google-calendar" element={
-              <ProtectedRoute allowedRoles={['medico']}>
-                <DoctorGoogleCalendarPage />
-              </ProtectedRoute>
-            } />
-
-            {/* Processamento de candidatura de médico */}
-            <Route path="/admin/candidatura" element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <HandleApplicationPage />
-              </ProtectedRoute>
-            } />
-
-            {/* Setup e cleanup admin (protegidos) */}
-            <Route path="/admin/setup" element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminSetupPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/cleanup" element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminCleanupPage />
-              </ProtectedRoute>
-            } />
             
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </Routes>
+        </ErrorBoundary>
       </TooltipProvider>
     </>
   );

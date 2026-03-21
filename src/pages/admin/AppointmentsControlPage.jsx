@@ -40,6 +40,7 @@ const AppointmentsControlPage = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isWipeOpen, setIsWipeOpen] = useState(false);
+  const [wipeConfirmText, setWipeConfirmText] = useState('');
   const [processing, setProcessing] = useState(false);
 
   // Edit Form State
@@ -262,9 +263,10 @@ const AppointmentsControlPage = () => {
   };
 
   const handleWipeAllData = async () => {
+    if (wipeConfirmText !== 'DELETAR TUDO') return;
     setProcessing(true);
     try {
-        console.log("Starting System Wipe via RPC...");
+        console.warn('wipe_system_data triggered by admin at', new Date().toISOString());
         
         // Use the server-side RPC function for atomic and complete deletion
         const { error } = await supabase.rpc('wipe_system_data');
@@ -279,6 +281,7 @@ const AppointmentsControlPage = () => {
         });
         
         setIsWipeOpen(false);
+        setWipeConfirmText('');
 
         // Force reload to clear all caches in Admin, Patient and Doctor panels
         setTimeout(() => {
@@ -828,15 +831,15 @@ const AppointmentsControlPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* FULL WIPE / RESET SYSTEM Dialog */}
-      <Dialog open={isWipeOpen} onOpenChange={setIsWipeOpen}>
+      {/* FULL WIPE / RESET SYSTEM Dialog — Double Confirmation */}
+      <Dialog open={isWipeOpen} onOpenChange={(open) => { setIsWipeOpen(open); if (!open) setWipeConfirmText(''); }}>
         <DialogContent className="border-red-200">
           <DialogHeader>
              <DialogTitle className="text-red-600 flex items-center gap-2">
-               <AlertTriangle className="w-6 h-6 text-red-600"/> Resetar Todo o Sistema
+               <AlertTriangle className="w-6 h-6 text-red-600"/> ATENÇÃO: Esta ação é IRREVERSÍVEL
              </DialogTitle>
              <DialogDescription className="text-gray-700 pt-2">
-               ATENÇÃO: Você está prestes a apagar <strong>TODOS OS AGENDAMENTOS</strong> do sistema.
+               Você está prestes a apagar <strong>TODOS OS DADOS</strong> do sistema.
                <br/><br/>
                Esta ação irá excluir permanentemente:
                <ul className="list-disc pl-5 my-2 space-y-1 text-red-700 font-medium text-xs">
@@ -845,12 +848,25 @@ const AppointmentsControlPage = () => {
                    <li>Registros financeiros e de pagamentos</li>
                    <li>Logs de auditoria e notificações</li>
                </ul>
-               <span className="font-bold">Esta ação é irreversível e deve ser usada apenas para reiniciar os testes ou limpar o banco de dados.</span>
+               <span className="font-bold">Para confirmar, digite exatamente: DELETAR TUDO</span>
              </DialogDescription>
           </DialogHeader>
+          <div className="py-2">
+            <Input
+              placeholder="Digite DELETAR TUDO para confirmar"
+              value={wipeConfirmText}
+              onChange={(e) => setWipeConfirmText(e.target.value)}
+              className="border-red-300 focus:border-red-500 focus:ring-red-200"
+            />
+          </div>
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setIsWipeOpen(false)}>Cancelar, manter dados</Button>
-            <Button variant="destructive" onClick={handleWipeAllData} disabled={processing} className="bg-red-600 hover:bg-red-700">
+            <Button variant="outline" onClick={() => { setIsWipeOpen(false); setWipeConfirmText(''); }}>Cancelar, manter dados</Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleWipeAllData} 
+              disabled={processing || wipeConfirmText !== 'DELETAR TUDO'} 
+              className="bg-red-600 hover:bg-red-700"
+            >
                {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                Sim, Apagar Tudo
             </Button>

@@ -9,6 +9,8 @@ import { Helmet } from 'react-helmet';
 import { cn } from "@/lib/utils";
 import { IMaskInput } from 'react-imask';
 import { useLoader } from '@/contexts/LoaderContext';
+import { Checkbox } from '@/components/ui/checkbox';
+import TermsModal from '@/components/TermsModal';
 
 // Masked Input Component for CPF and Phone
 const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) => (
@@ -55,6 +57,11 @@ const AuthPage = ({
   const [whatsapp, setWhatsapp] = useState('');
   const [birthDate, setBirthDate] = useState('');
 
+  // LGPD consent (HOTFIX-05)
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+
   useEffect(() => {
     if (isDoctor) {
       setIsLogin(true);
@@ -68,16 +75,30 @@ const AuthPage = ({
     
     if (pendingTCLE) {
       navigate('/patient/consultations');
-    } else if (targetRole === 'medico') {
-      navigate('/medico/dashboard');
     } else {
-      navigate('/paciente/dashboard');
+      navigate('/');
     }
     
     // Hide loader after navigation starts to ensure smooth transition
     setTimeout(() => {
       hideLoader();
     }, 1000);
+  };
+
+  // BONUS-01: CPF validation with check digits
+  const isValidCPF = (cpfValue) => {
+    const cleaned = cpfValue.replace(/\D/g, '');
+    if (cleaned.length !== 11 || /^(\d)\1+$/.test(cleaned)) return false;
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += parseInt(cleaned[i]) * (10 - i);
+    let rest = (sum * 10) % 11;
+    if (rest === 10) rest = 0;
+    if (rest !== parseInt(cleaned[9])) return false;
+    sum = 0;
+    for (let i = 0; i < 10; i++) sum += parseInt(cleaned[i]) * (11 - i);
+    rest = (sum * 10) % 11;
+    if (rest === 10) rest = 0;
+    return rest === parseInt(cleaned[10]);
   };
 
   const handleAuth = async e => {
@@ -97,6 +118,24 @@ const AuthPage = ({
         if (!isDoctor) {
              if (!fullName?.trim() || !cpf || !whatsapp || !birthDate || !email?.trim() || !password) {
                 throw new Error("Preencha todos os campos obrigatórios.");
+             }
+
+             // BONUS-01: CPF digit validation
+             if (!isValidCPF(cpf)) {
+               throw new Error("CPF inválido. Verifique os dígitos e tente novamente.");
+             }
+
+             // BONUS-02: Minimum password length
+             if (password.length < 8) {
+               toast({ variant: 'destructive', title: 'Senha muito curta', description: 'A senha deve ter no mínimo 8 caracteres.' });
+               setIsLoading(false);
+               hideLoader();
+               return;
+             }
+
+             // HOTFIX-05: LGPD consent check
+             if (!acceptedTerms) {
+               throw new Error("Você precisa aceitar os Termos de Serviço e a Política de Privacidade para se cadastrar.");
              }
         }
 
@@ -255,10 +294,33 @@ const AuthPage = ({
                         </div>
                     </div>
 
+                    {/* HOTFIX-05: LGPD consent checkbox — only on signup */}
+                    {!isLogin && !isDoctor && (
+                      <div className="flex items-start gap-2 mt-3 animate-in fade-in duration-200">
+                        <Checkbox
+                          id="lgpd-consent"
+                          checked={acceptedTerms}
+                          onCheckedChange={setAcceptedTerms}
+                          className="mt-0.5"
+                        />
+                        <label htmlFor="lgpd-consent" className="text-xs text-gray-600 leading-tight">
+                          Li e aceito os{' '}
+                          <button type="button" onClick={() => setShowTerms(true)} className="text-blue-600 underline hover:text-blue-800">
+                            Termos de Serviço
+                          </button>{' '}
+                          e a{' '}
+                          <button type="button" onClick={() => setShowPrivacy(true)} className="text-blue-600 underline hover:text-blue-800">
+                            Política de Privacidade
+                          </button>{' '}
+                          conforme a LGPD (Lei 13.709/2018).
+                        </label>
+                      </div>
+                    )}
+
                     <Button 
                         type="submit" 
                         className="w-full h-11 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
-                        disabled={isLoading}
+                        disabled={isLoading || (!isLogin && !isDoctor && !acceptedTerms)}
                     >
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : (isLogin ? 'Entrar' : 'Cadastrar')} 
                     </Button>
@@ -291,6 +353,20 @@ const AuthPage = ({
             </div>
         </div>
       </div>
+
+      {/* HOTFIX-05: Terms and Privacy modals */}
+      <TermsModal
+        isOpen={showTerms}
+        onClose={() => setShowTerms(false)}
+        title="Termos de Serviço"
+        content="Consulte os Termos de Serviço completos em /legal?doc=terms_of_service"
+      />
+      <TermsModal
+        isOpen={showPrivacy}
+        onClose={() => setShowPrivacy(false)}
+        title="Política de Privacidade (LGPD)"
+        content="Consulte a Política de Privacidade completa em /legal?doc=privacy_policy"
+      />
     </>
   );
 };

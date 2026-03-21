@@ -263,7 +263,7 @@ const PatientRecordPage = () => {
         }
     };
 
-    const handleUpdateEpisode = async (episodeId, data) => {
+    const handleUpdateEpisode = async (episodeId, data, silent = false) => {
         try {
             const { error } = await supabase.from('clinical_episodes').update(data).eq('id', episodeId);
             if (error) throw error;
@@ -271,9 +271,23 @@ const PatientRecordPage = () => {
             // Update local state
             setActiveEpisode(prev => ({ ...prev, ...data }));
             
-            // Per requirement: Switch to Consultas tab after saving
-            setActiveEpisode(null);
-            // Also update the appointments list with the new data
+            if (!silent) {
+                // Per requirement: Switch to Consultas tab after saving
+                setActiveEpisode(null);
+                // Also update the appointments list with the new data
+                setAppointments(prev => prev.map(appt => {
+                    if (appt.clinical_episodes?.some(ep => ep.id === episodeId)) {
+                        return {
+                            ...appt,
+                            clinical_episodes: appt.clinical_episodes.map(ep => ep.id === episodeId ? { ...ep, ...data } : ep)
+                        };
+                    }
+                    return appt;
+                }));
+                setActiveTab('consultas');
+                toast({ title: "Prontuário salvo com sucesso" });
+            }
+            // Also update the appointments list with the new data (always)
             setAppointments(prev => prev.map(appt => {
                 if (appt.clinical_episodes?.some(ep => ep.id === episodeId)) {
                     return {
@@ -284,11 +298,9 @@ const PatientRecordPage = () => {
                 return appt;
             }));
 
-            setActiveTab('consultas');
-            toast({ title: "Prontuário salvo com sucesso" });
-
         } catch (error) {
-            toast({ variant: "destructive", title: "Erro ao salvar", description: error.message });
+            if (!silent) toast({ variant: "destructive", title: "Erro ao salvar", description: error.message });
+            throw error;
         }
     };
 

@@ -2,12 +2,115 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle, ArrowRight, Loader2, User, Calendar, FileText, Download } from 'lucide-react';
+import {
+  CheckCircle,
+  ArrowRight,
+  Loader2,
+  User,
+  Calendar,
+  FileText,
+  Download,
+  ExternalLink,
+  Bell,
+  Video,
+  Mail,
+  Clock,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 
+// ─── Google Calendar Link ─────────────────────────────────────────────────────
+const buildGoogleCalendarLink = (appointment) => {
+  if (!appointment) return null;
+
+  const startDate = new Date(appointment.horario_inicio);
+  const endDate = appointment.horario_fim
+    ? new Date(appointment.horario_fim)
+    : new Date(startDate.getTime() + 30 * 60 * 1000);
+
+  const formatGCal = (d) =>
+    d
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\.\d{3}/, '');
+
+  const title = encodeURIComponent(
+    `Teleconsulta — ${appointment.medico?.public_name || 'Click Teleconsulta'}`
+  );
+  const dates = `${formatGCal(startDate)}/${formatGCal(endDate)}`;
+  const details = encodeURIComponent(
+    `Sua teleconsulta com ${appointment.medico?.public_name || 'o médico'} (${appointment.medico?.specialty || ''}) está confirmada.\n\nAcesse a plataforma 15 minutos antes do horário: https://clickteleconsulta.online/paciente/dashboard/consultas`
+  );
+  const location = encodeURIComponent('Teleconsulta Online — Click Teleconsulta');
+
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+};
+
+// ─── Próximos passos ──────────────────────────────────────────────────────────
+const NextSteps = ({ appointment }) => {
+  const gcalLink = buildGoogleCalendarLink(appointment);
+
+  return (
+    <div className="space-y-3">
+      <h3 className="font-bold text-slate-900 text-base">Próximos Passos</h3>
+      <div className="space-y-2.5">
+        {[
+          {
+            icon: <Mail className="w-4 h-4 text-blue-500" />,
+            text: 'Verifique seu email — um email de confirmação foi enviado com todos os detalhes.',
+            color: 'bg-blue-50 border-blue-100',
+          },
+          {
+            icon: <Calendar className="w-4 h-4 text-green-500" />,
+            text: 'Adicione ao seu calendário para não esquecer.',
+            color: 'bg-green-50 border-green-100',
+            action: gcalLink && (
+              <a
+                href={gcalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-green-700 hover:underline flex items-center gap-1 mt-1"
+              >
+                Google Calendar <ExternalLink className="w-3 h-3" />
+              </a>
+            ),
+          },
+          {
+            icon: <Clock className="w-4 h-4 text-amber-500" />,
+            text: 'Conecte-se 15 minutos antes. Certifique-se de estar em local silencioso e com boa conexão.',
+            color: 'bg-amber-50 border-amber-100',
+          },
+          {
+            icon: <Video className="w-4 h-4 text-primary" />,
+            text: 'Na hora da consulta, acesse "Minhas Consultas" e clique em "Entrar na Consulta".',
+            color: 'bg-primary/5 border-primary/10',
+          },
+        ].map((step, i) => (
+          <div
+            key={i}
+            className={`flex gap-3 p-3 rounded-xl border text-sm ${step.color}`}
+          >
+            <div className="flex-shrink-0 mt-0.5">{step.icon}</div>
+            <div>
+              <p className="text-slate-700">{step.text}</p>
+              {step.action}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ─── AppointmentSuccessPage ────────────────────────────────────────────────────
 const AppointmentSuccessPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,20 +131,22 @@ const AppointmentSuccessPage = () => {
       return;
     }
 
-    const fetchAppointmentAndGuide = async () => {
+    const fetchAppointment = async () => {
       setLoading(true);
-      const { data: appointmentData, error: appointmentError } = await supabase
+      const { data, error } = await supabase
         .from('agendamentos')
-        .select(`
+        .select(
+          `
           *, 
           medico:medicos(public_name, specialty), 
           guia:guias!agendamentos_guia_id_fkey(protocolo, pdf_url),
-          patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name)
-        `)
+          patient:perfis_usuarios!agendamentos_patient_id_fkey(full_name)
+        `
+        )
         .eq('id', appointmentId)
         .single();
 
-      if (appointmentError || !appointmentData) {
+      if (error || !data) {
         toast({
           variant: 'destructive',
           title: 'Erro ao Buscar Agendamento',
@@ -50,27 +155,33 @@ const AppointmentSuccessPage = () => {
         navigate('/paciente/dashboard/consultas');
         return;
       }
-      
-      setAppointment(appointmentData);
+
+      setAppointment(data);
       setLoading(false);
     };
 
-    fetchAppointmentAndGuide();
-
+    fetchAppointment();
   }, [appointmentId, navigate, toast]);
 
   const handleDownloadGuide = () => {
-    toast({
-      title: "🚧 Em Breve!",
-      description: "A geração do PDF da guia está sendo finalizada. Você poderá baixá-la em breve no seu painel!",
-    });
+    if (appointment?.guia?.pdf_url) {
+      window.open(appointment.guia.pdf_url, '_blank');
+    } else {
+      toast({
+        title: '🚧 Em Breve!',
+        description:
+          'A geração do PDF da guia está sendo finalizada. Você poderá baixá-la em breve no seu painel!',
+      });
+    }
   };
+
+  const gcalLink = buildGoogleCalendarLink(appointment);
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-20 gap-4">
         <Loader2 className="w-12 h-12 text-primary animate-spin" />
-        <h1 className="text-2xl font-semibold">Finalizando seu agendamento...</h1>
+        <h1 className="text-xl font-semibold">Finalizando seu agendamento...</h1>
       </div>
     );
   }
@@ -78,73 +189,142 @@ const AppointmentSuccessPage = () => {
   return (
     <>
       <Helmet>
-        <title>Agendamento Concluído! - Click Teleconsulta</title>
+        <title>Agendamento Concluído! — Click Teleconsulta</title>
       </Helmet>
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="container mx-auto px-4 py-12"
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="container mx-auto px-4 py-10 max-w-3xl"
       >
-        <Card className="w-full max-w-2xl mx-auto overflow-hidden shadow-2xl shadow-primary/10">
-          <CardHeader className="items-center bg-gradient-to-br from-green-50 to-emerald-50 p-8">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1, rotate: 360 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.2 }}
-            >
-              <CheckCircle className="h-24 w-24 text-green-500" />
-            </motion.div>
-            <CardTitle className="text-4xl font-bold text-gray-800 pt-4">
-              Agendamento Concluído!
-            </CardTitle>
-            <CardDescription className="pt-2 max-w-md text-center text-lg">
-              Sua consulta foi confirmada com sucesso. A guia já foi enviada ao médico.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-8 space-y-6">
-            <div className="border rounded-lg">
-              <div className="flex items-center gap-4 p-4 border-b">
-                <FileText className="w-6 h-6 text-primary flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Protocolo da Guia</p>
-                  <p className="font-bold text-xl tracking-wider">{appointment?.guia?.protocolo || 'Gerando...'}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 p-4 border-b">
-                <User className="w-6 h-6 text-primary flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Médico(a)</p>
-                  <p className="font-semibold text-lg">{appointment?.medico?.public_name} ({appointment?.medico?.specialty})</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 p-4">
-                <Calendar className="w-6 h-6 text-primary flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Data e Hora (Horário de Brasília)</p>
-                  <p className="font-semibold text-lg">{new Date(appointment?.horario_inicio).toLocaleString('pt-BR', { dateStyle: 'full', timeStyle: 'short' })}</p>
-                </div>
-              </div>
+        {/* Header de sucesso */}
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, rotate: 360 }}
+            transition={{
+              type: 'spring',
+              stiffness: 260,
+              damping: 20,
+              delay: 0.2,
+            }}
+            className="inline-flex"
+          >
+            <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+              <CheckCircle className="w-12 h-12 text-green-500" />
             </div>
-            
-            <div className="text-center text-muted-foreground text-sm pt-4">
-                <p>O médico responsável entrará em contato para realizar o atendimento e enviar o link da consulta.</p>
-            </div>
+          </motion.div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" variant="outline" onClick={handleDownloadGuide}>
-                <Download className="mr-2 h-4 w-4" />
-                Baixar Guia
-              </Button>
-              <Button size="lg" asChild>
-                <Link to="/paciente/dashboard/consultas">
-                  Ir para Minhas Consultas
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h1 className="text-3xl font-extrabold text-slate-900 mt-4">
+              Agendamento Concluído!
+            </h1>
+            <p className="text-muted-foreground mt-2 max-w-md mx-auto">
+              Sua consulta foi confirmada com sucesso. A guia foi enviada ao
+              médico e você receberá um email de confirmação em breve.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Detalhes da consulta */}
+        <Card className="mb-6 shadow-sm">
+          <CardContent className="p-0">
+            <div className="divide-y">
+              {appointment?.guia?.protocolo && (
+                <div className="flex items-center gap-4 p-5">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">
+                      Protocolo da Guia
+                    </p>
+                    <p className="font-bold text-xl tracking-wider">
+                      {appointment.guia.protocolo}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {appointment?.medico && (
+                <div className="flex items-center gap-4 p-5">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Médico(a)</p>
+                    <p className="font-semibold text-lg">
+                      {appointment.medico.public_name}
+                    </p>
+                    <p className="text-sm text-primary">
+                      {appointment.medico.specialty}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {appointment?.horario_inicio && (
+                <div className="flex items-center gap-4 p-5">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">
+                      Data e Hora (Horário de Brasília)
+                    </p>
+                    <p className="font-semibold text-lg">
+                      {new Date(appointment.horario_inicio).toLocaleString(
+                        'pt-BR',
+                        {
+                          dateStyle: 'full',
+                          timeStyle: 'short',
+                          timeZone: 'America/Sao_Paulo',
+                        }
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
+
+        {/* Próximos passos */}
+        <Card className="mb-6 shadow-sm">
+          <CardContent className="p-6">
+            <NextSteps appointment={appointment} />
+          </CardContent>
+        </Card>
+
+        {/* Ações */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Button size="lg" variant="outline" onClick={handleDownloadGuide}>
+            <Download className="mr-2 h-4 w-4" />
+            Baixar Guia
+          </Button>
+
+          {gcalLink && (
+            <Button size="lg" variant="outline" asChild>
+              <a href={gcalLink} target="_blank" rel="noopener noreferrer">
+                <Calendar className="mr-2 h-4 w-4" />
+                Adicionar ao Google Calendar
+                <ExternalLink className="ml-2 h-3 w-3" />
+              </a>
+            </Button>
+          )}
+
+          <Button size="lg" asChild>
+            <Link to="/paciente/dashboard/consultas">
+              Ir para Minhas Consultas
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
       </motion.div>
     </>
   );
