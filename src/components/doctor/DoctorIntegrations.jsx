@@ -18,11 +18,10 @@ const DoctorIntegrations = () => {
                 </CardHeader>
                 <CardContent className="p-2">
                     <div className="relative w-full max-w-full mx-auto rounded-md overflow-hidden shadow-sm border border-gray-100 transition-transform hover:scale-[1.005] duration-300">
-                        <img 
-                            src="https://horizons-cdn.hostinger.com/678b5778-a611-4960-82cc-681a679036f7/f75d1b6a374ac95a78d0a86f1b62e112.webp" 
-                            alt="Integração Doctoralia e Feegow"
-                            className="w-full h-auto max-h-24 object-cover block"
-                        />
+                        <div className="w-full h-20 grid grid-cols-2 bg-gradient-to-r from-sky-500 to-teal-500">
+                            <div className="flex items-center justify-center text-white font-semibold text-sm border-r border-white/30">Doctoralia</div>
+                            <div className="flex items-center justify-center text-white font-semibold text-sm">Feegow</div>
+                        </div>
                         
                         <div className="absolute inset-0 flex">
                             <a 

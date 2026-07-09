@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone } from 'lucide-react';
+import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import useAsync from '@/hooks/useAsync';
@@ -51,6 +51,36 @@ const DoctorProfile = () => {
     const [isSaving, setIsSaving] = useState(false);
     const { toast } = useToast();
     const fileInputRef = useRef(null);
+
+    // Troca de senha
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        if (newPassword.length < 6) {
+            toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 6 caracteres.' });
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            toast({ variant: 'destructive', title: 'As senhas não coincidem', description: 'Confirme a mesma senha nos dois campos.' });
+            return;
+        }
+        setIsChangingPassword(true);
+        try {
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            if (error) throw error;
+            toast({ title: 'Senha alterada!', description: 'Sua nova senha já está ativa.' });
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro ao alterar senha', description: err.message });
+        } finally {
+            setIsChangingPassword(false);
+        }
+    };
 
     const fetchDoctorProfile = useCallback(async () => {
         if (!user?.id) throw new Error("Usuário não autenticado.");
@@ -266,6 +296,68 @@ const DoctorProfile = () => {
                     </Button>
                 </div>
             </form>
+
+            <Card className="dashboard-card rounded-sm">
+                <CardHeader className="px-6 pt-6 pb-2">
+                    <CardTitle className="dashboard-title text-lg flex items-center gap-2">
+                        <KeyRound className="w-4 h-4 text-primary" /> Alterar Senha
+                    </CardTitle>
+                    <CardDescription className="dashboard-subtitle text-sm">
+                        Defina uma nova senha de acesso à sua conta.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="px-6 pb-6 pt-4">
+                    <form onSubmit={handleChangePassword} className="grid gap-5 max-w-xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="newPassword" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Nova Senha</Label>
+                                <div className="relative">
+                                    <Input
+                                        id="newPassword"
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        placeholder="Mínimo 6 caracteres"
+                                        autoComplete="new-password"
+                                        className="bg-white border-gray-300 focus:border-primary focus:ring-primary h-10 text-sm rounded-sm shadow-sm pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword((v) => !v)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        tabIndex={-1}
+                                        aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                                    >
+                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="confirmPassword" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Confirmar Nova Senha</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Repita a nova senha"
+                                    autoComplete="new-password"
+                                    className="bg-white border-gray-300 focus:border-primary focus:ring-primary h-10 text-sm rounded-sm shadow-sm"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex justify-end">
+                            <Button
+                                type="submit"
+                                disabled={isChangingPassword || !newPassword || !confirmPassword}
+                                className="min-w-[140px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm h-9 text-sm rounded-sm"
+                            >
+                                {isChangingPassword ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <KeyRound className="mr-2 h-4 w-4" />}
+                                Alterar Senha
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     );
 };

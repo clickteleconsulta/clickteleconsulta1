@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Logo from '@/components/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -28,13 +29,7 @@ const DoctorAreaHeader = () => {
         <div className="h-full px-6 md:px-8 flex items-center justify-between">
           {/* Brand */}
           <div className="flex items-center gap-3">
-             <div className="p-1.5 bg-blue-50 rounded-lg">
-              <img 
-                src="https://horizons-cdn.hostinger.com/678b5778-a611-4960-82cc-681a679036f7/8d9783d546a3becefb36676e0f018f25.png" 
-                alt="Click Teleconsulta Logo" 
-                className="w-8 h-8 object-contain" 
-              />
-            </div>
+             <Logo className="w-9 h-9" />
             <span className="text-xl font-bold text-gray-800 tracking-tight hidden md:block">
               Click Teleconsulta
             </span>

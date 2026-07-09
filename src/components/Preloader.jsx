@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Logo from '@/components/Logo';
 import { cn } from '@/lib/utils';
 import { useLoader } from '@/contexts/LoaderContext';
 
@@ -35,11 +36,7 @@ const Preloader = () => {
       )}
     >
       <div className="flex flex-col items-center w-full max-w-[420px] px-4 space-y-6">
-        <img 
-          src="https://horizons-cdn.hostinger.com/678b5778-a611-4960-82cc-681a679036f7/7054d8417c80717d153aed7ff7ebc683.png" 
-          alt="Logo" 
-          className="h-24 w-auto object-contain animate-in fade-in zoom-in duration-500 mb-4" 
-        />
+        <Logo className="h-24 w-24 object-contain animate-in fade-in zoom-in duration-500 mb-4" />
         
         <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
           <div 

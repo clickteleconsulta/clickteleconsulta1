@@ -25,7 +25,6 @@ import { openJitsiRoom } from '@/utils/telemedicineUtils';
 
 // Constants
 const ITEMS_PER_PAGE = 10;
-const EMPTY_STATE_ILLUSTRATION_URL = "https://horizons-cdn.hostinger.com/678b5778-a611-4960-82cc-681a679036f7/96e325ac2ebbbb7adca36032e2f749d0.png";
 
 // ... [Keep GuestTokenDialog, RescheduleDialog, NewGuestAppointmentDialog, PatientDetailsDialog EXACTLY as they are in the provided file. I will not repeat them here to save tokens unless necessary, but the instruction says "You must provide the complete file content". So I will include them.]
 
@@ -1016,7 +1015,7 @@ const DoctorConsultations = () => {
                         </div>
                       </TableCell>
                     </motion.tr>;
-                  }) : <TableRow><TableCell colSpan={6} className="h-96 text-center"><div className="flex flex-col items-center justify-center h-full"><img src={EMPTY_STATE_ILLUSTRATION_URL} alt="Nenhum agendamento encontrado" className="w-64 h-64 mb-6 object-contain" /><p className="text-gray-400 text-sm font-normal">Nenhum agendamento encontrado nesta categoria.</p></div></TableCell></TableRow>}
+                  }) : <TableRow><TableCell colSpan={6} className="h-96 text-center"><div className="flex flex-col items-center justify-center h-full"><CalendarClock className="w-20 h-20 mb-6 text-gray-300" /><p className="text-gray-400 text-sm font-normal">Nenhum agendamento encontrado nesta categoria.</p></div></TableCell></TableRow>}
                 </TableBody>
               </AnimatePresence>}
             </Table>
