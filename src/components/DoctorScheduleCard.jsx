@@ -231,14 +231,14 @@ export function DoctorScheduleCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-card rounded-xl border border-border/60 shadow-lg flex flex-col relative overflow-hidden my-3"
+      className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col relative overflow-hidden my-3"
     >
       <div className="flex flex-col md:flex-row">
-          <div className="p-3 md:p-4 flex flex-col gap-2 w-full md:w-[235px] border-b md:border-b-0 md:border-r border-border/30 bg-gray-50/50">
-              <div className="flex items-start gap-2">
-                  <Avatar className="w-12 h-12 border-2 border-primary/20 shadow-md shrink-0">
-                      <AvatarImage src={doctor?.image_url} alt={`Foto de ${doctor?.public_name || 'médico'}`} />
-                      <AvatarFallback className="bg-primary/10 text-primary"><User size={24} /></AvatarFallback>
+          <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
+              <div className="flex items-start gap-3">
+                  <Avatar className="w-14 h-14 shrink-0 rounded-xl overflow-hidden shadow-sm">
+                      <AvatarImage src={doctor?.image_url} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-xl object-cover" />
+                      <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-white rounded-xl"><User size={24} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-1">
@@ -270,15 +270,15 @@ export function DoctorScheduleCard({
 
               <div className="flex flex-col gap-1 mt-1 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
-                      <Award className="w-3 h-3 text-primary" />
+                      <Award className="w-3 h-3 text-sky-500" />
                       <span className="text-xs">Certificado</span>
                   </div>
                   <div className="flex items-center gap-1">
-                      <Asterisk className="w-3 h-3 text-primary" />
+                      <Asterisk className="w-3 h-3 text-sky-500" />
                       <span className="text-xs">Atendimentos em telemedicina</span>
                   </div>
                   <div className="flex items-center gap-1">
-                      <HeartHandshake className="w-3 h-3 text-primary" />
+                      <HeartHandshake className="w-3 h-3 text-sky-500" />
                       <span className="text-xs">Pacientes fiéis</span>
                       <TooltipProvider>
                           <Tooltip>
@@ -292,11 +292,11 @@ export function DoctorScheduleCard({
                       </TooltipProvider>
                   </div>
               </div>
-              <div className="flex flex-wrap gap-1.5 items-center mt-auto pt-2">
-                  <Badge variant="custom" className="bg-blue-100 text-primary font-bold py-0.5 px-2 rounded-md text-xs">
+              <div className="flex flex-wrap gap-2 items-center mt-auto pt-4 border-t border-slate-100">
+                  <Badge variant="custom" className="bg-sky-50 text-sky-700 font-bold py-1 px-3 rounded-full text-[13px] border border-sky-100">
                       {displayPrice}
                   </Badge>
-                  <Badge variant="custom" className="bg-green-100 text-green-800 font-semibold py-0.5 px-2 rounded-md flex items-center gap-1 text-xs">
+                  <Badge variant="custom" className="bg-blue-50 text-blue-700 font-semibold py-1 px-3 rounded-full flex items-center gap-1 text-[13px] border border-blue-100">
                       <Video className="w-3 h-3" />
                       <span>Teleconsulta</span>
                   </Badge>
@@ -326,11 +326,11 @@ export function DoctorScheduleCard({
               const isDayToday = isToday(daySchedule.date);
               const hasSlots = daySchedule.slots.length > 0;
               return <div key={daySchedule.dateFormatted} className="bg-white flex flex-col min-h-[220px]">
-                                              <div className={cn("py-3 px-1 text-center border-b border-gray-100 transition-colors h-[68px] flex flex-col justify-center", isDayToday ? "bg-blue-50/70" : "bg-white")}>
-                                                  <div className={cn("text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mb-0.5", isDayToday ? "text-blue-700" : "text-gray-500")}>
+                                              <div className={cn("py-3 px-1 text-center border-b border-gray-100 transition-colors h-[68px] flex flex-col justify-center", isDayToday ? "bg-sky-50" : "bg-white")}>
+                                                  <div className={cn("text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mb-0.5", isDayToday ? "text-sky-700" : "text-slate-500")}>
                                                       {daySchedule.dayName}
                                                   </div>
-                                                  <div className={cn("text-xs sm:text-sm font-bold", isDayToday ? "text-blue-700" : "text-gray-700")}>
+                                                  <div className={cn("text-xs sm:text-sm font-bold", isDayToday ? "text-sky-700" : "text-slate-700")}>
                                                       {daySchedule.dateFormatted}
                                                   </div>
                                               </div>
@@ -345,7 +345,7 @@ export function DoctorScheduleCard({
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-9 rounded-lg border text-sm font-semibold transition-all shadow-sm px-1", isBooked ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed decoration-gray-400" : "bg-white text-blue-700 border-blue-100 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md hover:text-blue-800")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-9 rounded-lg border text-sm font-semibold transition-all shadow-sm px-1", isBooked ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed decoration-gray-400" : "bg-white text-sky-700 border-sky-100 hover:border-sky-400 hover:bg-sky-50 hover:shadow-md hover:text-sky-800")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>
@@ -364,7 +364,7 @@ export function DoctorScheduleCard({
                               </div>
                               
                               {scheduleByDay.some(d => d.slots.length > 4) && <div className="mt-3 flex justify-end md:justify-end justify-center">
-                                      <button onClick={() => setIsExpanded(!isExpanded)} className="text-[13px] font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors px-3 py-1.5 rounded-md hover:bg-blue-50 group">
+                                      <button onClick={() => setIsExpanded(!isExpanded)} className="text-[13px] font-semibold text-sky-600 hover:text-sky-800 flex items-center gap-1 transition-colors px-3 py-1.5 rounded-md hover:bg-sky-50 group">
                                           {isExpanded ? "Ver menos horários" : "Mostrar mais horários"}
                                           <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", isExpanded && "rotate-180")} />
                                       </button>

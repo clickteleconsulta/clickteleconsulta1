@@ -207,7 +207,7 @@ const HomePage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className="inline-block text-teal-400"
+                    className="inline-block text-blue-400"
                   >
                     {CYCLING_WORDS[wordIndex]}
                   </motion.span>
@@ -237,7 +237,7 @@ const HomePage = () => {
                 />
                 <Button
                   type="submit"
-                  className="rounded-full px-6 bg-teal-500 hover:bg-teal-600 text-white font-body font-medium flex-shrink-0"
+                  className="rounded-full px-6 bg-blue-600 hover:bg-blue-700 text-white font-body font-medium flex-shrink-0"
                 >
                   Buscar
                 </Button>
@@ -248,19 +248,11 @@ const HomePage = () => {
                 <Button
                   asChild
                   size="lg"
-                  className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-8 font-display font-bold shadow-lg shadow-teal-500/30"
+                  className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 font-display font-bold shadow-lg shadow-blue-600/30"
                 >
                   <Link to="/agendamentos" className="flex items-center gap-2">
                     Agendar Consulta <ArrowRight className="w-4 h-4" />
                   </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white px-8 font-display font-bold bg-transparent"
-                >
-                  <Link to="/acesso-medico">Sou Médico</Link>
                 </Button>
               </motion.div>
             </motion.div>
