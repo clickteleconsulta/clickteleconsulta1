@@ -12,7 +12,6 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogD
 import { motion, AnimatePresence } from 'framer-motion';
 import { useJitsiRoom } from '@/hooks/useJitsiRoom';
 import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedicineButton';
-import { generateJitsiURL } from '@/utils/telemedicineUtils';
 
 const PatientConsultations = () => {
     const { appointments, loading, fetchAppointments } = useAppointments();
