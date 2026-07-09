@@ -34,6 +34,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { supabase } from '@/lib/customSupabaseClient';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
 const CYCLING_WORDS = ['consultas médicas', 'exames online', 'prescrições digitais'];
@@ -51,9 +52,10 @@ const SPECIALTIES = [
 ];
 
 // ─── Métricas de confiança ──────────────────────────────────────────────────────
+// (paridade com a fase avançada: "15.000+" e nº de médicos dinâmico do banco)
 const TRUST_METRICS = [
-  { value: '5.000+', label: 'Consultas realizadas', icon: Video, color: 'text-sky-500' },
-  { value: '50+', label: 'Médicos cadastrados', icon: Users, color: 'text-sky-500' },
+  { value: '15.000+', label: 'Consultas realizadas', icon: Video, color: 'text-sky-500' },
+  { value: '50+', key: 'doctors', label: 'Médicos cadastrados', icon: Users, color: 'text-sky-500' },
   { value: '4,9', label: 'Avaliação média', icon: Star, iconClass: 'fill-amber-400 text-amber-400' },
   { value: 'CFM', label: 'Certificado', icon: Shield, color: 'text-green-600' },
 ];
@@ -108,6 +110,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
+  const [doctorCount, setDoctorCount] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -115,6 +118,21 @@ const HomePage = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Paridade: nº de médicos cadastrados dinâmico (do banco)
+  useEffect(() => {
+    let active = true;
+    supabase
+      .from('medicos')
+      .select('id', { count: 'exact', head: true })
+      .then(({ count, error }) => {
+        if (active && !error && typeof count === 'number') setDoctorCount(count);
+      });
+    return () => { active = false; };
+  }, []);
+
+  const metricValue = (item) =>
+    item.key === 'doctors' && doctorCount != null ? String(doctorCount) : item.value;
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -335,7 +353,7 @@ const HomePage = () => {
                     <Icon className={`w-6 h-6 ${item.iconClass || item.color}`} />
                   </div>
                   <div>
-                    <p className="font-display text-3xl font-extrabold text-slate-900">{item.value}</p>
+                    <p className="font-display text-3xl font-extrabold text-slate-900">{metricValue(item)}</p>
                     <p className="font-body text-sm text-slate-500">{item.label}</p>
                   </div>
                 </motion.div>
