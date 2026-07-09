@@ -222,27 +222,6 @@ const HomePage = () => {
                 Rápido, seguro e acessível.
               </motion.p>
 
-              {/* Barra de busca */}
-              <motion.form
-                variants={fadeUp}
-                onSubmit={handleSearch}
-                className="mt-8 flex items-center gap-2 bg-white rounded-full p-1.5 pl-4 shadow-2xl shadow-black/20 max-w-lg"
-              >
-                <Search className="w-5 h-5 text-slate-400 flex-shrink-0" />
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Busque especialidade ou médico..."
-                  className="font-body border-0 shadow-none focus-visible:ring-0 text-slate-900 placeholder:text-slate-400 bg-transparent"
-                />
-                <Button
-                  type="submit"
-                  className="rounded-full px-6 bg-blue-600 hover:bg-blue-700 text-white font-body font-medium flex-shrink-0"
-                >
-                  Buscar
-                </Button>
-              </motion.form>
-
               {/* CTAs */}
               <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
                 <Button

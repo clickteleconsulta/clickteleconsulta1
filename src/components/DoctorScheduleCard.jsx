@@ -231,12 +231,12 @@ export function DoctorScheduleCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col relative overflow-hidden my-3"
+      className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[900px] mx-auto"
     >
       <div className="flex flex-col md:flex-row">
           <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
               <div className="flex items-start gap-3">
-                  <Avatar className="w-14 h-14 shrink-0 rounded-xl overflow-hidden shadow-sm">
+                  <Avatar className="w-14 h-14 border-2 border-white shadow-lg ring-2 ring-slate-100 shrink-0 rounded-xl">
                       <AvatarImage src={doctor?.image_url} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-xl object-cover" />
                       <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-white rounded-xl"><User size={24} /></AvatarFallback>
                   </Avatar>
@@ -296,14 +296,14 @@ export function DoctorScheduleCard({
                   <Badge variant="custom" className="bg-sky-50 text-sky-700 font-bold py-1 px-3 rounded-full text-[13px] border border-sky-100">
                       {displayPrice}
                   </Badge>
-                  <Badge variant="custom" className="bg-blue-50 text-blue-700 font-semibold py-1 px-3 rounded-full flex items-center gap-1 text-[13px] border border-blue-100">
-                      <Video className="w-3 h-3" />
+                  <Badge variant="custom" className="bg-emerald-50 text-emerald-700 font-semibold py-1 px-3 rounded-full flex items-center gap-1.5 text-[13px] border border-emerald-100">
+                      <Video className="w-3.5 h-3.5 text-emerald-500" />
                       <span>Teleconsulta</span>
                   </Badge>
               </div>
           </div>
           
-          <div className="p-3 md:p-4 flex-1 flex flex-col min-h-[300px]">
+          <div className="p-3.5 md:p-4 flex-1 flex flex-col min-h-[240px]">
               {loadingSlots ? <ScheduleSkeleton /> : !isScheduleAvailable ? <div className="flex-grow flex flex-col justify-center items-center text-center text-muted-foreground py-6">
                       <CalendarOff className="w-7 h-7 mb-1" />
                       <p className="font-semibold text-foreground text-sm">Sem horários disponíveis</p>
@@ -325,7 +325,7 @@ export function DoctorScheduleCard({
                                   {scheduleByDay.map(daySchedule => {
               const isDayToday = isToday(daySchedule.date);
               const hasSlots = daySchedule.slots.length > 0;
-              return <div key={daySchedule.dateFormatted} className="bg-white flex flex-col min-h-[220px]">
+              return <div key={daySchedule.dateFormatted} className="bg-white flex flex-col min-h-[190px]">
                                               <div className={cn("py-3 px-1 text-center border-b border-gray-100 transition-colors h-[68px] flex flex-col justify-center", isDayToday ? "bg-sky-50" : "bg-white")}>
                                                   <div className={cn("text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mb-0.5", isDayToday ? "text-sky-700" : "text-slate-500")}>
                                                       {daySchedule.dayName}
