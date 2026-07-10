@@ -20,7 +20,7 @@ const Footer = () => {
                   <span className="font-semibold text-sm">C&C ASSISTÊNCIA MÉDICA LTDA</span>
                 </div>
                 <p className="text-xs text-muted-foreground">CNPJ: 51.239.735/0001-03</p>
-                <img src="https://horizons-cdn.hostinger.com/678b5778-a611-4960-82cc-681a679036f7/chatgpt-image-24-de-nov.-de-2025-14_28_54-5gBag.png" alt="Logo C&C Assistência Médica" className="w-24 h-auto mt-2 opacity-90" />
+                <img src="/cc-logo.png" alt="Logo C&C Assistência Médica" className="w-24 h-auto mt-2 rounded-md opacity-90" />
             </div>
           </div>
           

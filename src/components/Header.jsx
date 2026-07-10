@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Logo from '@/components/Logo';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { LogOut, CalendarDays, LayoutDashboard, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,13 +30,7 @@ const Header = () => {
       <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-border h-16 flex items-center">
         <nav className="container mx-auto px-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="p-1.5 bg-primary/5 rounded-lg group-hover:bg-primary/10 transition-colors">
-              <img 
-                src="https://horizons-cdn.hostinger.com/678b5778-a611-4960-82cc-681a679036f7/8d9783d546a3becefb36676e0f018f25.png" 
-                alt="Click Teleconsulta Logo" 
-                className="w-10 h-10 object-contain" 
-              />
-            </div>
+            <Logo className="w-10 h-10 group-hover:scale-105 transition-transform" />
             <span className="text-lg font-semibold text-gray-800 tracking-tight">Click Teleconsulta</span>
           </Link>
           
