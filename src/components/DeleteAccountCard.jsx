@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,9 +21,7 @@ import { Loader2, Trash2, AlertTriangle } from 'lucide-react';
 const CONFIRM_WORD = 'EXCLUIR';
 
 const DeleteAccountCard = () => {
-    const { signOut } = useAuth();
     const { toast } = useToast();
-    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [confirmText, setConfirmText] = useState('');
     const [deleting, setDeleting] = useState(false);
@@ -36,9 +32,11 @@ const DeleteAccountCard = () => {
             const { error } = await supabase.rpc('delete_own_account');
             if (error) throw error;
 
-            toast({ title: 'Conta excluída', description: 'Sua conta e seus dados foram removidos.' });
-            try { await signOut(); } catch (_) { /* sessão já pode estar inválida */ }
-            navigate('/');
+            toast({ title: 'Conta excluída', description: 'Sua conta foi removida. Você já pode criar uma nova, se desejar.' });
+            // Logout apenas local: o usuário já não existe no servidor, então um
+            // signOut global falharia ("User from sub claim in JWT does not exist").
+            try { await supabase.auth.signOut({ scope: 'local' }); } catch (_) { /* sessão já inválida */ }
+            window.location.href = '/';
         } catch (err) {
             toast({ variant: 'destructive', title: 'Erro ao excluir conta', description: err.message });
             setDeleting(false);
