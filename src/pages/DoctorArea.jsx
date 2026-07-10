@@ -34,6 +34,7 @@ import DoctorAreaHeader from '@/components/doctor/DoctorAreaHeader';
 import MessagesPage from '@/pages/MessagesPage';
 import DoctorReviewsPage from '@/pages/doctor/DoctorReviewsPage';
 import DoctorProceduresPage from '@/pages/doctor/DoctorProceduresPage';
+import { FEATURES } from '@/config/features';
 
 const DoctorArea = () => {
     const { signOut, profile, session, loading } = useAuth();
@@ -126,13 +127,17 @@ const DoctorArea = () => {
             label: 'Procedimentos',
             icon: Stethoscope
         },
-        { 
+        {
             id: 'ajuda',
-            href: '/medico/dashboard/ajuda', 
-            label: 'Ajuda', 
-            icon: HelpCircle 
+            href: '/medico/dashboard/ajuda',
+            label: 'Ajuda',
+            icon: HelpCircle
         },
-    ];
+    ].filter((item) => {
+        if (item.id === 'mensagens' && !FEATURES.MESSAGING) return false;
+        if (item.id === 'pacientes' && !FEATURES.PRONTUARIO) return false;
+        return true;
+    });
 
     if (loading) {
         return (
@@ -246,13 +251,13 @@ const DoctorArea = () => {
                         <Routes>
                             <Route path="/" element={<Navigate to="consultas" replace />} />
                             <Route path="consultas" element={<DoctorConsultations />} />
-                            <Route path="pacientes" element={<PacientesListPage />} />
-                            <Route path="mensagens" element={<MessagesPage />} />
+                            {FEATURES.PRONTUARIO && <Route path="pacientes" element={<PacientesListPage />} />}
+                            {FEATURES.MESSAGING && <Route path="mensagens" element={<MessagesPage />} />}
                             <Route path="avaliacoes" element={<DoctorReviewsPage />} />
                             <Route path="procedimentos" element={<DoctorProceduresPage />} />
-                            
+
                             {/* Core Features */}
-                            <Route path="prescricoes" element={<DoctorDocuments />} />
+                            {FEATURES.PRONTUARIO && <Route path="prescricoes" element={<DoctorDocuments />} />}
                             <Route path="perfil" element={<DoctorProfile />} />
                             <Route path="agenda" element={<DoctorSchedule />} />
                             <Route path="financeiro" element={<DoctorFinance />} />
@@ -275,6 +280,7 @@ const DoctorArea = () => {
                                 </div>
                             } />
 
+                            <Route path="*" element={<Navigate to="consultas" replace />} />
                         </Routes>
                     </div>
                 </main>

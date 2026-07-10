@@ -29,6 +29,7 @@ import MessagesPage from '@/pages/MessagesPage';
 import PatientReviewsPage from '@/pages/patient/PatientReviewsPage';
 import { Link } from 'react-router-dom';
 import { differenceInMinutes, differenceInSeconds } from 'date-fns';
+import { FEATURES } from '@/config/features';
 
 // ─── Countdown Hook ───────────────────────────────────────────────────────────
 const useCountdown = (targetDate) => {
@@ -149,7 +150,7 @@ const NextAppointmentCard = ({ appointment }) => {
             </div>
           )}
 
-          {canEnter ? (
+          {canEnter && FEATURES.VIDEO_CALL ? (
             <Button
               asChild
               size="lg"
@@ -177,7 +178,7 @@ const NextAppointmentCard = ({ appointment }) => {
         </div>
       </div>
 
-      {canEnter && (
+      {canEnter && FEATURES.VIDEO_CALL && (
         <div className="mt-4 flex items-center gap-2 bg-green-50 border border-green-100 rounded-xl p-3 text-sm text-green-700">
           <Bell className="w-4 h-4 flex-shrink-0" />
           <span>
@@ -266,6 +267,7 @@ const PatientArea = () => {
                 <PlusCircle className="w-5 h-5" />
                 Agendar Consulta
               </NavLink>
+              {FEATURES.MESSAGING && (
               <NavLink
                 to="/paciente/dashboard/mensagens"
                 className={navLinkClasses}
@@ -273,6 +275,7 @@ const PatientArea = () => {
                 <MessageSquare className="w-5 h-5" />
                 Mensagens
               </NavLink>
+              )}
               <NavLink
                 to="/paciente/dashboard/avaliacoes"
                 className={navLinkClasses}
@@ -330,10 +333,11 @@ const PatientArea = () => {
               }
             />
             <Route path="agendar" element={<PatientNewAppointmentPage />} />
-            <Route path="mensagens" element={<MessagesPage />} />
+            {FEATURES.MESSAGING && <Route path="mensagens" element={<MessagesPage />} />}
             <Route path="avaliacoes" element={<PatientReviewsPage />} />
             <Route path="dados" element={<PatientData />} />
             <Route path="suporte" element={<SupportPage />} />
+            <Route path="*" element={<Navigate to="consultas" replace />} />
           </Routes>
         </main>
       </div>

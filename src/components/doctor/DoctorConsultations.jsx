@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { buildJitsiRoomId } from '@/utils/jitsiRoomId';
 import { openJitsiRoom } from '@/utils/telemedicineUtils';
+import { FEATURES } from '@/config/features';
 
 // Constants
 const ITEMS_PER_PAGE = 10;
@@ -937,6 +938,9 @@ const DoctorConsultations = () => {
                         <StatusBadge status={appt.status} paymentStatus={appt.pagamento_status} reminderSentAt={appt.reminder_sent_at} whatsappStatus={appt.whatsapp_status} appointmentId={appt.id} />
                       </TableCell>
                       <TableCell className="py-4 px-4 align-middle text-center">
+                        {!FEATURES.VIDEO_CALL ? (
+                          <span className="text-gray-300 text-xs">—</span>
+                        ) : (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="relative inline-block">
@@ -958,6 +962,7 @@ const DoctorConsultations = () => {
                             <p className="text-xs">{canStartCall ? 'Iniciar Consulta (Nova Aba)' : 'Indisponível'}</p>
                           </TooltipContent>
                         </Tooltip>
+                        )}
                       </TableCell>
                       <TableCell className="py-4 px-4 text-right align-middle">
                         <div className="flex items-center justify-end gap-2">
@@ -971,15 +976,17 @@ const DoctorConsultations = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="rounded-xl shadow-xl border-gray-100 min-w-[180px] p-1.5">
+                              {FEATURES.PRONTUARIO && (
                               <DropdownMenuItem onSelect={() => navigate(`/dashboard/medico/pacientes/${appt.patient_id}`)} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
                                 <User className="mr-2 h-4 w-4 text-gray-500" /> Ir para Prontuário
                               </DropdownMenuItem>
+                              )}
                               <PatientDetailsDialog patient={appt.perfis_usuarios} guest={appt.guest_patients}>
                                 <DropdownMenuItem onSelect={e => e.preventDefault()} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
                                   <Eye className="mr-2 h-4 w-4 text-gray-500" /> Ver Dados Rápidos
                                 </DropdownMenuItem>
                               </PatientDetailsDialog>
-                              {!isCancelled && !isCheckinCompleted && (
+                              {FEATURES.VIDEO_CALL && !isCancelled && !isCheckinCompleted && (
                                 <DropdownMenuItem onSelect={(e) => { e.preventDefault(); handleOpenVideoCall(appt); }} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
                                   <LinkIcon className="mr-2 h-4 w-4 text-gray-500" /> Iniciar Videochamada
                                 </DropdownMenuItem>

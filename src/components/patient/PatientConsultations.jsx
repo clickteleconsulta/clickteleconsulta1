@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogD
 import { motion, AnimatePresence } from 'framer-motion';
 import { useJitsiRoom } from '@/hooks/useJitsiRoom';
 import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedicineButton';
+import { FEATURES } from '@/config/features';
 
 const PatientConsultations = () => {
     const { appointments, loading, fetchAppointments } = useAppointments();
@@ -158,7 +159,7 @@ const PatientConsultations = () => {
                                        </div>
                                         
                                         {/* Action Button: PatientTelemedicineButton now handles logic */}
-                                        {isUpcoming && (
+                                        {FEATURES.VIDEO_CALL && isUpcoming && (
                                             <div className="w-full sm:w-auto">
                                                 {callAccess.isAccessible ? (
                                                     <PatientTelemedicineButton 

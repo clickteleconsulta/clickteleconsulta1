@@ -36,6 +36,7 @@ import MessagesPage from '@/pages/MessagesPage';
 import DoctorReviewsPage from '@/pages/doctor/DoctorReviewsPage';
 import PatientReviewsPage from '@/pages/patient/PatientReviewsPage';
 import DoctorsListPage from '@/pages/DoctorsListPage';
+import { FEATURES } from '@/config/features';
 
 // Admin Imports
 import AdminLoginPage from '@/pages/admin/AdminLoginPage';
@@ -171,28 +172,28 @@ function App() {
           </Route>
 
           {/* 3. Specialized Routes */}
-          <Route path="/verificar/:code" element={<VerificationPage />} />
-          <Route path="/paciente/guest" element={<GuestAppointmentPage />} />
+          {FEATURES.PRONTUARIO && <Route path="/verificar/:code" element={<VerificationPage />} />}
+          {FEATURES.GUEST_ACCESS && <Route path="/paciente/guest" element={<GuestAppointmentPage />} />}
           <Route path="/legal" element={<LegalPage />} />
 
-          <Route path="/call/:appointmentId" element={
+          {FEATURES.VIDEO_CALL && <Route path="/call/:appointmentId" element={
             <ProtectedRoute allowedRoles={['medico', 'paciente']}>
               <VideoCallPage />
             </ProtectedRoute>
-          } />
+          } />}
 
           {/* Consulta Routes */}
-          <Route path="/consulta/:appointmentId" element={
+          {FEATURES.VIDEO_CALL && <Route path="/consulta/:appointmentId" element={
             <ProtectedRoute allowedRoles={['medico', 'paciente']}>
               <VideoCallPage />
             </ProtectedRoute>
-          } />
+          } />}
 
-          <Route path="/consulta/:id/encerrada" element={
+          {FEATURES.VIDEO_CALL && <Route path="/consulta/:id/encerrada" element={
             <ProtectedRoute allowedRoles={['medico', 'paciente']}>
               <ConsultaEncerradaPage />
             </ProtectedRoute>
-          } />
+          } />}
 
           {/* Doctor Schedule */}
           <Route path="/medico/agenda" element={
@@ -202,39 +203,39 @@ function App() {
           } />
 
           {/* Direct Messages Route */}
-          <Route path="/mensagens" element={
+          {FEATURES.MESSAGING && <Route path="/mensagens" element={
             <ProtectedRoute allowedRoles={['medico', 'paciente']}>
               <div className="container mx-auto px-4 py-8 h-screen pt-24">
                  <MessagesPage />
               </div>
             </ProtectedRoute>
-          } />
+          } />}
 
           {/* Doctor Specific Feature Routes */}
-          <Route path="/dashboard/medico/pacientes/:patientId" element={
+          {FEATURES.PRONTUARIO && <Route path="/dashboard/medico/pacientes/:patientId" element={
             <ProtectedRoute allowedRoles={['medico']}>
               <PatientRecordPage />
             </ProtectedRoute>
-          } />
+          } />}
 
-          <Route path="/dashboard/medico/pacientes/:patientId/prescricoes" element={
+          {FEATURES.PRONTUARIO && <Route path="/dashboard/medico/pacientes/:patientId/prescricoes" element={
             <ProtectedRoute allowedRoles={['medico']}>
               <PatientPrescriptionsPage />
             </ProtectedRoute>
-          } />
-          
-          <Route path="/dashboard/prescricoes/memed" element={
+          } />}
+
+          {FEATURES.PRONTUARIO && <Route path="/dashboard/prescricoes/memed" element={
             <ProtectedRoute allowedRoles={['medico']}>
               <MemedPrescriptionPage />
             </ProtectedRoute>
-          } />
-          
+          } />}
+
           {/* HOTFIX-06: Protected with ProtectedRoute instead of DoctorRouteGuard (which only redirects, doesn't block) */}
-          <Route path="/prescricao/memed" element={
+          {FEATURES.PRONTUARIO && <Route path="/prescricao/memed" element={
             <ProtectedRoute allowedRoles={['medico']}>
                <MemedPrescricaoPage />
             </ProtectedRoute>
-          } />
+          } />}
 
           {/* 4. Public & Patient Routes */}
           <Route element={
@@ -299,11 +300,11 @@ function App() {
               </ProtectedRoute>
             } />
 
-            <Route path="/guia/:guideId" element={
+            {FEATURES.PRONTUARIO && <Route path="/guia/:guideId" element={
               <ProtectedRoute allowedRoles={['paciente']}>
                 <GuideViewerPage />
               </ProtectedRoute>
-            } />
+            } />}
 
             {/* Dynamic Routes */}
             <Route path="/medico/:id" element={<DoctorPublicProfilePage />} />
