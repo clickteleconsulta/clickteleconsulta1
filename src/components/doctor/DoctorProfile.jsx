@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff, FileText, ShieldCheck, Trash2 } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import useAsync from '@/hooks/useAsync';
@@ -202,6 +203,15 @@ const DoctorProfile = () => {
                 )}
             </div>
 
+            <Tabs defaultValue="perfil" className="w-full">
+                <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto gap-1 bg-gray-100 p-1 rounded-sm">
+                    <TabsTrigger value="perfil" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><UserIcon className="w-3.5 h-3.5" /> Perfil</TabsTrigger>
+                    <TabsTrigger value="documentacao" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><FileText className="w-3.5 h-3.5" /> Documentação</TabsTrigger>
+                    <TabsTrigger value="seguranca" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
+                    <TabsTrigger value="conta" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="perfil" className="mt-4">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <Card className="dashboard-card rounded-sm mb-4">
                     <CardHeader className="px-6 pt-6 pb-2">
@@ -299,9 +309,13 @@ const DoctorProfile = () => {
                     </Button>
                 </div>
             </form>
+                </TabsContent>
 
-            <DoctorDocumentation />
+                <TabsContent value="documentacao" className="mt-4">
+                    <DoctorDocumentation />
+                </TabsContent>
 
+                <TabsContent value="seguranca" className="mt-4 space-y-4">
             <Card className="dashboard-card rounded-sm">
                 <CardHeader className="px-6 pt-6 pb-2">
                     <CardTitle className="dashboard-title text-lg flex items-center gap-2">
@@ -365,8 +379,12 @@ const DoctorProfile = () => {
             </Card>
 
             <TwoFactorCard />
+                </TabsContent>
 
-            <DeleteAccountCard />
+                <TabsContent value="conta" className="mt-4">
+                    <DeleteAccountCard />
+                </TabsContent>
+            </Tabs>
         </div>
     );
 };
