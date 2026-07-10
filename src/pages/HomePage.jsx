@@ -207,7 +207,7 @@ const HomePage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className="inline-block text-teal-400"
+                    className="inline-block text-blue-400"
                   >
                     {CYCLING_WORDS[wordIndex]}
                   </motion.span>
@@ -222,45 +222,16 @@ const HomePage = () => {
                 Rápido, seguro e acessível.
               </motion.p>
 
-              {/* Barra de busca */}
-              <motion.form
-                variants={fadeUp}
-                onSubmit={handleSearch}
-                className="mt-8 flex items-center gap-2 bg-white rounded-full p-1.5 pl-4 shadow-2xl shadow-black/20 max-w-lg"
-              >
-                <Search className="w-5 h-5 text-slate-400 flex-shrink-0" />
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Busque especialidade ou médico..."
-                  className="font-body border-0 shadow-none focus-visible:ring-0 text-slate-900 placeholder:text-slate-400 bg-transparent"
-                />
-                <Button
-                  type="submit"
-                  className="rounded-full px-6 bg-teal-500 hover:bg-teal-600 text-white font-body font-medium flex-shrink-0"
-                >
-                  Buscar
-                </Button>
-              </motion.form>
-
               {/* CTAs */}
               <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
                 <Button
                   asChild
                   size="lg"
-                  className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-8 font-display font-bold shadow-lg shadow-teal-500/30"
+                  className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 font-display font-bold shadow-lg shadow-blue-600/30"
                 >
                   <Link to="/agendamentos" className="flex items-center gap-2">
                     Agendar Consulta <ArrowRight className="w-4 h-4" />
                   </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white px-8 font-display font-bold bg-transparent"
-                >
-                  <Link to="/acesso-medico">Sou Médico</Link>
                 </Button>
               </motion.div>
             </motion.div>
