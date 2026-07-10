@@ -51,21 +51,30 @@ const PatientData = () => {
       setValue('data_nasc', profile?.data_nasc || meta.data_nasc || '');
     }
   }, [profile, user, setValue]);
+  const meta = user?.user_metadata || {};
+  const cpfLocked = !!(profile?.cpf || meta.cpf);
+  const nascLocked = !!(profile?.data_nasc || meta.data_nasc);
+
   const onSubmit = async formData => {
-    // Only consider whatsapp for dirtiness as other fields are read-only
-    if (!isDirty && formData.whatsapp === profile.whatsapp) {
-      toast({
-        title: "Nenhuma alteração detectada."
-      });
-      return;
-    }
     setLoading(true);
+    const updates = { whatsapp: formData.whatsapp };
+
+    // Permite completar CPF / nascimento apenas se ainda estiverem vazios
+    if (!cpfLocked && formData.cpf) {
+      if ((formData.cpf || '').replace(/\D/g, '').length !== 11) {
+        toast({ variant: 'destructive', title: 'CPF inválido', description: 'Informe um CPF com 11 dígitos.' });
+        setLoading(false);
+        return;
+      }
+      updates.cpf = formData.cpf;
+    }
+    if (!nascLocked && formData.data_nasc) {
+      updates.data_nasc = formData.data_nasc;
+    }
+
     const {
       error
-    } = await supabase.from('perfis_usuarios').update({
-      // Only WhatsApp is editable
-      whatsapp: formData.whatsapp
-    }).eq('id', user.id);
+    } = await supabase.from('perfis_usuarios').update(updates).eq('id', user.id);
     if (error) {
       toast({
         variant: 'destructive',
@@ -98,13 +107,13 @@ const PatientData = () => {
                                 <Label htmlFor="cpf">CPF</Label>
                                 <Controller name="cpf" control={control} render={({
                 field
-              }) => <CpfInput {...field} disabled />} />
-                                <p className="text-xs text-muted-foreground">O CPF não pode ser alterado.</p>
+              }) => <CpfInput {...field} disabled={cpfLocked} />} />
+                                <p className="text-xs text-muted-foreground">{cpfLocked ? 'O CPF não pode ser alterado.' : 'Preencha seu CPF para completar o cadastro.'}</p>
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="data_nasc">Data de Nascimento</Label>
-                                <Input id="data_nasc" type="date" {...register('data_nasc')} disabled /> {/* Made read-only */}
-                                <p className="text-xs text-muted-foreground">A data de nascimento não pode ser alterada após o cadastro.</p>
+                                <Input id="data_nasc" type="date" {...register('data_nasc')} disabled={nascLocked} />
+                                <p className="text-xs text-muted-foreground">{nascLocked ? 'A data de nascimento não pode ser alterada após o cadastro.' : 'Informe sua data de nascimento para completar o cadastro.'}</p>
                             </div>
                         </div>
                         <div className="space-y-1">
