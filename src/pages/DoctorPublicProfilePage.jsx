@@ -77,7 +77,7 @@ const ReviewsSection = ({ reviews }) => {
     : null;
 
   return (
-    <div className="mt-6 space-y-4">
+    <div id="avaliacoes" className="mt-6 space-y-4 scroll-mt-24">
       <div className="flex items-start justify-between">
         <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -262,6 +262,14 @@ const DoctorPublicProfilePage = () => {
   useEffect(() => {
     if (status === 'success') fetchReviews();
   }, [status, fetchReviews]);
+
+  // Rola até a seção de Avaliações quando acessado via #avaliacoes (ex.: estrelas do card)
+  useEffect(() => {
+    if (status === 'success' && window.location.hash === '#avaliacoes') {
+      const el = document.getElementById('avaliacoes');
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+    }
+  }, [status, reviews]);
 
   const handleUpdateProfile = async (updatedData) => {
     if (!profileData?.doctor) return;

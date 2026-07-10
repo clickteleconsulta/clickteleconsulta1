@@ -252,11 +252,16 @@ export function DoctorScheduleCard({
                           </h3>
                       </Link>
 
-                      <div className="flex items-center gap-0.5 mt-1">
+                      <Link
+                          to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
+                          className="flex items-center gap-0.5 mt-1 w-fit group"
+                          title="Ver avaliações"
+                          aria-label="Ver avaliações do médico"
+                      >
                           {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                            <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400 transition-transform group-hover:scale-110" />
                           ))}
-                      </div>
+                      </Link>
                   </div>
               </div>
               
