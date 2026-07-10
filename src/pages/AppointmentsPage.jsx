@@ -275,7 +275,7 @@ const AppointmentsPage = () => {
       </Helmet>
 
       {/* Fundo de página cinza (full-bleed dentro do container) */}
-      <div className="-mx-4 -my-8 bg-slate-50 min-h-[calc(100vh-4rem)]">
+      <div className="-mx-4 -my-8 bg-slate-100 min-h-[calc(100vh-4rem)]">
         {/* Barra de busca — branca, centralizada, só os filtros */}
         <div className="bg-white/90 backdrop-blur-md border-b border-slate-200 py-4 shadow-sm sticky top-16 z-20">
           <div className="container mx-auto px-4">
