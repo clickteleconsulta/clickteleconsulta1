@@ -97,13 +97,7 @@ const DoctorArea = () => {
             label: 'Financeiro', 
             icon: Wallet 
         },
-        { 
-            id: 'relatorios',
-            href: '/medico/dashboard/relatorios',
-            label: 'Relatórios', 
-            icon: BarChart3 
-        },
-        { 
+        {
             id: 'agenda',
             href: '/medico/dashboard/agenda', 
             label: 'Agenda', 
@@ -257,21 +251,6 @@ const DoctorArea = () => {
                             <Route path="financeiro" element={<DoctorFinance />} />
                             <Route path="seguranca" element={<DoctorSecurity />} />
                             <Route path="ajuda" element={<DoctorHelp />} />
-
-                            {/* Placeholders */}
-                            <Route path="relatorios" element={
-                                <div className="flex flex-col items-center justify-center h-[60vh] text-center space-y-5">
-                                    <div className="p-6 bg-white rounded-2xl shadow-sm">
-                                        <BarChart3 className="h-10 w-10 text-blue-500" />
-                                    </div>
-                                    <div>
-                                        <h2 className="text-2xl font-bold text-gray-900">Relatórios</h2>
-                                        <p className="text-gray-500 max-w-sm mt-2">
-                                            Métricas detalhadas e relatórios de desempenho da sua clínica estarão disponíveis aqui.
-                                        </p>
-                                    </div>
-                                </div>
-                            } />
 
                             <Route path="*" element={<Navigate to="consultas" replace />} />
                         </Routes>
