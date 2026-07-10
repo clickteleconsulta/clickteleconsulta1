@@ -4,9 +4,9 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Lock, Loader2, ShieldCheck } from 'lucide-react';
+import { Lock, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useLoader } from '@/contexts/LoaderContext';
 
@@ -14,7 +14,6 @@ const AdminLoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSettingUp, setIsSettingUp] = useState(false);
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -62,28 +61,6 @@ const AdminLoginPage = () => {
       hideLoader();
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleSetupAdmin = async () => {
-    setIsSettingUp(true);
-    try {
-        const { data, error } = await supabase.functions.invoke('create-admin-user');
-        if (error) throw error;
-        toast({
-            title: 'Configuração concluída',
-            description: 'Conta de administrador criada/atualizada. Tente logar.',
-            variant: 'success'
-        });
-        // Credenciais removidas por segurança — preencha manualmente após setup
-    } catch (error) {
-        toast({
-            variant: 'destructive',
-            title: 'Erro na configuração',
-            description: error.message
-        });
-    } finally {
-        setIsSettingUp(false);
     }
   };
 
@@ -135,12 +112,6 @@ const AdminLoginPage = () => {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex justify-center border-t border-slate-900 pt-6">
-            <Button variant="link" className="text-slate-500 text-xs" onClick={handleSetupAdmin} disabled={isSettingUp}>
-                {isSettingUp ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <ShieldCheck className="w-3 h-3 mr-1" />}
-                Inicializar Admin (Primeiro Acesso)
-            </Button>
-        </CardFooter>
       </Card>
     </div>
   );
