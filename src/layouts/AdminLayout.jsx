@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { supabase } from '@/lib/customSupabaseClient';
 import { 
   LayoutDashboard, 
   Users, 
@@ -12,16 +13,28 @@ import {
   Banknote,
   FileText,
   Star,
-  AlertTriangle
+  AlertTriangle,
+  ShieldCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const AdminLayout = () => {
     const { signOut, profile } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    // Enforce 2FA: se a conta exige aal2 e está em aal1 (2FA não concluído), volta ao login
+    useEffect(() => {
+        supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+            .then(({ data }) => {
+                if (data && data.nextLevel === 'aal2' && data.currentLevel === 'aal1') {
+                    supabase.auth.signOut().finally(() => navigate('/acesso-administrador'));
+                }
+            })
+            .catch(() => {});
+    }, [navigate]);
 
     const handleSignOut = async () => {
         await signOut();
@@ -36,6 +49,7 @@ const AdminLayout = () => {
         { href: '/admin/dashboard/metodos-recebimento', label: 'Métodos de Recebimento', icon: CreditCard },
         { href: '/admin/dashboard/ai-training', label: 'Assistente IA', icon: Bot },
         { href: '/admin/dashboard/legal', label: 'Documentos Legais', icon: FileText },
+        { href: '/admin/dashboard/seguranca', label: 'Segurança', icon: ShieldCheck },
     ];
 
     return (

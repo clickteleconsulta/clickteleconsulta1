@@ -47,6 +47,7 @@ import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
 import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';
 import AdminWithdrawalsPage from '@/pages/admin/AdminWithdrawalsPage';
 import AdminReviewsPage from '@/pages/admin/AdminReviewsPage';
+import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 
 // Memed Integration
 import MemedPrescriptionPage from '@/integrations/memed/MemedPrescriptionPage';
@@ -165,6 +166,7 @@ function App() {
              <Route path="saques-pagamentos" element={<AdminWithdrawalsPage />} /> 
              <Route path="ai-training" element={<AdminAiTrainingPage />} />
              <Route path="legal" element={<AdminLegalPage />} />
+             <Route path="seguranca" element={<AdminSecurityPage />} />
              <Route index element={<Navigate to="agendamentos" replace />} />
           </Route>
 
