@@ -91,13 +91,7 @@ const DoctorArea = () => {
             label: 'Avaliações', 
             icon: Star 
         },
-        { 
-            id: 'pagamentos',
-            href: '/medico/dashboard/pagamentos', 
-            label: 'Pagamentos', 
-            icon: CreditCard 
-        },
-        { 
+        {
             id: 'financeiro',
             href: '/medico/dashboard/financeiro', 
             label: 'Financeiro', 
@@ -261,7 +255,6 @@ const DoctorArea = () => {
                             <Route path="perfil" element={<DoctorProfile />} />
                             <Route path="agenda" element={<DoctorSchedule />} />
                             <Route path="financeiro" element={<DoctorFinance />} />
-                            <Route path="pagamentos" element={<DoctorSubscriptionPage />} />
                             <Route path="seguranca" element={<DoctorSecurity />} />
                             <Route path="ajuda" element={<DoctorHelp />} />
 
