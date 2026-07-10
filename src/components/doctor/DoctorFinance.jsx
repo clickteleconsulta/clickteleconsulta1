@@ -50,8 +50,21 @@ const DoctorFinance = () => {
                 .eq('user_id', user.id)
                 .maybeSingle();
 
-            if (docError) throw docError;
-            if (!doc) { setLoading(false); return; }
+            if (docError) {
+                console.error('Erro ao carregar médico (financeiro):', docError);
+                toast({ variant: "destructive", title: "Erro", description: `Perfil do médico: ${docError.message}` });
+                setLoading(false);
+                return;
+            }
+            if (!doc) {
+                // Sem cadastro de médico ainda: mostra a tela zerada, sem erro.
+                setDoctorData(null);
+                setTransactions([]);
+                setWithdrawals([]);
+                setStats({ totalEarned: 0, pending: 0, cancelled: 0, available: 0 });
+                setLoading(false);
+                return;
+            }
             setDoctorData(doc);
 
             // Consultas (isolado: uma falha aqui não derruba a seção inteira)
@@ -124,7 +137,7 @@ const DoctorFinance = () => {
 
         } catch (error) {
             console.error("Financial fetch error:", error);
-            toast({ variant: "destructive", title: "Erro", description: "Não foi possível carregar os dados financeiros." });
+            toast({ variant: "destructive", title: "Erro", description: error?.message || "Não foi possível carregar os dados financeiros." });
         } finally {
             setLoading(false);
         }
