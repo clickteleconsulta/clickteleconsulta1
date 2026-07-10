@@ -11,6 +11,7 @@ import { Loader2, KeyRound } from 'lucide-react';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
 import TwoFactorCard from '@/components/TwoFactorCard';
+import DeleteAccountCard from '@/components/DeleteAccountCard';
 const CpfInput = React.forwardRef(({
   onChange,
   value,
@@ -148,6 +149,8 @@ const PatientData = () => {
             </Card>
 
             <TwoFactorCard />
+
+            <DeleteAccountCard />
         </div>;
 };
 export default PatientData;

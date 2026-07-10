@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TwoFactorCard from '@/components/TwoFactorCard';
 import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
+import DeleteAccountCard from '@/components/DeleteAccountCard';
 
 const ProfileSkeleton = () => (
     <div className="space-y-4">
@@ -364,6 +365,8 @@ const DoctorProfile = () => {
             </Card>
 
             <TwoFactorCard />
+
+            <DeleteAccountCard />
         </div>
     );
 };
