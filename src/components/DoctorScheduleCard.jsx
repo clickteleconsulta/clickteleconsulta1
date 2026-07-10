@@ -270,10 +270,17 @@ export function DoctorScheduleCard({
               </div>
 
               <div className="mt-2 text-[13px] text-slate-500">
-                  <div className="flex items-center gap-1.5">
-                      <Award className="w-4 h-4 text-emerald-500" />
-                      <span>Certificado</span>
-                  </div>
+                  <Tooltip delayDuration={150}>
+                      <TooltipTrigger asChild>
+                          <div className="flex items-center gap-1.5 w-fit cursor-help">
+                              <Award className="w-4 h-4 text-emerald-500" />
+                              <span>Certificado</span>
+                          </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="rounded-lg bg-gray-900 text-white border-0 text-xs max-w-[220px]">
+                          Médico parceiro verificado pela plataforma
+                      </TooltipContent>
+                  </Tooltip>
               </div>
               <div className="flex flex-wrap gap-2 items-center mt-auto pt-4 border-t border-slate-100">
                   <Badge variant="custom" className="bg-emerald-50 text-emerald-700 font-semibold py-1 px-2.5 rounded-full flex items-center gap-1.5 text-[12px] border border-emerald-100">
