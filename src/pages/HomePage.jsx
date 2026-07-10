@@ -77,13 +77,6 @@ const FEATURES = [
   { icon: Users, title: 'Especialistas Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
 ];
 
-// ─── Depoimentos ────────────────────────────────────────────────────────────────
-const TESTIMONIALS = [
-  { name: 'Ana S.', initials: 'AS', text: 'Muito prático! Consegui consulta em menos de 24h, sem sair de casa. O médico foi super atencioso.', rating: 5 },
-  { name: 'Carlos M.', initials: 'CM', text: 'A plataforma é fácil e intuitiva. Fiz minha consulta no intervalo do almoço. Recomendo muito!', rating: 5 },
-  { name: 'Júlia R.', initials: 'JR', text: 'Excelente atendimento e sem filas. A prescrição digital é genial. Recomendo para toda a família.', rating: 5 },
-];
-
 // ─── FAQ ────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
   { q: 'O que é teleconsulta?', a: 'Teleconsulta é uma consulta médica realizada por videochamada, regulamentada pelo CFM. Você recebe atendimento profissional sem precisar se deslocar até um consultório.' },
@@ -393,61 +386,6 @@ const HomePage = () => {
                 </motion.div>
               );
             })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════════
-          6. DEPOIMENTOS
-      ═══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <h2 className="font-display text-3xl md:text-4xl font-extrabold text-slate-900">
-              O que nossos pacientes dizem
-            </h2>
-          </motion.div>
-
-          <motion.div
-            className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto"
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {TESTIMONIALS.map((review, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp}
-                className="bg-white rounded-2xl p-7 shadow-sm border border-slate-100 hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center font-display text-sm font-bold text-blue-700">
-                    {review.initials}
-                  </div>
-                  <div>
-                    <p className="font-display text-sm font-bold text-slate-900">{review.name}</p>
-                    <div className="flex gap-0.5 mt-0.5">
-                      {Array.from({ length: review.rating }).map((_, j) => (
-                        <Star key={j} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="font-body text-sm text-slate-600 italic leading-relaxed mb-4">
-                  &ldquo;{review.text}&rdquo;
-                </p>
-                <div className="flex items-center gap-1.5 text-xs font-body text-blue-600">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Consulta verificada</span>
-                </div>
-              </motion.div>
-            ))}
           </motion.div>
         </div>
       </section>
