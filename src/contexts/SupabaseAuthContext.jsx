@@ -73,9 +73,10 @@ export const AuthProvider = ({ children }) => {
     if (data) setProfile(data);
   }, [user]);
 
-  const signUp = useCallback(async (email, password, options) => {
+  const signUp = useCallback(async (email, password, metadata) => {
     try {
-      const { data, error } = await supabase.auth.signUp({ email, password, options });
+      // metadata (full_name, cpf, whatsapp, data_nasc, etc.) precisa ir em options.data
+      const { data, error } = await supabase.auth.signUp({ email, password, options: { data: metadata } });
       if (error) throw error;
       return { data, error: null };
     } catch (error) {

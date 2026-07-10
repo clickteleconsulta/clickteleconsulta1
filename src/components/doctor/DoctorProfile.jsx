@@ -14,6 +14,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import useAsync from '@/hooks/useAsync';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import TwoFactorCard from '@/components/TwoFactorCard';
 
 const ProfileSkeleton = () => (
     <div className="space-y-4">
@@ -358,6 +359,8 @@ const DoctorProfile = () => {
                     </form>
                 </CardContent>
             </Card>
+
+            <TwoFactorCard />
         </div>
     );
 };

@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Loader2, KeyRound } from 'lucide-react';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
+import TwoFactorCard from '@/components/TwoFactorCard';
 const CpfInput = React.forwardRef(({
   onChange,
   value,
@@ -42,13 +43,14 @@ const PatientData = () => {
   } = useToast();
   const navigate = useNavigate();
   useEffect(() => {
-    if (profile) {
-      setValue('full_name', profile.full_name);
-      setValue('cpf', profile.cpf);
-      setValue('whatsapp', profile.whatsapp);
-      setValue('data_nasc', profile.data_nasc);
+    const meta = user?.user_metadata || {};
+    if (profile || user) {
+      setValue('full_name', profile?.full_name || meta.full_name || '');
+      setValue('cpf', profile?.cpf || meta.cpf || '');
+      setValue('whatsapp', profile?.whatsapp || meta.whatsapp || '');
+      setValue('data_nasc', profile?.data_nasc || meta.data_nasc || '');
     }
-  }, [profile, setValue]);
+  }, [profile, user, setValue]);
   const onSubmit = async formData => {
     // Only consider whatsapp for dirtiness as other fields are read-only
     if (!isDirty && formData.whatsapp === profile.whatsapp) {
@@ -135,6 +137,8 @@ const PatientData = () => {
                     </Button>
                 </CardContent>
             </Card>
+
+            <TwoFactorCard />
         </div>;
 };
 export default PatientData;
