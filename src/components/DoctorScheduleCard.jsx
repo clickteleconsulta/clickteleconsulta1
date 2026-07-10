@@ -221,6 +221,11 @@ export function DoctorScheduleCard({
 
   // Directly use the formatted price passed from the parent which already includes the tax
   const displayPrice = formattedPatientPrice ? formattedPatientPrice : 'Consultar';
+
+  // CRM: usa somente a parte numérica (o campo pode já vir com "/UF") e anexa a UF uma única vez
+  const crmNumber = doctor?.crm ? String(doctor.crm).split('/')[0].trim() : '';
+  const crmDisplay = crmNumber ? `CRM ${crmNumber}${doctor?.uf ? `/${doctor.uf}` : ''}` : '';
+  const specialtyLabel = doctor?.specialty ? `Médico ${doctor.specialty}` : 'Médico';
   
   if (typeof patientPrice === 'number') {
     console.log(`Rendering DoctorScheduleCard price for ${doctor?.name}:`, formattedPatientPrice);
@@ -256,8 +261,8 @@ export function DoctorScheduleCard({
               </div>
               
               <div className="mt-1">
-                  <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap" title={`${doctor?.specialty} ${doctor?.crm ? `CRM ${doctor.crm}/${doctor.uf}` : ''}`}>
-                      {doctor?.specialty}{doctor?.crm && ` · CRM ${doctor.crm}/${doctor.uf}`}
+                  <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap" title={`${specialtyLabel}${crmDisplay ? ` · ${crmDisplay}` : ''}`}>
+                      {specialtyLabel}{crmDisplay && ` · ${crmDisplay}`}
                   </p>
               </div>
 
@@ -268,8 +273,8 @@ export function DoctorScheduleCard({
                   </div>
               </div>
               <div className="flex flex-wrap gap-2 items-center mt-auto pt-4 border-t border-slate-100">
-                  <Badge variant="custom" className="bg-emerald-50 text-emerald-700 font-semibold py-0.5 px-2.5 rounded-full flex items-center gap-1 text-[11px] border border-emerald-100">
-                      <Video className="w-3 h-3 text-emerald-500" />
+                  <Badge variant="custom" className="bg-emerald-50 text-emerald-700 font-semibold py-1 px-2.5 rounded-full flex items-center gap-1.5 text-[12px] border border-emerald-100">
+                      <Video className="w-3.5 h-3.5 text-emerald-500" />
                       <span>Teleconsulta</span>
                   </Badge>
                   <Badge variant="custom" className="bg-blue-50 text-blue-700 font-bold py-1 px-3 rounded-full text-[13px] border border-blue-100 ml-auto">
