@@ -1055,9 +1055,6 @@ const DoctorConsultations = () => {
                 {isRefreshing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RefreshCw className="w-4 h-4 mr-2" />}
                 Atualizar
              </Button>
-            <div className="flex-1 md:flex-none">
-                <NewGuestAppointmentDialog />
-            </div>
         </div>
       </div>
 
