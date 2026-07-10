@@ -85,12 +85,12 @@ const NextSteps = ({ appointment }) => {
           },
           {
             icon: <Clock className="w-4 h-4 text-amber-500" />,
-            text: 'Conecte-se 15 minutos antes. Certifique-se de estar em local silencioso e com boa conexão.',
+            text: 'Anote a data e o horário do seu agendamento e fique atento aos lembretes.',
             color: 'bg-amber-50 border-amber-100',
           },
           {
-            icon: <Video className="w-4 h-4 text-primary" />,
-            text: 'Na hora da consulta, acesse "Minhas Consultas" e clique em "Entrar na Consulta".',
+            icon: <Calendar className="w-4 h-4 text-primary" />,
+            text: 'Acompanhe seu agendamento em "Minhas Consultas", na sua área do paciente.',
             color: 'bg-primary/5 border-primary/10',
           },
         ].map((step, i) => (

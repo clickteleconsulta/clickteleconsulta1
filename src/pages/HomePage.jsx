@@ -71,10 +71,10 @@ const STEPS = [
 const FEATURES = [
   { icon: Clock, title: 'Sem filas de espera', desc: 'Consulte no horário que funciona para você, sem esperar em salas lotadas.', span: 'md:col-span-2' },
   { icon: Shield, title: 'CFM Certificado', desc: 'Todos os profissionais são habilitados pelo Conselho Federal de Medicina.' },
-  { icon: FileText, title: 'Prescrição Digital (Memed)', desc: 'Receitas válidas em todo o Brasil, enviadas direto para seu celular.' },
+  { icon: Calendar, title: 'Agendamento Rápido', desc: 'Escolha especialidade, médico e horário e agende em poucos cliques.' },
   { icon: Lock, title: 'Seguro LGPD', desc: 'Seus dados protegidos com criptografia de ponta a ponta.' },
-  { icon: ClipboardList, title: 'Prontuário Online', desc: 'Histórico completo de consultas e documentos acessível 24h.' },
-  { icon: MonitorPlay, title: 'Videochamada HD', desc: 'Qualidade de áudio e vídeo profissional para um atendimento completo.' },
+  { icon: CheckCircle, title: 'Confirmação na Hora', desc: 'Seu agendamento é confirmado imediatamente após o pagamento.' },
+  { icon: Users, title: 'Especialistas Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
 ];
 
 // ─── Depoimentos ────────────────────────────────────────────────────────────────
