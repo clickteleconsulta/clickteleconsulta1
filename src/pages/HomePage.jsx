@@ -273,8 +273,8 @@ const HomePage = () => {
                     <Stethoscope className="w-4 h-4 text-sky-400" />
                   </div>
                   <div>
-                    <p className="font-display text-white text-xs font-bold">50+ médicos</p>
-                    <p className="text-slate-400 text-xs font-body">Diversas áreas</p>
+                    <p className="font-display text-white text-xs font-bold">Atendimentos médicos</p>
+                    <p className="text-slate-400 text-xs font-body">por telemedicina</p>
                   </div>
                 </div>
               </motion.div>
