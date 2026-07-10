@@ -261,9 +261,12 @@ export function DoctorScheduleCard({
               </div>
               
               <div className="mt-1">
-                  <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap" title={`${specialtyLabel}${crmDisplay ? ` · ${crmDisplay}` : ''}`}>
-                      {specialtyLabel}{crmDisplay && ` · ${crmDisplay}`}
+                  <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap" title={specialtyLabel}>
+                      {specialtyLabel}
                   </p>
+                  {crmDisplay && (
+                      <p className="text-[13px] text-slate-400">{crmDisplay}</p>
+                  )}
               </div>
 
               <div className="mt-2 text-[13px] text-slate-500">
