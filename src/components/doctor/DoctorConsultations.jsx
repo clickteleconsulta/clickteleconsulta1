@@ -864,7 +864,6 @@ const DoctorConsultations = () => {
                   <TableHead className="text-gray-600 font-medium text-sm py-4 px-4 w-[180px]">Protocolo</TableHead>
                   <TableHead className="text-gray-600 font-medium text-sm py-4 px-4">Paciente</TableHead>
                   <TableHead className="text-gray-600 font-medium text-sm py-4 px-4 w-[200px]">Status</TableHead>
-                  <TableHead className="text-center text-gray-600 font-medium text-sm py-4 px-4 w-[120px]">Acesso</TableHead>
                   <TableHead className="text-right text-gray-600 font-medium text-sm py-4 px-4 w-[140px]">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -937,33 +936,6 @@ const DoctorConsultations = () => {
                       <TableCell className="py-4 px-4 align-middle">
                         <StatusBadge status={appt.status} paymentStatus={appt.pagamento_status} reminderSentAt={appt.reminder_sent_at} whatsappStatus={appt.whatsapp_status} appointmentId={appt.id} />
                       </TableCell>
-                      <TableCell className="py-4 px-4 align-middle text-center">
-                        {!FEATURES.VIDEO_CALL ? (
-                          <span className="text-gray-300 text-xs">—</span>
-                        ) : (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="relative inline-block">
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                disabled={!canStartCall}
-                                onClick={() => canStartCall && handleOpenVideoCall(appt)}
-                                className={`w-9 h-9 rounded-xl transition-all duration-200 relative ${canStartCall ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 border border-emerald-200 shadow-sm" : "bg-gray-50 text-gray-300 border border-gray-100 cursor-not-allowed"}`}
-                              >
-                                <Video className="w-4 h-4" /> 
-                              </Button>
-                              {canStartCall && (
-                                <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full animate-pulse border-2 border-white"></span>
-                              )}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent className="rounded-lg">
-                            <p className="text-xs">{canStartCall ? 'Iniciar Consulta (Nova Aba)' : 'Indisponível'}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        )}
-                      </TableCell>
                       <TableCell className="py-4 px-4 text-right align-middle">
                         <div className="flex items-center justify-end gap-2">
                           <Button size="icon" variant={isCheckinCompleted ? 'success' : 'outline'} disabled={isActionLoading || !canCheckIn || isCheckinCompleted || isCancelled} onClick={() => handleConfirmAttendance(appt.id)} className={`h-9 w-9 rounded-lg shadow-sm border ${isCheckinCompleted ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-transparent' : 'border-gray-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-gray-400 hover:shadow-md transition-all'}`} title="Check-in">
@@ -996,9 +968,6 @@ const DoctorConsultations = () => {
                                   <CalendarClock className="mr-2 h-4 w-4 text-gray-500" /> Reagendar
                                 </DropdownMenuItem>
                               )}
-                              {appt.pagamento_status !== 'pago' && !isCancelled && !isGuest && <DropdownMenuItem onSelect={e => { e.preventDefault(); handleConfirmPayment(appt.id); }} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
-                                <CreditCard className="mr-2 h-4 w-4 text-gray-500" />Confirmar Pagamento
-                              </DropdownMenuItem>}
                               {!isCancelled && !isCheckinCompleted && <DropdownMenuSeparator className="my-1 bg-gray-100" />}
                               {!isCancelled && !isCheckinCompleted && <AlertDialog>
                                 <AlertDialogTrigger asChild>
