@@ -15,6 +15,7 @@ import useAsync from '@/hooks/useAsync';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TwoFactorCard from '@/components/TwoFactorCard';
+import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
 
 const ProfileSkeleton = () => (
     <div className="space-y-4">
@@ -297,6 +298,8 @@ const DoctorProfile = () => {
                     </Button>
                 </div>
             </form>
+
+            <DoctorDocumentation />
 
             <Card className="dashboard-card rounded-sm">
                 <CardHeader className="px-6 pt-6 pb-2">
