@@ -14,7 +14,8 @@ import {
   FileText,
   Star,
   AlertTriangle,
-  ShieldCheck
+  ShieldCheck,
+  FolderCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -44,6 +45,7 @@ const AdminLayout = () => {
     const navItems = [
         { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
         { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users },
+        { href: '/admin/dashboard/documentacao', label: 'Documentação', icon: FolderCheck },
         { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle },
         { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote },
         { href: '/admin/dashboard/metodos-recebimento', label: 'Métodos de Recebimento', icon: CreditCard },
