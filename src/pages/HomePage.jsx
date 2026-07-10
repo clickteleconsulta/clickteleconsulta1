@@ -46,9 +46,9 @@ const SPECIALTIES = [
   { name: 'Dermatologia', icon: Sparkles, color: 'bg-amber-50 text-amber-500' },
   { name: 'Neurologia', icon: Brain, color: 'bg-slate-100 text-slate-600' },
   { name: 'Ortopedia', icon: Bone, color: 'bg-orange-50 text-orange-500' },
-  { name: 'Pediatria', icon: Baby, color: 'bg-emerald-50 text-emerald-600' },
+  { name: 'Pediatria', icon: Baby, color: 'bg-blue-50 text-blue-600' },
   { name: 'Ginecologia', icon: User, color: 'bg-pink-50 text-pink-500' },
-  { name: 'Psicologia', icon: BrainCircuit, color: 'bg-teal-50 text-teal-600' },
+  { name: 'Psicologia', icon: BrainCircuit, color: 'bg-blue-50 text-blue-600' },
 ];
 
 // ─── Métricas de confiança ──────────────────────────────────────────────────────
@@ -110,7 +110,6 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
-  const [doctorCount, setDoctorCount] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -119,20 +118,6 @@ const HomePage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Paridade: nº de médicos cadastrados dinâmico (do banco)
-  useEffect(() => {
-    let active = true;
-    supabase
-      .from('medicos')
-      .select('id', { count: 'exact', head: true })
-      .then(({ count, error }) => {
-        if (active && !error && typeof count === 'number') setDoctorCount(count);
-      });
-    return () => { active = false; };
-  }, []);
-
-  const metricValue = (item) =>
-    item.key === 'doctors' && doctorCount != null ? String(doctorCount) : item.value;
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -195,7 +180,7 @@ const HomePage = () => {
                 <span className="relative inline-block">
                   clique
                   <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
-                    <path d="M2 6C50 2 150 2 198 6" stroke="#06b6d4" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M2 6C50 2 150 2 198 6" stroke="#2563eb" strokeWidth="3" strokeLinecap="round" />
                   </svg>
                 </span>{' '}
                 de{' '}
@@ -245,8 +230,8 @@ const HomePage = () => {
                 className="absolute top-8 right-12 w-52 bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-teal-500/20 flex items-center justify-center">
-                    <Video className="w-5 h-5 text-teal-400" />
+                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <Video className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
                     <p className="font-display text-white text-sm font-bold">Consulta HD</p>
@@ -267,12 +252,12 @@ const HomePage = () => {
                 className="absolute bottom-16 right-4 w-48 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-emerald-400" />
+                  <div className="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
                     <p className="font-display text-white text-xs font-bold">LGPD Compliant</p>
-                    <p className="text-emerald-400 text-xs font-body">100% seguro</p>
+                    <p className="text-blue-400 text-xs font-body">100% seguro</p>
                   </div>
                 </div>
               </motion.div>
@@ -297,88 +282,9 @@ const HomePage = () => {
               {/* Círculos decorativos */}
               <div className="absolute top-0 right-0 w-64 h-64 rounded-full border border-white/5" />
               <div className="absolute bottom-0 left-8 w-48 h-48 rounded-full border border-white/5" />
-              <div className="absolute top-1/3 left-1/4 w-32 h-32 rounded-full bg-teal-500/5" />
+              <div className="absolute top-1/3 left-1/4 w-32 h-32 rounded-full bg-blue-500/5" />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════════
-          2. BARRA DE CONFIANÇA
-      ═══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white border-y border-slate-100">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-wrap justify-center md:justify-between items-center gap-8 md:gap-4">
-            {TRUST_METRICS.map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex items-center gap-4"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0">
-                    <Icon className={`w-6 h-6 ${item.iconClass || item.color}`} />
-                  </div>
-                  <div>
-                    <p className="font-display text-3xl font-extrabold text-slate-900">{metricValue(item)}</p>
-                    <p className="font-body text-sm text-slate-500">{item.label}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════════
-          3. ESPECIALIDADES
-      ═══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-slate-50 py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="font-display text-3xl md:text-4xl font-extrabold text-slate-900">
-              Especialidades disponíveis
-            </h2>
-            <p className="font-body mt-3 text-slate-500 max-w-md mx-auto">
-              Atendimento online com especialistas em diversas áreas da saúde
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto"
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {SPECIALTIES.map((spec, i) => {
-              const Icon = spec.icon;
-              return (
-                <motion.button
-                  key={i}
-                  variants={fadeUp}
-                  onClick={() => navigate(`/medicos?especialidade=${encodeURIComponent(spec.name)}`)}
-                  className="flex flex-col items-center gap-3 p-6 bg-white rounded-2xl shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer group"
-                >
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${spec.color} group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-7 h-7" />
-                  </div>
-                  <span className="font-display text-sm font-bold text-slate-700 text-center">
-                    {spec.name}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </motion.div>
         </div>
       </section>
 
@@ -417,10 +323,10 @@ const HomePage = () => {
                     className="flex flex-col items-center text-center flex-1 px-4"
                   >
                     <div className="relative mb-5">
-                      <div className="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-teal-50 transition-colors">
-                        <Icon className="w-8 h-8 text-teal-500" />
+                      <div className="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                        <Icon className="w-8 h-8 text-blue-500" />
                       </div>
-                      <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-teal-500 text-white text-sm font-display font-bold flex items-center justify-center shadow-lg shadow-teal-500/30">
+                      <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-display font-bold flex items-center justify-center shadow-lg shadow-blue-500/30">
                         {index + 1}
                       </span>
                     </div>
@@ -475,8 +381,8 @@ const HomePage = () => {
                   variants={fadeUp}
                   className={`bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ${feature.span || ''}`}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-teal-500" />
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-blue-500" />
                   </div>
                   <h3 className="font-display text-lg font-bold text-slate-900 mb-2">
                     {feature.title}
@@ -521,7 +427,7 @@ const HomePage = () => {
                 className="bg-white rounded-2xl p-7 shadow-sm border border-slate-100 hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center font-display text-sm font-bold text-teal-700">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center font-display text-sm font-bold text-blue-700">
                     {review.initials}
                   </div>
                   <div>
@@ -536,7 +442,7 @@ const HomePage = () => {
                 <p className="font-body text-sm text-slate-600 italic leading-relaxed mb-4">
                   &ldquo;{review.text}&rdquo;
                 </p>
-                <div className="flex items-center gap-1.5 text-xs font-body text-emerald-600">
+                <div className="flex items-center gap-1.5 text-xs font-body text-blue-600">
                   <CheckCircle className="w-3.5 h-3.5" />
                   <span>Consulta verificada</span>
                 </div>
@@ -552,7 +458,7 @@ const HomePage = () => {
       <section
         className="relative py-20 overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #0a2540 0%, #06b6d4 100%)',
+          background: 'linear-gradient(135deg, #0a2540 0%, #2563eb 100%)',
         }}
       >
         {/* Dot grid pattern */}
