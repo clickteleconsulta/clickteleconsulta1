@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope } from 'lucide-react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { format, parseISO } from 'date-fns';
@@ -34,6 +34,7 @@ const DoctorFinance = () => {
     const [withdrawAmount, setWithdrawAmount] = useState('');
     const [requestingWithdraw, setRequestingWithdraw] = useState(false);
     const [doctorData, setDoctorData] = useState(null);
+    const [detailTx, setDetailTx] = useState(null);
 
     useEffect(() => {
         if (user) {
@@ -72,9 +73,9 @@ const DoctorFinance = () => {
             {
                 const { data, error } = await supabase
                     .from('agendamentos')
-                    .select('*, patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name)')
+                    .select('*, patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name), guia:guias!agendamentos_guia_id_fkey(servico_snapshot)')
                     .eq('medico_id', doc.id)
-                    .order('appointment_date', { ascending: false });
+                    .order('created_at', { ascending: false });
                 if (error) console.warn('Erro ao carregar consultas (financeiro):', error.message);
                 else appts = data || [];
             }
@@ -115,10 +116,14 @@ const DoctorFinance = () => {
                     pending += netValue;
                 }
 
-                // Data segura para exibição (evita parseISO em valor nulo)
+                // Data da consulta (evita parseISO em valor nulo)
                 const raw = appt.horario_inicio || (appt.appointment_date ? `${appt.appointment_date}T${appt.appointment_time || '00:00:00'}` : null);
                 const dateObj = raw ? new Date(raw) : null;
                 const validDate = dateObj && !isNaN(dateObj.getTime()) ? dateObj : null;
+
+                // Data de criação do pagamento/guia
+                const created = appt.created_at ? new Date(appt.created_at) : null;
+                const createdValid = created && !isNaN(created.getTime()) ? created : null;
 
                 return {
                     ...appt,
@@ -127,6 +132,9 @@ const DoctorFinance = () => {
                     totalValue,
                     displayDate: validDate ? format(validDate, 'dd/MM/yyyy') : '—',
                     displayTime: validDate ? format(validDate, 'HH:mm') : '',
+                    createdDisplay: createdValid ? format(createdValid, 'dd/MM/yyyy') : '—',
+                    createdTime: createdValid ? format(createdValid, 'HH:mm') : '',
+                    serviceName: appt.guia?.servico_snapshot?.nome || 'Teleconsulta',
                 };
             });
 
@@ -301,20 +309,21 @@ const DoctorFinance = () => {
                 <TabsContent value="consultas" className="mt-4">
                     <Card className="border border-gray-200 shadow-sm rounded-sm">
                         <CardHeader className="p-4 border-b border-gray-100">
-                            <CardTitle className="text-sm font-semibold text-gray-900">Extrato de Consultas</CardTitle>
-                            <CardDescription className="text-xs text-gray-500">Histórico detalhado de atendimentos.</CardDescription>
+                            <CardTitle className="text-sm font-semibold text-gray-900">Guias de Pagamento</CardTitle>
+                            <CardDescription className="text-xs text-gray-500">Histórico detalhado dos pagamentos das consultas.</CardDescription>
                         </CardHeader>
-                        <CardContent className="p-0">
+                        <CardContent className="p-0 overflow-x-auto">
                             <Table>
                                 <TableHeader className="bg-gray-50 border-b border-gray-200">
                                     <TableRow className="h-9 hover:bg-transparent">
-                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Data</TableHead>
-                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Paciente</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Data de Criação</TableHead>
+                                        <TableHead className="text-right text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Valor</TableHead>
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Status</TableHead>
-                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Pagamento</TableHead>
-                                        <TableHead className="text-right text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Valor Bruto</TableHead>
-                                        <TableHead className="text-right text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Taxa Plat.</TableHead>
-                                        <TableHead className="text-right font-bold text-green-700 text-[10px] uppercase tracking-wide py-2 px-4">Líquido</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Data da Consulta</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Paciente</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Especialista</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Serviço</TableHead>
+                                        <TableHead className="text-right text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Ações</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -323,34 +332,38 @@ const DoctorFinance = () => {
                                             <TableRow key={t.id} className="h-10 hover:bg-gray-50 border-b border-gray-100 last:border-0">
                                                 <TableCell className="py-2 px-4">
                                                     <div className="flex flex-col">
-                                                        <span className="font-semibold text-gray-900 text-xs">
-                                                            {t.displayDate}
-                                                        </span>
-                                                        <span className="text-[10px] text-gray-500">{t.displayTime}</span>
+                                                        <span className="font-semibold text-gray-900 text-xs">{t.createdDisplay}</span>
+                                                        <span className="text-[10px] text-gray-500">{t.createdTime}</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="py-2 px-4 text-xs font-medium text-gray-700">{t.patient?.full_name}</TableCell>
-                                                <TableCell className="py-2 px-4">{getStatusBadge(t.status)}</TableCell>
+                                                <TableCell className="text-right text-gray-900 text-xs py-2 px-4 font-semibold">
+                                                    {t.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                </TableCell>
                                                 <TableCell className="py-2 px-4">
-                                                    <Badge variant="outline" className={`h-5 text-[10px] px-2 rounded-sm font-medium border ${t.pagamento_status === 'pago' ? 'border-green-200 text-green-700 bg-green-50' : 'border-gray-200 text-gray-500'}`}>
+                                                    <Badge variant="outline" className={`h-5 text-[10px] px-2 rounded-sm font-medium border ${t.pagamento_status === 'pago' ? 'border-green-200 text-green-700 bg-green-50' : 'border-amber-200 text-amber-700 bg-amber-50'}`}>
                                                         {t.pagamento_status?.toUpperCase() || 'PENDENTE'}
                                                     </Badge>
                                                 </TableCell>
-                                                <TableCell className="text-right text-gray-600 text-xs py-2 px-4 font-medium">
-                                                    {t.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                <TableCell className="py-2 px-4">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs text-gray-700">{t.displayDate}</span>
+                                                        <span className="text-[10px] text-gray-500">{t.displayTime}</span>
+                                                    </div>
                                                 </TableCell>
-                                                <TableCell className="text-right text-red-500 text-[10px] py-2 px-4">
-                                                    - {t.platformFee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                                </TableCell>
-                                                <TableCell className="text-right font-bold text-green-700 text-xs py-2 px-4">
-                                                    {t.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                <TableCell className="py-2 px-4 text-xs font-medium text-gray-700">{t.patient?.full_name || '—'}</TableCell>
+                                                <TableCell className="py-2 px-4 text-xs text-gray-700">{doctorData?.public_name || doctorData?.name || '—'}</TableCell>
+                                                <TableCell className="py-2 px-4 text-xs text-gray-700">{t.serviceName}</TableCell>
+                                                <TableCell className="text-right py-2 px-4">
+                                                    <Button variant="outline" size="sm" onClick={() => setDetailTx(t)} className="h-7 gap-1 text-[11px] rounded-sm border-gray-300 text-gray-700">
+                                                        <Eye className="w-3 h-3" /> Ver detalhes
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={7} className="text-center py-8 text-gray-400 text-xs">
-                                                Nenhuma transação encontrada.
+                                            <TableCell colSpan={8} className="text-center py-8 text-gray-400 text-xs">
+                                                Nenhuma guia de pagamento encontrada.
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -430,6 +443,56 @@ const DoctorFinance = () => {
             <div className="pt-4">
                 <WithdrawalDataForm onSave={fetchFinancialData} />
             </div>
+
+            <Dialog open={!!detailTx} onOpenChange={(o) => !o && setDetailTx(null)}>
+                <DialogContent className="p-6 sm:max-w-[460px] rounded-sm border-gray-200">
+                    <DialogHeader className="p-0 pb-3">
+                        <DialogTitle className="text-lg font-semibold text-gray-900">Detalhes da Guia de Pagamento</DialogTitle>
+                        <DialogDescription className="text-xs text-gray-500">
+                            {detailTx?.protocolo ? `Protocolo ${detailTx.protocolo}` : 'Informações do pagamento e da consulta.'}
+                        </DialogDescription>
+                    </DialogHeader>
+                    {detailTx && (
+                        <div className="space-y-3 text-sm">
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-sm border border-gray-200">
+                                <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Valor</span>
+                                <span className="text-lg font-bold text-gray-900">{detailTx.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Status</p>
+                                    <Badge variant="outline" className={`h-5 text-[10px] px-2 rounded-sm font-medium border ${detailTx.pagamento_status === 'pago' ? 'border-green-200 text-green-700 bg-green-50' : 'border-amber-200 text-amber-700 bg-amber-50'}`}>
+                                        {detailTx.pagamento_status?.toUpperCase() || 'PENDENTE'}
+                                    </Badge>
+                                </div>
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Serviço</p>
+                                    <p className="text-xs text-gray-700 flex items-center gap-1"><Stethoscope className="w-3 h-3 text-gray-400" /> {detailTx.serviceName}</p>
+                                </div>
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Data de Criação</p>
+                                    <p className="text-xs text-gray-700">{detailTx.createdDisplay} {detailTx.createdTime}</p>
+                                </div>
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Data da Consulta</p>
+                                    <p className="text-xs text-gray-700 flex items-center gap-1"><CalendarIcon className="w-3 h-3 text-gray-400" /> {detailTx.displayDate} {detailTx.displayTime}</p>
+                                </div>
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Paciente</p>
+                                    <p className="text-xs text-gray-700 flex items-center gap-1"><UserIcon className="w-3 h-3 text-gray-400" /> {detailTx.patient?.full_name || '—'}</p>
+                                </div>
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Especialista</p>
+                                    <p className="text-xs text-gray-700">{doctorData?.public_name || doctorData?.name || '—'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <DialogFooter className="p-0 pt-4">
+                        <Button variant="outline" onClick={() => setDetailTx(null)} className="h-9 text-xs rounded-sm border-gray-300">Fechar</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             <Dialog open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen}>
                 <DialogContent className="p-6 sm:max-w-[400px] rounded-sm border-gray-200">

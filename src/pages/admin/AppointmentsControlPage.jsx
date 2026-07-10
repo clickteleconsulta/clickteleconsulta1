@@ -65,7 +65,7 @@ const AppointmentsControlPage = () => {
             *,
             medicos ( id, name, specialty, crm, uf, payment_settings ),
             patient:perfis_usuarios!patient_id ( id, full_name, email, cpf, whatsapp ),
-            guias:agendamentos_guia_id_fkey ( medico_snapshot )
+            guias:agendamentos_guia_id_fkey ( medico_snapshot, servico_snapshot )
         `)
         .order('created_at', { ascending: false });
 
@@ -91,6 +91,13 @@ const AppointmentsControlPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Formatação de data segura (evita crash com valores nulos/inválidos)
+  const safeFmt = (val, pattern) => {
+    if (!val) return '—';
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? '—' : format(d, pattern);
   };
 
   // Helper to calculate financials for a single appointment
@@ -127,7 +134,7 @@ const AppointmentsControlPage = () => {
       const matchesDoctor = doctorFilter === 'all' || apt.medicos?.id === doctorFilter;
       
       let matchesDate = true;
-      if (startDate || endDate) {
+      if ((startDate || endDate) && apt.appointment_date) {
         const aptDate = parseISO(apt.appointment_date);
         const start = startDate ? startOfDay(parseISO(startDate)) : null;
         const end = endDate ? endOfDay(parseISO(endDate)) : null;
@@ -397,14 +404,14 @@ const AppointmentsControlPage = () => {
 
         <Card className="bg-white border-green-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-green-700">Taxa do Site (Total)</CardTitle>
+            <CardTitle className="text-sm font-medium text-green-700">Receita Paga (Total)</CardTitle>
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-700">
-              {stats.totalSiteFees.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              {stats.totalRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
             </div>
-            <p className="text-xs text-green-500 mt-1">Receita da plataforma</p>
+            <p className="text-xs text-green-500 mt-1">Pagamentos confirmados</p>
           </CardContent>
         </Card>
       </div>
@@ -487,13 +494,13 @@ const AppointmentsControlPage = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50/50">
-                <TableHead>Data / Hora</TableHead>
-                <TableHead>Paciente</TableHead>
-                <TableHead>Médico</TableHead>
-                <TableHead className="text-right">Valor Total</TableHead>
-                <TableHead className="text-right text-blue-600">Repasse</TableHead>
-                <TableHead className="text-right text-green-600">Taxa Site</TableHead>
+                <TableHead>Data de Criação</TableHead>
+                <TableHead className="text-right">Valor</TableHead>
                 <TableHead className="text-center">Status</TableHead>
+                <TableHead>Data da Consulta</TableHead>
+                <TableHead>Paciente</TableHead>
+                <TableHead>Especialista</TableHead>
+                <TableHead>Serviço</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -506,20 +513,40 @@ const AppointmentsControlPage = () => {
                 </TableRow>
               ) : (
                 paginatedAppointments.map((apt) => {
-                  const { totalValue, siteFee, doctorPayout, feePercent } = calculateFinancials(apt);
+                  const { totalValue } = calculateFinancials(apt);
+                  const serviceName = apt.guias?.servico_snapshot?.nome || 'Teleconsulta';
 
                   return (
                   <TableRow key={apt.id} className="hover:bg-gray-50/50">
                     <TableCell>
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-900">
-                          {format(parseISO(apt.appointment_date), 'dd/MM/yyyy')}
+                          {safeFmt(apt.created_at, 'dd/MM/yyyy')}
                         </span>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {apt.appointment_time?.slice(0, 5)}
+                        <span className="text-xs text-muted-foreground">
+                          {safeFmt(apt.created_at, 'HH:mm')}
                         </span>
                         <span className="text-[10px] text-gray-400 font-mono mt-1">
                             {apt.protocolo || '-'}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right font-medium">
+                        {totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </TableCell>
+                    <TableCell className="text-center">
+                        <div className="flex flex-col items-center gap-1">
+                            {getStatusBadge(apt.status)}
+                            {getPaymentBadge(apt.pagamento_status)}
+                        </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-900">
+                          {safeFmt(apt.appointment_date, 'dd/MM/yyyy')}
+                        </span>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> {apt.appointment_time?.slice(0, 5)}
                         </span>
                       </div>
                     </TableCell>
@@ -534,7 +561,7 @@ const AppointmentsControlPage = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                       <div className="flex flex-col max-w-[180px]">
+                       <div className="flex flex-col max-w-[160px]">
                         <span className="text-sm truncate" title={apt.medicos?.name}>
                           {apt.medicos?.name}
                         </span>
@@ -543,26 +570,8 @@ const AppointmentsControlPage = () => {
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-right font-medium">
-                        {totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </TableCell>
-                    <TableCell className="text-right text-blue-600 text-xs">
-                         <div className="flex flex-col items-end">
-                             <span>{doctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                             <span className="text-[9px] text-gray-400">{100 - feePercent}%</span>
-                         </div>
-                    </TableCell>
-                    <TableCell className="text-right text-green-600 text-xs">
-                         <div className="flex flex-col items-end">
-                             <span>{siteFee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                             <span className="text-[9px] text-gray-400">{feePercent}%</span>
-                         </div>
-                    </TableCell>
-                    <TableCell className="text-center">
-                        <div className="flex flex-col items-center gap-1">
-                            {getStatusBadge(apt.status)}
-                            {getPaymentBadge(apt.pagamento_status)}
-                        </div>
+                    <TableCell className="text-sm text-gray-700">
+                        {serviceName}
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -575,7 +584,7 @@ const AppointmentsControlPage = () => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Ações</DropdownMenuLabel>
                           <DropdownMenuItem onClick={() => { setSelectedAppointment(apt); setIsViewOpen(true); }}>
-                            <Eye className="mr-2 h-4 w-4" /> Detalhes
+                            <Eye className="mr-2 h-4 w-4" /> Ver detalhes
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleEditClick(apt)}>
                             <Pencil className="mr-2 h-4 w-4" /> Editar
@@ -673,7 +682,7 @@ const AppointmentsControlPage = () => {
                             </h4>
                             <div className="space-y-2 text-sm">
                                 <p><span className="text-muted-foreground">Protocolo:</span> {selectedAppointment.protocolo || 'N/A'}</p>
-                                <p><span className="text-muted-foreground">Data:</span> {format(parseISO(selectedAppointment.appointment_date), 'dd/MM/yyyy')}</p>
+                                <p><span className="text-muted-foreground">Data:</span> {safeFmt(selectedAppointment.appointment_date, 'dd/MM/yyyy')}</p>
                                 <p><span className="text-muted-foreground">Horário:</span> {selectedAppointment.appointment_time}</p>
                                 <p><span className="text-muted-foreground">Status:</span> {selectedAppointment.status}</p>
                                 <p><span className="text-muted-foreground">Link da Sala:</span> {selectedAppointment.meeting_link ? <a href={selectedAppointment.meeting_link} target="_blank" rel="noreferrer" className="text-blue-600 underline">Acessar Sala</a> : 'Não gerado'}</p>
@@ -685,9 +694,9 @@ const AppointmentsControlPage = () => {
                                 <DollarSign className="w-4 h-4"/> Financeiro
                             </h4>
                             <div className="space-y-2 text-sm">
-                                <p><span className="text-muted-foreground">Valor Total:</span> {financialDetails.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                                <p><span className="text-muted-foreground">Repasse Médico ({100 - financialDetails.feePercent}%):</span> {financialDetails.doctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                                <p><span className="text-muted-foreground">Taxa Site ({financialDetails.feePercent}%):</span> {financialDetails.siteFee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                                <p><span className="text-muted-foreground">Valor:</span> {financialDetails.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                                <p><span className="text-muted-foreground">Serviço:</span> {selectedAppointment.guias?.servico_snapshot?.nome || 'Teleconsulta'}</p>
+                                <p><span className="text-muted-foreground">Data de Criação:</span> {safeFmt(selectedAppointment.created_at, "dd/MM/yyyy 'às' HH:mm")}</p>
                                 <p><span className="text-muted-foreground">Status Pagamento:</span> {selectedAppointment.pagamento_status || 'Pendente'}</p>
                                 <p><span className="text-muted-foreground">ID Transação:</span> {selectedAppointment.checkout_session_id || '-'}</p>
                             </div>
