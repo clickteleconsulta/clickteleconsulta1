@@ -129,24 +129,18 @@ const DoctorDocumentation = () => {
         if (!user?.id) return;
         setLoading(true);
         const { data, error } = await supabase
-            .from('medicos')
-            .select('documentos')
-            .eq('user_id', user.id)
-            .maybeSingle();
-        if (!error) setDocs(data?.documentos || {});
+            .from('medico_documentos')
+            .select('*')
+            .eq('user_id', user.id);
+        if (!error && data) {
+            const map = {};
+            data.forEach((row) => { map[row.slot] = row; });
+            setDocs(map);
+        }
         setLoading(false);
     }, [user?.id]);
 
     useEffect(() => { load(); }, [load]);
-
-    const persist = async (next) => {
-        const { error } = await supabase
-            .from('medicos')
-            .update({ documentos: next, updated_at: new Date().toISOString() })
-            .eq('user_id', user.id);
-        if (error) throw error;
-        setDocs(next);
-    };
 
     const handleUpload = async (slotKey, file) => {
         const ext = (file.name.split('.').pop() || '').toLowerCase();
@@ -167,17 +161,22 @@ const DoctorDocumentation = () => {
             if (upErr) throw upErr;
 
             const prev = docs[slotKey];
-            const next = {
-                ...docs,
-                [slotKey]: {
-                    path,
-                    name: file.name,
-                    size: file.size,
-                    uploaded_at: new Date().toISOString(),
-                    status: 'pendente',
-                },
+            const row = {
+                user_id: user.id,
+                slot: slotKey,
+                path,
+                name: file.name,
+                size: file.size,
+                status: 'pendente',
+                uploaded_at: new Date().toISOString(),
             };
-            await persist(next);
+            const { data, error } = await supabase
+                .from('medico_documentos')
+                .upsert(row, { onConflict: 'user_id,slot' })
+                .select()
+                .single();
+            if (error) throw error;
+            setDocs((d) => ({ ...d, [slotKey]: data }));
             if (prev?.path && prev.path !== path) {
                 supabase.storage.from('doctor-documents').remove([prev.path]).catch(() => {});
             }
@@ -209,9 +208,13 @@ const DoctorDocumentation = () => {
         if (!doc) return;
         setBusyKey(slotKey);
         try {
-            const next = { ...docs };
-            delete next[slotKey];
-            await persist(next);
+            const { error } = await supabase
+                .from('medico_documentos')
+                .delete()
+                .eq('user_id', user.id)
+                .eq('slot', slotKey);
+            if (error) throw error;
+            setDocs((d) => { const n = { ...d }; delete n[slotKey]; return n; });
             if (doc.path) supabase.storage.from('doctor-documents').remove([doc.path]).catch(() => {});
             toast({ title: 'Documento removido.' });
         } catch (err) {
