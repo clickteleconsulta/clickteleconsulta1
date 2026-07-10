@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -15,20 +15,25 @@ import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedi
 import { FEATURES } from '@/config/features';
 
 const PatientConsultations = () => {
-    const { appointments, loading, fetchAppointments } = useAppointments();
+    const { appointments, loading, refetchAppointments } = useAppointments();
     const { toast } = useToast();
     const navigate = useNavigate();
-    
+
+    // Recarrega a lista sempre que a página é aberta (evita lista desatualizada)
+    useEffect(() => {
+        refetchAppointments?.();
+    }, [refetchAppointments]);
+
     // Integrate Jitsi Hook for blocked room handling only
     const { generateRoomInfo } = useJitsiRoom();
     const [blockedRoom, setBlockedRoom] = useState(null);
     
     const upcomingAppointments = useMemo(() => appointments
-        .filter(appt => ['confirmado', 'reagendado', 'pendente'].includes(appt.status))
+        .filter(appt => ['confirmado', 'reagendado', 'pendente', 'agendado'].includes(appt.status))
         .sort((a, b) => new Date(a.horario_inicio) - new Date(b.horario_inicio)), [appointments]);
 
     const pastAppointments = useMemo(() => appointments
-        .filter(appt => !['confirmado', 'reagendado', 'pendente'].includes(appt.status))
+        .filter(appt => !['confirmado', 'reagendado', 'pendente', 'agendado'].includes(appt.status))
         .sort((a, b) => new Date(b.horario_inicio) - new Date(a.horario_inicio)), [appointments]);
 
     const getCallAccessibility = (scheduledTime, callOpenMinutesAfter = 30) => {
@@ -105,7 +110,7 @@ const PatientConsultations = () => {
                  <AnimatePresence>
                     {appointmentsList.map(appt => {
                         const callAccess = getCallAccessibility(appt.horario_inicio, appt.call_open_minutes_after);
-                        const isUpcoming = ['confirmado', 'reagendado', 'pendente'].includes(appt.status);
+                        const isUpcoming = ['confirmado', 'reagendado', 'pendente', 'agendado'].includes(appt.status);
                         
                         // Check status sala for "Waiting doctor" message
                         const doctorStarted = appt.status_sala === 'medico_iniciou';
