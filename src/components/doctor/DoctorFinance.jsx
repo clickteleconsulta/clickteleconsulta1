@@ -42,67 +42,82 @@ const DoctorFinance = () => {
     }, [user]);
 
     const fetchFinancialData = async () => {
-        if (!doctorData) setLoading(true); 
+        if (!doctorData) setLoading(true);
         try {
             const { data: doc, error: docError } = await supabase
                 .from('medicos')
                 .select('*')
                 .eq('user_id', user.id)
-                .single();
-            
+                .maybeSingle();
+
             if (docError) throw docError;
+            if (!doc) { setLoading(false); return; }
             setDoctorData(doc);
-            
-            const { data: appts, error: apptsError } = await supabase
-                .from('agendamentos')
-                .select('*, patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name)')
-                .eq('medico_id', doc.id)
-                .order('appointment_date', { ascending: false });
 
-            if (apptsError) throw apptsError;
+            // Consultas (isolado: uma falha aqui não derruba a seção inteira)
+            let appts = [];
+            {
+                const { data, error } = await supabase
+                    .from('agendamentos')
+                    .select('*, patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name)')
+                    .eq('medico_id', doc.id)
+                    .order('appointment_date', { ascending: false });
+                if (error) console.warn('Erro ao carregar consultas (financeiro):', error.message);
+                else appts = data || [];
+            }
 
-            const { data: withdraws, error: withdrawsError } = await supabase
-                .from('saques')
-                .select('*')
-                .eq('doctor_id', doc.id)
-                .order('created_at', { ascending: false });
+            // Saques (isolado: a tabela/coluna pode não existir em alguns ambientes)
+            let withdraws = [];
+            {
+                const { data, error } = await supabase
+                    .from('saques')
+                    .select('*')
+                    .eq('doctor_id', doc.id)
+                    .order('created_at', { ascending: false });
+                if (error) console.warn('Erro ao carregar saques (financeiro):', error.message);
+                else withdraws = data || [];
+            }
+            setWithdrawals(withdraws);
 
-            if (withdrawsError) throw withdrawsError;
-            setWithdrawals(withdraws || []);
-
-            let totalEarned = 0; 
+            let totalEarned = 0;
             let pending = 0;
             let cancelled = 0;
-            let available = 0;
 
-            const totalWithdrawn = (withdraws || [])
+            const totalWithdrawn = withdraws
                 .filter(w => w.status !== 'Cancelado')
-                .reduce((acc, curr) => acc + parseFloat(curr.valor), 0);
+                .reduce((acc, curr) => acc + (parseFloat(curr.valor) || 0), 0);
+
+            const feePercent = doc.payment_settings?.platform_fee_percent || 0;
 
             const processedTransactions = appts.map(appt => {
                 const totalValue = (appt.price_in_cents || 0) / 100;
-                const feePercent = doc.payment_settings?.platform_fee_percent || 0; 
                 const platformFee = totalValue * (feePercent / 100);
                 const netValue = totalValue - platformFee;
 
                 if (appt.status === 'cancelado') {
-                    cancelled += totalValue; 
+                    cancelled += totalValue;
                 } else if (appt.pagamento_status === 'pago') {
                     totalEarned += netValue;
                 } else if (appt.status === 'confirmado') {
                     pending += netValue;
                 }
 
+                // Data segura para exibição (evita parseISO em valor nulo)
+                const raw = appt.horario_inicio || (appt.appointment_date ? `${appt.appointment_date}T${appt.appointment_time || '00:00:00'}` : null);
+                const dateObj = raw ? new Date(raw) : null;
+                const validDate = dateObj && !isNaN(dateObj.getTime()) ? dateObj : null;
+
                 return {
                     ...appt,
                     netValue,
                     platformFee,
-                    totalValue
+                    totalValue,
+                    displayDate: validDate ? format(validDate, 'dd/MM/yyyy') : '—',
+                    displayTime: validDate ? format(validDate, 'HH:mm') : '',
                 };
             });
 
-            available = totalEarned - totalWithdrawn;
-            if (available < 0) available = 0;
+            const available = Math.max(0, totalEarned - totalWithdrawn);
 
             setStats({ totalEarned, pending, cancelled, available });
             setTransactions(processedTransactions);
@@ -296,9 +311,9 @@ const DoctorFinance = () => {
                                                 <TableCell className="py-2 px-4">
                                                     <div className="flex flex-col">
                                                         <span className="font-semibold text-gray-900 text-xs">
-                                                            {format(parseISO(t.appointment_date), 'dd/MM/yyyy')}
+                                                            {t.displayDate}
                                                         </span>
-                                                        <span className="text-[10px] text-gray-500">{t.appointment_time?.slice(0, 5)}</span>
+                                                        <span className="text-[10px] text-gray-500">{t.displayTime}</span>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="py-2 px-4 text-xs font-medium text-gray-700">{t.patient?.full_name}</TableCell>
@@ -352,11 +367,12 @@ const DoctorFinance = () => {
                                 <TableBody>
                                     {withdrawals.length > 0 ? (
                                         withdrawals.map((w) => {
-                                            const details = w.dados_saque_json;
+                                            const details = w.dados_saque_json || {};
+                                            const createdAt = w.created_at ? new Date(w.created_at) : null;
                                             return (
                                                 <TableRow key={w.id} className="h-10 hover:bg-gray-50 border-b border-gray-100 last:border-0">
                                                     <TableCell className="font-medium text-gray-700 text-xs py-2 px-4">
-                                                        {format(parseISO(w.created_at), "dd/MM/yyyy 'às' HH:mm")}
+                                                        {createdAt && !isNaN(createdAt.getTime()) ? format(createdAt, "dd/MM/yyyy 'às' HH:mm") : '—'}
                                                     </TableCell>
                                                     <TableCell className="font-bold text-gray-900 text-xs py-2 px-4">
                                                         {parseFloat(w.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
