@@ -850,26 +850,6 @@ const DoctorConsultations = () => {
     return (
       <div className="flex items-center gap-1.5">
         <span className={containerClass}>{icon}{text}</span>
-        {(status === 'confirmado' || status === 'agendado') && (paymentStatus === 'pago' || paymentStatus === 'pendente') && (
-          <>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className={`p-1.5 rounded-full transition-colors border border-transparent hover:border-gray-200 ${whatsappIconClass}`} onClick={(e) => { e.stopPropagation(); handleResendWhatsapp(appointmentId); }} disabled={isLoading}>
-                  {isLoading ? <Loader2 className="w-3 h-3 animate-spin text-blue-600" /> : <Smartphone className="w-3 h-3" />}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent className="rounded-lg"><p>{whatsappTooltip}</p></TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className={`p-1.5 rounded-full transition-colors border border-transparent hover:border-gray-200 ${emailIconClass}`} onClick={(e) => { e.stopPropagation(); handleSendEmail(appointmentId); }} disabled={isEmailLoading}>
-                  {isEmailLoading ? <Loader2 className="w-3 h-3 animate-spin text-blue-600" /> : <Mail className="w-3 h-3" />}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent className="rounded-lg"><p>{emailTooltip}</p></TooltipContent>
-            </Tooltip>
-          </>
-        )}
       </div>
     );
   };
