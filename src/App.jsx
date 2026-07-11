@@ -23,6 +23,7 @@ import AppointmentSuccessPage from '@/pages/AppointmentSuccessPage';
 import ConfirmationRequestPage from '@/pages/ConfirmationRequestPage';
 import ChangePasswordPage from '@/pages/ChangePasswordPage';
 import SignUpSuccessPage from '@/pages/SignUpSuccessPage';
+import DoctorInviteSignupPage from '@/pages/DoctorInviteSignupPage';
 import DoctorPublicProfilePage from '@/pages/DoctorPublicProfilePage';
 import AppointmentReviewPage from '@/pages/AppointmentReviewPage';
 import AppointmentConfirmationPage from '@/pages/AppointmentConfirmationPage';
@@ -253,6 +254,7 @@ function App() {
             {/* Auth Routes */}
             <Route path="/acesso-paciente" element={<AuthRedirect role="paciente" />} />
             <Route path="/acesso-medico" element={<AuthRedirect role="medico" />} />
+            <Route path="/cadastro-medico/:token" element={<DoctorInviteSignupPage />} />
             
             <Route path="/recuperar-senha" element={<PasswordRecoveryPage />} />
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />

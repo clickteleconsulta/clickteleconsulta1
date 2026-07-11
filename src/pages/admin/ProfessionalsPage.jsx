@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Loader2, User, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
 
 const ProfessionalsPage = () => {
   const [doctors, setDoctors] = useState([]);
@@ -282,83 +283,12 @@ const ProfessionalsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-            <h2 className="text-3xl font-bold tracking-tight">Profissionais Cadastrados</h2>
-            <p className="text-muted-foreground text-sm">Gerencie contas, taxas e visibilidade dos médicos.</p>
-        </div>
-        
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-            <DialogTrigger asChild>
-                <Button className="gap-2">
-                    <Plus className="w-4 h-4" /> Novo Médico
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh]">
-                <DialogHeader>
-                    <DialogTitle>Cadastrar Novo Profissional</DialogTitle>
-                    <DialogDescription>
-                        Crie uma conta para um novo especialista. Ele receberá acesso imediato.
-                    </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleCreateDoctor} className="space-y-4 py-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Nome Completo</Label>
-                            <Input id="name" required value={newDoctor.full_name} onChange={e => setNewDoctor({...newDoctor, full_name: e.target.value})} placeholder="Dr. Nome Sobrenome" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="specialty">Especialidade</Label>
-                            <Input id="specialty" required value={newDoctor.specialty} onChange={e => setNewDoctor({...newDoctor, specialty: e.target.value})} placeholder="Ex: Cardiologia" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="crm">CRM (Apenas números)</Label>
-                            <Input id="crm" required value={newDoctor.crm} onChange={e => setNewDoctor({...newDoctor, crm: e.target.value})} placeholder="123456" />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="uf">UF (Estado)</Label>
-                            <Select value={newDoctor.uf} onValueChange={val => setNewDoctor({...newDoctor, uf: val})}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Selecione..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {['SP','RJ','MG','RS','PR','SC','BA','DF'].map(uf => (
-                                        <SelectItem key={uf} value={uf}>{uf}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email de Acesso</Label>
-                            <Input id="email" type="email" required value={newDoctor.email} onChange={e => setNewDoctor({...newDoctor, email: e.target.value})} placeholder="medico@clinica.com" />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="phone">Telefone/WhatsApp</Label>
-                            <Input id="phone" required value={newDoctor.phone} onChange={e => setNewDoctor({...newDoctor, phone: e.target.value})} placeholder="(00) 00000-0000" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Senha Inicial</Label>
-                            <Input id="password" type="text" required value={newDoctor.password} onChange={e => setNewDoctor({...newDoctor, password: e.target.value})} placeholder="Mínimo 6 caracteres" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="price">Valor Consulta (R$)</Label>
-                            <Input id="price" required type="number" step="0.01" value={newDoctor.price} onChange={e => setNewDoctor({...newDoctor, price: e.target.value})} placeholder="150.00" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="fee">Taxa da Plataforma (%)</Label>
-                            <Input id="fee" required type="number" step="0.1" value={newDoctor.fee_percent} onChange={e => setNewDoctor({...newDoctor, fee_percent: e.target.value})} placeholder="10" />
-                        </div>
-                    </div>
-                    <DialogFooter className="pt-4">
-                        <Button type="submit" disabled={isCreating}>
-                            {isCreating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
-                            Criar Conta
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+      <div>
+        <h2 className="text-3xl font-bold tracking-tight">Profissionais Cadastrados</h2>
+        <p className="text-muted-foreground text-sm">Gerencie contas, taxas e visibilidade dos médicos.</p>
       </div>
+
+      <DoctorInviteSection />
 
       <Dialog open={isFeeOpen} onOpenChange={setIsFeeOpen}>
         <DialogContent>
