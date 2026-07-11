@@ -41,6 +41,7 @@ const DoctorArea = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [doctorImageUrl, setDoctorImageUrl] = useState(null);
+    const [medicoInfo, setMedicoInfo] = useState(null);
 
     useEffect(() => {
         let mounted = true;
@@ -48,12 +49,13 @@ const DoctorArea = () => {
             if (session?.user?.id) {
                 const { data } = await supabase
                     .from('medicos')
-                    .select('image_url')
+                    .select('image_url, is_active, is_public')
                     .eq('user_id', session.user.id)
                     .maybeSingle();
-                
-                if (mounted && data?.image_url) {
-                    setDoctorImageUrl(data.image_url);
+
+                if (mounted && data) {
+                    if (data.image_url) setDoctorImageUrl(data.image_url);
+                    setMedicoInfo(data);
                 }
             }
         };
@@ -236,6 +238,20 @@ const DoctorArea = () => {
                 {/* Page content with Outlet/Routes */}
                 <main className="flex-1 overflow-auto p-6 bg-gray-100">
                     <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+                        {medicoInfo && medicoInfo.is_active !== false && medicoInfo.is_public === false && (
+                            <div className="mb-6 flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                                <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                                <div className="flex-1">
+                                    <p className="text-sm font-semibold text-amber-900">Seu perfil está pausado</p>
+                                    <p className="text-sm text-amber-800 mt-0.5">
+                                        Envie sua documentação para análise em <strong>Configurações → Documentação</strong>. Após a aprovação pela administração, seu perfil ficará ativo e visível na página pública de agendamentos.
+                                    </p>
+                                    <Link to="/medico/dashboard/perfil" className="inline-block mt-2 text-sm font-medium text-amber-900 underline">
+                                        Ir para Documentação
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
                         <Routes>
                             <Route path="/" element={<Navigate to="consultas" replace />} />
                             <Route path="consultas" element={<DoctorConsultations />} />

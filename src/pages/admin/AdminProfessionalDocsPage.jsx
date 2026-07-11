@@ -70,7 +70,7 @@ const AdminProfessionalDocsPage = () => {
 
             if (userIds.length > 0) {
                 const [{ data: medicos }, { data: perfis }] = await Promise.all([
-                    supabase.from('medicos').select('user_id, public_name, specialty, crm, uf, image_url').in('user_id', userIds),
+                    supabase.from('medicos').select('id, user_id, public_name, specialty, crm, uf, image_url, is_public, is_active').in('user_id', userIds),
                     supabase.from('perfis_usuarios').select('id, full_name, email').in('id', userIds),
                 ]);
                 (medicos || []).forEach((m) => { medicosMap[m.user_id] = m; });
@@ -90,6 +90,8 @@ const AdminProfessionalDocsPage = () => {
                 const hasPending = items.some((i) => (i.status || 'pendente') === 'pendente');
                 return {
                     user_id: uid,
+                    medico_id: medico.id || null,
+                    is_public: medico.is_public,
                     name: medico.public_name || perfil.full_name || 'Profissional',
                     email: perfil.email || '',
                     specialty: medico.specialty || '',
@@ -144,6 +146,51 @@ const AdminProfessionalDocsPage = () => {
                 )
             );
             toast({ title: status === 'aprovado' ? 'Documento aprovado' : 'Documento rejeitado' });
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro', description: err.message });
+        } finally {
+            setBusyId(null);
+        }
+    };
+
+    const approveAndActivate = async (group) => {
+        setBusyId(group.user_id);
+        try {
+            // Aprova todos os documentos do profissional
+            const { error: docErr } = await supabase
+                .from('medico_documentos')
+                .update({ status: 'aprovado' })
+                .eq('user_id', group.user_id);
+            if (docErr) throw docErr;
+
+            // Ativa o perfil (visível ao público)
+            const { error: medErr } = await supabase
+                .from('medicos')
+                .update({ is_active: true, is_public: true })
+                .eq('user_id', group.user_id);
+            if (medErr) throw medErr;
+
+            toast({ title: 'Perfil aprovado e ativado!', description: `${group.name} agora aparece publicamente.`, variant: 'success' });
+            fetchData();
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro ao aprovar', description: err.message });
+        } finally {
+            setBusyId(null);
+        }
+    };
+
+    const rejectAll = async (group) => {
+        setBusyId(group.user_id);
+        try {
+            const { error } = await supabase
+                .from('medico_documentos')
+                .update({ status: 'rejeitado' })
+                .eq('user_id', group.user_id);
+            if (error) throw error;
+            // Mantém o perfil pausado
+            await supabase.from('medicos').update({ is_public: false }).eq('user_id', group.user_id);
+            toast({ title: 'Documentação recusada', description: `${group.name} permanece pausado.` });
+            fetchData();
         } catch (err) {
             toast({ variant: 'destructive', title: 'Erro', description: err.message });
         } finally {
@@ -256,6 +303,22 @@ const AdminProfessionalDocsPage = () => {
                                         </div>
                                     );
                                 })}
+
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 mt-1 border-t border-gray-100">
+                                    <p className="text-xs text-gray-500">
+                                        {g.is_public
+                                            ? <span className="text-emerald-600 font-medium">Perfil ativo (visível ao público)</span>
+                                            : <span className="text-amber-600 font-medium">Perfil pausado — aprove a documentação para ativar</span>}
+                                    </p>
+                                    <div className="flex items-center gap-2">
+                                        <Button type="button" variant="outline" size="sm" onClick={() => rejectAll(g)} disabled={busyId === g.user_id} className="h-8 gap-1.5 text-xs border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700">
+                                            <X className="w-3.5 h-3.5" /> Recusar documentação
+                                        </Button>
+                                        <Button type="button" size="sm" onClick={() => approveAndActivate(g)} disabled={busyId === g.user_id} className="h-8 gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
+                                            {busyId === g.user_id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />} Aprovar e ativar perfil
+                                        </Button>
+                                    </div>
+                                </div>
                             </CardContent>
                         </Card>
                     ))}

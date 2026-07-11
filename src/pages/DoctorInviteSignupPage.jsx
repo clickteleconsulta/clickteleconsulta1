@@ -24,6 +24,7 @@ const DoctorInviteSignupPage = () => {
     const [done, setDone] = useState(false);
 
     const [form, setForm] = useState({ full_name: '', cpf: '', crm: '', uf: '', whatsapp: '', password: '', confirm: '' });
+    const [termo, setTermo] = useState(false);
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
     const validate = useCallback(async () => {
@@ -50,6 +51,7 @@ const DoctorInviteSignupPage = () => {
         if (!form.crm.trim() || !form.uf) { toast({ variant: 'destructive', title: 'Informe CRM e UF' }); return; }
         if (form.password.length < 6) { toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 6 caracteres.' }); return; }
         if (form.password !== form.confirm) { toast({ variant: 'destructive', title: 'As senhas não coincidem' }); return; }
+        if (!termo) { toast({ variant: 'destructive', title: 'Aceite o Termo de Adesão', description: 'É necessário aceitar o Termo de Adesão para continuar.' }); return; }
 
         setSubmitting(true);
         try {
@@ -64,6 +66,7 @@ const DoctorInviteSignupPage = () => {
                         crm: form.crm.trim(),
                         uf: form.uf,
                         whatsapp: form.whatsapp.trim(),
+                        termo_aceito_em: new Date().toISOString(),
                     }
                 }
             });
@@ -160,7 +163,19 @@ const DoctorInviteSignupPage = () => {
                                         <Input type="password" value={form.confirm} onChange={e => set('confirm', e.target.value)} placeholder="Repita a senha" autoComplete="new-password" />
                                     </div>
                                 </div>
-                                <Button type="submit" disabled={submitting} className="w-full">
+                                <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
+                                    <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600" />
+                                    <span>
+                                        Li e aceito o <a href="/legal" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">Termo de Adesão</a> e as condições da plataforma Click Teleconsulta.
+                                    </span>
+                                </label>
+
+                                <div className="flex items-start gap-2 text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-md p-2.5">
+                                    <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-amber-500" />
+                                    <span>Após criar a conta, seu perfil ficará <strong>pausado</strong> até que você envie sua documentação e ela seja aprovada pela administração. Só então ele passa a aparecer publicamente.</span>
+                                </div>
+
+                                <Button type="submit" disabled={submitting || !termo} className="w-full">
                                     {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Stethoscope className="w-4 h-4 mr-2" />}
                                     Criar minha conta
                                 </Button>

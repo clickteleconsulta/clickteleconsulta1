@@ -109,10 +109,29 @@ const ProfessionalsPage = () => {
             }
         }
 
+        // 2b. Fetch documentos (status por médico)
+        let docsMap = {};
+        if (userIds.length > 0) {
+            const { data: docsData } = await supabase
+                .from('medico_documentos')
+                .select('user_id, status')
+                .in('user_id', userIds);
+            (docsData || []).forEach(d => {
+                (docsMap[d.user_id] = docsMap[d.user_id] || []).push(d.status || 'pendente');
+            });
+        }
+        const aggregateDocStatus = (statuses) => {
+            if (!statuses || statuses.length === 0) return 'nenhum';
+            if (statuses.some(s => s === 'rejeitado')) return 'recusado';
+            if (statuses.every(s => s === 'aprovado')) return 'aprovado';
+            return 'enviado';
+        };
+
         // 3. Merge data
         const mergedDoctors = doctorsData.map(doc => ({
             ...doc,
-            perfis_usuarios: profilesMap[doc.user_id] || { email: 'Email não encontrado', whatsapp: '' }
+            perfis_usuarios: profilesMap[doc.user_id] || { email: 'Email não encontrado', whatsapp: '' },
+            doc_status: aggregateDocStatus(docsMap[doc.user_id])
         }));
 
         setDoctors(mergedDoctors);
@@ -268,6 +287,17 @@ const ProfessionalsPage = () => {
       return <Badge className="bg-green-100 text-green-800 hover:bg-green-200 gap-1"><PlayCircle className="w-3 h-3" /> Ativo</Badge>;
   };
 
+  const getDocBadge = (status) => {
+      const map = {
+          aprovado: { label: 'Aprovado', cls: 'bg-green-100 text-green-800 border-green-200' },
+          enviado: { label: 'Enviado (Aguardando aprovação)', cls: 'bg-amber-100 text-amber-800 border-amber-200' },
+          recusado: { label: 'Recusado', cls: 'bg-red-100 text-red-800 border-red-200' },
+          nenhum: { label: 'Não enviado', cls: 'bg-gray-100 text-gray-600 border-gray-200' },
+      };
+      const s = map[status] || map.nenhum;
+      return <Badge variant="outline" className={`${s.cls} text-[10px] whitespace-nowrap`}>{s.label}</Badge>;
+  };
+
   const formatPrice = (price) => {
       if (price === undefined || price === null) return '-';
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
@@ -344,6 +374,7 @@ const ProfessionalsPage = () => {
                     <TableHead>Consulta</TableHead>
                     <TableHead>Taxa (%)</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Documentos</TableHead>
                     <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
                 </TableHeader>
@@ -378,6 +409,9 @@ const ProfessionalsPage = () => {
                     </TableCell>
                     <TableCell>
                         {getStatusBadge(doc)}
+                    </TableCell>
+                    <TableCell>
+                        {getDocBadge(doc.doc_status)}
                     </TableCell>
                     <TableCell className="text-right">
                         <DropdownMenu>
@@ -415,7 +449,7 @@ const ProfessionalsPage = () => {
                 ))}
                 {filteredDoctors.length === 0 && (
                     <TableRow>
-                        <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
+                        <TableCell colSpan={8} className="text-center py-4 text-muted-foreground">
                             Nenhum médico encontrado.
                         </TableCell>
                     </TableRow>
