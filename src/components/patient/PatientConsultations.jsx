@@ -155,6 +155,11 @@ const PatientConsultations = () => {
                                                 {new Date(appt.horario_inicio).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' })}
                                             </span>
                                         </div>
+                                        {isUpcoming && appt.pagamento_status === 'pago' && (
+                                            <p className="mt-3 text-xs text-blue-800 bg-blue-50 border border-blue-100 rounded-md p-2 leading-relaxed">
+                                                O médico entrará em contato <strong>até 15 minutos antes</strong> para enviar o link da consulta. Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>.
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div className="flex flex-col items-end gap-3 w-full sm:w-auto">

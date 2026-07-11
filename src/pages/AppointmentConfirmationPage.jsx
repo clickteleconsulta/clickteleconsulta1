@@ -284,40 +284,18 @@ const AppointmentConfirmationPage = () => {
           <div className="lg:col-span-2 space-y-6">
             
             {/* TELEMEDICINE SECTION */}
-            {isPaid && (
-              <Card className="border-l-4 border-l-blue-600 shadow-md bg-blue-50/20">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2 text-blue-700">
-                      <Stethoscope className="w-6 h-6" /> Sala de Teleconsulta
-                    </CardTitle>
-                    <TelemedicineStatusIndicator appointmentId={appointmentId} />
+            {isPaid && !isDoctor && (
+              <Card className="border-l-4 border-l-green-600 shadow-md bg-green-50/40">
+                <CardContent className="py-6 flex items-start gap-3">
+                  <CheckCircle className="w-7 h-7 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-bold text-green-900 text-lg">Pagamento confirmado — sua consulta está garantida!</h3>
+                    <p className="text-sm text-green-900/90 mt-1.5 leading-relaxed">
+                      O médico entrará em contato <strong>até 15 minutos antes</strong> do horário para enviar o link da sua consulta.
+                      Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>, siga as instruções do procedimento e tenha uma ótima consulta.
+                    </p>
                   </div>
-                  <CardDescription>
-                    Acesso seguro à videochamada.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
-                  <div className="text-sm text-gray-600 max-w-sm">
-                    {isDoctor 
-                      ? "Como médico, você deve iniciar a consulta para que o paciente possa entrar."
-                      : "Aguarde o médico iniciar o atendimento para acessar a sala."
-                    }
-                  </div>
-                  
-                  {isDoctor ? (
-                    <DoctorTelemedicineButton appointment={appointment} />
-                  ) : (
-                    <PatientTelemedicineButton appointment={appointment} />
-                  )}
                 </CardContent>
-                
-                {/* LOGS TABLE (Only for Doctor/Admin) */}
-                {isDoctor && (
-                  <div className="px-6 pb-6">
-                    <TelemedicineLogsTable appointmentId={appointmentId} />
-                  </div>
-                )}
               </Card>
             )}
 
