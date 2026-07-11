@@ -65,9 +65,20 @@ const DoctorInviteSection = () => {
                 if (error.code === '23505') throw new Error('Já existe um convite pendente para este e-mail.');
                 throw error;
             }
-            // Copia o link automaticamente para o admin enviar ao médico
-            try { await navigator.clipboard.writeText(inviteLink(data.token)); } catch (_) { /* ignore */ }
-            toast({ title: 'Convite criado!', description: 'O link de convite foi copiado. Envie-o ao médico.' });
+            const link = inviteLink(data.token);
+            // Tenta disparar o e-mail automático (edge function); fallback: link copiado
+            let emailed = false;
+            try {
+                const { error: fnErr } = await supabase.functions.invoke('send-doctor-invite', { body: { email: clean, link } });
+                emailed = !fnErr;
+            } catch (_) { /* function indisponível */ }
+            try { await navigator.clipboard.writeText(link); } catch (_) { /* ignore */ }
+            toast({
+                title: 'Convite criado!',
+                description: emailed
+                    ? 'E-mail enviado ao médico. O link também foi copiado.'
+                    : 'Link copiado. Envie ao médico (envio automático de e-mail indisponível).',
+            });
             setEmail('');
             fetchInvites();
         } catch (err) {
@@ -83,6 +94,17 @@ const DoctorInviteSection = () => {
             toast({ title: 'Link copiado!', description: 'Envie ao médico para ele criar a conta.' });
         } catch (_) {
             toast({ variant: 'destructive', title: 'Não foi possível copiar', description: inviteLink(token) });
+        }
+    };
+
+    const handleResend = async (inv) => {
+        const link = inviteLink(inv.token);
+        try {
+            const { error } = await supabase.functions.invoke('send-doctor-invite', { body: { email: inv.email, link } });
+            if (error) throw error;
+            toast({ title: 'E-mail reenviado!', description: `Convite reenviado para ${inv.email}.` });
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Falha ao reenviar', description: err.message || 'Envio automático indisponível. Use "Copiar link".' });
         }
     };
 
@@ -148,6 +170,9 @@ const DoctorInviteSection = () => {
                                 </div>
                                 {inv.status === 'pendente' && (
                                     <div className="flex items-center gap-2 shrink-0">
+                                        <Button variant="outline" size="sm" onClick={() => handleResend(inv)} className="gap-1.5 h-8 text-xs">
+                                            <Send className="w-3.5 h-3.5" /> Reenviar
+                                        </Button>
                                         <Button variant="outline" size="sm" onClick={() => handleCopy(inv.token)} className="gap-1.5 h-8 text-xs">
                                             <Copy className="w-3.5 h-3.5" /> Copiar link
                                         </Button>
