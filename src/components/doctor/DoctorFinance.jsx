@@ -68,12 +68,36 @@ const DoctorFinance = () => {
             }
             setDoctorData(doc);
 
+            // Procedimentos do médico (fonte do "Serviço"). Cria um padrão se não houver.
+            let procedures = [];
+            {
+                const { data, error } = await supabase
+                    .from('procedimentos')
+                    .select('id, nome, preco, principal')
+                    .eq('medico_id', doc.id);
+                if (error) console.warn('Erro procedimentos (financeiro):', error.message);
+                else procedures = data || [];
+            }
+            if (procedures.length === 0) {
+                const { data: created, error: seedErr } = await supabase
+                    .from('procedimentos')
+                    .insert({ medico_id: doc.id, nome: 'Teleconsulta', preco: 100.00, principal: true })
+                    .select('id, nome, preco, principal')
+                    .single();
+                if (seedErr) console.warn('Erro ao criar procedimento padrão:', seedErr.message);
+                else if (created) procedures = [created];
+            }
+            const procMap = {};
+            procedures.forEach(p => { procMap[p.id] = p; });
+            const principalProc = procedures.find(p => p.principal) || procedures[0];
+            const defaultServiceName = principalProc?.nome || 'Teleconsulta';
+
             // Consultas (isolado: uma falha aqui não derruba a seção inteira)
             let appts = [];
             {
                 const { data, error } = await supabase
                     .from('agendamentos')
-                    .select('*, patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name), guia:guias!agendamentos_guia_id_fkey(servico_snapshot)')
+                    .select('*, patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name)')
                     .eq('medico_id', doc.id)
                     .order('created_at', { ascending: false });
                 if (error) console.warn('Erro ao carregar consultas (financeiro):', error.message);
@@ -134,7 +158,7 @@ const DoctorFinance = () => {
                     displayTime: validDate ? format(validDate, 'HH:mm') : '',
                     createdDisplay: createdValid ? format(createdValid, 'dd/MM/yyyy') : '—',
                     createdTime: createdValid ? format(createdValid, 'HH:mm') : '',
-                    serviceName: appt.guia?.servico_snapshot?.nome || 'Teleconsulta',
+                    serviceName: procMap[appt.servico_id]?.nome || defaultServiceName,
                 };
             });
 

@@ -19,6 +19,7 @@ const AppointmentsControlPage = () => {
   const { toast } = useToast();
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [procMap, setProcMap] = useState({});
   const [loading, setLoading] = useState(true);
   
   // Filters
@@ -80,6 +81,12 @@ const AppointmentsControlPage = () => {
       
       if (docError) throw docError;
       setDoctors(docData || []);
+
+      // Procedimentos (serviço) — mapa id -> nome
+      const { data: procData } = await supabase.from('procedimentos').select('id, nome');
+      const pmap = {};
+      (procData || []).forEach(p => { pmap[p.id] = p.nome; });
+      setProcMap(pmap);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -514,7 +521,7 @@ const AppointmentsControlPage = () => {
               ) : (
                 paginatedAppointments.map((apt) => {
                   const { totalValue } = calculateFinancials(apt);
-                  const serviceName = apt.guias?.servico_snapshot?.nome || 'Teleconsulta';
+                  const serviceName = procMap[apt.servico_id] || apt.guias?.servico_snapshot?.nome || 'Teleconsulta';
 
                   return (
                   <TableRow key={apt.id} className="hover:bg-gray-50/50">
@@ -695,7 +702,7 @@ const AppointmentsControlPage = () => {
                             </h4>
                             <div className="space-y-2 text-sm">
                                 <p><span className="text-muted-foreground">Valor:</span> {financialDetails.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                                <p><span className="text-muted-foreground">Serviço:</span> {selectedAppointment.guias?.servico_snapshot?.nome || 'Teleconsulta'}</p>
+                                <p><span className="text-muted-foreground">Serviço:</span> {procMap[selectedAppointment.servico_id] || selectedAppointment.guias?.servico_snapshot?.nome || 'Teleconsulta'}</p>
                                 <p><span className="text-muted-foreground">Data de Criação:</span> {safeFmt(selectedAppointment.created_at, "dd/MM/yyyy 'às' HH:mm")}</p>
                                 <p><span className="text-muted-foreground">Status Pagamento:</span> {selectedAppointment.pagamento_status || 'Pendente'}</p>
                                 <p><span className="text-muted-foreground">ID Transação:</span> {selectedAppointment.checkout_session_id || '-'}</p>
