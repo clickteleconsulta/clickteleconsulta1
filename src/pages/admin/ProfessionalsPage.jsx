@@ -14,6 +14,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Loader2, User, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 const ProfessionalsPage = () => {
   const [doctors, setDoctors] = useState([]);
@@ -318,8 +319,6 @@ const ProfessionalsPage = () => {
         <p className="text-muted-foreground text-sm">Gerencie contas, taxas e visibilidade dos médicos.</p>
       </div>
 
-      <DoctorInviteSection />
-
       <Dialog open={isFeeOpen} onOpenChange={setIsFeeOpen}>
         <DialogContent>
             <DialogHeader>
@@ -345,7 +344,18 @@ const ProfessionalsPage = () => {
             </DialogFooter>
         </DialogContent>
       </Dialog>
-      
+
+      <Tabs defaultValue="lista" className="w-full">
+        <TabsList>
+          <TabsTrigger value="lista">Lista de Médicos</TabsTrigger>
+          <TabsTrigger value="convites">Enviar Convite</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="convites" className="mt-4">
+          <DoctorInviteSection />
+        </TabsContent>
+
+        <TabsContent value="lista" className="mt-4">
       <Card>
         <CardHeader>
           <CardTitle>Lista de Médicos</CardTitle>
@@ -459,6 +469,8 @@ const ProfessionalsPage = () => {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

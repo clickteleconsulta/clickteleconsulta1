@@ -25,7 +25,14 @@ const DoctorInviteSignupPage = () => {
 
     const [form, setForm] = useState({ full_name: '', cpf: '', crm: '', uf: '', whatsapp: '', password: '', confirm: '' });
     const [termo, setTermo] = useState(false);
+    const [termoUrl, setTermoUrl] = useState(null);
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+    useEffect(() => {
+        supabase.from('termo_adesao').select('pdf_url').eq('is_active', true).maybeSingle()
+            .then(({ data }) => setTermoUrl(data?.pdf_url || null))
+            .catch(() => {});
+    }, []);
 
     const validate = useCallback(async () => {
         setChecking(true);
@@ -166,7 +173,7 @@ const DoctorInviteSignupPage = () => {
                                 <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
                                     <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600" />
                                     <span>
-                                        Li e aceito o <a href="/legal" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">Termo de Adesão</a> e as condições da plataforma Click Teleconsulta.
+                                        Li e aceito o <a href={termoUrl || '/legal'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">Termo de Adesão</a> e as condições da plataforma Click Teleconsulta.
                                     </span>
                                 </label>
 

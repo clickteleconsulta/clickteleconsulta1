@@ -12,6 +12,7 @@ import { ptBR } from 'date-fns/locale';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import TermoAdesaoManager from "@/components/admin/TermoAdesaoManager";
 
 const DOC_TYPES = {
     terms_of_service: "Termos de Serviço",
@@ -42,10 +43,12 @@ const AdminLegalPage = () => {
     }, [activeTab]);
 
     const fetchDocumentVersions = async () => {
+        // O Termo de Adesão é gerenciado por componente próprio (não usa a edge function)
+        if (activeTab === 'termo_adesao') { setLoading(false); return; }
         setLoading(true);
         setFetchError(null);
         try {
-            
+
             // Using supabase.functions.invoke with GET method (via query params)
             const { data, error } = await supabase.functions.invoke(`manage-documents?type=${activeTab}`, {
                 method: 'GET'
@@ -232,9 +235,10 @@ const AdminLegalPage = () => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 max-w-[500px]">
+                <TabsList className="grid w-full grid-cols-3 max-w-[680px]">
                     <TabsTrigger value="terms_of_service">Termos de Serviço</TabsTrigger>
                     <TabsTrigger value="privacy_policy">Política de Privacidade</TabsTrigger>
+                    <TabsTrigger value="termo_adesao">Termo de Adesão</TabsTrigger>
                 </TabsList>
 
                 {fetchError && (
@@ -250,6 +254,7 @@ const AdminLegalPage = () => {
                     </Alert>
                 )}
 
+                {activeTab === 'termo_adesao' ? <TermoAdesaoManager /> : (
                 <div className="mt-6 space-y-6">
                     {/* Section 1: Active Version */}
                     <Card className="border-blue-100 bg-blue-50/30">
@@ -418,6 +423,7 @@ const AdminLegalPage = () => {
                         </CardContent>
                     </Card>
                 </div>
+                )}
             </Tabs>
 
             {/* Preview Modal */}
