@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import WithdrawalDataForm from './WithdrawalDataForm';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 
 const DoctorFinance = () => {
     const { toast } = useToast();
@@ -311,9 +312,16 @@ const DoctorFinance = () => {
                     <p className="text-sm text-gray-500">Gerencie seus recebimentos e fluxo de caixa.</p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-sm border-gray-300 text-gray-700">
-                        <Download className="w-3.5 h-3.5" /> Relatório
-                    </Button>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-sm border-gray-300 text-gray-700">
+                                <Wallet className="w-3.5 h-3.5" /> Dados para saque
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="end" className="w-[380px] p-0 rounded-sm max-h-[80vh] overflow-y-auto border-gray-200 shadow-lg">
+                            <WithdrawalDataForm onSave={fetchFinancialData} />
+                        </PopoverContent>
+                    </Popover>
                     <Button
                         onClick={() => { setSelectedGuideIds([]); setIsWithdrawOpen(true); }}
                         disabled={!canRequestWithdraw || paidTransactions.length === 0}
@@ -489,9 +497,6 @@ const DoctorFinance = () => {
                 </TabsContent>
             </Tabs>
 
-            <div className="pt-4">
-                <WithdrawalDataForm onSave={fetchFinancialData} />
-            </div>
 
             <Dialog open={!!detailTx} onOpenChange={(o) => !o && setDetailTx(null)}>
                 <DialogContent className="p-6 sm:max-w-[460px] rounded-sm border-gray-200">
