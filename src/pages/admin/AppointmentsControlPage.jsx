@@ -559,8 +559,8 @@ const AppointmentsControlPage = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col max-w-[180px]">
-                        <span className="font-medium text-sm truncate" title={apt.patient?.full_name}>
-                          {apt.patient?.full_name || 'Desconhecido'}
+                        <span className="font-medium text-sm truncate" title={apt.paciente_nome || apt.patient?.full_name}>
+                          {apt.paciente_nome || apt.patient?.full_name || 'Desconhecido'}
                         </span>
                         <span className="text-xs text-muted-foreground truncate">
                           {apt.patient?.email}
@@ -663,7 +663,7 @@ const AppointmentsControlPage = () => {
                                 <User className="w-4 h-4"/> Dados do Paciente
                             </h4>
                             <div className="space-y-2 text-sm">
-                                <p><span className="text-muted-foreground">Nome:</span> {selectedAppointment.patient?.full_name}</p>
+                                <p><span className="text-muted-foreground">Nome:</span> {selectedAppointment.paciente_nome || selectedAppointment.patient?.full_name || '—'}</p>
                                 <p><span className="text-muted-foreground">Email:</span> {selectedAppointment.patient?.email}</p>
                                 <p><span className="text-muted-foreground">CPF:</span> {selectedAppointment.patient?.cpf || '-'}</p>
                                 <p><span className="text-muted-foreground">WhatsApp:</span> {selectedAppointment.patient?.whatsapp || '-'}</p>

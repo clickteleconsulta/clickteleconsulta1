@@ -129,10 +129,12 @@ const DoctorFinance = () => {
 
             const feePercent = doc.payment_settings?.platform_fee_percent || 0;
 
+            const round2 = (v) => Math.round((v + Number.EPSILON) * 100) / 100;
+
             const processedTransactions = appts.map(appt => {
-                const totalValue = (appt.price_in_cents || 0) / 100;
-                const platformFee = totalValue * (feePercent / 100);
-                const netValue = totalValue - platformFee;
+                const totalValue = round2((appt.price_in_cents || 0) / 100);
+                const platformFee = round2(totalValue * (feePercent / 100));
+                const netValue = round2(totalValue - platformFee);
 
                 if (appt.status === 'cancelado') {
                     cancelled += totalValue;
@@ -161,6 +163,7 @@ const DoctorFinance = () => {
                     createdDisplay: createdValid ? format(createdValid, 'dd/MM/yyyy') : '—',
                     createdTime: createdValid ? format(createdValid, 'HH:mm') : '',
                     serviceName: procMap[appt.servico_id]?.nome || defaultServiceName,
+                    patientName: appt.paciente_nome || appt.patient?.full_name || 'Paciente',
                 };
             });
 
@@ -210,7 +213,8 @@ const DoctorFinance = () => {
              return;
         }
 
-        const total = selected.reduce((a, g) => a + g.netValue, 0);
+        const total = Math.round((selected.reduce((a, g) => a + g.netValue, 0) + Number.EPSILON) * 100) / 100;
+        const totalCents = Math.round(total * 100);
         setRequestingWithdraw(true);
         try {
             const { data: saque, error } = await supabase
@@ -218,6 +222,7 @@ const DoctorFinance = () => {
                 .insert({
                     doctor_id: doctorData.id,
                     valor: total,
+                    amount_cents: totalCents,
                     metodo_pagamento: doctorData.withdrawal_payment_method,
                     dados_saque_json: {
                         pix_key: doctorData.withdrawal_pix_key,
@@ -284,9 +289,10 @@ const DoctorFinance = () => {
     // Guias disponíveis: pagas e ainda não vinculadas a um saque.
     // (Pendentes não pagas são canceladas automaticamente até 20 min antes do atendimento;
     //  guias já sacadas saem do extrato de consultas e passam para o extrato de saques.)
+    const round2 = (v) => Math.round((v + Number.EPSILON) * 100) / 100;
     const paidTransactions = transactions.filter(t => t.pagamento_status === 'pago' && !t.saque_id && t.status !== 'cancelado');
-    const availableBalance = paidTransactions.reduce((a, t) => a + t.netValue, 0);
-    const selectedTotal = paidTransactions.filter(g => selectedGuideIds.includes(g.id)).reduce((a, g) => a + g.netValue, 0);
+    const availableBalance = round2(paidTransactions.reduce((a, t) => a + t.netValue, 0));
+    const selectedTotal = round2(paidTransactions.filter(g => selectedGuideIds.includes(g.id)).reduce((a, g) => a + g.netValue, 0));
 
     // Intervalo de 7 dias entre solicitações de saque
     const lastWithdrawal = withdrawals[0];
@@ -390,7 +396,7 @@ const DoctorFinance = () => {
                                                         <span className="text-[10px] text-gray-500">{t.displayTime}</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="py-2 px-4 text-xs font-medium text-gray-700">{t.patient?.full_name || '—'}</TableCell>
+                                                <TableCell className="py-2 px-4 text-xs font-medium text-gray-700">{t.patientName}</TableCell>
                                                 <TableCell className="py-2 px-4 text-xs text-gray-700">{doctorData?.public_name || doctorData?.name || '—'}</TableCell>
                                                 <TableCell className="py-2 px-4 text-xs text-gray-700">{t.serviceName}</TableCell>
                                                 <TableCell className="text-right py-2 px-4">
@@ -528,7 +534,7 @@ const DoctorFinance = () => {
                                 </div>
                                 <div className="space-y-0.5">
                                     <p className="text-[10px] text-gray-400 uppercase font-bold">Paciente</p>
-                                    <p className="text-xs text-gray-700 flex items-center gap-1"><UserIcon className="w-3 h-3 text-gray-400" /> {detailTx.patient?.full_name || '—'}</p>
+                                    <p className="text-xs text-gray-700 flex items-center gap-1"><UserIcon className="w-3 h-3 text-gray-400" /> {detailTx.patientName}</p>
                                 </div>
                                 <div className="space-y-0.5">
                                     <p className="text-[10px] text-gray-400 uppercase font-bold">Especialista</p>
@@ -590,7 +596,7 @@ const DoctorFinance = () => {
                                             className="w-4 h-4 accent-blue-600"
                                          />
                                          <div className="flex-1 min-w-0">
-                                             <p className="text-xs font-medium text-gray-800 truncate">{g.patient?.full_name || 'Paciente'} · <span className="text-gray-500">{g.serviceName}</span></p>
+                                             <p className="text-xs font-medium text-gray-800 truncate">{g.patientName} · <span className="text-gray-500">{g.serviceName}</span></p>
                                              <p className="text-[10px] text-gray-400">Consulta {g.displayDate} · criada {g.createdDisplay}</p>
                                          </div>
                                          <span className="text-xs font-bold text-green-700 shrink-0">{g.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
@@ -633,7 +639,7 @@ const DoctorFinance = () => {
                                         {guias.map(g => (
                                             <div key={g.id} className="flex items-center justify-between px-3 py-2.5">
                                                 <div className="min-w-0">
-                                                    <p className="text-xs font-medium text-gray-800 truncate">{g.patient?.full_name || 'Paciente'} · <span className="text-gray-500">{g.serviceName}</span></p>
+                                                    <p className="text-xs font-medium text-gray-800 truncate">{g.patientName} · <span className="text-gray-500">{g.serviceName}</span></p>
                                                     <p className="text-[10px] text-gray-400">Consulta {g.displayDate}</p>
                                                 </div>
                                                 <span className="text-xs font-bold text-green-700 shrink-0">{g.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
