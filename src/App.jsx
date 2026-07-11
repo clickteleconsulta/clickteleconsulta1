@@ -24,6 +24,7 @@ import ConfirmationRequestPage from '@/pages/ConfirmationRequestPage';
 import ChangePasswordPage from '@/pages/ChangePasswordPage';
 import SignUpSuccessPage from '@/pages/SignUpSuccessPage';
 import DoctorInviteSignupPage from '@/pages/DoctorInviteSignupPage';
+import AuthConfirmPage from '@/pages/AuthConfirmPage';
 import DoctorPublicProfilePage from '@/pages/DoctorPublicProfilePage';
 import AppointmentReviewPage from '@/pages/AppointmentReviewPage';
 import AppointmentConfirmationPage from '@/pages/AppointmentConfirmationPage';
@@ -254,6 +255,7 @@ function App() {
             {/* Auth Routes */}
             <Route path="/acesso-paciente" element={<AuthRedirect role="paciente" />} />
             <Route path="/acesso-medico" element={<AuthRedirect role="medico" />} />
+            <Route path="/auth/confirmar" element={<AuthConfirmPage />} />
             <Route path="/cadastro-medico" element={<DoctorInviteSignupPage />} />
             <Route path="/cadastro-medico/:token" element={<DoctorInviteSignupPage />} />
             
