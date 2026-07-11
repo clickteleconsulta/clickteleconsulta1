@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
@@ -13,29 +13,36 @@ import { Loader2, Stethoscope, CheckCircle2, AlertTriangle } from 'lucide-react'
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 
 const DoctorInviteSignupPage = () => {
+    const { token } = useParams();
     const navigate = useNavigate();
     const { toast } = useToast();
 
     const [checking, setChecking] = useState(true);
-    const [session, setSession] = useState(null);
+    const [invite, setInvite] = useState(null);       // { email, status }
+    const [inviteError, setInviteError] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [done, setDone] = useState(false);
 
     const [form, setForm] = useState({ full_name: '', cpf: '', crm: '', uf: '', whatsapp: '', password: '', confirm: '' });
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-    useEffect(() => {
-        let mounted = true;
-        // O supabase-js processa automaticamente o token do link do convite (hash da URL).
-        const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-            if (mounted) { setSession(s); setChecking(false); }
-        });
-        const t = setTimeout(async () => {
-            const { data } = await supabase.auth.getSession();
-            if (mounted) { setSession(data?.session || null); setChecking(false); }
-        }, 600);
-        return () => { mounted = false; clearTimeout(t); sub?.subscription?.unsubscribe?.(); };
-    }, []);
+    const validate = useCallback(async () => {
+        setChecking(true);
+        try {
+            const { data, error } = await supabase.rpc('validar_convite_medico', { p_token: token });
+            if (error) throw error;
+            const row = Array.isArray(data) ? data[0] : data;
+            if (!row || !row.email) setInviteError('Convite não encontrado.');
+            else if (!['pendente', 'enviado'].includes(row.status)) setInviteError('Este convite já foi utilizado ou cancelado.');
+            else setInvite(row);
+        } catch (err) {
+            setInviteError(err.message || 'Não foi possível validar o convite.');
+        } finally {
+            setChecking(false);
+        }
+    }, [token]);
+
+    useEffect(() => { validate(); }, [validate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,35 +53,24 @@ const DoctorInviteSignupPage = () => {
 
         setSubmitting(true);
         try {
-            const { error: upErr } = await supabase.auth.updateUser({
+            const { error } = await supabase.auth.signUp({
+                email: invite.email,
                 password: form.password,
-                data: {
-                    full_name: form.full_name.trim(),
-                    role: 'medico',
-                    cpf: form.cpf.trim(),
-                    crm: form.crm.trim(),
-                    uf: form.uf,
-                    whatsapp: form.whatsapp.trim(),
+                options: {
+                    data: {
+                        full_name: form.full_name.trim(),
+                        role: 'medico',
+                        cpf: form.cpf.trim(),
+                        crm: form.crm.trim(),
+                        uf: form.uf,
+                        whatsapp: form.whatsapp.trim(),
+                    }
                 }
             });
-            if (upErr) throw upErr;
-
-            const uid = session.user.id;
-            await supabase.from('perfis_usuarios').update({
-                full_name: form.full_name.trim(),
-                cpf: form.cpf.trim() || null,
-                whatsapp: form.whatsapp.trim() || null,
-            }).eq('id', uid);
-            await supabase.from('medicos').update({
-                name: form.full_name.trim(),
-                public_name: form.full_name.trim(),
-                crm: form.crm.trim() || null,
-                uf: form.uf || null,
-            }).eq('user_id', uid);
-
+            if (error) throw error;
             setDone(true);
         } catch (err) {
-            toast({ variant: 'destructive', title: 'Erro ao concluir cadastro', description: err.message });
+            toast({ variant: 'destructive', title: 'Erro ao criar conta', description: err.message });
         } finally {
             setSubmitting(false);
         }
@@ -92,15 +88,14 @@ const DoctorInviteSignupPage = () => {
                         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                         <p className="text-sm text-slate-500">Validando convite...</p>
                     </CardContent>
-                ) : !session ? (
+                ) : inviteError ? (
                     <CardContent className="py-14 flex flex-col items-center gap-3 text-center">
                         <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
                             <AlertTriangle className="w-7 h-7 text-red-500" />
                         </div>
-                        <h2 className="text-lg font-bold text-slate-900">Convite inválido ou expirado</h2>
-                        <p className="text-sm text-slate-500 max-w-sm">
-                            Abra esta página pelo link enviado ao seu e-mail. Se o link expirou, peça à administração para reenviar o convite.
-                        </p>
+                        <h2 className="text-lg font-bold text-slate-900">Convite inválido</h2>
+                        <p className="text-sm text-slate-500 max-w-sm">{inviteError}</p>
+                        <p className="text-xs text-slate-400">Somente profissionais convidados pela administração podem criar uma conta de médico.</p>
                         <Button asChild variant="outline" className="mt-2"><Link to="/">Voltar ao início</Link></Button>
                     </CardContent>
                 ) : done ? (
@@ -108,25 +103,27 @@ const DoctorInviteSignupPage = () => {
                         <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center">
                             <CheckCircle2 className="w-7 h-7 text-emerald-500" />
                         </div>
-                        <h2 className="text-lg font-bold text-slate-900">Cadastro concluído!</h2>
-                        <p className="text-sm text-slate-500 max-w-sm">Sua conta de médico está pronta. Você já pode acessar seu painel.</p>
-                        <Button onClick={() => navigate('/medico/dashboard')} className="mt-2">Ir para o painel</Button>
+                        <h2 className="text-lg font-bold text-slate-900">Conta criada com sucesso!</h2>
+                        <p className="text-sm text-slate-500 max-w-sm">
+                            Sua conta de médico foi criada. Faça login para acessar seu painel (confirme o e-mail antes, se solicitado).
+                        </p>
+                        <Button onClick={() => navigate('/acesso-medico')} className="mt-2">Ir para o login</Button>
                     </CardContent>
                 ) : (
                     <>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-xl">
-                                <Stethoscope className="w-5 h-5 text-blue-600" /> Complete seu cadastro
+                                <Stethoscope className="w-5 h-5 text-blue-600" /> Criar conta de médico
                             </CardTitle>
                             <CardDescription>
-                                Convite para <span className="font-medium text-slate-700">{session.user?.email}</span>. Defina sua senha e seus dados profissionais.
+                                Convite para <span className="font-medium text-slate-700">{invite.email}</span>. Preencha seus dados para se tornar parceiro.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div className="space-y-1.5">
                                     <Label className="text-xs font-semibold text-slate-600">E-mail</Label>
-                                    <Input value={session.user?.email || ''} disabled className="bg-slate-50" />
+                                    <Input value={invite.email} disabled className="bg-slate-50" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label className="text-xs font-semibold text-slate-600">Nome completo</Label>
@@ -165,7 +162,7 @@ const DoctorInviteSignupPage = () => {
                                 </div>
                                 <Button type="submit" disabled={submitting} className="w-full">
                                     {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Stethoscope className="w-4 h-4 mr-2" />}
-                                    Concluir cadastro
+                                    Criar minha conta
                                 </Button>
                             </form>
                         </CardContent>

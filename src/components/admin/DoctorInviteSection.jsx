@@ -30,11 +30,11 @@ const DoctorInviteSection = () => {
     const [email, setEmail] = useState('');
     const [sending, setSending] = useState(false);
 
-    const redirectTo = `${window.location.origin}/cadastro-medico`;
+    const inviteLink = (token) => `${window.location.origin}/cadastro-medico/${token}`;
 
-    const invokeInvite = async (targetEmail) => {
+    const sendInviteEmail = async (targetEmail, link) => {
         const { error } = await supabase.functions.invoke('send-doctor-invite', {
-            body: { email: targetEmail, redirectTo },
+            body: { email: targetEmail, link },
         });
         if (error) {
             let msg = error.message;
@@ -68,8 +68,26 @@ const DoctorInviteSection = () => {
         }
         setSending(true);
         try {
-            await invokeInvite(clean);
-            toast({ title: 'Convite enviado!', description: `Um e-mail de convite foi enviado para ${clean}.` });
+            // Cria o convite com token (a conta só será criada quando o médico preencher o formulário)
+            const { data, error } = await supabase
+                .from('convites_medico')
+                .insert({ email: clean, invited_by: user?.id })
+                .select()
+                .single();
+            if (error) {
+                if (error.code === '23505') throw new Error('Já existe um convite pendente para este e-mail.');
+                throw error;
+            }
+            const link = inviteLink(data.token);
+            let emailed = false;
+            try { await sendInviteEmail(clean, link); emailed = true; } catch (_) { /* envio indisponível */ }
+            if (!emailed) { try { await navigator.clipboard.writeText(link); } catch (_) { /* ignore */ } }
+            toast({
+                title: 'Convite criado!',
+                description: emailed
+                    ? `E-mail de convite enviado para ${clean}.`
+                    : 'E-mail automático indisponível — o link foi copiado. Envie-o ao médico.',
+            });
             setEmail('');
             fetchInvites();
         } catch (err) {
@@ -81,11 +99,20 @@ const DoctorInviteSection = () => {
 
     const handleResend = async (inv) => {
         try {
-            await invokeInvite(inv.email);
+            await sendInviteEmail(inv.email, inviteLink(inv.token));
             toast({ title: 'E-mail reenviado!', description: `Convite reenviado para ${inv.email}.` });
             fetchInvites();
         } catch (err) {
             toast({ variant: 'destructive', title: 'Falha ao reenviar', description: err.message });
+        }
+    };
+
+    const handleCopy = async (token) => {
+        try {
+            await navigator.clipboard.writeText(inviteLink(token));
+            toast({ title: 'Link copiado!', description: 'Envie ao médico para ele criar a conta.' });
+        } catch (_) {
+            toast({ variant: 'destructive', title: 'Não foi possível copiar', description: inviteLink(token) });
         }
     };
 
@@ -153,6 +180,9 @@ const DoctorInviteSection = () => {
                                     <div className="flex items-center gap-2 shrink-0">
                                         <Button variant="outline" size="sm" onClick={() => handleResend(inv)} className="gap-1.5 h-8 text-xs">
                                             <Send className="w-3.5 h-3.5" /> Reenviar
+                                        </Button>
+                                        <Button variant="outline" size="sm" onClick={() => handleCopy(inv.token)} className="gap-1.5 h-8 text-xs">
+                                            <Copy className="w-3.5 h-3.5" /> Copiar link
                                         </Button>
                                         <Button variant="ghost" size="sm" onClick={() => handleCancel(inv.id)} className="gap-1.5 h-8 text-xs text-red-600 hover:text-red-700 hover:bg-red-50">
                                             <Ban className="w-3.5 h-3.5" /> Cancelar
