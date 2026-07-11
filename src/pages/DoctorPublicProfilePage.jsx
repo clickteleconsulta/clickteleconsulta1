@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
+import { toSiteUrl } from '@/lib/storageUrl';
 import { Loader2, Frown, Star, MapPin, Shield, Edit, Save, Info, MessageCircle, CheckCircle, Phone, Calendar } from 'lucide-react';
 import useAsync from '@/hooks/useAsync';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -312,7 +313,7 @@ const DoctorPublicProfilePage = () => {
               <div className="px-5 pb-5 relative">
                 <div className="flex justify-between items-end -mt-12 mb-3">
                   <Avatar className="w-24 h-24 border-4 border-background shadow-md bg-white">
-                    <AvatarImage src={doctor.image_url} alt={doctor.public_name} className="object-cover" />
+                    <AvatarImage src={toSiteUrl(doctor.image_url)} alt={doctor.public_name} className="object-cover" />
                     <AvatarFallback className="text-2xl">{doctor.public_name?.[0] || 'M'}</AvatarFallback>
                   </Avatar>
                   {isOwner && (

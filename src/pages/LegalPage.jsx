@@ -6,6 +6,7 @@ import { Loader2, ArrowLeft, AlertCircle, FileText, Download, ExternalLink, Refr
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Helmet } from 'react-helmet';
+import { toSiteUrl } from '@/lib/storageUrl';
 
 const DOC_TITLES = {
     terms_of_service: "Termos de Serviço",
@@ -146,7 +147,7 @@ const LegalPage = () => {
                                     </div>
                                     
                                     <Button asChild className="bg-gray-900 text-white hover:bg-gray-800 shadow-md gap-2 rounded-lg h-11 px-6">
-                                        <a href={document?.pdf_url} target="_blank" rel="noopener noreferrer" download={document?.pdf_file_name || 'documento.pdf'}>
+                                        <a href={toSiteUrl(document?.pdf_url)} target="_blank" rel="noopener noreferrer" download={document?.pdf_file_name || 'documento.pdf'}>
                                             <Download className="w-4 h-4" /> Baixar PDF
                                         </a>
                                     </Button>
@@ -160,7 +161,7 @@ const LegalPage = () => {
                                             {/* Desktop: Embed PDF directly */}
                                             <div className="hidden md:block w-full h-full">
                                                 <object 
-                                                    data={document.pdf_url} 
+                                                    data={toSiteUrl(document.pdf_url)} 
                                                     type="application/pdf" 
                                                     width="100%" 
                                                     height="100%" 
@@ -168,7 +169,7 @@ const LegalPage = () => {
                                                     aria-label={`Visualizador PDF de ${document.title}`}
                                                 >
                                                     <embed 
-                                                        src={document.pdf_url} 
+                                                        src={toSiteUrl(document.pdf_url)} 
                                                         type="application/pdf" 
                                                         width="100%" 
                                                         height="100%" 
@@ -178,7 +179,7 @@ const LegalPage = () => {
                                                     {/* Fallback for browsers that don't support embed/object */}
                                                     <p className="p-8 text-center text-gray-500">
                                                         Seu navegador não suporta a visualização direta de PDFs. 
-                                                        Você pode <a href={document.pdf_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">baixar o documento aqui</a>.
+                                                        Você pode <a href={toSiteUrl(document.pdf_url)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">baixar o documento aqui</a>.
                                                     </p>
                                                 </object>
                                             </div>
@@ -192,7 +193,7 @@ const LegalPage = () => {
                                                         Para uma melhor experiência de leitura em dispositivos móveis, recomendamos abrir o documento externamente.
                                                     </p>
                                                     <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-base">
-                                                        <a href={document.pdf_url} target="_blank" rel="noopener noreferrer">
+                                                        <a href={toSiteUrl(document.pdf_url)} target="_blank" rel="noopener noreferrer">
                                                             Abrir PDF <ExternalLink className="w-4 h-4 ml-2" />
                                                         </a>
                                                     </Button>

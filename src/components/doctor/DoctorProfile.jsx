@@ -19,6 +19,7 @@ import TwoFactorCard from '@/components/TwoFactorCard';
 import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
 import DeleteAccountCard from '@/components/DeleteAccountCard';
 import { maskCRM, maskPhone, maskUF } from '@/lib/masks';
+import { toSiteUrl } from '@/lib/storageUrl';
 
 const ProfileSkeleton = () => (
     <div className="space-y-4">
@@ -132,7 +133,7 @@ const DoctorProfile = () => {
             const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(fileName);
             const { data: updatedData, error: updateError } = await supabase
                 .from('medicos')
-                .update({ image_url: publicUrl, updated_at: new Date().toISOString() })
+                .update({ image_url: toSiteUrl(publicUrl), updated_at: new Date().toISOString() })
                 .eq('user_id', user.id)
                 .select()
                 .single();

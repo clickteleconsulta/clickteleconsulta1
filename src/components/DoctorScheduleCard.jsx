@@ -15,6 +15,7 @@ import { format, addDays, startOfToday, isToday, addMinutes } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { utcToZonedTime } from 'date-fns-tz';
 import { supabase } from '@/lib/customSupabaseClient';
+import { toSiteUrl } from '@/lib/storageUrl';
 import { Skeleton } from './ui/skeleton';
 
 const generateTimeSlotsFromAgenda = (agenda, day) => {
@@ -242,7 +243,7 @@ export function DoctorScheduleCard({
           <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
               <div className="flex items-start gap-3">
                   <Avatar className="w-14 h-14 border-2 border-white shadow-lg ring-2 ring-slate-100 shrink-0 rounded-xl">
-                      <AvatarImage src={doctor?.image_url} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-xl object-cover" />
+                      <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-xl object-cover" />
                       <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-white rounded-xl"><User size={24} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">

@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Eye, CheckCircle2, Trash2, Save, Upload, FileType, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
+import { toSiteUrl } from '@/lib/storageUrl';
 
 const TermoAdesaoManager = () => {
     const { toast } = useToast();
@@ -64,7 +65,7 @@ const TermoAdesaoManager = () => {
             // desativa as anteriores e insere a nova como ativa
             await supabase.from('termo_adesao').update({ is_active: false }).eq('is_active', true);
             const { error: insErr } = await supabase.from('termo_adesao').insert({
-                version: nextVersion, pdf_url: pub.publicUrl, pdf_file_name: selectedFile.name, is_active: true,
+                version: nextVersion, pdf_url: toSiteUrl(pub.publicUrl), pdf_file_name: selectedFile.name, is_active: true,
             });
             if (insErr) throw insErr;
 

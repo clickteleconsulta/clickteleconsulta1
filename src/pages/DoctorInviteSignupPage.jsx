@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Stethoscope, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { maskCPF, maskPhone, maskCRM, isValidCPF, isValidPhone } from '@/lib/masks';
+import { toSiteUrl } from '@/lib/storageUrl';
 
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 
@@ -176,7 +177,7 @@ const DoctorInviteSignupPage = () => {
                                 <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
                                     <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600" />
                                     <span>
-                                        Li e aceito o <a href={termoUrl || '/legal'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">Termo de Adesão</a> e as condições da plataforma Click Teleconsulta.
+                                        Li e aceito o <a href={toSiteUrl(termoUrl) || '/legal'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">Termo de Adesão</a> e as condições da plataforma Click Teleconsulta.
                                     </span>
                                 </label>
 
