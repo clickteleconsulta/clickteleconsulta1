@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, KeyRound } from 'lucide-react';
+import { maskPhone } from '@/lib/masks';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
 import TwoFactorCard from '@/components/TwoFactorCard';
@@ -119,7 +120,7 @@ const PatientData = () => {
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="whatsapp">WhatsApp</Label>
-                            <Input id="whatsapp" {...register('whatsapp')} placeholder="(00) 00000-0000" />
+                            <Input id="whatsapp" {...register('whatsapp')} onChange={(e) => setValue('whatsapp', maskPhone(e.target.value), { shouldDirty: true })} placeholder="(00) 00000-0000" inputMode="numeric" maxLength={15} />
                         </div>
                         <div className="flex justify-end">
                             <Button type="submit" disabled={loading || !isDirty}>

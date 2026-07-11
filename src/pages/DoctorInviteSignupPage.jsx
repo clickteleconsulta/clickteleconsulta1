@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Stethoscope, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { maskCPF, maskPhone, maskCRM, isValidCPF, isValidPhone } from '@/lib/masks';
 
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 
@@ -56,6 +57,8 @@ const DoctorInviteSignupPage = () => {
         e.preventDefault();
         if (!form.full_name.trim()) { toast({ variant: 'destructive', title: 'Informe seu nome' }); return; }
         if (!form.crm.trim() || !form.uf) { toast({ variant: 'destructive', title: 'Informe CRM e UF' }); return; }
+        if (form.cpf && !isValidCPF(form.cpf)) { toast({ variant: 'destructive', title: 'CPF inválido', description: 'Verifique os números do CPF.' }); return; }
+        if (form.whatsapp && !isValidPhone(form.whatsapp)) { toast({ variant: 'destructive', title: 'Telefone inválido', description: 'Informe o DDD + número.' }); return; }
         if (form.password.length < 6) { toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 6 caracteres.' }); return; }
         if (form.password !== form.confirm) { toast({ variant: 'destructive', title: 'As senhas não coincidem' }); return; }
         if (!termo) { toast({ variant: 'destructive', title: 'Aceite o Termo de Adesão', description: 'É necessário aceitar o Termo de Adesão para continuar.' }); return; }
@@ -142,15 +145,15 @@ const DoctorInviteSignupPage = () => {
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">CPF</Label>
-                                        <Input value={form.cpf} onChange={e => set('cpf', e.target.value)} placeholder="000.000.000-00" />
+                                        <Input value={form.cpf} onChange={e => set('cpf', maskCPF(e.target.value))} placeholder="000.000.000-00" inputMode="numeric" maxLength={14} />
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">WhatsApp</Label>
-                                        <Input value={form.whatsapp} onChange={e => set('whatsapp', e.target.value)} placeholder="(00) 00000-0000" />
+                                        <Input value={form.whatsapp} onChange={e => set('whatsapp', maskPhone(e.target.value))} placeholder="(00) 00000-0000" inputMode="numeric" maxLength={15} />
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">CRM</Label>
-                                        <Input value={form.crm} onChange={e => set('crm', e.target.value)} placeholder="000000" />
+                                        <Input value={form.crm} onChange={e => set('crm', maskCRM(e.target.value))} placeholder="000000" inputMode="numeric" maxLength={8} />
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">UF</Label>
