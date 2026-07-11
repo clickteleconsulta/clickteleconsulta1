@@ -11,10 +11,11 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, User, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search } from 'lucide-react';
+import { Loader2, User, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 const ProfessionalsPage = () => {
   const [doctors, setDoctors] = useState([]);
@@ -43,6 +44,10 @@ const ProfessionalsPage = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [newFee, setNewFee] = useState('');
   const [isUpdatingFee, setIsUpdatingFee] = useState(false);
+
+  // Delete Doctor State
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchMainProceduresPrices = async (docs) => {
     if (!docs || docs.length === 0) return;
@@ -288,6 +293,22 @@ const ProfessionalsPage = () => {
       return <Badge className="bg-green-100 text-green-800 hover:bg-green-200 gap-1"><PlayCircle className="w-3 h-3" /> Ativo</Badge>;
   };
 
+  const handleDeleteDoctor = async () => {
+      if (!deleteTarget) return;
+      setIsDeleting(true);
+      try {
+          const { error } = await supabase.rpc('admin_delete_doctor', { p_user_id: deleteTarget.user_id });
+          if (error) throw error;
+          toast({ title: 'Conta excluída', description: `${deleteTarget.public_name || deleteTarget.name} foi removido permanentemente.`, variant: 'success' });
+          setDeleteTarget(null);
+          fetchProfessionals();
+      } catch (err) {
+          toast({ variant: 'destructive', title: 'Erro ao excluir', description: err.message });
+      } finally {
+          setIsDeleting(false);
+      }
+  };
+
   const getDocBadge = (status) => {
       const map = {
           aprovado: { label: 'Aprovado', cls: 'bg-green-100 text-green-800 border-green-200' },
@@ -452,6 +473,10 @@ const ProfessionalsPage = () => {
                                         <Ban className="mr-2 h-4 w-4" /> Cancelar Conta
                                     </DropdownMenuItem>
                                 )}
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="text-red-600 focus:text-red-600" onClick={() => setDeleteTarget(doc)}>
+                                    <Trash2 className="mr-2 h-4 w-4" /> Excluir Conta (permanente)
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </TableCell>
@@ -471,6 +496,33 @@ const ProfessionalsPage = () => {
       </Card>
         </TabsContent>
       </Tabs>
+
+      <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600 flex items-center gap-2">
+              <Trash2 className="w-5 h-5" /> Excluir conta do profissional
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação é <strong>irreversível</strong>. A conta de{' '}
+              <strong>{deleteTarget?.public_name || deleteTarget?.name}</strong> e seus dados profissionais
+              (perfil, agenda, procedimentos, documentos) serão removidos permanentemente. O e-mail ficará
+              livre para um novo cadastro.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => { e.preventDefault(); handleDeleteDoctor(); }}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+              Excluir permanentemente
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
