@@ -4,7 +4,6 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { LogOut, CalendarDays, LayoutDashboard, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import NotificationBell from '@/components/NotificationBell';
 
 const Header = () => {
   const { session, signOut, profile } = useAuth();
@@ -44,8 +43,6 @@ const Header = () => {
           <div className="flex items-center gap-3">
             {session ? (
               <>
-                <NotificationBell />
-
                 <Button variant="ghost" size="sm" onClick={handleDashboardRedirect} className="flex items-center gap-2 font-normal text-gray-600 hover:text-primary hover:bg-primary/5">
                   <LayoutDashboard className="w-4 h-4" />
                   <span>Painel do Paciente</span>

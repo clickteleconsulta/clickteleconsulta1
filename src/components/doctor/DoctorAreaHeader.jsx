@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import NotificationBell from '@/components/NotificationBell';
 
 const DoctorAreaHeader = () => {
   const { signOut, loading: authLoading } = useAuth();
@@ -37,10 +36,7 @@ const DoctorAreaHeader = () => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-4">
-             {/* Notification Bell Component */}
-             <NotificationBell />
-
-             <Link 
+             <Link
                 to="/medico/dashboard"
                 className="hidden md:flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors text-sm font-medium"
              >
