@@ -57,6 +57,9 @@ const AppointmentConfirmationPage = () => {
               description: "Sua consulta foi confirmada com sucesso.",
               variant: "success"
             });
+            // Notifica o médico por WhatsApp (best-effort; só envia quando o provedor
+            // estiver configurado na função notify-doctor-new-appointment).
+            supabase.functions.invoke('notify-doctor-new-appointment', { body: { appointmentId } }).catch(() => {});
             // Clean URL params
             navigate('.', { replace: true, state: { appointmentId } });
           } else {
