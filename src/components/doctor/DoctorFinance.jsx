@@ -371,6 +371,7 @@ const DoctorFinance = () => {
                                 <TableHeader className="bg-gray-50 border-b border-gray-200">
                                     <TableRow className="h-9 hover:bg-transparent">
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Data de Criação</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Protocolo</TableHead>
                                         <TableHead className="text-right text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Valor</TableHead>
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Status</TableHead>
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Data da Consulta</TableHead>
@@ -389,6 +390,9 @@ const DoctorFinance = () => {
                                                         <span className="font-semibold text-gray-900 text-xs">{t.createdDisplay}</span>
                                                         <span className="text-[10px] text-gray-500">{t.createdTime}</span>
                                                     </div>
+                                                </TableCell>
+                                                <TableCell className="py-2 px-4">
+                                                    <span className="font-mono text-xs font-semibold text-gray-800">{t.protocolo || '—'}</span>
                                                 </TableCell>
                                                 <TableCell className="text-right text-green-700 text-xs py-2 px-4 font-bold">
                                                     {t.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
@@ -416,7 +420,7 @@ const DoctorFinance = () => {
                                         ))
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={8} className="text-center py-8 text-gray-400 text-xs">
+                                            <TableCell colSpan={9} className="text-center py-8 text-gray-400 text-xs">
                                                 Nenhuma guia de pagamento encontrada.
                                             </TableCell>
                                         </TableRow>
@@ -602,7 +606,7 @@ const DoctorFinance = () => {
                                          />
                                          <div className="flex-1 min-w-0">
                                              <p className="text-xs font-medium text-gray-800 truncate">{g.patientName} · <span className="text-gray-500">{g.serviceName}</span></p>
-                                             <p className="text-[10px] text-gray-400">Consulta {g.displayDate} · criada {g.createdDisplay}</p>
+                                             <p className="text-[10px] text-gray-400">Protocolo <span className="font-mono text-gray-500">{g.protocolo || '—'}</span> · Consulta {g.displayDate}</p>
                                          </div>
                                          <span className="text-xs font-bold text-green-700 shrink-0">{g.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                                      </label>
@@ -645,7 +649,7 @@ const DoctorFinance = () => {
                                             <div key={g.id} className="flex items-center justify-between px-3 py-2.5">
                                                 <div className="min-w-0">
                                                     <p className="text-xs font-medium text-gray-800 truncate">{g.patientName} · <span className="text-gray-500">{g.serviceName}</span></p>
-                                                    <p className="text-[10px] text-gray-400">Consulta {g.displayDate}</p>
+                                                    <p className="text-[10px] text-gray-400">Protocolo <span className="font-mono text-gray-500">{g.protocolo || '—'}</span> · Consulta {g.displayDate}</p>
                                                 </div>
                                                 <span className="text-xs font-bold text-green-700 shrink-0">{g.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                                             </div>
