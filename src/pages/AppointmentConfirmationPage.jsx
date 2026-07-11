@@ -162,7 +162,7 @@ const AppointmentConfirmationPage = () => {
                 appointmentId: appointment.id,
                 priceInCents: appointment.price_in_cents,
                 title: `Consulta com ${appointment.medico?.public_name}`,
-                successUrl: `${window.location.origin}/agendamento/confirmado?appointmentId=${appointment.id}`,
+                successUrl: `${window.location.origin}/agendamento/confirmado?appointmentId=${appointment.id}&session_id={CHECKOUT_SESSION_ID}`,
                 cancelUrl: `${window.location.origin}/agendamento/confirmado?appointmentId=${appointment.id}`
             }
         });
