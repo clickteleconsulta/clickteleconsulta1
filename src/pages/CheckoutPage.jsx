@@ -136,9 +136,14 @@ const AppointmentSummary = ({ appointmentDetails, compact = false }) => {
           <span>Total</span>
           <span className="text-xl text-blue-600">R$ {price}</span>
         </div>
-        <p className="text-xs text-muted-foreground">
-          O pagamento será confirmado pelo profissional.
-        </p>
+        <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-md p-2.5">
+          <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+          <span>
+            Conclua o pagamento até <strong>20 minutos antes</strong> do horário
+            da consulta. Guias não pagas nesse prazo são{' '}
+            <strong>canceladas automaticamente</strong>, junto com o agendamento.
+          </span>
+        </div>
       </CardContent>
     </Card>
   );
@@ -335,6 +340,18 @@ const CheckoutPage = () => {
                 Após a confirmação, você receberá um{' '}
                 <strong>email de confirmação</strong> com todos os detalhes do
                 seu agendamento.
+              </p>
+            </div>
+
+            {/* Aviso prazo de pagamento */}
+            <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+              <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <p>
+                <strong>Prazo de pagamento:</strong> a consulta só é confirmada
+                após o pagamento. Ele deve ser concluído até{' '}
+                <strong>20 minutos antes</strong> do horário agendado — guias e
+                agendamentos não pagos nesse prazo são{' '}
+                <strong>cancelados automaticamente</strong>.
               </p>
             </div>
 

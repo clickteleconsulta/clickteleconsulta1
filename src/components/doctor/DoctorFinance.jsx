@@ -263,6 +263,10 @@ const DoctorFinance = () => {
 
     if (loading) return <div className="flex justify-center p-8"><Loader2 className="animate-spin text-gray-400 w-8 h-8" /></div>;
 
+    // Exibe apenas guias com pagamento confirmado. Pendentes não pagas são
+    // canceladas automaticamente até 20 min antes do atendimento.
+    const paidTransactions = transactions.filter(t => t.pagamento_status === 'pago');
+
     return (
         <div className="space-y-6 max-w-6xl mx-auto pb-10">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -351,8 +355,8 @@ const DoctorFinance = () => {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {transactions.length > 0 ? (
-                                        transactions.map((t) => (
+                                    {paidTransactions.length > 0 ? (
+                                        paidTransactions.map((t) => (
                                             <TableRow key={t.id} className="h-10 hover:bg-gray-50 border-b border-gray-100 last:border-0">
                                                 <TableCell className="py-2 px-4">
                                                     <div className="flex flex-col">
