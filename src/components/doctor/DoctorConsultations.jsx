@@ -179,10 +179,12 @@ const RescheduleDialog = ({ appointment, open, onOpenChange }) => {
 
                 const slots = [];
                 agenda.forEach(rule => {
-                    const ruleStartSP = utcToZonedTime(new Date(rule.hora_inicio), timeZone);
-                    const ruleEndSP = utcToZonedTime(new Date(rule.hora_fim), timeZone);
-                    const startTotalMins = ruleStartSP.getHours() * 60 + ruleStartSP.getMinutes();
-                    const endTotalMins = ruleEndSP.getHours() * 60 + ruleEndSP.getMinutes();
+                    // hora_inicio/hora_fim são strings "HH:MM:SS" no horário de Brasília
+                    const [sh, sm] = String(rule.hora_inicio || '').split(':').map(Number);
+                    const [eh, em] = String(rule.hora_fim || '').split(':').map(Number);
+                    if ([sh, sm, eh, em].some(n => Number.isNaN(n))) return;
+                    const startTotalMins = sh * 60 + sm;
+                    const endTotalMins = eh * 60 + em;
                     const interval = rule.intervalo_em_minutos || 30;
                     let currentMins = startTotalMins;
 
@@ -190,7 +192,7 @@ const RescheduleDialog = ({ appointment, open, onOpenChange }) => {
                         const h = Math.floor(currentMins / 60);
                         const m = currentMins % 60;
                         const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
-                        const slotIso = `${date} ${timeStr}`; 
+                        const slotIso = `${date} ${timeStr}`;
                         const slotDate = zonedTimeToUtc(slotIso, timeZone);
                         slots.push(slotDate);
                         currentMins += interval;
