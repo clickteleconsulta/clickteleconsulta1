@@ -908,7 +908,7 @@ const DoctorConsultations = () => {
                       <TableCell className="py-4 px-4 align-middle">
                         <PatientDetailsDialog patient={appt.perfis_usuarios} guest={appt.guest_patients}>
                           <div className="flex flex-col cursor-pointer group/proto">
-                            <span className="text-sm font-medium text-gray-700 group-hover/proto:text-blue-600 transition-colors">#{appt.protocolo?.split('-')[2] || '---'}</span>
+                            <span className="text-sm font-medium text-gray-700 group-hover/proto:text-blue-600 transition-colors">#{appt.protocolo || '---'}</span>
                             <div className="flex items-center gap-1.5 mt-0.5">
                               <Video className="w-3 h-3 text-gray-400" />
                               <span className="text-xs text-gray-500 font-medium">Videochamada</span>
