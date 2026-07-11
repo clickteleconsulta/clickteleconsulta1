@@ -68,7 +68,9 @@ export const AppointmentsProvider = ({ children }) => {
                 }
 
                 if(doctorData?.id){
-                     query = query.eq('medico_id', doctorData.id);
+                     // O médico só vê agendamentos com pagamento confirmado.
+                     // Pendentes (não pagos) ficam ocultos até a confirmação do pagamento.
+                     query = query.eq('medico_id', doctorData.id).in('pagamento_status', ['pago', 'reembolsado']);
                 } else {
                     setAppointments([]);
                     setLoading(false);
