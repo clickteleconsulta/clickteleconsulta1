@@ -32,9 +32,9 @@ const DoctorInviteSection = () => {
 
     const inviteLink = (token) => `${window.location.origin}/cadastro-medico/${token}`;
 
-    const sendInviteEmail = async (targetEmail, link) => {
+    const sendInvite = async (targetEmail) => {
         const { error } = await supabase.functions.invoke('send-doctor-invite', {
-            body: { email: targetEmail, link },
+            body: { email: targetEmail, origin: window.location.origin },
         });
         if (error) {
             let msg = error.message;
@@ -68,38 +68,20 @@ const DoctorInviteSection = () => {
         }
         setSending(true);
         try {
-            // Cria o convite com token (a conta só será criada quando o médico preencher o formulário)
-            const { data, error } = await supabase
-                .from('convites_medico')
-                .insert({ email: clean, invited_by: user?.id })
-                .select()
-                .single();
-            if (error) {
-                if (error.code === '23505') throw new Error('Já existe um convite pendente para este e-mail.');
-                throw error;
-            }
-            const link = inviteLink(data.token);
-            let emailed = false;
-            try { await sendInviteEmail(clean, link); emailed = true; } catch (_) { /* envio indisponível */ }
-            if (!emailed) { try { await navigator.clipboard.writeText(link); } catch (_) { /* ignore */ } }
-            toast({
-                title: 'Convite criado!',
-                description: emailed
-                    ? `E-mail de convite enviado para ${clean}.`
-                    : 'E-mail automático indisponível — o link foi copiado. Envie-o ao médico.',
-            });
+            await sendInvite(clean);
+            toast({ title: 'Convite enviado!', description: `Um e-mail de convite foi enviado para ${clean}.` });
             setEmail('');
-            fetchInvites();
         } catch (err) {
             toast({ variant: 'destructive', title: 'Erro ao convidar', description: err.message });
         } finally {
             setSending(false);
+            fetchInvites();
         }
     };
 
     const handleResend = async (inv) => {
         try {
-            await sendInviteEmail(inv.email, inviteLink(inv.token));
+            await sendInvite(inv.email);
             toast({ title: 'E-mail reenviado!', description: `Convite reenviado para ${inv.email}.` });
             fetchInvites();
         } catch (err) {

@@ -1,9 +1,7 @@
 // Supabase Edge Function: send-doctor-invite
-// Envia o e-mail de convite (via Resend — mesmo provedor já usado no SMTP do projeto)
-// com o LINK DE TOKEN para a página privada onde o médico cria a própria conta.
-// NÃO cria a conta antecipadamente.
-// Secret necessário: RESEND_API_KEY (a mesma chave do Resend do projeto).
-// Opcional: INVITE_FROM (padrão: "Click Teleconsulta <noreply@clickteleconsulta.online>")
+// Cria/reusa o convite (com token) e envia o e-mail (via Resend) com o LINK DE TOKEN
+// para a página privada onde o médico cria a própria conta. NÃO cria a conta antecipadamente.
+// Precisa apenas de { email } no corpo (origin é opcional). Secret: RESEND_API_KEY.
 
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -63,6 +61,7 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization") ?? "";
     const url = Deno.env.get("SUPABASE_URL")!;
     const anon = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
     // Confirma que o chamador é admin
     const userClient = createClient(url, anon, { global: { headers: { Authorization: authHeader } } });
@@ -74,11 +73,35 @@ serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const email = String(body?.email ?? "").trim().toLowerCase();
-    const link = String(body?.link ?? "");
-    if (!email || !link) return json({ error: "Dados incompletos (email/link)" }, 400);
+    if (!email) return json({ error: "E-mail obrigatório" }, 400);
+
+    // Base para o link (aceita origin, deriva de redirectTo, ou usa padrão)
+    let base = String(body?.origin ?? "").trim();
+    if (!base && body?.redirectTo) base = String(body.redirectTo).replace(/\/cadastro-medico.*$/, "");
+    if (!base) base = Deno.env.get("SITE_URL") || "https://clickteleconsulta.online";
+    base = base.replace(/\/+$/, "");
+
+    const admin = createClient(url, service);
+
+    // Cria ou reaproveita um convite ativo (com token)
+    let token: string | null = null;
+    const { data: existing } = await admin
+      .from("convites_medico").select("token")
+      .eq("email", email).in("status", ["pendente", "enviado"]).maybeSingle();
+    if (existing?.token) {
+      token = existing.token;
+    } else {
+      const { data: created, error: insErr } = await admin
+        .from("convites_medico").insert({ email, invited_by: user.id, status: "pendente" })
+        .select("token").single();
+      if (insErr) return json({ error: "Falha ao registrar convite: " + insErr.message }, 500);
+      token = created.token;
+    }
+
+    const link = `${base}/cadastro-medico/${token}`;
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_API_KEY) return json({ error: "RESEND_API_KEY não configurada" }, 500);
+    if (!RESEND_API_KEY) return json({ error: "RESEND_API_KEY não configurada", link }, 500);
     const FROM = Deno.env.get("INVITE_FROM") || "Click Teleconsulta <noreply@clickteleconsulta.online>";
 
     const resp = await fetch("https://api.resend.com/emails", {
@@ -92,7 +115,9 @@ serve(async (req) => {
       }),
     });
     const result = await resp.json().catch(() => ({}));
-    if (!resp.ok) return json({ error: result?.message || "Falha no envio do e-mail" }, 502);
+    if (!resp.ok) return json({ error: result?.message || "Falha no envio do e-mail", link }, 502);
+
+    await admin.from("convites_medico").update({ status: "enviado" }).eq("email", email).eq("status", "pendente");
 
     return json({ ok: true, id: result?.id ?? null });
   } catch (e) {
