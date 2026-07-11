@@ -360,8 +360,8 @@ const DoctorFinance = () => {
                                                         <span className="text-[10px] text-gray-500">{t.createdTime}</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="text-right text-gray-900 text-xs py-2 px-4 font-semibold">
-                                                    {t.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                <TableCell className="text-right text-green-700 text-xs py-2 px-4 font-bold">
+                                                    {t.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                                 </TableCell>
                                                 <TableCell className="py-2 px-4">
                                                     <Badge variant="outline" className={`h-5 text-[10px] px-2 rounded-sm font-medium border ${t.pagamento_status === 'pago' ? 'border-green-200 text-green-700 bg-green-50' : 'border-amber-200 text-amber-700 bg-amber-50'}`}>
@@ -478,9 +478,15 @@ const DoctorFinance = () => {
                     </DialogHeader>
                     {detailTx && (
                         <div className="space-y-3 text-sm">
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-sm border border-gray-200">
-                                <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Valor</span>
-                                <span className="text-lg font-bold text-gray-900">{detailTx.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                            <div className="p-3 bg-gray-50 rounded-sm border border-gray-200 space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Valor pago pelo paciente</span>
+                                    <span className="text-sm font-semibold text-gray-900">{detailTx.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                </div>
+                                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                                    <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Valor de repasse (você recebe)</span>
+                                    <span className="text-lg font-bold text-green-700">{detailTx.netValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="space-y-0.5">
