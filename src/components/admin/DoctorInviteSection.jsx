@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 const StatusBadge = ({ status }) => {
     const map = {
         pendente: { label: 'Pendente', cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
+        enviado: { label: 'Enviado', cls: 'bg-blue-50 text-blue-700 border-blue-200', icon: Send },
         aceito: { label: 'Aceito', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: CheckCircle2 },
         cancelado: { label: 'Cancelado', cls: 'bg-gray-100 text-gray-500 border-gray-200', icon: Ban },
     };
@@ -29,7 +30,18 @@ const DoctorInviteSection = () => {
     const [email, setEmail] = useState('');
     const [sending, setSending] = useState(false);
 
-    const inviteLink = (token) => `${window.location.origin}/cadastro-medico/${token}`;
+    const redirectTo = `${window.location.origin}/cadastro-medico`;
+
+    const invokeInvite = async (targetEmail) => {
+        const { error } = await supabase.functions.invoke('send-doctor-invite', {
+            body: { email: targetEmail, redirectTo },
+        });
+        if (error) {
+            let msg = error.message;
+            try { const b = await error.context?.json?.(); if (b?.error) msg = b.error; } catch (_) { /* ignore */ }
+            throw new Error(msg);
+        }
+    };
 
     const fetchInvites = useCallback(async () => {
         setLoading(true);
@@ -56,29 +68,8 @@ const DoctorInviteSection = () => {
         }
         setSending(true);
         try {
-            const { data, error } = await supabase
-                .from('convites_medico')
-                .insert({ email: clean, invited_by: user?.id })
-                .select()
-                .single();
-            if (error) {
-                if (error.code === '23505') throw new Error('Já existe um convite pendente para este e-mail.');
-                throw error;
-            }
-            const link = inviteLink(data.token);
-            // Tenta disparar o e-mail automático (edge function); fallback: link copiado
-            let emailed = false;
-            try {
-                const { error: fnErr } = await supabase.functions.invoke('send-doctor-invite', { body: { email: clean, link } });
-                emailed = !fnErr;
-            } catch (_) { /* function indisponível */ }
-            try { await navigator.clipboard.writeText(link); } catch (_) { /* ignore */ }
-            toast({
-                title: 'Convite criado!',
-                description: emailed
-                    ? 'E-mail enviado ao médico. O link também foi copiado.'
-                    : 'Link copiado. Envie ao médico (envio automático de e-mail indisponível).',
-            });
+            await invokeInvite(clean);
+            toast({ title: 'Convite enviado!', description: `Um e-mail de convite foi enviado para ${clean}.` });
             setEmail('');
             fetchInvites();
         } catch (err) {
@@ -88,23 +79,13 @@ const DoctorInviteSection = () => {
         }
     };
 
-    const handleCopy = async (token) => {
-        try {
-            await navigator.clipboard.writeText(inviteLink(token));
-            toast({ title: 'Link copiado!', description: 'Envie ao médico para ele criar a conta.' });
-        } catch (_) {
-            toast({ variant: 'destructive', title: 'Não foi possível copiar', description: inviteLink(token) });
-        }
-    };
-
     const handleResend = async (inv) => {
-        const link = inviteLink(inv.token);
         try {
-            const { error } = await supabase.functions.invoke('send-doctor-invite', { body: { email: inv.email, link } });
-            if (error) throw error;
+            await invokeInvite(inv.email);
             toast({ title: 'E-mail reenviado!', description: `Convite reenviado para ${inv.email}.` });
+            fetchInvites();
         } catch (err) {
-            toast({ variant: 'destructive', title: 'Falha ao reenviar', description: err.message || 'Envio automático indisponível. Use "Copiar link".' });
+            toast({ variant: 'destructive', title: 'Falha ao reenviar', description: err.message });
         }
     };
 
@@ -168,13 +149,10 @@ const DoctorInviteSection = () => {
                                         {inv.status === 'aceito' && inv.aceito_em && ` · aceito em ${format(new Date(inv.aceito_em), 'dd/MM/yyyy')}`}
                                     </p>
                                 </div>
-                                {inv.status === 'pendente' && (
+                                {['pendente', 'enviado'].includes(inv.status) && (
                                     <div className="flex items-center gap-2 shrink-0">
                                         <Button variant="outline" size="sm" onClick={() => handleResend(inv)} className="gap-1.5 h-8 text-xs">
                                             <Send className="w-3.5 h-3.5" /> Reenviar
-                                        </Button>
-                                        <Button variant="outline" size="sm" onClick={() => handleCopy(inv.token)} className="gap-1.5 h-8 text-xs">
-                                            <Copy className="w-3.5 h-3.5" /> Copiar link
                                         </Button>
                                         <Button variant="ghost" size="sm" onClick={() => handleCancel(inv.id)} className="gap-1.5 h-8 text-xs text-red-600 hover:text-red-700 hover:bg-red-50">
                                             <Ban className="w-3.5 h-3.5" /> Cancelar

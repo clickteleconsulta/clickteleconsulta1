@@ -254,6 +254,7 @@ function App() {
             {/* Auth Routes */}
             <Route path="/acesso-paciente" element={<AuthRedirect role="paciente" />} />
             <Route path="/acesso-medico" element={<AuthRedirect role="medico" />} />
+            <Route path="/cadastro-medico" element={<DoctorInviteSignupPage />} />
             <Route path="/cadastro-medico/:token" element={<DoctorInviteSignupPage />} />
             
             <Route path="/recuperar-senha" element={<PasswordRecoveryPage />} />
