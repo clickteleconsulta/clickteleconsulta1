@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock } from 'lucide-react';
+import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock, Filter, SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, DialogDescription } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, isToday } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -1045,39 +1046,63 @@ const DoctorConsultations = () => {
         </div>
       </div>
 
-    {/* Filtros: status + período (por padrão, do dia atual em diante) */}
-    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end mb-6">
-      <div className="w-full sm:w-56">
-        <Label className="text-[11px] font-medium text-gray-500 ml-1">Filtrar por status</Label>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-10 bg-white border-gray-200 rounded-lg text-sm mt-1"><SelectValue placeholder="Status" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os status</SelectItem>
-            <SelectItem value="agendadas">Agendadas</SelectItem>
-            <SelectItem value="concluidas">Concluídas</SelectItem>
-            <SelectItem value="canceladas">Canceladas</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <Label className="text-[11px] font-medium text-gray-500 ml-1">Período</Label>
-        <div className="flex items-end gap-2 mt-1">
-          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 ml-1">De</span>
-            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="h-10 w-[150px] bg-white border-gray-200 rounded-lg text-sm" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 ml-1">Até</span>
-            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="h-10 w-[150px] bg-white border-gray-200 rounded-lg text-sm" />
-          </div>
-          {(startDate || endDate) && (
-            <Button variant="ghost" size="sm" onClick={() => { setStartDate(''); setEndDate(''); }} className="h-10 text-xs text-gray-500 hover:text-gray-700">
-              <XCircle className="w-3.5 h-3.5 mr-1" /> Limpar datas
-            </Button>
-          )}
+    {/* Filtros como botões que abrem uma aba rápida (popover) */}
+    {(() => {
+      const STATUS_LABELS = { all: 'Todos', agendadas: 'Agendadas', concluidas: 'Concluídas', canceladas: 'Canceladas' };
+      const fmtBr = (s) => s ? `${s.slice(8, 10)}/${s.slice(5, 7)}` : '';
+      const periodLabel = startDate && endDate
+        ? `${fmtBr(startDate)}–${fmtBr(endDate)}`
+        : startDate ? `a partir de ${fmtBr(startDate)}`
+        : endDate ? `até ${fmtBr(endDate)}`
+        : 'Todos';
+      const setToday = () => { const n = new Date(); setStartDate(`${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`); setEndDate(''); };
+      return (
+        <div className="flex flex-wrap gap-3 items-center mb-6">
+          {/* Status */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className={`h-10 gap-2 rounded-lg border-gray-200 bg-white text-sm ${statusFilter !== 'all' ? 'text-blue-700 border-blue-200 bg-blue-50/50' : 'text-gray-700'}`}>
+                <Filter className="w-4 h-4" /> Status: <span className="font-semibold">{STATUS_LABELS[statusFilter]}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-48 p-1 rounded-lg">
+              {Object.entries(STATUS_LABELS).map(([v, l]) => (
+                <button key={v} type="button" onClick={() => setStatusFilter(v)} className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${statusFilter === v ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-gray-50 text-gray-700'}`}>
+                  {l}
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
+
+          {/* Período */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className={`h-10 gap-2 rounded-lg border-gray-200 bg-white text-sm ${(startDate || endDate) ? 'text-blue-700 border-blue-200 bg-blue-50/50' : 'text-gray-700'}`}>
+                <CalendarIcon className="w-4 h-4" /> Período: <span className="font-semibold">{periodLabel}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-64 p-3 space-y-3 rounded-lg">
+              <div className="space-y-1">
+                <Label className="text-[11px] font-medium text-gray-500">De</Label>
+                <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="h-9 bg-white border-gray-200 rounded-md text-sm" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[11px] font-medium text-gray-500">Até</Label>
+                <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="h-9 bg-white border-gray-200 rounded-md text-sm" />
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <Button variant="ghost" size="sm" onClick={setToday} className="h-8 text-xs text-blue-600 hover:text-blue-700 px-2">Hoje em diante</Button>
+                <Button variant="ghost" size="sm" onClick={() => { setStartDate(''); setEndDate(''); }} className="h-8 text-xs text-gray-500 hover:text-gray-700 px-2">
+                  <XCircle className="w-3.5 h-3.5 mr-1" /> Limpar
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
-      </div>
-    </div>
+      );
+    })()}
 
     <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
       <AppointmentsTable appointmentsList={displayedAppointments} tabKey="upcoming" />
