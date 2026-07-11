@@ -669,7 +669,7 @@ const DoctorConsultations = () => {
   const [localEmailSentStatus, setLocalEmailSentStatus] = useState({});
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState('upcoming');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('agendadas');
   const [startDate, setStartDate] = useState(() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`; });
   const [endDate, setEndDate] = useState('');
   const [currentPage, setCurrentPage] = useState({ upcoming: 1, history: 1 });
