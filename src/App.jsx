@@ -52,6 +52,7 @@ import AdminWithdrawalsPage from '@/pages/admin/AdminWithdrawalsPage';
 import AdminReviewsPage from '@/pages/admin/AdminReviewsPage';
 import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminProfessionalDocsPage from '@/pages/admin/AdminProfessionalDocsPage';
+import AdminPatientsPage from '@/pages/admin/AdminPatientsPage';
 
 // Memed Integration
 import MemedPrescriptionPage from '@/integrations/memed/MemedPrescriptionPage';
@@ -166,6 +167,7 @@ function App() {
              <Route path="agendamentos" element={<AppointmentsControlPage />} />
              <Route path="profissionais" element={<ProfessionalsPage />} />
              <Route path="documentacao" element={<AdminProfessionalDocsPage />} />
+             <Route path="pacientes" element={<AdminPatientsPage />} />
              <Route path="avaliacoes" element={<AdminReviewsPage />} />
              <Route path="metodos-recebimento" element={<AdminPaymentMethodsPage />} />
              <Route path="saques-pagamentos" element={<AdminWithdrawalsPage />} /> 
