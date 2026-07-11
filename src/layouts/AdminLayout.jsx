@@ -16,7 +16,7 @@ import {
   AlertTriangle,
   ShieldCheck,
   FolderCheck,
-  UserRound
+  User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -46,7 +46,7 @@ const AdminLayout = () => {
     const navItems = [
         { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
         { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users },
-        { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: UserRound },
+        { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
         { href: '/admin/dashboard/documentacao', label: 'Documentação', icon: FolderCheck },
         { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle },
         { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote },
