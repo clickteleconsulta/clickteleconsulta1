@@ -67,47 +67,17 @@ const DoctorArea = () => {
     };
 
     const menuItems = [
-        { 
-            id: 'consultas',
-            href: '/medico/dashboard/consultas', 
-            label: 'Consultas', 
-            icon: Calendar 
-        },
-        { 
-            id: 'pacientes',
-            href: '/medico/dashboard/pacientes', 
-            label: 'Pacientes', 
-            icon: Users 
-        }, 
-        { 
-            id: 'mensagens',
-            href: '/medico/dashboard/mensagens',
-            label: 'Mensagens', 
-            icon: MessageSquare 
-        },
-        { 
-            id: 'avaliacoes',
-            href: '/medico/dashboard/avaliacoes',
-            label: 'Avaliações', 
-            icon: Star 
-        },
         {
-            id: 'financeiro',
-            href: '/medico/dashboard/financeiro', 
-            label: 'Financeiro', 
-            icon: Wallet 
+            id: 'consultas',
+            href: '/medico/dashboard/consultas',
+            label: 'Consultas',
+            icon: Calendar
         },
         {
             id: 'agenda',
-            href: '/medico/dashboard/agenda', 
-            label: 'Agenda', 
-            icon: Clock 
-        },
-        { 
-            id: 'configuracoes',
-            href: '/medico/dashboard/perfil',
-            label: 'Configurações', 
-            icon: Settings 
+            href: '/medico/dashboard/agenda',
+            label: 'Agenda',
+            icon: Clock
         },
         {
             id: 'procedimentos',
@@ -116,10 +86,40 @@ const DoctorArea = () => {
             icon: Stethoscope
         },
         {
+            id: 'financeiro',
+            href: '/medico/dashboard/financeiro',
+            label: 'Financeiro',
+            icon: Wallet
+        },
+        {
+            id: 'avaliacoes',
+            href: '/medico/dashboard/avaliacoes',
+            label: 'Avaliações',
+            icon: Star
+        },
+        {
+            id: 'configuracoes',
+            href: '/medico/dashboard/perfil',
+            label: 'Configurações',
+            icon: Settings
+        },
+        {
             id: 'ajuda',
             href: '/medico/dashboard/ajuda',
             label: 'Ajuda',
             icon: HelpCircle
+        },
+        {
+            id: 'pacientes',
+            href: '/medico/dashboard/pacientes',
+            label: 'Pacientes',
+            icon: Users
+        },
+        {
+            id: 'mensagens',
+            href: '/medico/dashboard/mensagens',
+            label: 'Mensagens',
+            icon: MessageSquare
         },
     ].filter((item) => {
         if (item.id === 'mensagens' && !FEATURES.MESSAGING) return false;
