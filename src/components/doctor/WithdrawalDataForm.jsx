@@ -103,7 +103,7 @@ const WithdrawalDataForm = ({ onSave }) => {
                         Configuração de resgate
                     </CardTitle>
                     <CardDescription className="dashboard-subtitle text-xs">
-                        Cadastre os dados bancários para receber na sua conta os resgates dos valores dos Repasses Medprev.
+                        Cadastre os dados bancários para receber na sua conta os resgates dos valores dos Repasses Click Teleconsulta.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="px-4 py-4 space-y-4">
