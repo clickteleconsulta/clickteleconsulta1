@@ -66,7 +66,7 @@ const AppointmentsControlPage = () => {
             *,
             medicos ( id, name, specialty, crm, uf, payment_settings ),
             patient:perfis_usuarios!patient_id ( id, full_name, email, cpf, whatsapp ),
-            guias:agendamentos_guia_id_fkey ( medico_snapshot, servico_snapshot )
+            guias:agendamentos_guia_id_fkey ( medico_snapshot )
         `)
         .order('created_at', { ascending: false });
 

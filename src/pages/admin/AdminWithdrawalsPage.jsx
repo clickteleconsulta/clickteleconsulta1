@@ -24,19 +24,29 @@ const AdminWithdrawalsPage = () => {
     const fetchWithdrawals = async () => {
         setLoading(true);
         try {
+            // Sem embed de FK (evita falha se o relacionamento não estiver registrado no PostgREST)
             const { data, error } = await supabase
                 .from('saques')
-                .select(`
-                    *,
-                    medicos ( name, public_name )
-                `)
+                .select('*')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setWithdrawals(data || []);
+
+            const rows = data || [];
+            const doctorIds = [...new Set(rows.map(r => r.doctor_id).filter(Boolean))];
+            let medicosMap = {};
+            if (doctorIds.length > 0) {
+                const { data: meds } = await supabase
+                    .from('medicos')
+                    .select('id, name, public_name')
+                    .in('id', doctorIds);
+                (meds || []).forEach(m => { medicosMap[m.id] = m; });
+            }
+
+            setWithdrawals(rows.map(r => ({ ...r, medicos: medicosMap[r.doctor_id] || null })));
         } catch (error) {
             console.error('Error fetching withdrawals:', error);
-            toast({ variant: 'destructive', title: 'Erro', description: 'Não foi possível carregar os saques.' });
+            toast({ variant: 'destructive', title: 'Erro', description: error?.message || 'Não foi possível carregar os saques.' });
         } finally {
             setLoading(false);
         }
