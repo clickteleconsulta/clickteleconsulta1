@@ -666,6 +666,9 @@ const DoctorConsultations = () => {
   const [localEmailSentStatus, setLocalEmailSentStatus] = useState({});
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [startDate, setStartDate] = useState(() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`; });
+  const [endDate, setEndDate] = useState('');
   const [currentPage, setCurrentPage] = useState({ upcoming: 1, history: 1 });
 
   const [selectedGuestAppt, setSelectedGuestAppt] = useState(null);
@@ -747,6 +750,30 @@ const DoctorConsultations = () => {
   const pastAppointments = useMemo(() => filteredAppointments.filter(a => ['atendido', 'concluida', 'cancelado', 'expirado'].includes(a.status) || (!['confirmado', 'reagendado', 'pendente', 'agendado'].includes(a.status))), [filteredAppointments]);
   const pendingCount = useMemo(() => appointments.filter(a => ['confirmado', 'pendente', 'reagendado', 'agendado'].includes(a.status) && a.pagamento_status !== 'cancelado').length, [appointments]);
   const completedCount = useMemo(() => appointments.filter(a => ['atendido', 'concluida'].includes(a.status)).length, [appointments]);
+
+  // Lista filtrada por busca + status + período (por padrão, do dia atual em diante)
+  const displayedAppointments = useMemo(() => {
+    const STATUS_GROUPS = {
+      agendadas: ['confirmado', 'reagendado', 'pendente', 'agendado'],
+      concluidas: ['atendido', 'concluida'],
+      canceladas: ['cancelado', 'expirado'],
+    };
+    const toDayStr = (d) => {
+      if (!d) return '';
+      const x = new Date(d);
+      if (isNaN(x.getTime())) return '';
+      return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`;
+    };
+    const term = searchTerm.toLowerCase();
+    return sortedAppointments.filter(a => {
+      const patientName = a.paciente_nome || a.perfis_usuarios?.full_name || a.guest_patients?.name || '';
+      const matchesSearch = patientName.toLowerCase().includes(term) || (a.protocolo || '').toLowerCase().includes(term);
+      const matchesStatus = statusFilter === 'all' || (STATUS_GROUPS[statusFilter] || []).includes(a.status);
+      const day = toDayStr(a.horario_inicio);
+      const matchesDate = (!startDate || (day && day >= startDate)) && (!endDate || (day && day <= endDate));
+      return matchesSearch && matchesStatus && matchesDate;
+    });
+  }, [sortedAppointments, searchTerm, statusFilter, startDate, endDate]);
   
   const handleAction = async (id, action, successToast, failureToast) => {
     setIsSubmitting(prev => ({ ...prev, [id]: true }));
@@ -1003,16 +1030,7 @@ const DoctorConsultations = () => {
   };
 
   return <div className="space-y-8 pb-12 pt-8 px-6 min-h-screen">
-      <div className="flex flex-col md:flex-row gap-3 mb-8">
-        <div onClick={() => setActiveTab('upcoming')} className={`flex-1 p-3 rounded-xl shadow-sm border cursor-pointer transition-all duration-300 relative overflow-hidden group min-h-[70px] flex items-center ${activeTab === 'upcoming' ? 'bg-white border-b-4 border-b-blue-500 shadow-lg shadow-blue-100/50' : 'bg-white border border-gray-200 hover:shadow-lg'}`}>
-          <div className="flex items-center gap-3 z-10"><div className="bg-blue-50 border border-blue-100 p-2 rounded-lg text-blue-600"><CalendarIcon className="w-6 h-6" /></div><div><h3 className="text-base font-semibold text-gray-900">{pendingCount} Pendentes</h3><p className="text-xs font-medium text-gray-500 mt-0">Novos atendimentos</p></div></div>
-        </div>
-        <div onClick={() => setActiveTab('history')} className={`flex-1 p-3 rounded-xl shadow-sm border cursor-pointer transition-all duration-300 relative overflow-hidden group min-h-[70px] flex items-center ${activeTab === 'history' ? 'bg-white border-b-4 border-b-emerald-500 shadow-lg shadow-emerald-100/50' : 'bg-white border border-gray-200 hover:shadow-lg'}`}>
-          <div className="flex items-center gap-3 z-10"><div className="bg-emerald-50 border border-emerald-100 p-2 rounded-lg text-emerald-600"><CheckCircle2 className="w-6 h-6" /></div><div><h3 className="text-base font-semibold text-gray-900">{completedCount} Concluídas</h3><p className="text-xs font-medium text-gray-500 mt-0">Ver histórico</p></div></div>
-        </div>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4 items-center mb-8">
+      <div className="flex flex-col md:flex-row gap-4 items-center mb-4">
         <div className="relative flex-1 w-full flex items-center gap-3">
             <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -1027,18 +1045,43 @@ const DoctorConsultations = () => {
         </div>
       </div>
 
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="hidden">
-        <TabsTrigger value="upcoming">Próximas</TabsTrigger>
-        <TabsTrigger value="history">Histórico</TabsTrigger>
-      </TabsList>
-      <TabsContent value="upcoming" className="mt-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <AppointmentsTable appointmentsList={upcomingAppointments} tabKey="upcoming" />
-      </TabsContent>
-      <TabsContent value="history" className="mt-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <AppointmentsTable appointmentsList={pastAppointments} tabKey="history" />
-      </TabsContent>
-    </Tabs>
+    {/* Filtros: status + período (por padrão, do dia atual em diante) */}
+    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end mb-6">
+      <div className="w-full sm:w-56">
+        <Label className="text-[11px] font-medium text-gray-500 ml-1">Filtrar por status</Label>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="h-10 bg-white border-gray-200 rounded-lg text-sm mt-1"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os status</SelectItem>
+            <SelectItem value="agendadas">Agendadas</SelectItem>
+            <SelectItem value="concluidas">Concluídas</SelectItem>
+            <SelectItem value="canceladas">Canceladas</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label className="text-[11px] font-medium text-gray-500 ml-1">Período</Label>
+        <div className="flex items-end gap-2 mt-1">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 ml-1">De</span>
+            <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="h-10 w-[150px] bg-white border-gray-200 rounded-lg text-sm" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 ml-1">Até</span>
+            <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="h-10 w-[150px] bg-white border-gray-200 rounded-lg text-sm" />
+          </div>
+          {(startDate || endDate) && (
+            <Button variant="ghost" size="sm" onClick={() => { setStartDate(''); setEndDate(''); }} className="h-10 text-xs text-gray-500 hover:text-gray-700">
+              <XCircle className="w-3.5 h-3.5 mr-1" /> Limpar datas
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <AppointmentsTable appointmentsList={displayedAppointments} tabKey="upcoming" />
+    </div>
 
     <GuestTokenDialog appointment={selectedGuestAppt} open={!!selectedGuestAppt} onOpenChange={(open) => !open && setSelectedGuestAppt(null)} />
     <RescheduleDialog appointment={selectedRescheduleAppt} open={!!selectedRescheduleAppt} onOpenChange={(open) => !open && setSelectedRescheduleAppt(null)} />
