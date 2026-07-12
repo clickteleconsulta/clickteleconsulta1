@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Stethoscope, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Lock } from 'lucide-react';
+import { patientPriceFromRepasse } from '@/lib/price';
 
 // Procedimento padrão da plataforma — imutável (exceto o valor de repasse).
 const TELECONSULTA_NOME = 'Teleconsulta';
@@ -225,13 +226,8 @@ const DoctorProceduresPage = () => {
         return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
     };
 
-    const calculateFinalPrice = (price, taxPercent) => {
-        const tax = Number(taxPercent) || 0;
-        if (tax > 0) {
-            return price / (1 - (tax / 100));
-        }
-        return price;
-    };
+    // Preço paciente: aplica a taxa e arredonda para cima ao próximo R$ 0,50 (sem valor quebrado).
+    const calculateFinalPrice = (price, taxPercent) => patientPriceFromRepasse(price, taxPercent);
 
     if (loading) {
         return <div className="flex justify-center items-center h-64 w-full"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>;

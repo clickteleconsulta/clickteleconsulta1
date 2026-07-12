@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
+import { patientPriceFromRepasse } from '@/lib/price';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { Loader2, Frown, Edit, Search, Filter, X } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -64,7 +65,8 @@ const AppointmentsPage = () => {
       const taxaPercentual = doc.payment_settings?.platform_fee_percent || 0;
       const mainProc = doc.procedimentos?.find(p => p.principal);
       const precoRepasse = mainProc ? Number(mainProc.preco) : (Number(doc.price_in_cents) / 100 || 0);
-      const precoFinal = taxaPercentual === 0 ? precoRepasse : precoRepasse / (1 - (taxaPercentual / 100));
+      // Preço paciente: aplica a taxa e arredonda para cima ao próximo R$ 0,50 (sem valor quebrado).
+      const precoFinal = patientPriceFromRepasse(precoRepasse, taxaPercentual);
       newDoctorPrices[doc.id] = precoFinal;
       return {
         ...doc,
