@@ -16,6 +16,7 @@ import { ptBR } from 'date-fns/locale';
 import { utcToZonedTime } from 'date-fns-tz';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
+import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { Skeleton } from './ui/skeleton';
 
 const generateTimeSlotsFromAgenda = (agenda, day) => {
@@ -210,7 +211,7 @@ export function DoctorScheduleCard({
     
     const appointmentDetails = {
       medico_id: doctor.id,
-      doctor_name: doctor.public_name || doctor.name,
+      doctor_name: formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name),
       specialty: doctor.specialty,
       appointment_date: format(appointmentDate, 'yyyy-MM-dd'),
       appointment_time: time,
@@ -266,8 +267,8 @@ export function DoctorScheduleCard({
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          <h3 className="text-lg font-bold text-slate-900 overflow-hidden text-ellipsis whitespace-nowrap" title={doctor?.public_name || doctor?.name}>
-                              {doctor?.public_name || doctor?.name}
+                          <h3 className="text-lg font-bold text-slate-900 overflow-hidden text-ellipsis whitespace-nowrap" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
+                              {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
                           </h3>
                       </Link>
 

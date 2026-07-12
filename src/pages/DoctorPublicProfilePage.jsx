@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -324,7 +325,7 @@ const DoctorPublicProfilePage = () => {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h1 className="text-xl md:text-2xl font-bold text-foreground">{doctor.public_name || doctor.name}</h1>
+                    <h1 className="text-xl md:text-2xl font-bold text-foreground">{formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}</h1>
                     {/* Verified badge */}
                     <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-[11px] flex items-center gap-1">
                       <CheckCircle className="w-3 h-3" /> Verificado — Click Teleconsulta

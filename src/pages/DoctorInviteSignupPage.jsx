@@ -25,7 +25,7 @@ const DoctorInviteSignupPage = () => {
     const [submitting, setSubmitting] = useState(false);
     const [done, setDone] = useState(false);
 
-    const [form, setForm] = useState({ full_name: '', cpf: '', crm: '', uf: '', whatsapp: '', password: '', confirm: '' });
+    const [form, setForm] = useState({ full_name: '', cpf: '', crm: '', uf: '', whatsapp: '', sexo: '', password: '', confirm: '' });
     const [termo, setTermo] = useState(false);
     const [termoUrl, setTermoUrl] = useState(null);
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -58,6 +58,7 @@ const DoctorInviteSignupPage = () => {
         e.preventDefault();
         if (!form.full_name.trim()) { toast({ variant: 'destructive', title: 'Informe seu nome' }); return; }
         if (!form.crm.trim() || !form.uf) { toast({ variant: 'destructive', title: 'Informe CRM e UF' }); return; }
+        if (!form.sexo) { toast({ variant: 'destructive', title: 'Informe o sexo', description: 'Selecione o sexo para definir o tratamento (Dr./Dra.).' }); return; }
         if (form.cpf && !isValidCPF(form.cpf)) { toast({ variant: 'destructive', title: 'CPF inválido', description: 'Verifique os números do CPF.' }); return; }
         if (form.whatsapp && !isValidPhone(form.whatsapp)) { toast({ variant: 'destructive', title: 'Telefone inválido', description: 'Informe o DDD + número.' }); return; }
         if (form.password.length < 6) { toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 6 caracteres.' }); return; }
@@ -77,6 +78,7 @@ const DoctorInviteSignupPage = () => {
                         crm: form.crm.trim(),
                         uf: form.uf,
                         whatsapp: form.whatsapp.trim(),
+                        sexo: form.sexo,
                         termo_aceito_em: new Date().toISOString(),
                     }
                 }
@@ -141,7 +143,8 @@ const DoctorInviteSignupPage = () => {
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label className="text-xs font-semibold text-slate-600">Nome completo</Label>
-                                    <Input value={form.full_name} onChange={e => set('full_name', e.target.value)} placeholder="Dr. Nome Sobrenome" />
+                                    <Input value={form.full_name} onChange={e => set('full_name', e.target.value)} placeholder="Nome Sobrenome (sem Dr./Dra.)" />
+                                    <p className="text-[11px] text-slate-400">O tratamento (Dr. ou Dra.) é aplicado automaticamente conforme o sexo.</p>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="space-y-1.5">
@@ -151,6 +154,16 @@ const DoctorInviteSignupPage = () => {
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">WhatsApp</Label>
                                         <Input value={form.whatsapp} onChange={e => set('whatsapp', maskPhone(e.target.value))} placeholder="(00) 00000-0000" inputMode="numeric" maxLength={15} />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-xs font-semibold text-slate-600">Sexo</Label>
+                                        <Select value={form.sexo} onValueChange={v => set('sexo', v)}>
+                                            <SelectTrigger><SelectValue placeholder="Sexo" /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="masculino">Masculino</SelectItem>
+                                                <SelectItem value="feminino">Feminino</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">CRM</Label>

@@ -4,6 +4,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, Stethoscope } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { formatDoctorDisplayName } from '@/lib/doctorName';
 
 export function DoctorCard({ doctor }) {
   const [price, setPrice] = useState(null);
@@ -41,7 +42,7 @@ export function DoctorCard({ doctor }) {
           {doctor.image_url ? (
             <img 
               src={doctor.image_url} 
-              alt={doctor.public_name || doctor.name} 
+              alt={formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}
               className="w-full h-full object-cover" 
             />
           ) : (
@@ -52,8 +53,8 @@ export function DoctorCard({ doctor }) {
         </div>
       </CardHeader>
       <CardContent className="flex-grow p-5">
-        <CardTitle className="text-xl line-clamp-1" title={doctor.public_name || doctor.name}>
-          {doctor.public_name || doctor.name}
+        <CardTitle className="text-xl line-clamp-1" title={formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}>
+          {formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}
         </CardTitle>
         <p className="text-primary font-medium flex items-center gap-1.5 mt-1.5 text-sm">
           <Stethoscope size={14} />

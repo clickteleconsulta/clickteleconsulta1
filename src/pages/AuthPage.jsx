@@ -55,6 +55,7 @@ const AuthPage = ({
   const [cpf, setCpf] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [birthDate, setBirthDate] = useState('');
+  const [sexo, setSexo] = useState('');
 
   // LGPD consent (HOTFIX-05)
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -108,7 +109,7 @@ const AuthPage = ({
       } else {
         // Validation for Patient Signup
         if (!isDoctor) {
-             if (!fullName?.trim() || !cpf || !whatsapp || !birthDate || !email?.trim() || !password) {
+             if (!fullName?.trim() || !cpf || !whatsapp || !birthDate || !sexo || !email?.trim() || !password) {
                 throw new Error("Preencha todos os campos obrigatórios.");
              }
 
@@ -136,7 +137,8 @@ const AuthPage = ({
           full_name: fullName.trim(),
           cpf: cpf,
           whatsapp: whatsapp,
-          data_nasc: birthDate
+          data_nasc: birthDate,
+          sexo: sexo
         };
 
         const { error } = await signUp(email, password, metadata);
@@ -235,15 +237,28 @@ const AuthPage = ({
                             />
                         </div>
 
-                        <MaskedInput
-                            id="whatsapp"
-                            name="whatsapp"
-                            mask="(00) 00000-0000"
-                            value={whatsapp}
-                            onChange={e => setWhatsapp(e.target.value)}
-                            placeholder="WhatsApp"
-                            required
-                        />
+                        <div className="grid grid-cols-2 gap-3">
+                            <MaskedInput
+                                id="whatsapp"
+                                name="whatsapp"
+                                mask="(00) 00000-0000"
+                                value={whatsapp}
+                                onChange={e => setWhatsapp(e.target.value)}
+                                placeholder="WhatsApp"
+                                required
+                            />
+                            <select
+                                id="sexo"
+                                value={sexo}
+                                onChange={e => setSexo(e.target.value)}
+                                required
+                                className={`h-11 px-3 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none ${sexo ? 'text-gray-800' : 'text-gray-400'}`}
+                            >
+                                <option value="" disabled>Sexo</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="feminino">Feminino</option>
+                            </select>
+                        </div>
                     </div>
                     )}
 

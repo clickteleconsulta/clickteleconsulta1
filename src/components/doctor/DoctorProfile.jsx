@@ -20,6 +20,7 @@ import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
 import DeleteAccountCard from '@/components/DeleteAccountCard';
 import { maskCRM, maskPhone, maskUF } from '@/lib/masks';
 import { toSiteUrl } from '@/lib/storageUrl';
+import { formatDoctorDisplayName, stripDoctorTitle } from '@/lib/doctorName';
 
 const ProfileSkeleton = () => (
     <div className="space-y-4">
@@ -52,7 +53,7 @@ const specialtiesList = [
 
 const DoctorProfile = () => {
     const { user, reloadProfile } = useAuth();
-    const { register, handleSubmit, formState: { errors, isDirty }, reset, control, setValue } = useForm();
+    const { register, handleSubmit, formState: { errors, isDirty }, reset, control, setValue, watch } = useForm();
     const [uploading, setUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const { toast } = useToast();
@@ -153,14 +154,15 @@ const DoctorProfile = () => {
         setIsSaving(true);
         try {
             const updates = {
-                public_name: formData.public_name,
+                public_name: stripDoctorTitle(formData.public_name),
                 specialty: formData.specialty,
                 crm: formData.crm,
                 uf: formData.uf,
                 phone_number: formData.phone_number,
+                sexo: formData.sexo || null,
                 bio: formData.bio,
                 instructions: formData.instructions,
-                updated_at: new Date().toISOString(), 
+                updated_at: new Date().toISOString(),
             };
 
             const { data, error } = await supabase.from("medicos").update(updates).eq("user_id", user.id).select().single();
@@ -242,8 +244,12 @@ const DoctorProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="public_name" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Nome de Exibição</Label>
-                                    <Input id="public_name" placeholder="Dr. Nome Sobrenome" {...register('public_name', { required: true })} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
+                                    <Input id="public_name" placeholder="Nome Sobrenome" {...register('public_name', { required: true })} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                     {errors.public_name && <p className="text-xs text-red-600 font-medium mt-1">Obrigatório</p>}
+                                    <p className="text-[11px] text-gray-500">
+                                        Informe apenas o nome. Aparece como{' '}
+                                        <span className="font-semibold text-blue-600">{formatDoctorDisplayName(watch('sexo'), watch('public_name')) || '—'}</span>.
+                                    </p>
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="specialty" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Especialidade</Label>
@@ -270,6 +276,25 @@ const DoctorProfile = () => {
                                             </Select>
                                         )}
                                     />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="sexo" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Sexo</Label>
+                                    <Controller
+                                        name="sexo"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select onValueChange={field.onChange} value={field.value || ''}>
+                                                <SelectTrigger className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
+                                                    <SelectValue placeholder="Selecione" />
+                                                </SelectTrigger>
+                                                <SelectContent className="rounded-lg border-gray-200">
+                                                    <SelectItem value="masculino">Masculino</SelectItem>
+                                                    <SelectItem value="feminino">Feminino</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    <p className="text-[11px] text-gray-500">Define o tratamento (Dr./Dra.).</p>
                                 </div>
                             </div>
 
