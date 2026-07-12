@@ -152,6 +152,20 @@ export function DoctorScheduleCard({
     };
   }, [doctor?.id, isFallback, fetchAllData]);
 
+  // Posiciona o card na primeira janela (de 5 dias) que tenha horários disponíveis.
+  // Agendas esparsas (ex.: médico só atende sexta) podem não ter nenhum dia disponível
+  // nos próximos 5 dias; sem isto o card ficaria "vazio" mesmo havendo horários adiante.
+  useEffect(() => {
+    if (isFallback || !doctorAgenda || doctorAgenda.length === 0) return;
+    const base = startOfToday();
+    for (let i = 0; i <= 20; i++) {
+      if (generateTimeSlotsFromAgenda(doctorAgenda, addDays(base, i)).length > 0) {
+        setDayOffset(Math.floor(i / 5) * 5);
+        return;
+      }
+    }
+  }, [doctorAgenda, isFallback]);
+
   const scheduleByDay = useMemo(() => {
     if (!doctorAgenda || isFallback) return visibleDays.map(day => ({
       date: day,
@@ -219,6 +233,10 @@ export function DoctorScheduleCard({
   };
 
   const isScheduleAvailable = scheduleByDay.some(d => d.slots.length > 0);
+  // Se o médico tem agenda configurada, sempre mostramos a grade + setas de navegação
+  // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
+  // dias com disponibilidade. O estado "Sem horários" fica só para quem não tem agenda.
+  const hasConfiguredAgenda = !isFallback && Array.isArray(doctorAgenda) && doctorAgenda.length > 0;
 
   // Directly use the formatted price passed from the parent which already includes the tax
   const displayPrice = formattedPatientPrice ? formattedPatientPrice : 'Consultar';
@@ -300,7 +318,7 @@ export function DoctorScheduleCard({
           </div>
           
           <div className="p-3.5 md:p-4 flex-1 flex flex-col min-h-[240px]">
-              {loadingSlots ? <ScheduleSkeleton /> : !isScheduleAvailable ? <div className="flex-grow flex flex-col justify-center items-center text-center text-muted-foreground py-6">
+              {loadingSlots ? <ScheduleSkeleton /> : !hasConfiguredAgenda ? <div className="flex-grow flex flex-col justify-center items-center text-center text-muted-foreground py-6">
                       <CalendarOff className="w-7 h-7 mb-1" />
                       <p className="font-semibold text-foreground text-sm">Sem horários disponíveis</p>
                       <p className="text-xs">{isFallback ? 'A agenda do médico não pôde ser carregada.' : 'Este médico está ajustando seus horários. Volte mais tarde.'}</p>
