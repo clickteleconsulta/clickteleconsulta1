@@ -172,7 +172,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
     if (status === 'error' || doctorProfileStatus === 'error' || !doctorProfile) return <div className="text-center p-6 text-sm text-red-600 border border-red-200 rounded-sm bg-red-50">{loadError?.message || "Erro no perfil"}</div>;
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-2xl mx-auto">
              <div className="flex flex-col gap-1 mb-2">
                 <h1 className="font-[Manrope] text-2xl font-extrabold tracking-tight text-gray-900">Configuração da Agenda</h1>
                 <p className="text-sm text-gray-500">Gerencie seus horários de atendimento semanais.</p>
@@ -197,17 +197,17 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                                         {blocksForDay.map((item) => {
                                              const fieldIndex = fields.findIndex(f => f.id === item.id);
                                              return (
-                                                 <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end p-4 bg-gray-50/70 rounded-xl border border-gray-200 transition-all duration-300 hover:border-blue-200 hover:bg-white hover:shadow-md hover:shadow-blue-500/5 hover:ring-1 hover:ring-blue-100 animate-in fade-in slide-in-from-top-1">
-                                                    <div className="md:col-span-3">
+                                                 <div key={item.id} className="flex flex-wrap items-end gap-3 sm:gap-4 p-4 bg-gray-50/70 rounded-xl border border-gray-200 transition-all duration-300 hover:border-blue-200 hover:bg-white hover:shadow-md hover:shadow-blue-500/5 hover:ring-1 hover:ring-blue-100 animate-in fade-in slide-in-from-top-1">
+                                                    <div className="w-[calc(50%-0.5rem)] sm:w-[120px]">
                                                         <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Início</Label>
                                                         <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-lg transition-all duration-200 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100" {...register(`schedule.${fieldIndex}.hora_inicio`)} />
                                                     </div>
-                                                    <div className="md:col-span-3">
+                                                    <div className="w-[calc(50%-0.5rem)] sm:w-[120px]">
                                                         <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Fim</Label>
                                                         <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-lg transition-all duration-200 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100" {...register(`schedule.${fieldIndex}.hora_fim`)} />
                                                     </div>
-                                                    <div className="md:col-span-4">
-                                                        <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Intervalo (min)</Label>
+                                                    <div className="flex-1 min-w-[130px] sm:flex-none sm:w-[150px]">
+                                                        <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Intervalo</Label>
                                                         <Controller name={`schedule.${fieldIndex}.intervalo_em_minutos`} control={control} render={({ field }) => (
                                                             <Select onValueChange={(val) => field.onChange(parseInt(val))} value={String(field.value)}>
                                                                 <SelectTrigger className="bg-white border-gray-300 h-9 text-sm rounded-lg transition-all duration-200 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100"><SelectValue /></SelectTrigger>
@@ -215,10 +215,10 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                                                             </Select>
                                                         )}/>
                                                     </div>
-                                                    <div className="md:col-span-2 flex justify-end">
+                                                    <div className="ml-auto sm:ml-1">
                                                         <Button type="button" variant="ghost" size="icon" onClick={() => remove(fieldIndex)} className="text-gray-400 hover:text-red-600 hover:bg-red-50 h-9 w-9 rounded-xl border border-transparent hover:border-red-200 transition-all duration-200 hover:scale-110 hover:rotate-6 active:scale-95"><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
-                                                     {errors?.schedule?.[fieldIndex] && <p className="text-xs text-red-600 font-medium mt-1 md:col-span-12">{errors.schedule[fieldIndex]?.hora_inicio?.message || errors.schedule[fieldIndex]?.hora_fim?.message}</p>}
+                                                     {errors?.schedule?.[fieldIndex] && <p className="text-xs text-red-600 font-medium mt-1 w-full">{errors.schedule[fieldIndex]?.hora_inicio?.message || errors.schedule[fieldIndex]?.hora_fim?.message}</p>}
                                                 </div>
                                              )
                                         })}
@@ -238,7 +238,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                     </Tabs>
                 </CardContent>
                 <CardFooter className="px-6 pt-4 flex justify-end border-t border-gray-200 pb-6 bg-gray-50/30 rounded-b-2xl">
-                    <Button type="submit" disabled={isSaving} className="min-w-[150px] bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white h-11 text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-80 disabled:hover:translate-y-0">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
+                    <Button type="submit" disabled={isSaving} className="min-w-[150px] bg-primary hover:bg-primary/90 text-white h-11 text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-80 disabled:hover:translate-y-0">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
                 </CardFooter>
             </Card>
         </form>
