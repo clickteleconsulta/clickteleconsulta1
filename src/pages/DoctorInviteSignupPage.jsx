@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Stethoscope, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Loader2, Stethoscope, CheckCircle2, AlertTriangle, FileText, ExternalLink } from 'lucide-react';
 import { maskCPF, maskPhone, maskCRM, isValidCPF, isValidPhone } from '@/lib/masks';
 import { toSiteUrl } from '@/lib/storageUrl';
 
@@ -174,12 +174,27 @@ const DoctorInviteSignupPage = () => {
                                         <Input type="password" value={form.confirm} onChange={e => set('confirm', e.target.value)} placeholder="Repita a senha" autoComplete="new-password" />
                                     </div>
                                 </div>
-                                <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
-                                    <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600" />
-                                    <span>
-                                        Li e aceito o <a href={toSiteUrl(termoUrl) || '/legal'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">Termo de Adesão</a> e as condições da plataforma Click Teleconsulta.
-                                    </span>
-                                </label>
+                                <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-3 space-y-2.5">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <span className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+                                            <FileText className="w-4 h-4 text-blue-600" /> Termo de Adesão do Médico Parceiro
+                                        </span>
+                                        <a
+                                            href={toSiteUrl(termoUrl) || '/legal'}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 underline shrink-0"
+                                        >
+                                            Ler o termo <ExternalLink className="w-3 h-3" />
+                                        </a>
+                                    </div>
+                                    <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
+                                        <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600 shrink-0" />
+                                        <span>
+                                            Li e <strong>aceito</strong> o Termo de Adesão e as condições da plataforma Click Teleconsulta. O aceite é obrigatório para criar a conta.
+                                        </span>
+                                    </label>
+                                </div>
 
                                 <div className="flex items-start gap-2 text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-md p-2.5">
                                     <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-amber-500" />
