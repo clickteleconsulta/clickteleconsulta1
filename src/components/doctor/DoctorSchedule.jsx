@@ -186,7 +186,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                 <CardContent className="px-6 pb-6 pt-0">
                     <Tabs defaultValue="1" className="w-full">
                         <TabsList className="grid w-full grid-cols-7 bg-gray-100 p-1 rounded-sm h-auto mb-6">
-                            {weekDays.map((day) => (<TabsTrigger key={day.id} value={String(day.id)} className="rounded-sm font-medium text-xs py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 text-gray-500">{day.name.slice(0, 3)}</TabsTrigger>))}
+                            {weekDays.map((day) => (<TabsTrigger key={day.id} value={String(day.id)} className="rounded-md font-semibold text-xs py-2 transition-all duration-200 hover:text-gray-700 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 data-[state=active]:scale-[1.02] text-gray-500">{day.name.slice(0, 3)}</TabsTrigger>))}
                         </TabsList>
                         {weekDays.map(day => {
                              const blocksForDay = fields.filter(field => field.dia_semana === day.id);
@@ -197,39 +197,39 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                                         {blocksForDay.map((item) => {
                                              const fieldIndex = fields.findIndex(f => f.id === item.id);
                                              return (
-                                                 <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end p-4 bg-gray-50 rounded-sm border border-gray-200">
+                                                 <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end p-4 bg-gray-50 rounded-lg border border-gray-200 transition-all duration-200 hover:border-gray-300 hover:shadow-sm animate-in fade-in slide-in-from-top-1">
                                                     <div className="md:col-span-3">
                                                         <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Início</Label>
-                                                        <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-sm" {...register(`schedule.${fieldIndex}.hora_inicio`)} />
+                                                        <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-md transition-all duration-200" {...register(`schedule.${fieldIndex}.hora_inicio`)} />
                                                     </div>
                                                     <div className="md:col-span-3">
                                                         <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Fim</Label>
-                                                        <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-sm" {...register(`schedule.${fieldIndex}.hora_fim`)} />
+                                                        <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-md transition-all duration-200" {...register(`schedule.${fieldIndex}.hora_fim`)} />
                                                     </div>
                                                     <div className="md:col-span-4">
                                                         <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Intervalo (min)</Label>
                                                         <Controller name={`schedule.${fieldIndex}.intervalo_em_minutos`} control={control} render={({ field }) => (
                                                             <Select onValueChange={(val) => field.onChange(parseInt(val))} value={String(field.value)}>
-                                                                <SelectTrigger className="bg-white border-gray-300 h-9 text-sm rounded-sm"><SelectValue /></SelectTrigger>
+                                                                <SelectTrigger className="bg-white border-gray-300 h-9 text-sm rounded-md transition-all duration-200"><SelectValue /></SelectTrigger>
                                                                 <SelectContent className="rounded-sm border-gray-200">{intervaloOptions.map(o => <SelectItem key={o.value} value={String(o.value)}>{o.label}</SelectItem>)}</SelectContent>
                                                             </Select>
                                                         )}/>
                                                     </div>
                                                     <div className="md:col-span-2 flex justify-end">
-                                                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(fieldIndex)} className="text-gray-400 hover:text-red-600 hover:bg-red-50 h-9 w-9 rounded-sm border border-transparent hover:border-red-200"><Trash2 className="h-4 w-4" /></Button>
+                                                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(fieldIndex)} className="text-gray-400 hover:text-red-600 hover:bg-red-50 h-9 w-9 rounded-lg border border-transparent hover:border-red-200 transition-all duration-200 hover:scale-105 active:scale-95"><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
                                                      {errors?.schedule?.[fieldIndex] && <p className="text-xs text-red-600 font-medium mt-1 md:col-span-12">{errors.schedule[fieldIndex]?.hora_inicio?.message || errors.schedule[fieldIndex]?.hora_fim?.message}</p>}
                                                 </div>
                                              )
                                         })}
-                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="w-full border-dashed border-gray-300 text-gray-600 hover:border-primary hover:text-primary hover:bg-blue-50 h-9 text-xs rounded-sm mt-2 font-medium"><PlusCircle className="mr-2 h-3.5 w-3.5" /> Adicionar Horário</Button>
+                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="group w-full border-dashed border-gray-300 text-gray-600 hover:border-primary hover:text-primary hover:bg-blue-50 h-9 text-xs rounded-lg mt-2 font-semibold transition-all duration-200 hover:shadow-sm"><PlusCircle className="mr-2 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-90" /> Adicionar Horário</Button>
                                     </div>
                                 ) : (
-                                    <div className="text-center py-10 border border-dashed border-gray-200 rounded-sm bg-gray-50">
-                                        <CalendarOff className="mx-auto h-8 w-8 text-gray-300 mb-2" />
-                                        <h3 className="text-sm font-semibold text-gray-700">Dia sem atendimento</h3>
+                                    <div className="group/empty text-center py-10 border border-dashed border-gray-200 rounded-lg bg-gray-50 transition-all duration-200 hover:border-gray-300">
+                                        <CalendarOff className="mx-auto h-8 w-8 text-gray-300 mb-2 transition-transform duration-300 group-hover/empty:scale-110" />
+                                        <h3 className="text-sm font-semibold tracking-tight text-gray-700">Dia sem atendimento</h3>
                                         <p className="text-xs text-gray-500 mt-1 mb-4">Você não tem horários configurados para {day.name}.</p>
-                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="border-gray-300 text-gray-700 hover:bg-white hover:border-primary h-8 text-xs rounded-sm font-medium bg-white shadow-sm"><PlusCircle className="mr-2 h-3.5 w-3.5" /> Ativar {day.name}</Button>
+                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="group border-gray-300 text-gray-700 hover:bg-white hover:border-primary h-8 text-xs rounded-lg font-semibold bg-white shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"><PlusCircle className="mr-2 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-90" /> Ativar {day.name}</Button>
                                     </div>
                                 )}
                                 </TabsContent>
@@ -238,7 +238,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                     </Tabs>
                 </CardContent>
                 <CardFooter className="px-6 pt-4 flex justify-end border-t border-gray-200 pb-6 bg-gray-50/30">
-                    <Button type="submit" disabled={isSaving} className="min-w-[140px] bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm h-10 text-sm font-medium rounded-sm">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
+                    <Button type="submit" disabled={isSaving} className="min-w-[140px] bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm h-10 text-sm font-semibold rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:hover:translate-y-0 disabled:hover:shadow-sm">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
                 </CardFooter>
             </Card>
         </form>
