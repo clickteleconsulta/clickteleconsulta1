@@ -36,7 +36,15 @@ const DeleteAccountCard = () => {
             // Logout apenas local: o usuário já não existe no servidor, então um
             // signOut global falharia ("User from sub claim in JWT does not exist").
             try { await supabase.auth.signOut({ scope: 'local' }); } catch (_) { /* sessão já inválida */ }
-            window.location.href = '/';
+            // Garantia extra: remove qualquer token do Supabase remanescente antes do reload,
+            // senão a aplicação recarrega e volta a ler a sessão antiga (parece "ainda logado").
+            try {
+                Object.keys(window.localStorage).forEach((k) => {
+                    if (k.startsWith('sb-')) window.localStorage.removeItem(k);
+                });
+            } catch (_) { /* storage indisponível */ }
+            // Reload completo, substituindo o histórico (não dá para voltar à página da conta excluída).
+            window.location.replace('/');
         } catch (err) {
             toast({ variant: 'destructive', title: 'Erro ao excluir conta', description: err.message });
             setDeleting(false);
