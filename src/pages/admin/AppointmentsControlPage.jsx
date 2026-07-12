@@ -750,7 +750,9 @@ const AppointmentsControlPage = () => {
                                 <DollarSign className="w-4 h-4"/> Financeiro
                             </h4>
                             <div className="space-y-2 text-sm">
-                                <p><span className="text-muted-foreground">Valor:</span> {financialDetails.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                                <p><span className="text-muted-foreground">Valor pago pelo paciente:</span> {financialDetails.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                                <p><span className="text-muted-foreground">Repasse ao médico:</span> <span className="font-semibold text-blue-700">{financialDetails.doctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
+                                <p><span className="text-muted-foreground">Taxa retida pela plataforma ({financialDetails.feePercent}%):</span> <span className="font-semibold text-indigo-700">{financialDetails.siteFee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
                                 <p><span className="text-muted-foreground">Serviço:</span> {procMap[selectedAppointment.servico_id] || selectedAppointment.guias?.servico_snapshot?.nome || 'Teleconsulta'}</p>
                                 <p><span className="text-muted-foreground">Data de Criação:</span> {safeFmt(selectedAppointment.created_at, "dd/MM/yyyy 'às' HH:mm")}</p>
                                 <p><span className="text-muted-foreground">Status Pagamento:</span> {selectedAppointment.pagamento_status || 'Pendente'}</p>

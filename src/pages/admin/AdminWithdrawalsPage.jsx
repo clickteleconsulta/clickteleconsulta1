@@ -16,6 +16,17 @@ const AdminWithdrawalsPage = () => {
     const { toast } = useToast();
     const [selectedWithdrawal, setSelectedWithdrawal] = useState(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [saqueGuias, setSaqueGuias] = useState([]);
+    const [guiasLoading, setGuiasLoading] = useState(false);
+
+    const fmt = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    // Repasse e taxa de uma guia, usando a taxa CONGELADA no pagamento (imutável).
+    const calcGuia = (g) => {
+        const total = (g.price_in_cents || 0) / 100;
+        const fee = Number(g.taxa_percent_snapshot) || 0;
+        const taxa = total * (fee / 100);
+        return { total, taxa, repasse: total - taxa, fee };
+    };
 
     useEffect(() => {
         fetchWithdrawals();
@@ -84,9 +95,23 @@ const AdminWithdrawalsPage = () => {
         }
     };
 
-    const openDetails = (withdrawal) => {
+    const openDetails = async (withdrawal) => {
         setSelectedWithdrawal(withdrawal);
         setIsDetailsOpen(true);
+        setSaqueGuias([]);
+        setGuiasLoading(true);
+        try {
+            const { data } = await supabase
+                .from('agendamentos')
+                .select('id, protocolo, appointment_date, appointment_time, price_in_cents, taxa_percent_snapshot')
+                .eq('saque_id', withdrawal.id)
+                .order('appointment_date', { ascending: true });
+            setSaqueGuias(data || []);
+        } catch (e) {
+            console.warn('Erro ao carregar guias do saque:', e?.message);
+        } finally {
+            setGuiasLoading(false);
+        }
     };
 
     const getStatusBadge = (status) => {
@@ -229,6 +254,59 @@ const AdminWithdrawalsPage = () => {
                                         </>
                                     )}
                                 </div>
+                            </div>
+
+                            {/* Guias pagas neste saque, com repasse e taxa retida */}
+                            <div className="space-y-2">
+                                <h4 className="font-semibold text-sm border-b pb-1">
+                                    Guias incluídas neste saque {saqueGuias.length > 0 && `(${saqueGuias.length})`}
+                                </h4>
+                                {guiasLoading ? (
+                                    <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>
+                                ) : saqueGuias.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground py-2">Nenhuma guia vinculada a este saque.</p>
+                                ) : (
+                                    <>
+                                        <div className="space-y-1.5 max-h-52 overflow-auto pr-1">
+                                            {saqueGuias.map((g) => {
+                                                const c = calcGuia(g);
+                                                return (
+                                                    <div key={g.id} className="flex items-start justify-between gap-3 text-xs bg-gray-50 border rounded-md px-2.5 py-1.5">
+                                                        <div className="flex flex-col min-w-0">
+                                                            <span className="font-mono text-gray-700">{g.protocolo || '—'}</span>
+                                                            <span className="text-gray-400">
+                                                                {g.appointment_date ? format(parseISO(g.appointment_date), 'dd/MM/yyyy') : '—'}
+                                                                {g.appointment_time ? ` ${String(g.appointment_time).slice(0, 5)}` : ''}
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-right shrink-0 leading-tight">
+                                                            <div className="text-gray-600">Pago: <span className="font-medium">{fmt(c.total)}</span></div>
+                                                            <div className="text-indigo-600">Taxa ({c.fee}%): {fmt(c.taxa)}</div>
+                                                            <div className="text-blue-700 font-semibold">Repasse: {fmt(c.repasse)}</div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        {(() => {
+                                            const tot = saqueGuias.reduce((acc, g) => {
+                                                const c = calcGuia(g);
+                                                acc.total += c.total; acc.taxa += c.taxa; acc.repasse += c.repasse;
+                                                return acc;
+                                            }, { total: 0, taxa: 0, repasse: 0 });
+                                            return (
+                                                <div className="flex items-center justify-between gap-3 text-xs font-semibold border-t pt-2 mt-1">
+                                                    <span className="text-gray-700">Totais</span>
+                                                    <div className="text-right leading-tight">
+                                                        <div className="text-gray-600">Bruto: {fmt(tot.total)}</div>
+                                                        <div className="text-indigo-600">Taxa retida: {fmt(tot.taxa)}</div>
+                                                        <div className="text-blue-700">Repasse: {fmt(tot.repasse)}</div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
+                                    </>
+                                )}
                             </div>
                         </div>
                     )}
