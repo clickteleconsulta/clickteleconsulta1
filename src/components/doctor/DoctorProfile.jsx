@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import TwoFactorCard from '@/components/TwoFactorCard';
 import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
 import DeleteAccountCard from '@/components/DeleteAccountCard';
-import { maskCRM, maskPhone, maskUF } from '@/lib/masks';
+import { maskCRM, maskPhone } from '@/lib/masks';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName, stripDoctorTitle } from '@/lib/doctorName';
 
@@ -49,6 +49,11 @@ const ProfileSkeleton = () => (
 
 const specialtiesList = [
     "Clínico Geral"
+];
+
+const BRAZIL_UFS = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
+    'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
 ];
 
 const DoctorProfile = () => {
@@ -305,7 +310,23 @@ const DoctorProfile = () => {
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="uf" className="text-xs font-bold text-gray-700 uppercase tracking-wide">UF</Label>
-                                    <Input id="uf" placeholder="SP" maxLength={2} {...register('uf', { required: true })} onChange={(e) => setValue('uf', maskUF(e.target.value), { shouldDirty: true })} className="uppercase bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
+                                    <Controller
+                                        name="uf"
+                                        control={control}
+                                        rules={{ required: true }}
+                                        render={({ field }) => (
+                                            <Select onValueChange={field.onChange} value={field.value || ''}>
+                                                <SelectTrigger className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
+                                                    <SelectValue placeholder="UF" />
+                                                </SelectTrigger>
+                                                <SelectContent className="rounded-lg border-gray-200 max-h-56">
+                                                    {BRAZIL_UFS.map((uf) => (
+                                                        <SelectItem key={uf} value={uf}>{uf}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="phone_number" className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1.5">
