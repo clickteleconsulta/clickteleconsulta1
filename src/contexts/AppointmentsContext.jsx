@@ -175,11 +175,12 @@ export const AppointmentsProvider = ({ children }) => {
         } catch (error) {
             console.error('appointment_create_error:', error);
             let description = "Não foi possível concluir seu agendamento agora. Tente novamente.";
-            if (error.code === '23505' && error.message.includes('agendamentos_confirmados_unicos_idx')) { 
-                description = "agendamentos_confirmados_unicos_idx"
-            } else {
-                toast({ variant: "destructive", title: "Erro no Agendamento", description: description });
+            const msg = (error?.message || '').toLowerCase();
+            // Horário já reservado (double-booking) — trigger de reserva ou índice único.
+            if (error.code === '23505' || msg.includes('reservado') || msg.includes('double_booking') || msg.includes('buffer time')) {
+                description = "Este horário já está reservado. Por favor, escolha outro horário.";
             }
+            toast({ variant: "destructive", title: "Erro no Agendamento", description });
             return { data: null, error: new Error(description) };
         }
     };
