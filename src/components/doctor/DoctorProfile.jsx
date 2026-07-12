@@ -189,7 +189,7 @@ const DoctorProfile = () => {
         <div className="space-y-4 max-w-5xl mx-auto pb-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                 <div>
-                    <h1 className="text-xl font-bold tracking-tight text-gray-900">Meu Perfil</h1>
+                    <h1 className="dash-page-title text-2xl">Meu Perfil</h1>
                     <div className="flex items-center gap-2 mt-1">
                         <p className="text-sm text-gray-500">Gerencie suas informações profissionais.</p>
                         {isDirty && <span className="text-xs text-amber-600 font-medium animate-pulse">• Alterações não salvas</span>}

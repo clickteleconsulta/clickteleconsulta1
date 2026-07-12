@@ -63,15 +63,24 @@ p, span, div, li {
 
 @layer components {
   .dashboard-card {
-    @apply bg-white rounded-sm border border-gray-200 shadow-sm p-6 transition-all duration-200 hover:shadow-md;
+    @apply bg-white rounded-2xl border border-gray-200 shadow-sm p-6 transition-all duration-300 hover:shadow-lg;
+    /* brilho azul sutil da marca no hover */
+    --tw-shadow-color: rgb(59 130 246 / 0.06);
   }
-  
+
   .dashboard-title {
-    @apply text-lg font-semibold text-gray-900 tracking-tight;
+    @apply text-lg font-bold text-gray-900 tracking-tight;
+    font-family: 'Manrope', sans-serif;
   }
 
   .dashboard-subtitle {
     @apply text-sm font-normal text-gray-500;
+  }
+
+  /* Título de página do dashboard (Manrope, marca) */
+  .dash-page-title {
+    @apply font-bold tracking-tight text-gray-900;
+    font-family: 'Manrope', sans-serif;
   }
 
   .table-header {

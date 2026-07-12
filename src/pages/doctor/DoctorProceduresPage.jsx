@@ -174,11 +174,11 @@ const DoctorProceduresPage = () => {
         <div className="w-full space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="w-full sm:w-auto flex-1">
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 break-words">Meus Procedimentos</h1>
+                    <h1 className="dash-page-title text-2xl break-words">Meus Procedimentos</h1>
                     <p className="text-sm text-gray-500 mt-1">Gerencie os serviços, descrições e valores do seu atendimento.</p>
                 </div>
                 {!isFormOpen && (
-                    <Button onClick={() => handleOpenForm()} className="bg-blue-600 hover:bg-blue-700 shadow-sm transition-all h-9 text-sm shrink-0 w-full sm:w-auto">
+                    <Button onClick={() => handleOpenForm()} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md shadow-blue-500/20 h-9 text-sm shrink-0 w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
                         <Plus className="w-4 h-4 mr-2" /> Novo Procedimento
                     </Button>
                 )}
@@ -248,7 +248,7 @@ const DoctorProceduresPage = () => {
 
                         <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-6 mt-6 border-t border-gray-100">
                             <Button variant="outline" onClick={handleCancel} disabled={isSaving} className="rounded-lg font-semibold h-9 text-sm w-full sm:w-auto">Cancelar</Button>
-                            <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold shadow-sm h-9 text-sm w-full sm:w-auto">
+                            <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md shadow-blue-500/20 h-9 text-sm w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
                                 {isSaving ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin shrink-0" /> : null}
                                 Salvar Procedimento
                             </Button>

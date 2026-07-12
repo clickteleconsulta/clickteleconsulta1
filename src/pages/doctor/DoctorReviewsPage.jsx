@@ -198,16 +198,16 @@ const DoctorReviewsPage = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Avaliações dos Pacientes</h1>
+                <h1 className="dash-page-title text-2xl">Avaliações dos Pacientes</h1>
                 <p className="text-gray-500 mt-1">Gerencie as avaliações recebidas após as consultas.</p>
             </div>
 
             <Tabs defaultValue="pendentes" className="w-full">
-                <TabsList className="mb-4">
-                    <TabsTrigger value="pendentes" className="gap-2">
+                <TabsList className="mb-4 h-10 p-1 bg-gray-100/80 rounded-xl">
+                    <TabsTrigger value="pendentes" className="gap-2 rounded-lg transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
                         <CheckCircle className="w-4 h-4" /> Recebidas ({pendingReviews.length})
                     </TabsTrigger>
-                    <TabsTrigger value="denunciadas" className="gap-2">
+                    <TabsTrigger value="denunciadas" className="gap-2 rounded-lg transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
                         <AlertTriangle className="w-4 h-4" /> Denunciadas ({reportedReviews.length})
                     </TabsTrigger>
                 </TabsList>
