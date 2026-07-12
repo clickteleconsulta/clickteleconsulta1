@@ -906,15 +906,17 @@ const AppointmentsControlPage = () => {
                <AlertTriangle className="w-6 h-6 text-red-600"/> ATENÇÃO: Esta ação é IRREVERSÍVEL
              </DialogTitle>
              <DialogDescription className="text-gray-700 pt-2">
-               Você está prestes a apagar <strong>TODOS OS DADOS</strong> do sistema.
+               Reset para novo teste: apaga os <strong>dados operacionais</strong>, mantendo as contas cadastradas.
                <br/><br/>
                Esta ação irá excluir permanentemente:
                <ul className="list-disc pl-5 my-2 space-y-1 text-red-700 font-medium text-xs">
                    <li>Todos os agendamentos registrados</li>
                    <li>Histórico de guias médicas</li>
-                   <li>Registros financeiros e de pagamentos</li>
+                   <li>Registros financeiros e de pagamentos (saques)</li>
+                   <li>Avaliações dos pacientes</li>
                    <li>Logs de auditoria e notificações</li>
                </ul>
+               <span className="block text-green-700 font-medium text-xs mb-2">As contas de médicos e pacientes (e suas configurações de agenda e procedimentos) serão mantidas.</span>
                <span className="font-bold">Para confirmar, digite exatamente: DELETAR TUDO</span>
              </DialogDescription>
           </DialogHeader>
