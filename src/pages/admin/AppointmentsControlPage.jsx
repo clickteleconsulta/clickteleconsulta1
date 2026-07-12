@@ -107,32 +107,41 @@ const AppointmentsControlPage = () => {
     return isNaN(d.getTime()) ? '—' : format(d, pattern);
   };
 
-  // Helper to calculate financials for a single appointment
+  // Helper to calculate financials for a single appointment.
+  // A taxa é CONGELADA no momento do pagamento (taxa_percent_snapshot) e nunca muda depois —
+  // alterar a taxa do médico não afeta atendimentos já pagos. Os fallbacks servem apenas para
+  // registros ainda não congelados (legado).
   const calculateFinancials = (apt) => {
     const totalValue = (apt.price_in_cents || 0) / 100;
-    
-    // Priority 1: Fee from snapshot (Historical accuracy)
-    let feePercent = apt.guias?.medico_snapshot?.payment_settings?.platform_fee_percent;
-    
-    // Priority 2: Fee from current doctor settings
+
+    let feePercent = apt.taxa_percent_snapshot;
+
+    if (feePercent === undefined || feePercent === null) {
+        feePercent = apt.guias?.medico_snapshot?.payment_settings?.platform_fee_percent;
+    }
     if (feePercent === undefined || feePercent === null) {
         feePercent = apt.medicos?.payment_settings?.platform_fee_percent;
     }
-
-    // Default: 0% if nothing configured
     if (feePercent === undefined || feePercent === null) {
         feePercent = 0;
     }
+    feePercent = Number(feePercent) || 0;
 
-    const siteFee = totalValue * (feePercent / 100);
-    const doctorPayout = totalValue - siteFee;
+    const siteFee = totalValue * (feePercent / 100);      // receita da plataforma
+    const doctorPayout = totalValue - siteFee;            // repasse do médico
 
     return { totalValue, siteFee, doctorPayout, feePercent };
   };
 
   const filteredAppointments = useMemo(() => {
     return appointments.filter(apt => {
-      const matchesSearch = 
+      // Só registrar guias que tiveram pagamento. Some com pendentes e com os cancelados
+      // por falta de pagamento; mantém pagos e cancelados pelo médico (pago/reembolsado),
+      // relevantes para controle de reembolso.
+      const isPaidRecord = apt.pagamento_status === 'pago' || apt.pagamento_status === 'reembolsado';
+      if (!isPaidRecord) return false;
+
+      const matchesSearch =
         (apt.patient?.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
         (apt.medicos?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
         (apt.protocolo?.toLowerCase() || '').includes(searchTerm.toLowerCase());
@@ -368,7 +377,7 @@ const AppointmentsControlPage = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total de Registros</CardTitle>
@@ -405,7 +414,20 @@ const AppointmentsControlPage = () => {
             <div className="text-2xl font-bold text-blue-700">
               {stats.totalDoctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
             </div>
-            <p className="text-xs text-blue-500 mt-1">Baseado em taxas individuais</p>
+            <p className="text-xs text-blue-500 mt-1">Repasse líquido aos médicos</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border-indigo-100">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-indigo-700">Receita da Plataforma</CardTitle>
+            <DollarSign className="h-4 w-4 text-indigo-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-indigo-700">
+              {stats.totalSiteFees.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </div>
+            <p className="text-xs text-indigo-500 mt-1">Taxa retida (congelada no pagamento)</p>
           </CardContent>
         </Card>
 
@@ -418,7 +440,7 @@ const AppointmentsControlPage = () => {
             <div className="text-2xl font-bold text-green-700">
               {stats.totalRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
             </div>
-            <p className="text-xs text-green-500 mt-1">Pagamentos confirmados</p>
+            <p className="text-xs text-green-500 mt-1">Total pago pelos pacientes</p>
           </CardContent>
         </Card>
       </div>
