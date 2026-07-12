@@ -21,7 +21,7 @@ import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedi
 import TelemedicineStatusIndicator from '@/components/telemedicine/TelemedicineStatusIndicator';
 import TelemedicineLogsTable from '@/components/telemedicine/TelemedicineLogsTable';
 
-const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
+const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
 
 const AppointmentConfirmationPage = () => {
   const location = useLocation();
@@ -120,7 +120,7 @@ const AppointmentConfirmationPage = () => {
             .from('agendamentos')
             .select(`
             *,
-            medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name),
+            medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number),
             guia:guia_id(*),
             patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)
             `)
@@ -153,7 +153,7 @@ const AppointmentConfirmationPage = () => {
       }, async (payload) => {
           const { data } = await supabase
             .from('agendamentos')
-            .select('*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)')
+            .select('*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)')
             .eq('id', appointmentId)
             .single();
           if (data) setAppointment(data);
@@ -446,6 +446,9 @@ const AppointmentConfirmationPage = () => {
                             <div><p className="text-xs text-indigo-600 font-semibold">NOME DO MÉDICO(A)</p><p className="font-bold text-gray-800">{medico?.public_name || medico?.name || 'Não informado'}</p></div>
                             <div><p className="text-xs text-indigo-600 font-semibold">ESPECIALIDADE</p><p className="font-medium text-gray-800">{medico?.specialty || 'Não informado'}</p></div>
                             <div><p className="text-xs text-indigo-600 font-semibold">REGISTRO (CRM)</p><p className="font-medium text-gray-800">{medico?.crm ? `${medico.crm} - ${medico.uf || ''}` : 'Não informado'}</p></div>
+                            {isPaid && medico?.phone_number && (
+                                <div><p className="text-xs text-indigo-600 font-semibold">NÚMERO DE CONTATO</p><p className="font-bold text-gray-800">{medico.phone_number}</p></div>
+                            )}
                         </div>
                     </div>
                 </div>

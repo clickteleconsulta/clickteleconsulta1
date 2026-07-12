@@ -4,7 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, Clock, Video, PlusCircle, CheckCircle2, AlertTriangle, XCircle, MousePointerClick, ExternalLink, Copy, FileText, Lock } from 'lucide-react';
+import { Loader2, Calendar, Clock, Video, PlusCircle, CheckCircle2, AlertTriangle, XCircle, MousePointerClick, ExternalLink, Copy, FileText, Lock, Phone } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -192,6 +192,11 @@ const PatientConsultations = () => {
                                         {isUpcoming && appt.pagamento_status === 'pago' && (
                                             <p className="mt-3 text-xs text-blue-800 bg-blue-50 border border-blue-100 rounded-md p-2 leading-relaxed">
                                                 O médico entrará em contato <strong>até 15 minutos antes</strong> para enviar o link da consulta. Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>.
+                                            </p>
+                                        )}
+                                        {appt.pagamento_status === 'pago' && appt.medicos?.phone_number && (
+                                            <p className="mt-2 flex items-center gap-1.5 text-sm text-gray-700">
+                                                <Phone size={14} className="text-primary" /> Contato do médico: <strong>{appt.medicos.phone_number}</strong>
                                             </p>
                                         )}
                                     </div>

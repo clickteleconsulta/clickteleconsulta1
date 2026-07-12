@@ -309,9 +309,10 @@ const DoctorProfile = () => {
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="phone_number" className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1.5">
-                                        <Phone className="w-3.5 h-3.5 text-gray-400" /> Telefone Público
+                                        <Phone className="w-3.5 h-3.5 text-gray-400" /> Número de Contato
                                     </Label>
                                     <Input id="phone_number" placeholder="(00) 00000-0000" {...register('phone_number')} onChange={(e) => setValue('phone_number', maskPhone(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={15} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
+                                    <p className="text-[11px] text-gray-500">Compartilhado com o paciente apenas após a confirmação do pagamento. Não aparece no perfil público.</p>
                                 </div>
                             </div>
 
