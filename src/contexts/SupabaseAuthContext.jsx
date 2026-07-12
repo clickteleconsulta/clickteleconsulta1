@@ -97,15 +97,21 @@ export const AuthProvider = ({ children }) => {
   }, [toast]);
 
   const signOut = useCallback(async () => {
+    // Tenta revogar a sessão no servidor, mas o logout NUNCA deve falhar para o usuário:
+    // se o JWT/usuário já não existe no servidor ("User from sub claim in JWT does not exist"),
+    // ainda assim limpamos a sessão local.
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      return { error: null };
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Erro ao sair', description: error.message });
-      return { error };
+      console.warn('signOut (servidor) ignorado:', error?.message);
+      try { await supabase.auth.signOut({ scope: 'local' }); } catch (_) { /* já inválida */ }
+      try {
+        Object.keys(window.localStorage).forEach((k) => { if (k.startsWith('sb-')) window.localStorage.removeItem(k); });
+      } catch (_) { /* storage indisponível */ }
     }
-  }, [toast]);
+    return { error: null };
+  }, []);
 
   const value = useMemo(() => ({
     user,
