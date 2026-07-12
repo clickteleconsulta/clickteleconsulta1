@@ -3,8 +3,11 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { maskCPF } from '@/lib/masks';
 import {
     Loader2,
     FileText,
@@ -14,6 +17,9 @@ import {
     ShieldCheck,
     Clock,
     FileCheck2,
+    Lock,
+    Save,
+    UserCog,
 } from 'lucide-react';
 
 const ACCEPTED_MIME = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
@@ -125,6 +131,11 @@ const DoctorDocumentation = () => {
     const [uploadingKey, setUploadingKey] = useState(null);
     const [busyKey, setBusyKey] = useState(null);
 
+    // Dados privados do profissional (perfis_usuarios)
+    const [priv, setPriv] = useState({ data_nasc: '', cpf: '', email: '' });
+    const [cpfLocked, setCpfLocked] = useState(false);
+    const [savingPriv, setSavingPriv] = useState(false);
+
     const load = useCallback(async () => {
         if (!user?.id) return;
         setLoading(true);
@@ -137,8 +148,35 @@ const DoctorDocumentation = () => {
             data.forEach((row) => { map[row.slot] = row; });
             setDocs(map);
         }
+
+        const { data: perfil } = await supabase
+            .from('perfis_usuarios')
+            .select('data_nasc, cpf, email')
+            .eq('id', user.id)
+            .maybeSingle();
+        if (perfil) {
+            setPriv({ data_nasc: perfil.data_nasc || '', cpf: perfil.cpf || '', email: perfil.email || user.email || '' });
+            setCpfLocked(!!perfil.cpf); // CPF já preenchido não pode ser editado
+        }
         setLoading(false);
     }, [user?.id]);
+
+    const savePrivate = async () => {
+        setSavingPriv(true);
+        try {
+            const updates = { data_nasc: priv.data_nasc || null };
+            // O CPF só é gravado se ainda não estava definido; após inserido é imutável.
+            if (!cpfLocked && priv.cpf) updates.cpf = priv.cpf;
+            const { error } = await supabase.from('perfis_usuarios').update(updates).eq('id', user.id);
+            if (error) throw error;
+            if (!cpfLocked && priv.cpf) setCpfLocked(true);
+            toast({ title: 'Dados salvos!', description: 'Informações privadas atualizadas.' });
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro ao salvar', description: err.message });
+        } finally {
+            setSavingPriv(false);
+        }
+    };
 
     useEffect(() => { load(); }, [load]);
 
@@ -225,6 +263,53 @@ const DoctorDocumentation = () => {
     };
 
     return (
+        <div className="space-y-4">
+        <Card className="dashboard-card rounded-sm">
+            <CardHeader className="px-6 pt-6 pb-2">
+                <CardTitle className="dashboard-title text-lg flex items-center gap-2">
+                    <UserCog className="w-4 h-4 text-primary" /> Dados privados do profissional
+                </CardTitle>
+                <CardDescription className="dashboard-subtitle text-sm">
+                    Preencha as informações privadas do profissional. Estas informações não ficarão visíveis para os pacientes.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="px-6 pb-6 pt-4">
+                {loading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Skeleton className="h-10 w-full rounded-lg" />
+                        <Skeleton className="h-10 w-full rounded-lg" />
+                        <Skeleton className="h-10 w-full rounded-lg" />
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="doc_data_nasc" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Data de Nascimento</Label>
+                                <Input id="doc_data_nasc" type="date" value={priv.data_nasc} onChange={(e) => setPriv((p) => ({ ...p, data_nasc: e.target.value }))} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm text-gray-700" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="doc_cpf" className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1.5">
+                                    CPF {cpfLocked && <Lock className="w-3 h-3 text-gray-400" />}
+                                </Label>
+                                <Input id="doc_cpf" placeholder="000.000.000-00" value={priv.cpf} onChange={(e) => setPriv((p) => ({ ...p, cpf: maskCPF(e.target.value) }))} inputMode="numeric" maxLength={14} disabled={cpfLocked} readOnly={cpfLocked} className={`border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm ${cpfLocked ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : 'bg-white'}`} />
+                                {cpfLocked && <p className="text-[11px] text-gray-500">O CPF não pode ser alterado após o cadastro.</p>}
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="doc_email" className="text-xs font-bold text-gray-700 uppercase tracking-wide">E-mail</Label>
+                                <Input id="doc_email" type="email" value={priv.email} disabled readOnly className="bg-gray-100 border-gray-300 h-10 text-sm rounded-lg shadow-sm text-gray-500 cursor-not-allowed" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end mt-5">
+                            <Button onClick={savePrivate} disabled={savingPriv} className="bg-primary hover:bg-primary/90 text-white rounded-xl h-9 text-sm shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                                {savingPriv ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                                Salvar dados privados
+                            </Button>
+                        </div>
+                    </>
+                )}
+            </CardContent>
+        </Card>
+
         <Card className="dashboard-card rounded-sm">
             <CardHeader className="px-6 pt-6 pb-2">
                 <CardTitle className="dashboard-title text-lg flex items-center gap-2">
@@ -267,6 +352,7 @@ const DoctorDocumentation = () => {
                 )}
             </CardContent>
         </Card>
+        </div>
     );
 };
 
