@@ -128,13 +128,19 @@ const DoctorFinance = () => {
                 .filter(w => w.status !== 'Cancelado')
                 .reduce((acc, curr) => acc + (parseFloat(curr.valor) || 0), 0);
 
-            const feePercent = doc.payment_settings?.platform_fee_percent || 0;
+            // Taxa ATUAL do médico — usada apenas como fallback para guias sem taxa congelada (legado).
+            const currentFeePercent = doc.payment_settings?.platform_fee_percent || 0;
 
             const round2 = (v) => Math.round((v + Number.EPSILON) * 100) / 100;
 
             const processedTransactions = appts.map(appt => {
                 const totalValue = round2((appt.price_in_cents || 0) / 100);
-                const platformFee = round2(totalValue * (feePercent / 100));
+                // Usa a taxa CONGELADA no pagamento (imutável). Mudar a taxa do médico
+                // NÃO altera guias/atendimentos já pagos — sincronizado com o painel admin.
+                const feePct = (appt.taxa_percent_snapshot !== null && appt.taxa_percent_snapshot !== undefined)
+                    ? Number(appt.taxa_percent_snapshot)
+                    : currentFeePercent;
+                const platformFee = round2(totalValue * (feePct / 100));
                 const netValue = round2(totalValue - platformFee);
 
                 if (appt.status === 'cancelado') {
