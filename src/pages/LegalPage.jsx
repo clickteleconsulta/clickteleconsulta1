@@ -28,18 +28,23 @@ const LegalPage = () => {
         try {
             if (!docType) throw new Error("Tipo de documento não especificado.");
 
-            const { data, error } = await supabase.functions.invoke(`get-documents?type=${docType}`, {
-                method: 'GET'
-            });
+            // Lê o documento ativo diretamente da tabela (leitura pública via RLS),
+            // sem depender de Edge Function.
+            const { data, error } = await supabase
+                .from('platform_legal_documents')
+                .select('*')
+                .eq('type', docType)
+                .eq('is_active', true)
+                .order('created_at', { ascending: false })
+                .limit(1);
 
             if (error) {
                 console.error("API Error:", error);
-                throw new Error(error.message || "Erro ao carregar documento da API");
+                throw new Error(error.message || "Erro ao carregar documento.");
             }
-            
-            // The API returns an array (ordered by version DESC)
+
             const activeDocs = Array.isArray(data) ? data : [];
-            const targetDoc = activeDocs[0]; // Get the latest version
+            const targetDoc = activeDocs[0]; // versão ativa mais recente
 
             if (targetDoc) {
                 setDocument(targetDoc);
