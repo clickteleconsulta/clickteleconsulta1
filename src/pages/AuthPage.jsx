@@ -68,18 +68,13 @@ const AuthPage = ({
     }
   }, [isDoctor]);
   
-  // Helper to handle post-login redirects
+  // Helper to handle post-login redirects.
+  // NÃO navegar imperativamente aqui: o componente AuthRedirect (que renderiza esta página em
+  // /acesso-paciente e /acesso-medico) redireciona por papel assim que sessão + perfil carregam
+  // — paciente → /paciente/dashboard (→ consultas), médico → /medico/dashboard, admin → /admin/dashboard.
+  // O antigo navigate('/') / '/patient/consultations' quebrava esse fluxo, jogando o paciente na home.
   const handlePostAuthRedirect = () => {
-    // Check if there is a pending TCLE consent flow waiting
-    const pendingTCLE = sessionStorage.getItem('pendingTCLEAppointmentId');
-    
-    if (pendingTCLE) {
-      navigate('/patient/consultations');
-    } else {
-      navigate('/');
-    }
-    
-    // Hide loader after navigation starts to ensure smooth transition
+    // Apenas esconder o loader; o AuthRedirect assume o roteamento correto.
     setTimeout(() => {
       hideLoader();
     }, 1000);
