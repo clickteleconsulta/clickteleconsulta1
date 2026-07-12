@@ -19,7 +19,9 @@ import {
     BarChart3, 
     Clock,
     Stethoscope,
-    Star
+    Star,
+    ChevronsLeft,
+    ChevronsRight
 } from 'lucide-react';
 import DoctorConsultations from '@/components/doctor/DoctorConsultations';
 import DoctorProfile from '@/components/doctor/DoctorProfile';
@@ -42,6 +44,7 @@ const DoctorArea = () => {
     const navigate = useNavigate();
     const [doctorImageUrl, setDoctorImageUrl] = useState(null);
     const [medicoInfo, setMedicoInfo] = useState(null);
+    const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         let mounted = true;
@@ -157,54 +160,91 @@ const DoctorArea = () => {
 
     return (
         <div className="flex h-screen bg-gray-100 font-sans overflow-hidden">
-            {/* Sidebar positioned relatively with fixed width, always visible */}
-            <aside className="w-[88px] bg-white border-r border-gray-200 flex flex-col items-center py-8 gap-6 z-20 flex-shrink-0">
-                <div className="mb-4">
+            {/* Sidebar: modo reduzido (padrão) ou expandido */}
+            <aside className={`${expanded ? 'w-60' : 'w-[88px]'} bg-white border-r border-gray-200 flex flex-col py-8 gap-6 z-20 flex-shrink-0 transition-all duration-300 ease-in-out`}>
+                {/* Perfil + botão de expandir/recolher */}
+                <div className={`flex items-center gap-3 px-4 ${expanded ? 'justify-between' : 'flex-col justify-center'}`}>
+                    <div className={`flex items-center gap-3 min-w-0 ${expanded ? '' : 'flex-col'}`}>
+                        <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                                <div className="p-0.5 rounded-full ring-2 ring-gray-100 hover:ring-blue-100 transition-all cursor-pointer flex-shrink-0">
+                                    <Avatar className="h-10 w-10 rounded-full">
+                                        <AvatarImage src={doctorImageUrl} className="object-cover" />
+                                        <AvatarFallback className="bg-blue-50 text-blue-600 font-bold text-sm rounded-full">
+                                            {profile?.full_name?.charAt(0)}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </div>
+                            </TooltipTrigger>
+                            {!expanded && (
+                                <TooltipContent side="right" className="font-medium bg-gray-900 text-white border-0 rounded-lg shadow-lg">
+                                    <p>{profile?.full_name}</p>
+                                    <p className="text-xs text-gray-400">Médico</p>
+                                </TooltipContent>
+                            )}
+                        </Tooltip>
+                        {expanded && (
+                            <div className="min-w-0">
+                                <p className="text-sm font-semibold text-gray-900 truncate">{profile?.full_name}</p>
+                                <p className="text-xs text-gray-400">Médico</p>
+                            </div>
+                        )}
+                    </div>
                     <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
-                            <div className="p-0.5 rounded-full ring-2 ring-gray-100 hover:ring-blue-100 transition-all cursor-pointer">
-                                <Avatar className="h-10 w-10 rounded-full">
-                                    <AvatarImage src={doctorImageUrl} className="object-cover" />
-                                    <AvatarFallback className="bg-blue-50 text-blue-600 font-bold text-sm rounded-full">
-                                        {profile?.full_name?.charAt(0)}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </div>
+                            <button
+                                onClick={() => setExpanded((v) => !v)}
+                                aria-label={expanded ? 'Recolher menu' : 'Expandir menu'}
+                                className={`flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 flex-shrink-0 ${expanded ? '' : 'mt-1'}`}
+                            >
+                                {expanded ? <ChevronsLeft size={18} strokeWidth={2} /> : <ChevronsRight size={18} strokeWidth={2} />}
+                            </button>
                         </TooltipTrigger>
-                        <TooltipContent side="right" className="font-medium bg-gray-900 text-white border-0 rounded-lg shadow-lg">
-                            <p>{profile?.full_name}</p>
-                            <p className="text-xs text-gray-400">Médico</p>
-                        </TooltipContent>
+                        {!expanded && (
+                            <TooltipContent side="right" className="font-medium bg-gray-900 text-white border-0 ml-3 rounded-lg shadow-xl px-3 py-1.5">
+                                Expandir menu
+                            </TooltipContent>
+                        )}
                     </Tooltip>
                 </div>
 
-                <nav className="flex flex-col gap-4 w-full items-center flex-1 overflow-y-auto max-h-[calc(100vh-180px)] px-2 no-scrollbar">
+                <nav className={`flex flex-col gap-2 w-full flex-1 overflow-y-auto max-h-[calc(100vh-180px)] px-3 no-scrollbar ${expanded ? 'items-stretch' : 'items-center'}`}>
                     {menuItems.map((item) => {
                         const isActive = location.pathname.startsWith(item.href);
-                        
+
+                        const link = (
+                            <Link
+                                to={item.href}
+                                className={`
+                                    relative flex items-center rounded-xl transition-all duration-300 group
+                                    ${expanded ? 'justify-start gap-3 px-3 h-11 w-full' : 'justify-center w-12 h-12'}
+                                    ${isActive
+                                        ? 'text-blue-600 bg-blue-50 shadow-sm'
+                                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                                    }
+                                `}
+                            >
+                                <item.icon
+                                    size={22}
+                                    strokeWidth={isActive ? 2 : 1.5}
+                                    className={`flex-shrink-0 transition-transform duration-300 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`}
+                                />
+                                {expanded && (
+                                    <span className="text-sm font-medium truncate">{item.label}</span>
+                                )}
+                                {isActive && (
+                                    <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full" />
+                                )}
+                            </Link>
+                        );
+
+                        if (expanded) {
+                            return <React.Fragment key={item.id}>{link}</React.Fragment>;
+                        }
+
                         return (
                             <Tooltip key={item.id} delayDuration={0}>
-                                <TooltipTrigger asChild>
-                                    <Link
-                                        to={item.href}
-                                        className={`
-                                            relative flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300 group
-                                            ${isActive 
-                                                ? 'text-blue-600 bg-blue-50 shadow-sm' 
-                                                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                                            }
-                                        `}
-                                    >
-                                        <item.icon 
-                                            size={22} 
-                                            strokeWidth={isActive ? 2 : 1.5}
-                                            className={`transition-transform duration-300 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`} 
-                                        />
-                                        {isActive && (
-                                            <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full" />
-                                        )}
-                                    </Link>
-                                </TooltipTrigger>
+                                <TooltipTrigger asChild>{link}</TooltipTrigger>
                                 <TooltipContent side="right" className="font-medium bg-gray-900 text-white border-0 ml-3 rounded-lg shadow-xl px-3 py-1.5">
                                     {item.label}
                                 </TooltipContent>
@@ -213,20 +253,30 @@ const DoctorArea = () => {
                     })}
                 </nav>
 
-                <div className="mt-auto pt-4 flex flex-col gap-2 w-full items-center pb-4">
-                    <Tooltip delayDuration={0}>
-                        <TooltipTrigger asChild>
-                            <button
-                                onClick={handleSignOut}
-                                className="flex items-center justify-center w-10 h-10 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
-                            >
-                                <LogOut size={20} strokeWidth={1.5} className="transition-transform group-hover:translate-x-0.5" />
-                            </button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="font-medium bg-red-600 text-white border-red-600 ml-2 rounded-lg">
-                            Sair da conta
-                        </TooltipContent>
-                    </Tooltip>
+                <div className={`mt-auto pt-4 flex flex-col gap-2 w-full pb-4 px-3 ${expanded ? 'items-stretch' : 'items-center'}`}>
+                    {expanded ? (
+                        <button
+                            onClick={handleSignOut}
+                            className="flex items-center justify-start gap-3 px-3 h-11 w-full rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
+                        >
+                            <LogOut size={20} strokeWidth={1.5} className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" />
+                            <span className="text-sm font-medium">Sair da conta</span>
+                        </button>
+                    ) : (
+                        <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="flex items-center justify-center w-10 h-10 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
+                                >
+                                    <LogOut size={20} strokeWidth={1.5} className="transition-transform group-hover:translate-x-0.5" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" className="font-medium bg-red-600 text-white border-red-600 ml-2 rounded-lg">
+                                Sair da conta
+                            </TooltipContent>
+                        </Tooltip>
+                    )}
                 </div>
             </aside>
 
