@@ -118,6 +118,18 @@ const AuthPage = ({
                throw new Error("CPF inválido. Verifique os dígitos e tente novamente.");
              }
 
+             // Apenas maiores de 18 anos podem se cadastrar
+             {
+               const birth = new Date(birthDate);
+               const now = new Date();
+               let age = now.getFullYear() - birth.getFullYear();
+               const md = now.getMonth() - birth.getMonth();
+               if (md < 0 || (md === 0 && now.getDate() < birth.getDate())) age--;
+               if (isNaN(age) || age < 18) {
+                 throw new Error("Cadastro disponível apenas para maiores de 18 anos.");
+               }
+             }
+
              // BONUS-02: Minimum password length
              if (password.length < 8) {
                toast({ variant: 'destructive', title: 'Senha muito curta', description: 'A senha deve ter no mínimo 8 caracteres.' });
@@ -227,12 +239,13 @@ const AuthPage = ({
                                 placeholder="CPF"
                                 required
                             />
-                            <Input 
-                                id="birthDate" 
+                            <Input
+                                id="birthDate"
                                 type="date"
                                 value={birthDate}
                                 onChange={e => setBirthDate(e.target.value)}
                                 required
+                                max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
                                 className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-100 text-gray-500"
                             />
                         </div>
