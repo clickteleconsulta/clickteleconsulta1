@@ -7,8 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, KeyRound } from 'lucide-react';
+import { Loader2, KeyRound, User as UserIcon, ShieldCheck, Trash2 } from 'lucide-react';
 import { maskPhone } from '@/lib/masks';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
 import TwoFactorCard from '@/components/TwoFactorCard';
@@ -91,7 +92,15 @@ const PatientData = () => {
     }
     setLoading(false);
   };
-  return <div className="space-y-6">
+  return <div className="space-y-6 max-w-4xl mx-auto">
+        <Tabs defaultValue="dados" className="w-full">
+            <TabsList className="grid grid-cols-3 w-full max-w-md h-auto gap-1 bg-gray-100 p-1 rounded-sm">
+                <TabsTrigger value="dados" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><UserIcon className="w-3.5 h-3.5" /> Meus Dados</TabsTrigger>
+                <TabsTrigger value="seguranca" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
+                <TabsTrigger value="conta" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="dados" className="mt-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Meus Dados</CardTitle>
@@ -131,7 +140,9 @@ const PatientData = () => {
                     </form>
                 </CardContent>
             </Card>
+            </TabsContent>
 
+            <TabsContent value="seguranca" className="mt-4 space-y-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Segurança da Conta</CardTitle>
@@ -150,8 +161,12 @@ const PatientData = () => {
             </Card>
 
             <TwoFactorCard />
+            </TabsContent>
 
+            <TabsContent value="conta" className="mt-4">
             <DeleteAccountCard />
+            </TabsContent>
+        </Tabs>
         </div>;
 };
 export default PatientData;
