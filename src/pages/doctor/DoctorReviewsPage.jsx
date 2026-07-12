@@ -147,7 +147,7 @@ const DoctorReviewsPage = () => {
         const appointmentDate = dateStr ? format(new Date(`${dateStr}T00:00:00`), "dd/MM/yyyy", { locale: ptBR }) : 'Data indisponível';
 
         return (
-            <Card className="mb-4 overflow-hidden border-gray-200">
+            <Card className="mb-4 overflow-hidden border-gray-200 rounded-2xl shadow-sm transition-all duration-300 hover:shadow-md">
                 <div className={`h-1 w-full ${isReported ? 'bg-red-500' : 'bg-blue-500'}`} />
                 <CardContent className="p-5">
                     <div className="flex justify-between items-start mb-4">
@@ -183,7 +183,7 @@ const DoctorReviewsPage = () => {
                             <Button 
                                 variant="outline" 
                                 size="sm" 
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl transition-all duration-200"
                                 onClick={() => handleDenounceClick(review)}
                             >
                                 <ShieldAlert className="w-4 h-4 mr-2" /> Denunciar

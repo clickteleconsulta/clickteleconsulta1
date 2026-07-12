@@ -23,7 +23,7 @@ import { toSiteUrl } from '@/lib/storageUrl';
 
 const ProfileSkeleton = () => (
     <div className="space-y-4">
-        <Card className="rounded-sm border-gray-200 shadow-sm">
+        <Card className="rounded-xl border-gray-200 shadow-sm">
             <CardHeader>
                 <CardTitle><Skeleton className="h-6 w-1/3" /></CardTitle>
                 <CardDescription><Skeleton className="h-4 w-2/3" /></CardDescription>
@@ -37,9 +37,9 @@ const ProfileSkeleton = () => (
                      </div>
                 </div>
                  <div className="space-y-4">
-                    <Skeleton className="h-10 w-full rounded-sm" />
-                    <Skeleton className="h-10 w-full rounded-sm" />
-                    <Skeleton className="h-24 w-full rounded-sm" />
+                    <Skeleton className="h-10 w-full rounded-xl" />
+                    <Skeleton className="h-10 w-full rounded-xl" />
+                    <Skeleton className="h-24 w-full rounded-xl" />
                  </div>
             </CardContent>
         </Card>
@@ -183,7 +183,7 @@ const DoctorProfile = () => {
     };
 
     if (status === 'pending' || status === 'idle') return <ProfileSkeleton />;
-    if (status === 'error') return <div className="p-4 text-center text-sm"><p className="text-red-600 mb-2">{loadError.message}</p><Button onClick={retryLoad} size="sm" className="rounded-sm">Tentar novamente</Button></div>;
+    if (status === 'error') return <div className="p-4 text-center text-sm"><p className="text-red-600 mb-2">{loadError.message}</p><Button onClick={retryLoad} size="sm" className="rounded-xl">Tentar novamente</Button></div>;
 
     return (
         <div className="space-y-4 max-w-5xl mx-auto pb-8">
@@ -196,7 +196,7 @@ const DoctorProfile = () => {
                     </div>
                 </div>
                 {doctorData?.id && (
-                    <Button asChild variant="outline" size="sm" className="gap-2 shadow-sm border-gray-300 font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 h-9 rounded-sm">
+                    <Button asChild variant="outline" size="sm" className="gap-2 shadow-sm border-gray-300 font-medium text-gray-700 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50 h-9 rounded-xl transition-all duration-200">
                         <Link to={`/medico/${doctorData.id}`} target="_blank">
                             <ExternalLink className="w-3.5 h-3.5" />
                             Ver Perfil Público
@@ -206,22 +206,22 @@ const DoctorProfile = () => {
             </div>
 
             <Tabs defaultValue="perfil" className="w-full">
-                <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto gap-1 bg-gray-100 p-1 rounded-sm">
-                    <TabsTrigger value="perfil" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><UserIcon className="w-3.5 h-3.5" /> Perfil</TabsTrigger>
-                    <TabsTrigger value="documentacao" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><FileText className="w-3.5 h-3.5" /> Documentação</TabsTrigger>
-                    <TabsTrigger value="seguranca" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
-                    <TabsTrigger value="conta" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
+                <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto gap-1 bg-gray-100/80 p-1 rounded-xl">
+                    <TabsTrigger value="perfil" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><UserIcon className="w-3.5 h-3.5" /> Perfil</TabsTrigger>
+                    <TabsTrigger value="documentacao" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><FileText className="w-3.5 h-3.5" /> Documentação</TabsTrigger>
+                    <TabsTrigger value="seguranca" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
+                    <TabsTrigger value="conta" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="perfil" className="mt-4">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <Card className="dashboard-card rounded-sm mb-4">
+                <Card className="dashboard-card mb-4">
                     <CardHeader className="px-6 pt-6 pb-2">
                         <CardTitle className="dashboard-title text-lg">Dados Profissionais</CardTitle>
                         <CardDescription className="dashboard-subtitle text-sm">Informações visíveis para seus pacientes.</CardDescription>
                     </CardHeader>
                     <CardContent className="px-6 pb-6 pt-4">
-                        <div className="flex flex-col sm:flex-row gap-6 p-4 bg-gray-50/50 rounded-sm border border-gray-200 mb-6">
+                        <div className="flex flex-col sm:flex-row gap-6 p-4 bg-gray-50/50 rounded-xl border border-gray-200 mb-6">
                             <div className="relative group shrink-0 mx-auto sm:mx-0">
                                 <Avatar className="w-24 h-24 border-4 border-white shadow-sm rounded-full">
                                     <AvatarImage src={doctorData?.image_url} className="object-cover" />
@@ -242,7 +242,7 @@ const DoctorProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="public_name" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Nome de Exibição</Label>
-                                    <Input id="public_name" placeholder="Dr. Nome Sobrenome" {...register('public_name', { required: true })} className="bg-white border-gray-300 focus:border-primary focus:ring-primary transition-colors h-10 text-sm rounded-sm shadow-sm" />
+                                    <Input id="public_name" placeholder="Dr. Nome Sobrenome" {...register('public_name', { required: true })} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                     {errors.public_name && <p className="text-xs text-red-600 font-medium mt-1">Obrigatório</p>}
                                 </div>
                                 <div className="space-y-1.5">
@@ -257,10 +257,10 @@ const DoctorProfile = () => {
                                                 defaultValue={field.value}
                                                 value={field.value}
                                             >
-                                                <SelectTrigger className="bg-white border-gray-300 focus:border-primary focus:ring-primary transition-colors h-10 text-sm rounded-sm shadow-sm">
+                                                <SelectTrigger className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
                                                     <SelectValue placeholder="Selecione a especialidade" />
                                                 </SelectTrigger>
-                                                <SelectContent className="rounded-sm border-gray-200">
+                                                <SelectContent className="rounded-lg border-gray-200">
                                                     {specialtiesList.map((spec) => (
                                                         <SelectItem key={spec} value={spec}>
                                                             {spec}
@@ -276,36 +276,36 @@ const DoctorProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="crm" className="text-xs font-bold text-gray-700 uppercase tracking-wide">CRM</Label>
-                                    <Input id="crm" placeholder="000000" {...register('crm', { required: true })} onChange={(e) => setValue('crm', maskCRM(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={8} className="bg-white border-gray-300 focus:border-primary focus:ring-primary transition-colors h-10 text-sm rounded-sm shadow-sm" />
+                                    <Input id="crm" placeholder="000000" {...register('crm', { required: true })} onChange={(e) => setValue('crm', maskCRM(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={8} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="uf" className="text-xs font-bold text-gray-700 uppercase tracking-wide">UF</Label>
-                                    <Input id="uf" placeholder="SP" maxLength={2} {...register('uf', { required: true })} onChange={(e) => setValue('uf', maskUF(e.target.value), { shouldDirty: true })} className="uppercase bg-white border-gray-300 focus:border-primary focus:ring-primary transition-colors h-10 text-sm rounded-sm shadow-sm" />
+                                    <Input id="uf" placeholder="SP" maxLength={2} {...register('uf', { required: true })} onChange={(e) => setValue('uf', maskUF(e.target.value), { shouldDirty: true })} className="uppercase bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="phone_number" className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1.5">
                                         <Phone className="w-3.5 h-3.5 text-gray-400" /> Telefone Público
                                     </Label>
-                                    <Input id="phone_number" placeholder="(00) 00000-0000" {...register('phone_number')} onChange={(e) => setValue('phone_number', maskPhone(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={15} className="bg-white border-gray-300 focus:border-primary focus:ring-primary transition-colors h-10 text-sm rounded-sm shadow-sm" />
+                                    <Input id="phone_number" placeholder="(00) 00000-0000" {...register('phone_number')} onChange={(e) => setValue('phone_number', maskPhone(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={15} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                 </div>
                             </div>
 
                             <div className="space-y-1.5">
                                 <Label htmlFor="bio" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Biografia</Label>
-                                <Textarea id="bio" {...register('bio')} rows={4} className="resize-none bg-white border-gray-300 focus:border-primary focus:ring-primary text-sm rounded-sm shadow-sm p-3" placeholder="Fale sobre sua experiência, formação e abordagem..." />
+                                <Textarea id="bio" {...register('bio')} rows={4} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Fale sobre sua experiência, formação e abordagem..." />
                             </div>
 
                             <div className="space-y-1.5">
                                 <Label htmlFor="instructions" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Instruções ao Paciente</Label>
-                                <Textarea id="instructions" {...register('instructions')} rows={3} className="resize-none bg-white border-gray-300 focus:border-primary focus:ring-primary text-sm rounded-sm shadow-sm p-3" placeholder="Ex: Chegue 5 minutos antes para conexão. Tenha em mãos seus exames recentes." />
+                                <Textarea id="instructions" {...register('instructions')} rows={3} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Ex: Chegue 5 minutos antes para conexão. Tenha em mãos seus exames recentes." />
                             </div>
                         </div>
                     </CardContent>
                 </Card>
                 
                 <div className="flex items-center justify-end pt-4 border-t border-gray-200 gap-3">
-                        <Button type="button" variant="ghost" onClick={() => reset(doctorData)} disabled={!isDirty || isSaving} className="text-gray-600 hover:text-gray-900 h-9 text-sm rounded-sm">Cancelar</Button>
-                    <Button type="submit" disabled={isSaving} className="min-w-[120px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm h-9 text-sm rounded-sm">
+                        <Button type="button" variant="ghost" onClick={() => reset(doctorData)} disabled={!isDirty || isSaving} className="text-gray-600 hover:text-gray-900 h-9 text-sm rounded-xl">Cancelar</Button>
+                    <Button type="submit" disabled={isSaving} className="min-w-[120px] bg-primary hover:bg-primary/90 text-white font-semibold shadow-md shadow-blue-500/20 h-9 text-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
                         {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                         Salvar Alterações
                     </Button>
@@ -318,7 +318,7 @@ const DoctorProfile = () => {
                 </TabsContent>
 
                 <TabsContent value="seguranca" className="mt-4 space-y-4">
-            <Card className="dashboard-card rounded-sm">
+            <Card className="dashboard-card">
                 <CardHeader className="px-6 pt-6 pb-2">
                     <CardTitle className="dashboard-title text-lg flex items-center gap-2">
                         <KeyRound className="w-4 h-4 text-primary" /> Alterar Senha
@@ -340,7 +340,7 @@ const DoctorProfile = () => {
                                         onChange={(e) => setNewPassword(e.target.value)}
                                         placeholder="Mínimo 6 caracteres"
                                         autoComplete="new-password"
-                                        className="bg-white border-gray-300 focus:border-primary focus:ring-primary h-10 text-sm rounded-sm shadow-sm pr-10"
+                                        className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm pr-10"
                                     />
                                     <button
                                         type="button"
@@ -362,7 +362,7 @@ const DoctorProfile = () => {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="Repita a nova senha"
                                     autoComplete="new-password"
-                                    className="bg-white border-gray-300 focus:border-primary focus:ring-primary h-10 text-sm rounded-sm shadow-sm"
+                                    className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm"
                                 />
                             </div>
                         </div>
@@ -370,7 +370,7 @@ const DoctorProfile = () => {
                             <Button
                                 type="submit"
                                 disabled={isChangingPassword || !newPassword || !confirmPassword}
-                                className="min-w-[140px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm h-9 text-sm rounded-sm"
+                                className="min-w-[140px] bg-primary hover:bg-primary/90 text-white font-semibold shadow-md shadow-blue-500/20 h-9 text-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0"
                             >
                                 {isChangingPassword ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <KeyRound className="mr-2 h-4 w-4" />}
                                 Alterar Senha
