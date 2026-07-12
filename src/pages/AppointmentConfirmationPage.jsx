@@ -461,29 +461,6 @@ const AppointmentConfirmationPage = () => {
                     </div>
                 </div>
 
-                {/* Instructions */}
-                <div className="mb-8 border border-amber-200 bg-amber-50/50 p-6 rounded-xl">
-                    <h2 className="text-sm font-bold uppercase tracking-wider text-amber-800 mb-3 flex items-center gap-2">
-                        Instruções Importantes
-                    </h2>
-                    <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700 font-medium">
-                        <li>Conecte-se com pelo menos <strong>10 minutos de antecedência</strong> do horário agendado.</li>
-                        <li>Verifique se a sua <strong>câmera e microfone</strong> estão funcionando corretamente antes de entrar na sala.</li>
-                        <li>Escolha um <strong>ambiente silencioso e iluminado</strong> para a sua consulta.</li>
-                        <li>Tenha em mãos seus documentos de identificação e exames anteriores, caso possua.</li>
-                        <li>Certifique-se de que sua <strong>conexão com a internet está estável</strong>.</li>
-                    </ul>
-                </div>
-
-                {/* Access Link Info */}
-                <div className="bg-gray-900 text-white p-6 rounded-xl text-center mb-8">
-                    <h3 className="font-bold text-lg mb-2">Como acessar sua consulta?</h3>
-                    <p className="text-gray-300 text-sm mb-4">
-                        O link de acesso seguro para a sala de videochamada foi enviado para o seu e-mail cadastrado e também estará disponível na sua área do paciente na plataforma <strong>Click Teleconsulta</strong>.
-                    </p>
-                    <p className="text-xs text-gray-400">Em caso de dúvidas, contate nosso suporte técnico.</p>
-                </div>
-
                 {/* PDF Footer */}
                 <div className="mt-12 pt-6 border-t border-gray-200 text-center text-xs text-gray-400 flex justify-between items-center">
                     <p>Gerado em: {new Date().toLocaleString('pt-BR')}</p>
