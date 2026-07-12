@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import TwoFactorCard from '@/components/TwoFactorCard';
 import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
 import DeleteAccountCard from '@/components/DeleteAccountCard';
-import { maskCRM, maskPhone } from '@/lib/masks';
+import { maskCRM, maskPhone, maskCPF } from '@/lib/masks';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName, stripDoctorTitle } from '@/lib/doctorName';
 
@@ -57,7 +57,7 @@ const BRAZIL_UFS = [
 ];
 
 const DoctorProfile = () => {
-    const { user, reloadProfile } = useAuth();
+    const { user, profile, reloadProfile } = useAuth();
     const { register, handleSubmit, formState: { errors, isDirty }, reset, control, setValue, watch } = useForm();
     const [uploading, setUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -116,11 +116,16 @@ const DoctorProfile = () => {
                 ...doctorData,
                 instructions: doctorData.instructions || '',
                 specialty: doctorData.specialty || "Clínico Geral",
-                phone_number: doctorData.phone_number || ''
+                phone_number: doctorData.phone_number || '',
+                formacao: doctorData.formacao || '',
+                // Dados privados (perfis_usuarios) — não visíveis para pacientes
+                data_nasc: profile?.data_nasc || '',
+                cpf: profile?.cpf || '',
+                email: profile?.email || user?.email || ''
             };
             reset(formData);
         }
-    }, [doctorData, reset]);
+    }, [doctorData, profile, user, reset]);
 
     const handleAvatarClick = () => {
         fileInputRef.current.click();
@@ -166,21 +171,33 @@ const DoctorProfile = () => {
                 phone_number: formData.phone_number,
                 sexo: formData.sexo || null,
                 bio: formData.bio,
+                formacao: formData.formacao || null,
                 instructions: formData.instructions,
                 updated_at: new Date().toISOString(),
             };
 
             const { data, error } = await supabase.from("medicos").update(updates).eq("user_id", user.id).select().single();
             if (error) throw error;
-        
+
+            // Dados privados do profissional (perfis_usuarios) — não visíveis para pacientes
+            const { error: perfilError } = await supabase.from("perfis_usuarios").update({
+                cpf: formData.cpf || null,
+                data_nasc: formData.data_nasc || null,
+            }).eq("id", user.id);
+            if (perfilError) console.warn('Erro ao salvar dados privados:', perfilError.message);
+
             toast({ title: "Perfil Salvo!", description: `Seus dados foram atualizados.`, variant: "default" });
             setDoctorData(data);
-            
+
             reset({
                 ...data,
                 instructions: data.instructions || '',
-                phone_number: data.phone_number || ''
-            }); 
+                phone_number: data.phone_number || '',
+                formacao: data.formacao || '',
+                data_nasc: formData.data_nasc || '',
+                cpf: formData.cpf || '',
+                email: formData.email || ''
+            });
             reloadProfile().catch(console.error);
         } catch (err) {
             toast({ variant: "destructive", title: "Erro ao atualizar", description: err.message });
@@ -343,8 +360,36 @@ const DoctorProfile = () => {
                             </div>
 
                             <div className="space-y-1.5">
+                                <Label htmlFor="formacao" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Formação</Label>
+                                <Textarea id="formacao" {...register('formacao')} rows={4} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Informe a formação acadêmica, informações sobre residência e experiência clínica — tudo que mostre ao paciente o conhecimento e a experiência adquiridos ao longo da sua trajetória como profissional de saúde. Inclua o tipo de graduação, curso, instituição e ano de conclusão (opcional)." />
+                                <p className="text-[11px] text-gray-500">Aparece para os pacientes no seu perfil.</p>
+                            </div>
+
+                            <div className="space-y-1.5">
                                 <Label htmlFor="instructions" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Instruções ao Paciente</Label>
                                 <Textarea id="instructions" {...register('instructions')} rows={3} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Ex: Chegue 5 minutos antes para conexão. Tenha em mãos seus exames recentes." />
+                            </div>
+
+                            {/* Dados privados do profissional — não visíveis para pacientes */}
+                            <div className="rounded-xl border border-gray-200 bg-gray-50/60 p-4 space-y-4">
+                                <div>
+                                    <h3 className="text-sm font-bold text-gray-800">Dados privados do profissional</h3>
+                                    <p className="text-[11px] text-gray-500 mt-0.5">Preencha as informações privadas do profissional. Estas informações não ficarão visíveis para os pacientes.</p>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="data_nasc" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Data de Nascimento</Label>
+                                        <Input id="data_nasc" type="date" {...register('data_nasc')} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm text-gray-700" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="cpf" className="text-xs font-bold text-gray-700 uppercase tracking-wide">CPF</Label>
+                                        <Input id="cpf" placeholder="000.000.000-00" {...register('cpf')} onChange={(e) => setValue('cpf', maskCPF(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={14} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm" />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="email" className="text-xs font-bold text-gray-700 uppercase tracking-wide">E-mail</Label>
+                                        <Input id="email" type="email" {...register('email')} disabled readOnly className="bg-gray-100 border-gray-300 h-10 text-sm rounded-lg shadow-sm text-gray-500 cursor-not-allowed" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </CardContent>

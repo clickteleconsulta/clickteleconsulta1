@@ -362,6 +362,16 @@ const DoctorPublicProfilePage = () => {
               </div>
             </div>
 
+            {/* Formação */}
+            {doctor.formacao && (
+              <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
+                <h2 className="text-base font-semibold text-foreground">Formação</h2>
+                <div className="prose prose-sm max-w-none text-muted-foreground text-sm">
+                  {doctor.formacao.split('\n').map((p, i) => <p key={i}>{p}</p>)}
+                </div>
+              </div>
+            )}
+
             {/* Instructions */}
             <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
               <h2 className="text-base font-semibold text-foreground">Instruções para Atendimento</h2>
