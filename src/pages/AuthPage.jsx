@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { IMaskInput } from 'react-imask';
 import { useLoader } from '@/contexts/LoaderContext';
 import { Checkbox } from '@/components/ui/checkbox';
-import TermsModal from '@/components/TermsModal';
 
 // Masked Input Component for CPF and Phone
 const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) => (
@@ -59,8 +58,6 @@ const AuthPage = ({
 
   // LGPD consent (HOTFIX-05)
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
-  const [showPrivacy, setShowPrivacy] = useState(false);
 
   useEffect(() => {
     if (isDoctor) {
@@ -300,13 +297,13 @@ const AuthPage = ({
                         />
                         <label htmlFor="lgpd-consent" className="text-xs text-gray-600 leading-tight">
                           Li e aceito os{' '}
-                          <button type="button" onClick={() => setShowTerms(true)} className="text-blue-600 underline hover:text-blue-800">
+                          <a href="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
                             Termos de Serviço
-                          </button>{' '}
+                          </a>{' '}
                           e a{' '}
-                          <button type="button" onClick={() => setShowPrivacy(true)} className="text-blue-600 underline hover:text-blue-800">
+                          <a href="/legal?doc=privacy_policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
                             Política de Privacidade
-                          </button>{' '}
+                          </a>{' '}
                           conforme a LGPD (Lei 13.709/2018).
                         </label>
                       </div>
@@ -349,19 +346,6 @@ const AuthPage = ({
         </div>
       </div>
 
-      {/* HOTFIX-05: Terms and Privacy modals */}
-      <TermsModal
-        isOpen={showTerms}
-        onClose={() => setShowTerms(false)}
-        title="Termos de Serviço"
-        content="Consulte os Termos de Serviço completos em /legal?doc=terms_of_service"
-      />
-      <TermsModal
-        isOpen={showPrivacy}
-        onClose={() => setShowPrivacy(false)}
-        title="Política de Privacidade (LGPD)"
-        content="Consulte a Política de Privacidade completa em /legal?doc=privacy_policy"
-      />
     </>
   );
 };
