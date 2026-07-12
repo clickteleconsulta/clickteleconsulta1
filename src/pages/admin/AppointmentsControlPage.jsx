@@ -3,6 +3,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -20,6 +21,8 @@ const AppointmentsControlPage = () => {
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [procMap, setProcMap] = useState({});
+  const [settledSaques, setSettledSaques] = useState(new Set()); // saques com status 'Recebido' (já pagos ao médico)
+  const [activeTab, setActiveTab] = useState('ativos'); // 'ativos' | 'historico'
   const [loading, setLoading] = useState(true);
   
   // Filters
@@ -88,6 +91,11 @@ const AppointmentsControlPage = () => {
       (procData || []).forEach(p => { pmap[p.id] = p.nome; });
       setProcMap(pmap);
 
+      // Saques já PAGOS ao médico (status 'Recebido'). As guias vinculadas a esses saques
+      // foram repassadas e migram para o Histórico; o saldo a pagar é debitado automaticamente.
+      const { data: saqueData } = await supabase.from('saques').select('id, status');
+      setSettledSaques(new Set((saqueData || []).filter(s => s.status === 'Recebido').map(s => s.id)));
+
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
@@ -133,6 +141,9 @@ const AppointmentsControlPage = () => {
     return { totalValue, siteFee, doctorPayout, feePercent };
   };
 
+  // Guia liquidada = seu saque já foi pago ao médico (status 'Recebido').
+  const isSettled = (apt) => !!apt.saque_id && settledSaques.has(apt.saque_id);
+
   const filteredAppointments = useMemo(() => {
     return appointments.filter(apt => {
       // Só registrar guias que tiveram pagamento. Some com pendentes e com os cancelados
@@ -168,21 +179,27 @@ const AppointmentsControlPage = () => {
     });
   }, [appointments, searchTerm, statusFilter, doctorFilter, startDate, endDate]);
 
+  // Aba "Agendamentos" = guias ainda não repassadas (a pagar); "Histórico" = já repassadas.
+  const tabAppointments = useMemo(
+    () => filteredAppointments.filter(apt => (activeTab === 'historico' ? isSettled(apt) : !isSettled(apt))),
+    [filteredAppointments, activeTab, settledSaques]
+  );
+
   const paginatedAppointments = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredAppointments.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredAppointments, currentPage]);
+    return tabAppointments.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [tabAppointments, currentPage]);
 
-  const totalPages = Math.ceil(filteredAppointments.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(tabAppointments.length / ITEMS_PER_PAGE);
 
   const stats = useMemo(() => {
-    const total = filteredAppointments.length;
+    const total = tabAppointments.length;
     // Updated logic: Include 'atendido' status in the confirmed count
-    const confirmed = filteredAppointments.filter(a => a.status === 'confirmado' || a.status === 'atendido').length;
-    const cancelled = filteredAppointments.filter(a => a.status === 'cancelado').length;
-    
+    const confirmed = tabAppointments.filter(a => a.status === 'confirmado' || a.status === 'atendido').length;
+    const cancelled = tabAppointments.filter(a => a.status === 'cancelado').length;
+
     // Financials based on Paid status, summing real calculated values
-    const paidAppointments = filteredAppointments.filter(a => a.pagamento_status === 'pago');
+    const paidAppointments = tabAppointments.filter(a => a.pagamento_status === 'pago');
     
     let totalRevenue = 0;
     let totalSiteFees = 0;
@@ -196,7 +213,7 @@ const AppointmentsControlPage = () => {
     });
 
     return { total, confirmed, cancelled, totalRevenue, totalSiteFees, totalDoctorPayout };
-  }, [filteredAppointments]);
+  }, [tabAppointments]);
 
   const handleEditClick = (apt) => {
     setSelectedAppointment(apt);
@@ -376,6 +393,14 @@ const AppointmentsControlPage = () => {
         </div>
       </div>
 
+      {/* Abas: guias a pagar vs. já repassadas (histórico) */}
+      <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setCurrentPage(1); }}>
+        <TabsList className="grid w-full grid-cols-2 max-w-md h-10 p-1 bg-gray-100/80 rounded-xl">
+          <TabsTrigger value="ativos" className="rounded-lg text-sm transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">Agendamentos</TabsTrigger>
+          <TabsTrigger value="historico" className="rounded-lg text-sm transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">Histórico de Agendamentos</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="bg-white">
@@ -407,14 +432,14 @@ const AppointmentsControlPage = () => {
 
         <Card className="bg-white border-blue-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-blue-700">Repasse Médicos (Total)</CardTitle>
+            <CardTitle className="text-sm font-medium text-blue-700">{activeTab === 'historico' ? 'Repasse Pago (Total)' : 'Repasse a Pagar (saldo)'}</CardTitle>
             <User className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-700">
               {stats.totalDoctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
             </div>
-            <p className="text-xs text-blue-500 mt-1">Repasse líquido aos médicos</p>
+            <p className="text-xs text-blue-500 mt-1">{activeTab === 'historico' ? 'Já repassado aos médicos' : 'Saldo devido aos médicos'}</p>
           </CardContent>
         </Card>
 
@@ -537,7 +562,9 @@ const AppointmentsControlPage = () => {
               {paginatedAppointments.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
-                    Nenhum agendamento encontrado com os filtros atuais.
+                    {activeTab === 'historico'
+                      ? 'Nenhuma guia repassada ainda. As guias aparecem aqui após o pagamento do saque ao médico.'
+                      : 'Nenhum agendamento encontrado com os filtros atuais.'}
                   </TableCell>
                 </TableRow>
               ) : (
