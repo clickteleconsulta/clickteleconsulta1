@@ -3,6 +3,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from './SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { buildJitsiRoomId } from '@/utils/jitsiRoomId';
 
 const AppointmentsContext = createContext();
@@ -146,16 +147,21 @@ export const AppointmentsProvider = ({ children }) => {
                 return { data: null, error: new Error("Usuário não autorizado") };
             }
             
-            const appointmentDateTime = new Date(appointmentData.horario_inicio);
-            
+            // Data/hora no fuso de Brasília. Usa os valores já calculados na reserva;
+            // como fallback, converte o horario_inicio (UTC) para Brasília — nunca o fuso do navegador.
+            const TZ = 'America/Sao_Paulo';
+            const startZoned = utcToZonedTime(new Date(appointmentData.horario_inicio), TZ);
+            const apptDate = appointmentData.appointment_date || format(startZoned, 'yyyy-MM-dd');
+            const apptTime = appointmentData.appointment_time || format(startZoned, 'HH:mm:ss');
+
             const { data, error } = await supabase
                 .from('agendamentos')
-                .insert({ 
+                .insert({
                     patient_id: session.user.id,
                     medico_id: appointmentData.medico_id,
                     servico_id: appointmentData.servico_id,
-                    appointment_date: format(appointmentDateTime, 'yyyy-MM-dd'),
-                    appointment_time: format(appointmentDateTime, 'HH:mm:ss'),
+                    appointment_date: apptDate,
+                    appointment_time: apptTime,
                     horario_inicio: appointmentData.horario_inicio,
                     horario_fim: appointmentData.horario_fim,
                     price_in_cents: appointmentData.price_in_cents,

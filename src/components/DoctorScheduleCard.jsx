@@ -13,7 +13,7 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/comp
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { format, addDays, startOfToday, isToday, addMinutes } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { utcToZonedTime } from 'date-fns-tz';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
@@ -200,23 +200,26 @@ export function DoctorScheduleCard({
       return;
     }
     
-    const [hours, minutes] = time.split(':').map(Number);
-    const appointmentDate = new Date(day);
-    appointmentDate.setHours(hours, minutes, 0, 0);
-    
+    // O horário do slot está no fuso de Brasília. Converte explicitamente para UTC
+    // (independe do fuso do navegador), evitando gravar a hora local como se fosse UTC.
+    const timeZone = 'America/Sao_Paulo';
+    const dayStr = format(day, 'yyyy-MM-dd');
+    const startUtc = zonedTimeToUtc(`${dayStr} ${time}:00`, timeZone);
+    const endUtc = addMinutes(startUtc, 30);
+
     // Ensure we use the exact patient price calculated in the parent component
-    const priceToUse = typeof patientPrice === 'number' 
-      ? Math.round(patientPrice * 100) 
+    const priceToUse = typeof patientPrice === 'number'
+      ? Math.round(patientPrice * 100)
       : (doctor.price_in_cents || 0);
-    
+
     const appointmentDetails = {
       medico_id: doctor.id,
       doctor_name: formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name),
       specialty: doctor.specialty,
-      appointment_date: format(appointmentDate, 'yyyy-MM-dd'),
-      appointment_time: time,
-      horario_inicio: appointmentDate.toISOString(),
-      horario_fim: addMinutes(appointmentDate, 30).toISOString(),
+      appointment_date: dayStr,
+      appointment_time: `${time}:00`,
+      horario_inicio: startUtc.toISOString(),
+      horario_fim: endUtc.toISOString(),
       price_in_cents: priceToUse
     };
 
