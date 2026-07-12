@@ -13,6 +13,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useJitsiRoom } from '@/hooks/useJitsiRoom';
 import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedicineButton';
 import { FEATURES } from '@/config/features';
+import { supabase } from '@/lib/customSupabaseClient';
+
+// Regras de cancelamento do paciente:
+// - Não pagas (pendente): pode cancelar a qualquer momento.
+// - Pagas: só pode cancelar/reagendar até 3 horas antes do horário.
+// - Já atendidas: não pode cancelar.
+const canPatientCancel = (appt) => {
+    if (['atendido', 'concluida', 'realizado', 'cancelado', 'expirado'].includes(appt.status)) return false;
+    if (appt.pagamento_status !== 'pago') return true;
+    const hoursUntil = (new Date(appt.horario_inicio).getTime() - Date.now()) / 3600000;
+    return hoursUntil >= 3;
+};
 
 const PatientConsultations = () => {
     const { appointments, loading, refetchAppointments } = useAppointments();
@@ -27,6 +39,28 @@ const PatientConsultations = () => {
     // Integrate Jitsi Hook for blocked room handling only
     const { generateRoomInfo } = useJitsiRoom();
     const [blockedRoom, setBlockedRoom] = useState(null);
+    const [cancelTarget, setCancelTarget] = useState(null);
+    const [isCancelling, setIsCancelling] = useState(false);
+
+    const confirmCancel = async () => {
+        if (!cancelTarget) return;
+        setIsCancelling(true);
+        try {
+            const { data, error } = await supabase.rpc('paciente_cancelar_agendamento', { p_agendamento_id: cancelTarget.id });
+            if (error) throw error;
+            if (data?.success === false) {
+                toast({ variant: 'destructive', title: 'Não foi possível cancelar', description: data.message });
+            } else {
+                toast({ title: 'Consulta cancelada', description: data?.message || 'Cancelamento realizado.', variant: 'success' });
+                setCancelTarget(null);
+                refetchAppointments?.();
+            }
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro ao cancelar', description: err.message });
+        } finally {
+            setIsCancelling(false);
+        }
+    };
     
     const upcomingAppointments = useMemo(() => appointments
         .filter(appt => ['confirmado', 'reagendado', 'pendente', 'agendado'].includes(appt.status))
@@ -201,6 +235,33 @@ const PatientConsultations = () => {
                                                 )}
                                             </div>
                                         )}
+
+                                        {/* Cancelar consulta — regras: pendente sempre; pago só até 3h antes; atendido nunca */}
+                                        {isUpcoming && !['atendido', 'concluida', 'realizado'].includes(appt.status) && (
+                                            canPatientCancel(appt) ? (
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => setCancelTarget(appt)}
+                                                    className="w-full sm:w-[200px] text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 rounded-lg"
+                                                >
+                                                    <XCircle className="w-4 h-4 mr-2" /> Cancelar consulta
+                                                </Button>
+                                            ) : (
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <div className="w-full sm:w-auto">
+                                                            <Button disabled size="sm" className="w-full sm:w-[200px] bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed rounded-lg">
+                                                                <Lock className="w-4 h-4 mr-2" /> Cancelar consulta
+                                                            </Button>
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side="bottom" className="bg-slate-800 text-white border-slate-700 max-w-[240px]">
+                                                        <p className="text-xs">Consultas pagas só podem ser canceladas ou reagendadas até <strong>3 horas antes</strong> do horário.</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            )
+                                        )}
                                     </div>
                                 </div>
                             </motion.li>
@@ -267,6 +328,51 @@ const PatientConsultations = () => {
                     </div>
                     <DialogFooter>
                         <Button variant="ghost" onClick={() => setBlockedRoom(null)}>Fechar</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Confirmação de cancelamento */}
+            <Dialog open={!!cancelTarget} onOpenChange={(open) => !open && setCancelTarget(null)}>
+                <DialogContent className="sm:max-w-md rounded-xl">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-red-600">
+                            <XCircle className="w-5 h-5" /> Cancelar consulta
+                        </DialogTitle>
+                        <DialogDescription>
+                            Tem certeza que deseja cancelar esta consulta? Esta ação não pode ser desfeita.
+                        </DialogDescription>
+                    </DialogHeader>
+                    {cancelTarget && (() => {
+                        const hoursUntil = (new Date(cancelTarget.horario_inicio).getTime() - Date.now()) / 3600000;
+                        const isPaid = cancelTarget.pagamento_status === 'pago';
+                        const refund = !isPaid ? null : hoursUntil >= 48 ? 100 : hoursUntil >= 24 ? 50 : 0;
+                        return (
+                            <div className="py-2 text-sm">
+                                <p className="text-gray-700">
+                                    <strong>{cancelTarget.medicos?.public_name || cancelTarget.medicos?.name}</strong> —{' '}
+                                    {new Date(cancelTarget.horario_inicio).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' })}
+                                </p>
+                                {isPaid ? (
+                                    <p className={`mt-2 rounded-md p-2 border text-xs ${refund > 0 ? 'bg-green-50 border-green-100 text-green-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
+                                        {refund === 100 && 'Você receberá reembolso integral (100%).'}
+                                        {refund === 50 && 'Você receberá reembolso parcial (50%).'}
+                                        {refund === 0 && 'Sem reembolso (menos de 24h de antecedência).'}
+                                    </p>
+                                ) : (
+                                    <p className="mt-2 rounded-md p-2 border bg-gray-50 border-gray-100 text-gray-600 text-xs">
+                                        Agendamento não pago — cancelamento sem custo.
+                                    </p>
+                                )}
+                            </div>
+                        );
+                    })()}
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button variant="outline" onClick={() => setCancelTarget(null)} disabled={isCancelling}>Voltar</Button>
+                        <Button variant="destructive" onClick={confirmCancel} disabled={isCancelling}>
+                            {isCancelling && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                            Confirmar cancelamento
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
