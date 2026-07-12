@@ -58,11 +58,11 @@ const ScheduleSkeleton = () => (
     </div>
     <div className="grid grid-cols-2 sm:grid-cols-5 gap-px bg-border rounded-lg overflow-hidden border border-border">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="bg-white p-2 text-center space-y-1 min-h-[150px]">
+          <div key={i} className="bg-white p-2 text-center space-y-1 min-h-[130px]">
                 <Skeleton className="h-3 w-12 mx-auto rounded-md" />
                 <Skeleton className="h-3 w-8 mx-auto rounded-md" />
-                <div className="space-y-1 mt-3">
-                    {Array.from({ length: 3 }).map((_, j) => <Skeleton key={j} className="h-8 w-full rounded-md" />)}
+                <div className="space-y-1.5 mt-2.5">
+                    {Array.from({ length: 3 }).map((_, j) => <Skeleton key={j} className="h-8 w-full rounded-lg" />)}
                 </div>
             </div>
         ))}
@@ -259,7 +259,7 @@ export function DoctorScheduleCard({
       className="bg-white rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[800px] mx-auto"
     >
       <div className="flex flex-col md:flex-row">
-          <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
+          <div className="p-4 md:p-5 flex flex-col gap-2.5 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
               <div className="flex items-start gap-3">
                   <Avatar className="w-14 h-14 border-2 border-white shadow-lg ring-2 ring-slate-100 shrink-0 rounded-xl">
                       <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-xl object-cover" />
@@ -318,13 +318,13 @@ export function DoctorScheduleCard({
               </div>
           </div>
           
-          <div className="p-3.5 md:p-4 flex-1 flex flex-col min-h-[240px]">
+          <div className="p-3 md:p-3.5 flex-1 flex flex-col min-h-[220px]">
               {loadingSlots ? <ScheduleSkeleton /> : !hasConfiguredAgenda ? <div className="flex-grow flex flex-col justify-center items-center text-center text-muted-foreground py-6">
                       <CalendarOff className="w-7 h-7 mb-1" />
                       <p className="font-semibold text-foreground text-sm">Sem horários disponíveis</p>
                       <p className="text-xs">{isFallback ? 'A agenda do médico não pôde ser carregada.' : 'Este médico está ajustando seus horários. Volte mais tarde.'}</p>
                   </div> : <>
-                      <div className="flex items-center justify-between mb-3 px-1">
+                      <div className="flex items-center justify-between mb-2.5 px-1">
                            <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => Math.max(0, d - 5))} disabled={dayOffset === 0} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                               <ChevronLeft className="w-5 h-5" />
                           </Button>
@@ -340,8 +340,8 @@ export function DoctorScheduleCard({
                                   {scheduleByDay.map(daySchedule => {
               const isDayToday = isToday(daySchedule.date);
               const hasSlots = daySchedule.slots.length > 0;
-              return <div key={daySchedule.dateFormatted} className="flex flex-col min-h-[170px]">
-                                              <div className="py-2 px-1 text-center mb-2">
+              return <div key={daySchedule.dateFormatted} className="flex flex-col min-h-[150px]">
+                                              <div className="py-1.5 px-1 text-center mb-1.5">
                                                   <div className={cn("text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mb-0.5", isDayToday ? "text-blue-600" : "text-slate-400")}>
                                                       {daySchedule.dayName}
                                                   </div>
@@ -350,7 +350,7 @@ export function DoctorScheduleCard({
                                                   </div>
                                               </div>
 
-                                              <div className="px-1 flex flex-col gap-2 flex-grow">
+                                              <div className="px-1 flex flex-col gap-1.5 flex-grow">
                                                   {(isExpanded ? daySchedule.slots : daySchedule.slots.slice(0, 4)).map(time => {
                     const slotDate = new Date(daySchedule.date);
                     const [hours, minutes] = time.split(':').map(Number);
@@ -360,7 +360,7 @@ export function DoctorScheduleCard({
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-9 rounded-full border text-sm font-semibold transition-all px-1", isBooked ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" : "bg-white text-blue-700 border-blue-100 hover:border-blue-300 hover:bg-blue-50")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-lg border text-[13px] font-semibold transition-all duration-200 px-1", isBooked ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" : "bg-white text-blue-700 border-blue-200 shadow-sm hover:border-blue-400 hover:bg-blue-50 hover:text-blue-800 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-px active:translate-y-0 active:scale-[0.97]")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>
@@ -378,7 +378,7 @@ export function DoctorScheduleCard({
             })}
                               </div>
                               
-                              {scheduleByDay.some(d => d.slots.length > 4) && <div className="mt-4 flex justify-center">
+                              {scheduleByDay.some(d => d.slots.length > 4) && <div className="mt-3 flex justify-center">
                                       <button onClick={() => setIsExpanded(!isExpanded)} className="text-[12px] font-semibold text-slate-500 hover:text-slate-700 flex items-center gap-1 transition-colors px-4 py-1.5 rounded-full hover:bg-slate-50 border border-slate-200 group">
                                           {isExpanded ? "Ver menos horários" : "Mostrar mais horários"}
                                           <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", isExpanded && "rotate-180")} />
