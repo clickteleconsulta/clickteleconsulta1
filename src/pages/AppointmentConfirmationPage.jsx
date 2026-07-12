@@ -21,6 +21,8 @@ import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedi
 import TelemedicineStatusIndicator from '@/components/telemedicine/TelemedicineStatusIndicator';
 import TelemedicineLogsTable from '@/components/telemedicine/TelemedicineLogsTable';
 
+const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
+
 const AppointmentConfirmationPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,6 +62,14 @@ const AppointmentConfirmationPage = () => {
             // Notifica o médico por WhatsApp (best-effort; só envia quando o provedor
             // estiver configurado na função notify-doctor-new-appointment).
             supabase.functions.invoke('notify-doctor-new-appointment', { body: { appointmentId } }).catch(() => {});
+            // Re-busca o agendamento até refletir o pagamento na tela (não depende do realtime).
+            for (let i = 0; i < 6; i++) {
+              const { data: fresh } = await supabase
+                .from('agendamentos').select(APPT_SELECT).eq('id', appointmentId).single();
+              if (fresh) setAppointment(fresh);
+              if (fresh?.pagamento_status === 'pago') break;
+              await new Promise((r) => setTimeout(r, 1200));
+            }
             // Clean URL params
             navigate('.', { replace: true, state: { appointmentId } });
           } else {
