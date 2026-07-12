@@ -9,8 +9,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Stethoscope, Star } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
+import { Lock } from 'lucide-react';
+
+// Procedimento padrão da plataforma — imutável (exceto o valor de repasse).
+const TELECONSULTA_NOME = 'Teleconsulta';
+const TELECONSULTA_DESC = 'Código TUSS 10101012';
+const REPASSE_MIN = 30;
+const REPASSE_MAX = 150;
+const REPASSE_DEFAULT = 100;
+// Detecta o procedimento protegido (funciona mesmo antes da coluna `bloqueado` existir no banco).
+const isProtectedProc = (p) =>
+    !!p && (p.bloqueado === true || String(p.nome || '').trim().toLowerCase() === 'teleconsulta');
 
 const DoctorProceduresPage = () => {
     const { user } = useAuth();
@@ -24,6 +34,7 @@ const DoctorProceduresPage = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [formLocked, setFormLocked] = useState(false);
     
     const [formData, setFormData] = useState({
         nome: '',
@@ -54,7 +65,38 @@ const DoctorProceduresPage = () => {
                 .order('created_at', { ascending: false });
 
             if (procError) throw procError;
-            setProcedures(procData || []);
+
+            // Garante o procedimento padrão "Teleconsulta" (principal, descrição TUSS fixa).
+            // Cobre contas antigas e serve de rede de segurança caso o trigger do banco não exista.
+            let list = procData || [];
+            try {
+                const tele = list.find(isProtectedProc);
+                if (!tele) {
+                    await supabase.from('procedimentos')
+                        .update({ principal: false })
+                        .eq('medico_id', docData.id)
+                        .eq('principal', true);
+                    const { data: created } = await supabase.from('procedimentos')
+                        .insert({ medico_id: docData.id, nome: TELECONSULTA_NOME, descricao: TELECONSULTA_DESC, preco: REPASSE_DEFAULT, principal: true })
+                        .select('*').single();
+                    if (created) list = [created, ...list];
+                } else if (tele.nome !== TELECONSULTA_NOME || tele.descricao !== TELECONSULTA_DESC || !tele.principal) {
+                    if (!tele.principal) {
+                        await supabase.from('procedimentos')
+                            .update({ principal: false })
+                            .eq('medico_id', docData.id)
+                            .eq('principal', true);
+                    }
+                    const { data: updated } = await supabase.from('procedimentos')
+                        .update({ nome: TELECONSULTA_NOME, descricao: TELECONSULTA_DESC, principal: true })
+                        .eq('id', tele.id).select('*').single();
+                    if (updated) list = list.map(p => (p.id === updated.id ? updated : p));
+                }
+            } catch (normErr) {
+                console.warn('Normalização Teleconsulta:', normErr?.message);
+            }
+
+            setProcedures(list);
         } catch (error) {
             console.error('Error fetching procedures:', error);
             toast({ variant: "destructive", title: "Erro", description: "Não foi possível carregar os procedimentos." });
@@ -69,20 +111,23 @@ const DoctorProceduresPage = () => {
 
     const handleOpenForm = (proc = null) => {
         if (proc) {
+            const locked = isProtectedProc(proc);
+            setFormLocked(locked);
             setEditingId(proc.id);
             setFormData({
-                nome: proc.nome,
-                descricao: proc.descricao || '',
-                preco: proc.preco.toString(),
-                principal: proc.principal || false
+                nome: locked ? TELECONSULTA_NOME : proc.nome,
+                descricao: locked ? TELECONSULTA_DESC : (proc.descricao || ''),
+                preco: proc.preco?.toString() ?? '',
+                principal: locked ? true : (proc.principal || false)
             });
         } else {
+            setFormLocked(false);
             setEditingId(null);
             setFormData({
                 nome: '',
                 descricao: '',
                 preco: '',
-                principal: procedures.length === 0
+                principal: false
             });
         }
         setIsFormOpen(true);
@@ -100,11 +145,28 @@ const DoctorProceduresPage = () => {
             return;
         }
 
+        const priceVal = parseFloat(formData.preco.toString().replace(',', '.'));
+        if (isNaN(priceVal)) {
+            toast({ variant: "destructive", title: "Atenção", description: "Informe um valor de repasse válido." });
+            return;
+        }
+
+        // Regra de repasse do procedimento Teleconsulta: mínimo R$30, máximo R$150.
+        if (formLocked && (priceVal < REPASSE_MIN || priceVal > REPASSE_MAX)) {
+            toast({
+                variant: "destructive",
+                title: "Valor fora do permitido",
+                description: `O repasse da Teleconsulta deve ser entre ${formatCurrency(REPASSE_MIN)} e ${formatCurrency(REPASSE_MAX)}.`
+            });
+            return;
+        }
+
         setIsSaving(true);
         try {
-            const priceVal = parseFloat(formData.preco.toString().replace(',', '.'));
-            
-            if (formData.principal) {
+            // O Teleconsulta é sempre o principal e imutável; os demais procedimentos não são principais.
+            const isPrincipal = formLocked ? true : false;
+
+            if (isPrincipal) {
                 await supabase
                     .from('procedimentos')
                     .update({ principal: false })
@@ -113,10 +175,10 @@ const DoctorProceduresPage = () => {
 
             const payload = {
                 medico_id: medicoId,
-                nome: formData.nome,
-                descricao: formData.descricao,
+                nome: formLocked ? TELECONSULTA_NOME : formData.nome,
+                descricao: formLocked ? TELECONSULTA_DESC : formData.descricao,
                 preco: priceVal,
-                principal: formData.principal,
+                principal: isPrincipal,
                 updated_at: new Date().toISOString()
             };
 
@@ -141,8 +203,13 @@ const DoctorProceduresPage = () => {
     };
 
     const handleDelete = async (id) => {
+        const proc = procedures.find(p => p.id === id);
+        if (isProtectedProc(proc)) {
+            toast({ variant: "destructive", title: "Não permitido", description: "A Teleconsulta é o procedimento padrão da plataforma e não pode ser excluída." });
+            return;
+        }
         if (!window.confirm("Deseja realmente excluir este procedimento?")) return;
-        
+
         try {
             const { error } = await supabase.from('procedimentos').delete().eq('id', id);
             if (error) throw error;
@@ -196,54 +263,75 @@ const DoctorProceduresPage = () => {
                     </div>
                     <CardContent className="p-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            {formLocked && (
+                                <div className="md:col-span-2 flex items-start gap-2.5 p-3 rounded-lg bg-blue-50/70 border border-blue-100">
+                                    <Lock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                                    <p className="text-[12px] text-blue-800 leading-relaxed">
+                                        Este é o procedimento padrão da plataforma. O nome e a descrição são fixos —
+                                        você pode ajustar apenas o <strong>valor de repasse</strong> (entre {formatCurrency(REPASSE_MIN)} e {formatCurrency(REPASSE_MAX)}).
+                                    </p>
+                                </div>
+                            )}
+
                             <div className="space-y-1.5 md:col-span-2">
-                                <Label htmlFor="nome" className="text-gray-900 font-semibold text-sm">Nome do Procedimento <span className="text-red-500">*</span></Label>
-                                <Input 
-                                    id="nome" 
+                                <Label htmlFor="nome" className="text-gray-900 font-semibold text-sm flex items-center gap-1.5">
+                                    Nome do Procedimento <span className="text-red-500">*</span>
+                                    {formLocked && <Lock className="w-3 h-3 text-gray-400" />}
+                                </Label>
+                                <Input
+                                    id="nome"
                                     value={formData.nome}
                                     onChange={(e) => setFormData({...formData, nome: e.target.value})}
                                     placeholder="Ex: Consulta Psiquiátrica Online"
-                                    className="text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full"
+                                    disabled={formLocked}
+                                    readOnly={formLocked}
+                                    className={`text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full ${formLocked ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
                                 />
                             </div>
-                            
+
                             <div className="space-y-1.5 md:col-span-2">
-                                <Label htmlFor="descricao" className="text-gray-900 font-semibold text-sm">Descrição detalhada</Label>
-                                <Textarea 
-                                    id="descricao" 
+                                <Label htmlFor="descricao" className="text-gray-900 font-semibold text-sm flex items-center gap-1.5">
+                                    Descrição detalhada
+                                    {formLocked && <Lock className="w-3 h-3 text-gray-400" />}
+                                </Label>
+                                <Textarea
+                                    id="descricao"
                                     value={formData.descricao}
                                     onChange={(e) => setFormData({...formData, descricao: e.target.value})}
                                     placeholder="Descreva os detalhes, duração aproximada ou o que está incluso no procedimento..."
-                                    className="min-h-[80px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full"
+                                    disabled={formLocked}
+                                    readOnly={formLocked}
+                                    className={`min-h-[80px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full ${formLocked ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
                                 />
                             </div>
 
                             <div className="space-y-1.5">
                                 <Label htmlFor="preco" className="text-gray-900 font-semibold text-sm">Valor de Repasse (R$) <span className="text-red-500">*</span></Label>
-                                <Input 
-                                    id="preco" 
+                                <Input
+                                    id="preco"
                                     type="number"
                                     step="0.01"
-                                    min="0"
+                                    min={formLocked ? REPASSE_MIN : 0}
+                                    max={formLocked ? REPASSE_MAX : undefined}
                                     value={formData.preco}
                                     onChange={(e) => setFormData({...formData, preco: e.target.value})}
                                     placeholder="0.00"
                                     className="text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full"
                                 />
-                                <p className="text-[11px] text-gray-500 font-medium">Este é o valor líquido que você receberá.</p>
+                                <p className="text-[11px] text-gray-500 font-medium">
+                                    {formLocked
+                                        ? `Valor líquido que você receberá. Permitido entre ${formatCurrency(REPASSE_MIN)} e ${formatCurrency(REPASSE_MAX)}.`
+                                        : 'Este é o valor líquido que você receberá.'}
+                                </p>
                             </div>
 
-                            <div className="flex items-center space-x-2 md:pt-6">
-                                <Checkbox 
-                                    id="principal" 
-                                    checked={formData.principal}
-                                    onCheckedChange={(checked) => setFormData({...formData, principal: checked})}
-                                    className="w-4 h-4 rounded data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 shrink-0"
-                                />
-                                <Label htmlFor="principal" className="text-sm font-semibold text-gray-900 cursor-pointer select-none break-words">
-                                    Marcar como procedimento principal
-                                </Label>
-                            </div>
+                            {formLocked && (
+                                <div className="flex items-center gap-2 md:pt-6">
+                                    <Badge className="bg-blue-100 text-blue-800 border-none gap-1 px-2 py-0.5 text-[10px] font-bold">
+                                        <Star className="w-3 h-3 fill-blue-600" /> Procedimento principal
+                                    </Badge>
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-6 mt-6 border-t border-gray-100">
@@ -313,11 +401,17 @@ const DoctorProceduresPage = () => {
 
                                     <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
                                         <Button variant="outline" size="sm" onClick={() => handleOpenForm(proc)} className="flex-1 text-xs font-semibold rounded-lg h-8">
-                                            <Edit2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> Editar
+                                            <Edit2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> {isProtectedProc(proc) ? 'Editar repasse' : 'Editar'}
                                         </Button>
-                                        <Button variant="outline" size="sm" onClick={() => handleDelete(proc.id)} className="flex-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 font-semibold rounded-lg h-8">
-                                            <Trash2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> Excluir
-                                        </Button>
+                                        {isProtectedProc(proc) ? (
+                                            <div className="flex-1 flex items-center justify-center gap-1.5 text-xs text-gray-400 font-semibold rounded-lg h-8 bg-gray-50 border border-gray-100 select-none">
+                                                <Lock className="w-3.5 h-3.5 shrink-0" /> Padrão
+                                            </div>
+                                        ) : (
+                                            <Button variant="outline" size="sm" onClick={() => handleDelete(proc.id)} className="flex-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 font-semibold rounded-lg h-8">
+                                                <Trash2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> Excluir
+                                            </Button>
+                                        )}
                                     </div>
                                 </CardContent>
                             </Card>
