@@ -56,7 +56,7 @@ const ScheduleSkeleton = () => (
         <Skeleton className="h-3 w-1/3 rounded-md" />
         <Skeleton className="h-8 w-8 rounded-md" />
     </div>
-    <div className="grid grid-cols-2 sm:grid-cols-5 gap-px bg-border rounded-lg overflow-hidden border border-border">
+    <div className="grid grid-cols-3 sm:grid-cols-5 gap-px bg-border rounded-lg overflow-hidden border border-border">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="bg-white p-2 text-center space-y-1 min-h-[130px]">
                 <Skeleton className="h-3 w-12 mx-auto rounded-md" />
@@ -89,9 +89,20 @@ export function DoctorScheduleCard({
   const [doctorAgenda, setDoctorAgenda] = useState([]);
   const [bookedSlots, setBookedSlots] = useState(new Map());
   const [isFavorite, setIsFavorite] = useState(false);
-  
+  // Dias visíveis por página: 3 no mobile (uma linha), 5 no desktop.
+  const [perPage, setPerPage] = useState(typeof window !== 'undefined' && window.innerWidth < 640 ? 3 : 5);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(min-width: 640px)');
+    const update = () => setPerPage(mq.matches ? 5 : 3);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
   const today = startOfToday();
-  const visibleDays = useMemo(() => Array.from({ length: 5 }).map((_, i) => addDays(today, i + dayOffset)), [today, dayOffset]);
+  const visibleDays = useMemo(() => Array.from({ length: perPage }).map((_, i) => addDays(today, i + dayOffset)), [today, dayOffset, perPage]);
 
   const fetchAllData = useCallback(async () => {
     if (isFallback || !doctor?.id) {
@@ -161,7 +172,7 @@ export function DoctorScheduleCard({
     const base = startOfToday();
     for (let i = 0; i <= 20; i++) {
       if (generateTimeSlotsFromAgenda(doctorAgenda, addDays(base, i)).length > 0) {
-        setDayOffset(Math.floor(i / 5) * 5);
+        setDayOffset(Math.floor(i / perPage) * perPage);
         return;
       }
     }
@@ -328,18 +339,18 @@ export function DoctorScheduleCard({
                       <p className="text-xs">{isFallback ? 'A agenda do médico não pôde ser carregada.' : 'Este médico está ajustando seus horários. Volte mais tarde.'}</p>
                   </div> : <>
                       <div className="flex items-center justify-between mb-2.5 px-1">
-                           <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => Math.max(0, d - 5))} disabled={dayOffset === 0} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
+                           <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => Math.max(0, d - perPage))} disabled={dayOffset === 0} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                               <ChevronLeft className="w-5 h-5" />
                           </Button>
                           <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider hidden sm:block">Selecione um horário</span>
-                          <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => d + 5)} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
+                          <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => d + perPage)} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                              <ChevronRight className="w-5 h-5" />
                           </Button>
                       </div>
                       
                       <TooltipProvider delayDuration={100}>
                           <motion.div className="flex-1 flex flex-col">
-                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-2 gap-y-0">
+                              <div className="grid grid-cols-3 sm:grid-cols-5 gap-x-2 gap-y-0">
                                   {scheduleByDay.map(daySchedule => {
               const isDayToday = isToday(daySchedule.date);
               const hasSlots = daySchedule.slots.length > 0;
