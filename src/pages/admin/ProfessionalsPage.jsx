@@ -246,9 +246,10 @@ const ProfessionalsPage = () => {
   };
 
   const updateStatus = async (id, isActive, isPublic, label) => {
+      // A RLS de leitura pública exige status='ativo'; mantém o status alinhado aos booleans.
       const { error } = await supabase
         .from('medicos')
-        .update({ is_active: isActive, is_public: isPublic })
+        .update({ is_active: isActive, is_public: isPublic, status: (isActive && isPublic) ? 'ativo' : 'inativo' })
         .eq('id', id);
 
       if (error) {

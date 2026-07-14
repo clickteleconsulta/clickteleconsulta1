@@ -163,10 +163,11 @@ const AdminProfessionalDocsPage = () => {
                 .eq('user_id', group.user_id);
             if (docErr) throw docErr;
 
-            // Ativa o perfil (visível ao público)
+            // Ativa o perfil (visível ao público). O status='ativo' é obrigatório: a RLS de
+            // leitura pública de medicos exige status='ativo' (além de is_public/is_active).
             const { error: medErr } = await supabase
                 .from('medicos')
-                .update({ is_active: true, is_public: true })
+                .update({ is_active: true, is_public: true, status: 'ativo' })
                 .eq('user_id', group.user_id);
             if (medErr) throw medErr;
 
@@ -187,8 +188,8 @@ const AdminProfessionalDocsPage = () => {
                 .update({ status: 'rejeitado' })
                 .eq('user_id', group.user_id);
             if (error) throw error;
-            // Mantém o perfil pausado
-            await supabase.from('medicos').update({ is_public: false }).eq('user_id', group.user_id);
+            // Mantém o perfil oculto ao público (status != 'ativo' para a RLS + is_public=false)
+            await supabase.from('medicos').update({ is_public: false, status: 'inativo' }).eq('user_id', group.user_id);
             toast({ title: 'Documentação recusada', description: `${group.name} permanece pausado.` });
             fetchData();
         } catch (err) {
