@@ -20,10 +20,6 @@ const Footer = () => {
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Teleconsulta com especialistas por videochamada — rápido, seguro e acessível.
             </p>
-            <div className="text-xs text-slate-400 space-y-0.5 pt-1">
-              <p className="font-semibold text-slate-500">C&amp;C ASSISTÊNCIA MÉDICA LTDA</p>
-              <p>CNPJ: 51.239.735/0001-03</p>
-            </div>
           </div>
 
           {/* Legal */}
