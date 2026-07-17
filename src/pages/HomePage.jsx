@@ -116,8 +116,8 @@ const HomePage = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const params = searchQuery.trim()
-      ? `/medicos?q=${encodeURIComponent(searchQuery.trim())}`
-      : '/medicos';
+      ? `/agendamentos?q=${encodeURIComponent(searchQuery.trim())}`
+      : '/agendamentos';
     navigate(params);
   };
 
@@ -129,6 +129,7 @@ const HomePage = () => {
           name="description"
           content="Agende teleconsultas com especialistas de forma rápida e segura. Sem filas, sem deslocamento."
         />
+        <link rel="canonical" href="https://clickteleconsulta.online/" />
         <link
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=DM+Sans:wght@400;500&display=swap"
           rel="stylesheet"

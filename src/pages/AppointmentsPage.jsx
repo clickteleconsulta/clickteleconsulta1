@@ -33,6 +33,7 @@ const AppointmentsPage = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [priceSort, setPriceSort] = useState('');
+  const [searchName, setSearchName] = useState(searchParams.get('q') || '');
   const [doctorPrices, setDoctorPrices] = useState({});
 
   const [activeFilters, setActiveFilters] = useState({
@@ -171,6 +172,7 @@ const AppointmentsPage = () => {
   };
 
   const handleClearFilters = () => {
+    setSearchName('');
     setSelectedSpecialty('');
     setSelectedDate('');
     setPriceSort('');
@@ -186,6 +188,15 @@ const AppointmentsPage = () => {
     if (!doctors) return [];
 
     let result = [...doctors];
+
+    // Busca por nome/especialidade (texto livre) — casa com a busca da home (?q=)
+    const term = searchName.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    if (term) {
+      result = result.filter((d) => {
+        const hay = `${d.public_name || d.name || ''} ${d.specialty || ''}`.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        return hay.includes(term);
+      });
+    }
 
     if (activeFilters.specialty && activeFilters.specialty !== 'all') {
       result = result.filter(doc => doc.specialty === activeFilters.specialty);
@@ -220,7 +231,7 @@ const AppointmentsPage = () => {
     });
 
     return result;
-  }, [doctors, activeFilters, doctorPrices]);
+  }, [doctors, activeFilters, doctorPrices, searchName]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -306,7 +317,8 @@ const AppointmentsPage = () => {
     <>
       <Helmet>
         <title>Agendar Consulta - Click Teleconsulta</title>
-        <meta name="description" content="Agende sua teleconsulta com um de nossos especialistas de forma rápida e segura." />
+        <meta name="description" content="Encontre especialistas, veja horários e agende sua teleconsulta de forma rápida e segura." />
+        <link rel="canonical" href="https://clickteleconsulta.online/agendamentos" />
       </Helmet>
 
       {/* Fundo de página cinza (full-bleed dentro do container) */}
@@ -315,6 +327,16 @@ const AppointmentsPage = () => {
         <div className="bg-white/90 backdrop-blur-md border-b border-slate-200 py-4 shadow-sm sticky top-16 z-20">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-center gap-2">
+              <div className="w-full md:w-56 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <Input
+                  type="text"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                  placeholder="Buscar por nome"
+                  className="h-10 pl-9 pr-3 bg-white border border-slate-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-slate-700"
+                />
+              </div>
               <div className="w-full md:w-52">
                 <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
                   <SelectTrigger className="h-10 px-3 bg-white border border-slate-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-slate-700">
@@ -364,7 +386,7 @@ const AppointmentsPage = () => {
                   <span className="md:inline">Buscar</span>
                 </Button>
 
-                {(selectedSpecialty || selectedDate || priceSort) && (
+                {(searchName || selectedSpecialty || selectedDate || priceSort) && (
                   <Button
                     variant="ghost"
                     className="h-10 w-10 p-0 text-slate-400 hover:bg-slate-100 hover:text-slate-600"

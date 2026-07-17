@@ -37,7 +37,6 @@ const LegalPage = lazy(() => import('@/pages/LegalPage'));
 const MessagesPage = lazy(() => import('@/pages/MessagesPage'));
 const DoctorReviewsPage = lazy(() => import('@/pages/doctor/DoctorReviewsPage'));
 const PatientReviewsPage = lazy(() => import('@/pages/patient/PatientReviewsPage'));
-const DoctorsListPage = lazy(() => import('@/pages/DoctorsListPage'));
 import { FEATURES } from '@/config/features';
 
 // Admin Imports
@@ -267,7 +266,8 @@ function App() {
           }>
             <Route path="/" element={<HomePage />} />
             <Route path="/agendamentos" element={<AppointmentsPage />} />
-            <Route path="/medicos" element={<DoctorsListPage />} />
+            {/* Lista unificada em /agendamentos (evita conteúdo duplicado) */}
+            <Route path="/medicos" element={<Navigate to="/agendamentos" replace />} />
             <Route path="/suporte" element={<SupportPage />} />
             
             {/* Auth Routes */}

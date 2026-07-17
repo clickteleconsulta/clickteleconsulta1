@@ -354,7 +354,7 @@ const DoctorProfilePage = () => {
 
       if (error || !doctorData) {
         toast({ variant: 'destructive', title: 'Médico não encontrado' });
-        navigate('/medicos');
+        navigate('/agendamentos');
         return;
       }
 
