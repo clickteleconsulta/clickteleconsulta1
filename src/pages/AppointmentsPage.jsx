@@ -202,13 +202,22 @@ const AppointmentsPage = () => {
       });
     }
 
-    if (activeFilters.priceSort) {
-      result.sort((a, b) => {
+    // Médicos com agenda disponível aparecem primeiro; sem horários vão para o fim.
+    // (mesmo critério do card: sem agenda configurada = "Sem horários disponíveis")
+    const hasAvailability = (doc) => !doc.is_fallback && (doc.agenda_medico?.length > 0);
+
+    // Ordenação estável: disponibilidade primeiro; dentro de cada grupo, preço (se ativo)
+    // ou a ordem original (por antiguidade do cadastro).
+    result.sort((a, b) => {
+      const availDiff = (hasAvailability(b) ? 1 : 0) - (hasAvailability(a) ? 1 : 0);
+      if (availDiff !== 0) return availDiff;
+      if (activeFilters.priceSort) {
         const priceA = doctorPrices[a.id] || 0;
         const priceB = doctorPrices[b.id] || 0;
         return activeFilters.priceSort === 'asc' ? priceA - priceB : priceB - priceA;
-      });
-    }
+      }
+      return 0;
+    });
 
     return result;
   }, [doctors, activeFilters, doctorPrices]);
