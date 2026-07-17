@@ -8,7 +8,7 @@ import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { format } from 'date-fns';
 import {
     Loader2, LayoutDashboard, CalendarDays, Wallet, Star, Clock, ChevronRight,
-    BellRing, CheckCircle2, Circle, AlertTriangle, FileWarning, CalendarClock, Landmark, ArrowRight
+    BellRing, CheckCircle2, Circle, AlertTriangle, FileWarning, CalendarClock, Landmark, ArrowRight, ExternalLink
 } from 'lucide-react';
 
 const TZ = 'America/Sao_Paulo';
@@ -139,11 +139,20 @@ const DoctorOverview = () => {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <div>
-                <h2 className="dash-page-title text-3xl flex items-center gap-2">
-                    <LayoutDashboard className="w-7 h-7 text-primary" /> Painel
-                </h2>
-                <p className="text-muted-foreground mt-0.5">Sua visão geral do dia — consultas, saldo e pendências.</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 className="dash-page-title text-3xl flex items-center gap-2">
+                        <LayoutDashboard className="w-7 h-7 text-primary" /> Painel
+                    </h2>
+                    <p className="text-muted-foreground mt-0.5">Sua visão geral do dia — consultas, saldo e pendências.</p>
+                </div>
+                {med?.id && med?.is_active && (
+                    <Button asChild variant="outline" size="sm" className="gap-2 shrink-0 border-gray-300 text-gray-700 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50">
+                        <Link to={`/medico/${med.id}`} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="w-3.5 h-3.5" /> Ver meu perfil público
+                        </Link>
+                    </Button>
+                )}
             </div>
 
             {/* KPIs */}

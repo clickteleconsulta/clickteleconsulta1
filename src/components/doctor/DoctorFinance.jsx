@@ -4,10 +4,12 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope, FileDown, CalendarDays, DollarSign, Landmark } from 'lucide-react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { format, parseISO } from 'date-fns';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -15,6 +17,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import WithdrawalDataForm from './WithdrawalDataForm';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+
+const PERIODS = [
+    { v: 'mes', label: 'Este mês' },
+    { v: '7', label: 'Últimos 7 dias' },
+    { v: '30', label: 'Últimos 30 dias' },
+    { v: '90', label: 'Últimos 90 dias' },
+    { v: 'all', label: 'Todo o período' },
+];
+// Data de início do recorte selecionado (null = tudo).
+const periodStart = (p) => {
+    if (p === 'all') return null;
+    const now = new Date();
+    if (p === 'mes') return new Date(now.getFullYear(), now.getMonth(), 1);
+    const days = Number(p) || 30;
+    const d = new Date(now);
+    d.setDate(d.getDate() - days);
+    d.setHours(0, 0, 0, 0);
+    return d;
+};
 
 const DoctorFinance = () => {
     const { toast } = useToast();
@@ -38,6 +59,7 @@ const DoctorFinance = () => {
     const [detailTx, setDetailTx] = useState(null);
     const [selectedGuideIds, setSelectedGuideIds] = useState([]);
     const [detailSaque, setDetailSaque] = useState(null);
+    const [period, setPeriod] = useState('mes');
 
     useEffect(() => {
         if (user) {
@@ -301,6 +323,37 @@ const DoctorFinance = () => {
     const availableBalance = round2(paidTransactions.reduce((a, t) => a + t.netValue, 0));
     const selectedTotal = round2(paidTransactions.filter(g => selectedGuideIds.includes(g.id)).reduce((a, g) => a + g.netValue, 0));
 
+    // Relatório por período: TODAS as consultas pagas (inclui já sacadas) no recorte,
+    // pela data da consulta (fallback data de criação da guia).
+    const periodStartDate = periodStart(period);
+    const inPeriod = (t) => {
+        if (!periodStartDate) return true;
+        const raw = t.horario_inicio || t.created_at;
+        if (!raw) return false;
+        const d = new Date(raw);
+        return !isNaN(d.getTime()) && d >= periodStartDate;
+    };
+    const paidInPeriod = transactions.filter(t => t.pagamento_status === 'pago' && t.status !== 'cancelado' && inPeriod(t));
+    const periodLiquido = round2(paidInPeriod.reduce((a, t) => a + t.netValue, 0));
+    const periodBruto = round2(paidInPeriod.reduce((a, t) => a + t.totalValue, 0));
+    const periodTaxa = round2(paidInPeriod.reduce((a, t) => a + t.platformFee, 0));
+    const periodTicket = paidInPeriod.length ? round2(periodLiquido / paidInPeriod.length) : 0;
+    const periodLabel = PERIODS.find(p => p.v === period)?.label || '';
+
+    const handleExportExtrato = () => {
+        downloadCsv(`extrato_consultas_${period}_${csvDateSuffix()}`, [
+            { header: 'Data da consulta', value: (t) => t.displayDate },
+            { header: 'Data de criação', value: (t) => t.createdDisplay },
+            { header: 'Protocolo', value: (t) => t.protocolo || '' },
+            { header: 'Paciente', value: (t) => t.patientName },
+            { header: 'Serviço', value: (t) => t.serviceName },
+            { header: 'Valor pago (R$)', value: (t) => brNumber(t.totalValue) },
+            { header: 'Taxa retida (R$)', value: (t) => brNumber(t.platformFee) },
+            { header: 'Repasse líquido (R$)', value: (t) => brNumber(t.netValue) },
+            { header: 'Situação', value: (t) => (t.saque_id ? 'Sacado' : 'Disponível') },
+        ], paidInPeriod);
+    };
+
     // Intervalo de 7 dias entre solicitações de saque
     const lastWithdrawal = withdrawals[0];
     let canRequestWithdraw = true;
@@ -359,6 +412,44 @@ const DoctorFinance = () => {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Relatório por período */}
+            <Card className="border border-gray-200 shadow-sm rounded-2xl">
+                <CardHeader className="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <CardTitle className="text-sm font-semibold text-gray-900 flex items-center gap-2"><CalendarDays className="w-4 h-4 text-primary" /> Relatório por período</CardTitle>
+                        <CardDescription className="text-xs text-gray-500">Extrato de repasses das consultas pagas — {periodLabel.toLowerCase()}.</CardDescription>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Select value={period} onValueChange={setPeriod}>
+                            <SelectTrigger className="w-[160px] h-9 gap-2 bg-white text-xs"><CalendarDays className="w-3.5 h-3.5 text-gray-400" /><SelectValue /></SelectTrigger>
+                            <SelectContent>{PERIODS.map(p => <SelectItem key={p.v} value={p.v}>{p.label}</SelectItem>)}</SelectContent>
+                        </Select>
+                        <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs" onClick={handleExportExtrato} disabled={paidInPeriod.length === 0}>
+                            <FileDown className="w-3.5 h-3.5" /> Exportar CSV
+                        </Button>
+                    </div>
+                </CardHeader>
+                <CardContent className="p-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" /> Repasse líquido</p>
+                        <p className="text-xl font-bold text-green-700 mt-1">{periodLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><Stethoscope className="w-3.5 h-3.5" /> Consultas pagas</p>
+                        <p className="text-xl font-bold text-gray-900 mt-1">{paidInPeriod.length}</p>
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><Landmark className="w-3.5 h-3.5" /> Ticket médio</p>
+                        <p className="text-xl font-bold text-gray-900 mt-1">{periodTicket.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><TrendingDown className="w-3.5 h-3.5" /> Bruto · taxa</p>
+                        <p className="text-sm font-semibold text-gray-700 mt-1">{periodBruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                        <p className="text-[11px] text-gray-400">taxa {periodTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    </div>
+                </CardContent>
+            </Card>
 
             <Tabs defaultValue="consultas" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 max-w-[320px] h-10 p-1 bg-gray-100/80 rounded-xl">
