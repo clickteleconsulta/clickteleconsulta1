@@ -11,7 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, User, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2 } from 'lucide-react';
+import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2 } from 'lucide-react';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
 import DoctorDocumentsReview from '@/components/admin/DoctorDocumentsReview';
@@ -339,10 +340,7 @@ const ProfessionalsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">Profissionais Cadastrados</h2>
-        <p className="text-muted-foreground text-sm">Gerencie contas, taxas e visibilidade dos médicos.</p>
-      </div>
+      <AdminPageHeader icon={Users} title="Profissionais" subtitle="Gerencie contas, documentação, taxas e visibilidade dos médicos." />
 
       <Dialog open={isFeeOpen} onOpenChange={setIsFeeOpen}>
         <DialogContent>

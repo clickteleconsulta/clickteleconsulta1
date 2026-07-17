@@ -128,7 +128,7 @@ const AdminSecurityPage = () => {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Segurança</h1>
+        <h3 className="dashboard-title text-xl">Segurança</h3>
         <p className="text-sm text-gray-500 mt-1">Gerencie a senha e a autenticação de 2 fatores desta conta.</p>
       </div>
 

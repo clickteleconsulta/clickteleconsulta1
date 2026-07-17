@@ -230,7 +230,7 @@ const AdminLegalPage = () => {
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-2">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900">Documentos Legais</h1>
+                <h3 className="dashboard-title text-xl">Documentos Legais</h3>
                 <p className="text-gray-500">Gerencie os termos e políticas da plataforma (Apenas PDF).</p>
             </div>
 

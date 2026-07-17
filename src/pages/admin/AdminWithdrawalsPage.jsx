@@ -8,6 +8,7 @@ import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw, FileDow
 import { useToast } from '@/components/ui/use-toast';
 import { format, parseISO } from 'date-fns';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const AdminWithdrawalsPage = () => {
@@ -140,20 +141,14 @@ const AdminWithdrawalsPage = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">Solicitações de Saque</h2>
-                    <p className="text-muted-foreground">Gerencie os pagamentos aos médicos parceiros.</p>
-                </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" onClick={handleExport} disabled={withdrawals.length === 0}>
-                        <FileDown className="w-4 h-4 mr-2" /> Exportar CSV
-                    </Button>
-                    <Button variant="outline" onClick={fetchWithdrawals}>
-                        <RefreshCcw className="w-4 h-4 mr-2" /> Atualizar
-                    </Button>
-                </div>
-            </div>
+            <AdminPageHeader icon={Banknote} title="Saques e Pagamentos" subtitle="Gerencie os pagamentos aos médicos parceiros.">
+                <Button variant="outline" size="sm" onClick={handleExport} disabled={withdrawals.length === 0} className="gap-2">
+                    <FileDown className="w-4 h-4" /> Exportar CSV
+                </Button>
+                <Button variant="outline" size="sm" onClick={fetchWithdrawals} className="gap-2">
+                    <RefreshCcw className="w-4 h-4" /> Atualizar
+                </Button>
+            </AdminPageHeader>
 
             <Card>
                 <CardHeader>

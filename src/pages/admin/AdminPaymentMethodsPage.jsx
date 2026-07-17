@@ -99,7 +99,7 @@ const AdminPaymentMethodsPage = () => {
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
             <div>
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900">Métodos de Recebimento</h1>
+                <h3 className="dashboard-title text-xl">Métodos de Recebimento</h3>
                 <p className="text-sm text-muted-foreground">Escolha o gateway que processará os pagamentos dos pacientes.</p>
             </div>
 

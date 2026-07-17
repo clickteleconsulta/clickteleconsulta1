@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { format, parseISO } from 'date-fns';
 import { Loader2, RefreshCcw, RotateCcw, CheckCircle2, AlertTriangle, FileDown } from 'lucide-react';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const safeDate = (v, p = 'dd/MM/yyyy') => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? '—' : format(d, p); };
@@ -91,22 +92,14 @@ const AdminRefundsPage = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-                        <RotateCcw className="w-7 h-7 text-primary" /> Reembolsos
-                    </h2>
-                    <p className="text-muted-foreground">Devolva aos pacientes os valores de consultas pagas e canceladas dentro da política.</p>
-                </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="gap-2" onClick={handleExport} disabled={loading || list.length === 0}>
-                        <FileDown className="w-4 h-4" /> Exportar CSV
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2" onClick={fetchData} disabled={loading}>
-                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />} Atualizar
-                    </Button>
-                </div>
-            </div>
+            <AdminPageHeader icon={RotateCcw} title="Reembolsos" subtitle="Devolva aos pacientes os valores de consultas pagas e canceladas dentro da política.">
+                <Button variant="outline" size="sm" className="gap-2" onClick={handleExport} disabled={loading || list.length === 0}>
+                    <FileDown className="w-4 h-4" /> Exportar CSV
+                </Button>
+                <Button variant="outline" size="sm" className="gap-2" onClick={fetchData} disabled={loading}>
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />} Atualizar
+                </Button>
+            </AdminPageHeader>
 
             {/* Resumo */}
             <div className="grid gap-4 sm:grid-cols-3">

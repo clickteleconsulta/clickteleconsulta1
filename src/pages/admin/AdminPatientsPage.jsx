@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Loader2, User, MoreHorizontal, Trash2, Search, Users, RefreshCw, CheckCircle2, FileDown } from 'lucide-react';
 import { downloadCsv, csvDateSuffix } from '@/lib/exportCsv';
 import { format } from 'date-fns';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const AdminPatientsPage = () => {
     const { toast } = useToast();
@@ -77,25 +78,15 @@ const AdminPatientsPage = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-                        <Users className="w-7 h-7 text-primary" /> Pacientes
-                    </h2>
-                    <p className="text-muted-foreground text-sm">
-                        Todas as contas de pacientes cadastradas.
-                        {!loading && <span className="ml-1 font-medium">{patients.length} no total.</span>}
-                    </p>
-                </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={handleExport} disabled={loading || filtered.length === 0} className="gap-2">
-                        <FileDown className="w-4 h-4" /> Exportar CSV
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={fetchPatients} disabled={loading} className="gap-2">
-                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Atualizar
-                    </Button>
-                </div>
-            </div>
+            <AdminPageHeader icon={Users} title="Pacientes"
+                subtitle={<>Todas as contas de pacientes cadastradas.{!loading && <span className="ml-1 font-medium">{patients.length} no total.</span>}</>}>
+                <Button variant="outline" size="sm" onClick={handleExport} disabled={loading || filtered.length === 0} className="gap-2">
+                    <FileDown className="w-4 h-4" /> Exportar CSV
+                </Button>
+                <Button variant="outline" size="sm" onClick={fetchPatients} disabled={loading} className="gap-2">
+                    <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Atualizar
+                </Button>
+            </AdminPageHeader>
 
             <Card>
                 <CardHeader>

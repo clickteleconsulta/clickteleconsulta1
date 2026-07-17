@@ -142,9 +142,9 @@ const AdminAiTrainingPage = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Bot className="w-8 h-8 text-primary" /> Treinamento da IA
-          </h1>
+          <h3 className="dashboard-title text-xl flex items-center gap-2">
+            <Bot className="w-5 h-5 text-primary" /> Treinamento da IA
+          </h3>
           <p className="text-muted-foreground">Gerencie as perguntas e respostas do assistente virtual.</p>
         </div>
         <Button onClick={() => handleOpenDialog()}>

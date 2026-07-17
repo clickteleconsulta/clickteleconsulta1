@@ -8,6 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useAdminPendingCounts } from '@/hooks/useAdminPendingCounts';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import { format } from 'date-fns';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import {
     Loader2, RefreshCw, Users, Stethoscope, Star, TrendingUp, DollarSign,
     Wallet, Landmark, CalendarCheck, XCircle, RotateCcw, Repeat, Info, LineChart,
@@ -239,29 +240,21 @@ const AdminStrategyPage = () => {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-                        <LineChart className="w-7 h-7 text-primary" /> Estudo Estratégico
-                    </h2>
-                    <p className="text-muted-foreground">Métricas do projeto em tempo real — captação, funil e financeiro.</p>
-                </div>
-                <div className="flex items-center gap-3">
-                    {updatedAt && <span className="text-xs text-gray-400 hidden sm:inline">Atualizado {updatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>}
-                    <Select value={period} onValueChange={setPeriod}>
-                        <SelectTrigger className="w-[170px] h-9 gap-2 bg-white">
-                            <CalendarDays className="w-4 h-4 text-gray-400" />
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {PERIODS.map(p => <SelectItem key={p.v} value={p.v}>{p.label}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                    <Button onClick={fetchMetrics} variant="outline" size="sm" className="gap-2" disabled={loading}>
-                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Atualizar
-                    </Button>
-                </div>
-            </div>
+            <AdminPageHeader icon={LineChart} title="Estudo Estratégico" subtitle="Métricas do projeto em tempo real — captação, funil e financeiro.">
+                {updatedAt && <span className="text-xs text-gray-400 hidden sm:inline">Atualizado {updatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>}
+                <Select value={period} onValueChange={setPeriod}>
+                    <SelectTrigger className="w-[170px] h-9 gap-2 bg-white">
+                        <CalendarDays className="w-4 h-4 text-gray-400" />
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {PERIODS.map(p => <SelectItem key={p.v} value={p.v}>{p.label}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+                <Button onClick={fetchMetrics} variant="outline" size="sm" className="gap-2" disabled={loading}>
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Atualizar
+                </Button>
+            </AdminPageHeader>
 
             {/* Precisa da sua atenção */}
             <AttentionPanel />

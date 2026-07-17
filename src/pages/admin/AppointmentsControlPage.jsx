@@ -12,6 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Loader2, Search, Filter, MoreHorizontal, Eye, Pencil, Trash2, Ban, Calendar as CalendarIcon, X, CheckCircle2, XCircle, Clock, FileText, DollarSign, User, Stethoscope, AlertTriangle, ArrowLeft, ArrowRight, FileDown } from 'lucide-react';
 import { format, parseISO, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 
@@ -392,28 +393,17 @@ const AppointmentsControlPage = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">Agendamentos</h2>
-          <p className="text-muted-foreground">Gerencie todas as consultas da plataforma.</p>
-        </div>
-        <div className="flex gap-2">
-            <Button
-                variant="destructive"
-                size="sm"
-                className="gap-2"
-                onClick={() => setIsWipeOpen(true)}
-            >
-                <Trash2 className="w-4 h-4"/> Resetar Sistema
-            </Button>
-           <Button onClick={handleExport} variant="outline" size="sm" className="gap-2" disabled={tabAppointments.length === 0}>
-             <FileDown className="w-4 h-4"/> Exportar CSV
-           </Button>
-           <Button onClick={fetchData} variant="outline" size="sm" className="gap-2">
-             <Filter className="w-4 h-4"/> Atualizar Lista
-           </Button>
-        </div>
-      </div>
+      <AdminPageHeader icon={CalendarIcon} title="Agendamentos" subtitle="Gerencie todas as consultas da plataforma.">
+        <Button variant="destructive" size="sm" className="gap-2" onClick={() => setIsWipeOpen(true)}>
+            <Trash2 className="w-4 h-4"/> Resetar Sistema
+        </Button>
+        <Button onClick={handleExport} variant="outline" size="sm" className="gap-2" disabled={tabAppointments.length === 0}>
+            <FileDown className="w-4 h-4"/> Exportar CSV
+        </Button>
+        <Button onClick={fetchData} variant="outline" size="sm" className="gap-2">
+            <Filter className="w-4 h-4"/> Atualizar Lista
+        </Button>
+      </AdminPageHeader>
 
       {/* Abas: guias a pagar vs. já repassadas (histórico) */}
       <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setCurrentPage(1); }}>

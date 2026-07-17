@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const AdminReviewsPage = () => {
     const { toast } = useToast();
@@ -217,11 +218,7 @@ const AdminReviewsPage = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Moderação de Avaliações</h1>
-                    <p className="text-sm text-gray-500 mt-1">Gerencie denúncias e o conteúdo publicado pelos pacientes.</p>
-                </div>
+            <AdminPageHeader icon={AlertTriangle} title="Avaliações" subtitle="Gerencie denúncias e o conteúdo publicado pelos pacientes.">
                 <div className="w-full md:w-64">
                     <Select value={filterDoctorId} onValueChange={(v) => { setFilterDoctorId(v); setCurrentPage(1); }}>
                         <SelectTrigger>
@@ -235,7 +232,7 @@ const AdminReviewsPage = () => {
                         </SelectContent>
                     </Select>
                 </div>
-            </div>
+            </AdminPageHeader>
 
             {loading ? (
                 <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>

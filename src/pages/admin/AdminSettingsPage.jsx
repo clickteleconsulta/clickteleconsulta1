@@ -12,6 +12,7 @@ import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';
 import AdminLegalPage from '@/pages/admin/AdminLegalPage';
 import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const DEFAULTS = {
     default_fee_percent: 25,
@@ -162,12 +163,8 @@ const AdminSettingsPage = () => {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <div>
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-                    <SlidersHorizontal className="w-7 h-7 text-primary" /> Configurações
-                </h2>
-                <p className="text-muted-foreground">Regras de negócio, recebimento, documentos legais, segurança e assistente de IA.</p>
-            </div>
+            <AdminPageHeader icon={SlidersHorizontal} title="Configurações"
+                subtitle="Regras de negócio, recebimento, documentos legais, segurança e assistente de IA." />
 
             <Tabs value={active} onValueChange={(v) => setParams({ tab: v }, { replace: true })} className="w-full">
                 <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-gray-100/80 rounded-xl">
