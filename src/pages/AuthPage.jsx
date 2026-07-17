@@ -206,10 +206,10 @@ const AuthPage = ({
         
         <div className="text-center mb-8 space-y-2">
             <h1 className="text-3xl font-bold text-blue-950 tracking-tight">
-              {isDoctor ? 'Área do Médico' : 'Área do Paciente'}
+              {isDoctor ? 'Área do Médico' : 'Acesse sua conta'}
             </h1>
             <p className="text-gray-500 font-medium text-sm">
-               {isDoctor ? 'Acesso restrito para médicos' : 'Acesso restrito para pacientes'}
+               {isDoctor ? 'Acesso restrito para médicos' : 'Entre para agendar e acompanhar suas consultas'}
             </p>
         </div>
 

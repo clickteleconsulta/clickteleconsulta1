@@ -36,7 +36,7 @@ const Footer = () => {
             <p className="font-semibold text-slate-900 text-sm">Acesso</p>
             <nav className="flex flex-col gap-2.5">
               <Link to="/agendamentos" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Agendar Consulta</Link>
-              <Link to="/acesso-paciente" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Área do Paciente</Link>
+              <Link to="/acesso-paciente" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Entrar</Link>
               <Link to="/acesso-medico" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Acesso para Médicos</Link>
             </nav>
           </div>

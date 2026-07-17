@@ -90,7 +90,7 @@ const NextSteps = ({ appointment }) => {
           },
           {
             icon: <Calendar className="w-4 h-4 text-primary" />,
-            text: 'Acompanhe seu agendamento em "Minhas Consultas", na sua área do paciente.',
+            text: 'Acompanhe seu agendamento em "Minhas Consultas", na sua conta.',
             color: 'bg-primary/5 border-primary/10',
           },
         ].map((step, i) => (

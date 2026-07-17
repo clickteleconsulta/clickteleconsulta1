@@ -231,7 +231,7 @@ const PatientArea = () => {
   return (
     <>
       <Helmet>
-        <title>Área do Paciente — Click Teleconsulta</title>
+        <title>Minha conta — Click Teleconsulta</title>
       </Helmet>
       <div className="grid md:grid-cols-[280px_1fr] gap-8 items-start">
         {/* Sidebar */}

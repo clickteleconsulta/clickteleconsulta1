@@ -254,7 +254,7 @@ const AiChatWidget = () => {
       } else if (hasAnyToken(['medico', 'doutor', 'especialista', 'cardiologista', 'pediatra'])) {
         responseText = 'Temos diversos especialistas qualificados em nossa plataforma. Você pode filtrar por especialidade na página de busca.';
       } else if (hasAnyToken(['cancelar', 'reembolso', 'desistir'])) {
-        responseText = 'Você pode cancelar sua consulta através do painel do paciente. O reembolso é processado automaticamente se o cancelamento ocorrer com 24h de antecedência.';
+        responseText = 'Você pode cancelar sua consulta em "Minhas Consultas", na sua conta. O reembolso é processado conforme a política de cancelamento.';
       } else if (hasAnyToken(['ajuda', 'suporte', 'problema', 'erro'])) {
         responseText = 'Você pode entrar em contato com nosso suporte técnico através da página de "Suporte" no menu superior.';
       } else if (hasAnyToken(['ola', 'oi', 'bom', 'tarde', 'noite'])) {

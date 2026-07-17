@@ -45,7 +45,7 @@ const Header = () => {
               <>
                 <Button variant="ghost" size="sm" onClick={handleDashboardRedirect} className="flex items-center gap-2 font-normal text-gray-600 hover:text-primary hover:bg-primary/5">
                   <LayoutDashboard className="w-4 h-4" />
-                  <span>Painel do Paciente</span>
+                  <span>Minha conta</span>
                 </Button>
                 <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-500 hover:text-red-600 hover:bg-red-50">
                   <LogOut className="w-4 h-4" />
@@ -55,7 +55,7 @@ const Header = () => {
                <div className="flex items-center gap-2">
                   <Button onClick={() => navigate('/acesso-paciente')} className="font-light bg-primary hover:bg-primary/90 rounded-full px-6">
                       <User className="w-4 h-4 mr-2" />
-                      Área do Paciente
+                      Entrar
                   </Button>
               </div>
             )}
