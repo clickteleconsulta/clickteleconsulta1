@@ -8,7 +8,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { format, parseISO } from 'date-fns';
-import { Loader2, RefreshCcw, RotateCcw, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Loader2, RefreshCcw, RotateCcw, CheckCircle2, AlertTriangle, FileDown } from 'lucide-react';
+import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const safeDate = (v, p = 'dd/MM/yyyy') => { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? '—' : format(d, p); };
@@ -71,6 +72,19 @@ const AdminRefundsPage = () => {
 
     const list = tab === 'historico' ? historico : pendentes;
 
+    const handleExport = () => {
+        downloadCsv(`reembolsos_${tab}_${csvDateSuffix()}`, [
+            { header: 'Cancelado em', value: (a) => safeDate(a.cancelado_em, 'dd/MM/yyyy HH:mm') },
+            { header: 'Paciente', value: (a) => a.paciente_nome || a.patient?.full_name || '' },
+            { header: 'Contato', value: (a) => a.patient?.email || a.patient?.whatsapp || '' },
+            { header: 'Protocolo', value: (a) => a.protocolo || '' },
+            { header: 'Valor pago (R$)', value: (a) => brNumber((a.price_in_cents || 0) / 100) },
+            { header: 'Reembolso (%)', value: (a) => refundPct(a) },
+            { header: 'Valor a devolver (R$)', value: (a) => brNumber(refundValue(a)) },
+            { header: 'Status', value: (a) => a.pagamento_status === 'reembolsado' ? 'Reembolsado' : 'Pendente' },
+        ], list);
+    };
+
     if (loading && rows.length === 0) {
         return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-primary w-8 h-8" /></div>;
     }
@@ -84,9 +98,14 @@ const AdminRefundsPage = () => {
                     </h2>
                     <p className="text-muted-foreground">Devolva aos pacientes os valores de consultas pagas e canceladas dentro da política.</p>
                 </div>
-                <Button variant="outline" size="sm" className="gap-2" onClick={fetchData} disabled={loading}>
-                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />} Atualizar
-                </Button>
+                <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="gap-2" onClick={handleExport} disabled={loading || list.length === 0}>
+                        <FileDown className="w-4 h-4" /> Exportar CSV
+                    </Button>
+                    <Button variant="outline" size="sm" className="gap-2" onClick={fetchData} disabled={loading}>
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />} Atualizar
+                    </Button>
+                </div>
             </div>
 
             {/* Resumo */}

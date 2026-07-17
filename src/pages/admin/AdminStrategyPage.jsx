@@ -1,18 +1,84 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { useAdminPendingCounts } from '@/hooks/useAdminPendingCounts';
+import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
+import { format } from 'date-fns';
 import {
     Loader2, RefreshCw, Users, Stethoscope, Star, TrendingUp, DollarSign,
     Wallet, Landmark, CalendarCheck, XCircle, RotateCcw, Repeat, Info, LineChart,
-    FolderCheck, Banknote, AlertTriangle, CheckCircle2, ChevronRight, BellRing
+    FolderCheck, Banknote, AlertTriangle, CheckCircle2, ChevronRight, BellRing, FileDown, CalendarDays
 } from 'lucide-react';
 
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const pct = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
+
+const PERIODS = [
+    { v: '7', label: 'Últimos 7 dias' },
+    { v: '30', label: 'Últimos 30 dias' },
+    { v: '90', label: 'Últimos 90 dias' },
+    { v: 'year', label: 'Este ano' },
+    { v: 'all', label: 'Todo o período' },
+];
+
+// Data de início do recorte selecionado (null = tudo).
+const periodStart = (period) => {
+    if (period === 'all') return null;
+    const now = new Date();
+    if (period === 'year') return new Date(now.getFullYear(), 0, 1);
+    const days = Number(period) || 30;
+    const d = new Date(now);
+    d.setDate(d.getDate() - days);
+    d.setHours(0, 0, 0, 0);
+    return d;
+};
+
+const refundPct = (a) => (a.refund_percent == null ? 100 : Number(a.refund_percent));
+
+// Métricas derivadas do período. Base atual (pacientes/médicos) e notas são cumulativas;
+// funil, financeiro e qualidade usam a DATA DE CRIAÇÃO da guia (competência).
+const computeDerived = (raw, period) => {
+    if (!raw) return null;
+    const start = periodStart(period);
+    const inRange = (a) => !start || (a.created_at && new Date(a.created_at) >= start);
+    const appts = (raw.appts || []).filter(inRange);
+
+    const total = appts.length;
+    const pagos = appts.filter(a => a.pagamento_status === 'pago');
+    const reembolsados = appts.filter(a => a.pagamento_status === 'reembolsado');
+    const atendidos = appts.filter(a => ['atendido', 'concluida'].includes(a.status));
+    const cancelados = appts.filter(a => a.status === 'cancelado');
+
+    let receitaPaga = 0, receitaPlataforma = 0;
+    pagos.forEach(a => {
+        const valor = (a.price_in_cents || 0) / 100;
+        const taxa = valor * ((Number(a.taxa_percent_snapshot) || 0) / 100);
+        receitaPaga += valor;
+        receitaPlataforma += taxa;
+    });
+    const repasse = receitaPaga - receitaPlataforma;
+    const ticket = pagos.length ? receitaPaga / pagos.length : 0;
+
+    const reembolsoValor = reembolsados.reduce((s, a) => s + ((a.price_in_cents || 0) / 100) * (refundPct(a) / 100), 0);
+
+    const porPaciente = {};
+    pagos.forEach(a => { if (a.patient_id) porPaciente[a.patient_id] = (porPaciente[a.patient_id] || 0) + 1; });
+    const recorrentes = Object.values(porPaciente).filter(n => n > 1).length;
+
+    return {
+        // base (cumulativa)
+        pacientes: raw.pacientes, medicosPublicos: raw.medicosPublicos, comAgenda: raw.comAgenda,
+        medicosTotal: raw.medicosTotal, notaMedia: raw.notaMedia, nAval: raw.nAval,
+        // período
+        appts, total, pagos: pagos.length, atendidos: atendidos.length, cancelados: cancelados.length,
+        reembolsados: reembolsados.length, reembolsoValor,
+        receitaPaga, receitaPlataforma, repasse, ticket, recorrentes,
+    };
+};
 
 // Painel "Precisa da sua atenção": transforma o Estudo Estratégico em centro de
 // comando, listando as pendências acionáveis com atalho direto para cada tela.
@@ -85,8 +151,9 @@ const AttentionPanel = () => {
 const AdminStrategyPage = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(true);
-    const [m, setM] = useState(null);
+    const [raw, setRaw] = useState(null);
     const [updatedAt, setUpdatedAt] = useState(null);
+    const [period, setPeriod] = useState('30');
 
     const fetchMetrics = useCallback(async () => {
         setLoading(true);
@@ -95,7 +162,7 @@ const AdminStrategyPage = () => {
                 supabase.from('perfis_usuarios').select('id', { count: 'exact', head: true }).eq('role', 'paciente'),
                 supabase.from('medicos').select('id, is_public, is_active, status'),
                 supabase.from('agenda_medico').select('medico_id'),
-                supabase.from('agendamentos').select('status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id'),
+                supabase.from('agendamentos').select('status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id, refund_percent, created_at, appointment_date, protocolo'),
                 supabase.from('avaliacoes').select('rating'),
             ]);
 
@@ -103,38 +170,14 @@ const AdminStrategyPage = () => {
             const medicosPublicos = medicos.filter(d => d.is_public && d.is_active && d.status === 'ativo').length;
             const comAgenda = new Set((agendaRes.data || []).map(a => a.medico_id)).size;
 
-            const appts = apptRes.data || [];
-            const total = appts.length;
-            const pagos = appts.filter(a => a.pagamento_status === 'pago');
-            const reembolsados = appts.filter(a => a.pagamento_status === 'reembolsado');
-            const atendidos = appts.filter(a => ['atendido', 'concluida'].includes(a.status));
-            const cancelados = appts.filter(a => a.status === 'cancelado');
-
-            let receitaPaga = 0, receitaPlataforma = 0;
-            pagos.forEach(a => {
-                const valor = (a.price_in_cents || 0) / 100;
-                const taxa = valor * ((Number(a.taxa_percent_snapshot) || 0) / 100);
-                receitaPaga += valor;
-                receitaPlataforma += taxa;
-            });
-            const repasse = receitaPaga - receitaPlataforma;
-            const ticket = pagos.length ? receitaPaga / pagos.length : 0;
-
-            // Pacientes recorrentes = pagaram mais de uma consulta
-            const porPaciente = {};
-            pagos.forEach(a => { if (a.patient_id) porPaciente[a.patient_id] = (porPaciente[a.patient_id] || 0) + 1; });
-            const recorrentes = Object.values(porPaciente).filter(n => n > 1).length;
-
             const ratings = (avalRes.data || []).map(r => r.rating).filter(Boolean);
             const notaMedia = ratings.length ? ratings.reduce((s, r) => s + r, 0) / ratings.length : 0;
 
-            setM({
+            setRaw({
                 pacientes: pacientesRes.count || 0,
                 medicosPublicos, comAgenda, medicosTotal: medicos.length,
-                total, pagos: pagos.length, atendidos: atendidos.length, cancelados: cancelados.length,
-                reembolsados: reembolsados.length,
-                receitaPaga, receitaPlataforma, repasse, ticket, recorrentes,
                 notaMedia, nAval: ratings.length,
+                appts: apptRes.data || [],
             });
             setUpdatedAt(new Date());
         } catch (err) {
@@ -146,9 +189,28 @@ const AdminStrategyPage = () => {
 
     useEffect(() => { fetchMetrics(); }, [fetchMetrics]);
 
+    const m = useMemo(() => computeDerived(raw, period), [raw, period]);
+
     if (loading && !m) {
         return <div className="flex h-[50vh] items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
     }
+
+    const periodLabel = PERIODS.find(p => p.v === period)?.label || '';
+
+    const handleExportFinance = () => {
+        const rows = m.appts;
+        downloadCsv(`relatorio_financeiro_${period}_${csvDateSuffix()}`, [
+            { header: 'Criado em', value: (a) => a.created_at ? format(new Date(a.created_at), 'dd/MM/yyyy HH:mm') : '' },
+            { header: 'Data consulta', value: (a) => a.appointment_date ? format(new Date(a.appointment_date), 'dd/MM/yyyy') : '' },
+            { header: 'Protocolo', value: (a) => a.protocolo || '' },
+            { header: 'Status', value: (a) => a.status || '' },
+            { header: 'Pagamento', value: (a) => a.pagamento_status || '' },
+            { header: 'Valor (R$)', value: (a) => brNumber((a.price_in_cents || 0) / 100) },
+            { header: 'Taxa (%)', value: (a) => Number(a.taxa_percent_snapshot) || 0 },
+            { header: 'Receita plataforma (R$)', value: (a) => brNumber((a.pagamento_status === 'pago' ? (a.price_in_cents || 0) / 100 : 0) * ((Number(a.taxa_percent_snapshot) || 0) / 100)) },
+            { header: 'Repasse (R$)', value: (a) => brNumber(a.pagamento_status === 'pago' ? ((a.price_in_cents || 0) / 100) * (1 - (Number(a.taxa_percent_snapshot) || 0) / 100) : 0) },
+        ], rows);
+    };
 
     const Kpi = ({ icon: Icon, label, value, note, tone = 'default' }) => {
         const tones = {
@@ -185,7 +247,16 @@ const AdminStrategyPage = () => {
                     <p className="text-muted-foreground">Métricas do projeto em tempo real — captação, funil e financeiro.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    {updatedAt && <span className="text-xs text-gray-400">Atualizado {updatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>}
+                    {updatedAt && <span className="text-xs text-gray-400 hidden sm:inline">Atualizado {updatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>}
+                    <Select value={period} onValueChange={setPeriod}>
+                        <SelectTrigger className="w-[170px] h-9 gap-2 bg-white">
+                            <CalendarDays className="w-4 h-4 text-gray-400" />
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {PERIODS.map(p => <SelectItem key={p.v} value={p.v}>{p.label}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                     <Button onClick={fetchMetrics} variant="outline" size="sm" className="gap-2" disabled={loading}>
                         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} Atualizar
                     </Button>
@@ -197,43 +268,54 @@ const AdminStrategyPage = () => {
 
             {/* Base */}
             <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Base atual</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Base atual (acumulado)</p>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Kpi icon={Users} label="Pacientes cadastrados" value={m.pacientes} tone="brand" />
                     <Kpi icon={Stethoscope} label="Médicos ativos (públicos)" value={m.medicosPublicos} note={`${m.comAgenda} com agenda configurada`} tone="teal" />
                     <Kpi icon={Star} label="Nota média" value={m.notaMedia ? m.notaMedia.toFixed(1) : '—'} note={`${m.nAval} avaliação(ões)`} tone="amber" />
-                    <Kpi icon={Repeat} label="Pacientes recorrentes" value={m.recorrentes} note="pagaram + de 1 consulta" />
+                    <Kpi icon={Repeat} label="Pacientes recorrentes" value={m.recorrentes} note={`no ${periodLabel.toLowerCase()}`} />
                 </div>
             </div>
 
             {/* Funil */}
             <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Funil do sistema (agendamento → receita)</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Funil do sistema · {periodLabel}</p>
                 <Card className="bg-white">
                     <CardContent className="p-5 space-y-3">
-                        {funil.map((s) => (
-                            <div key={s.label} className="flex items-center gap-4">
-                                <div className="flex items-center text-white font-semibold text-sm rounded-lg px-4"
-                                    style={{ background: s.color, height: 44, width: `${Math.max(pct(s.n, s.base), 12)}%`, minWidth: 130 }}>
-                                    {s.n}
+                        {m.total === 0 ? (
+                            <p className="text-sm text-gray-400 py-4 text-center">Nenhum agendamento criado neste período.</p>
+                        ) : (
+                            <>
+                                {funil.map((s) => (
+                                    <div key={s.label} className="flex items-center gap-4">
+                                        <div className="flex items-center text-white font-semibold text-sm rounded-lg px-4"
+                                            style={{ background: s.color, height: 44, width: `${Math.max(pct(s.n, s.base), 12)}%`, minWidth: 130 }}>
+                                            {s.n}
+                                        </div>
+                                        <div className="text-sm text-gray-600">
+                                            <b className="text-gray-900">{s.label}</b> · {pct(s.n, s.base)}% do total
+                                        </div>
+                                    </div>
+                                ))}
+                                <div className="flex flex-wrap gap-x-8 gap-y-1 pt-3 border-t border-gray-100 text-sm text-gray-600">
+                                    <span>Conversão p/ pagamento: <b className="text-gray-900">{pct(m.pagos, m.total)}%</b></span>
+                                    <span>Taxa de conclusão: <b className="text-gray-900">{pct(m.atendidos, m.pagos)}%</b></span>
+                                    <span>Cancelamentos: <b className="text-gray-900">{pct(m.cancelados, m.total)}%</b></span>
                                 </div>
-                                <div className="text-sm text-gray-600">
-                                    <b className="text-gray-900">{s.label}</b> · {pct(s.n, s.base)}% do total
-                                </div>
-                            </div>
-                        ))}
-                        <div className="flex flex-wrap gap-x-8 gap-y-1 pt-3 border-t border-gray-100 text-sm text-gray-600">
-                            <span>Conversão p/ pagamento: <b className="text-gray-900">{pct(m.pagos, m.total)}%</b></span>
-                            <span>Taxa de conclusão: <b className="text-gray-900">{pct(m.atendidos, m.pagos)}%</b></span>
-                            <span>Cancelamentos: <b className="text-gray-900">{pct(m.cancelados, m.total)}%</b></span>
-                        </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
             </div>
 
             {/* Financeiro */}
             <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Financeiro (pagamentos confirmados)</p>
+                <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Financeiro · {periodLabel}</p>
+                    <Button onClick={handleExportFinance} variant="outline" size="sm" className="h-8 gap-1.5 text-xs" disabled={!m.appts.length}>
+                        <FileDown className="w-3.5 h-3.5" /> Relatório (CSV)
+                    </Button>
+                </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Kpi icon={DollarSign} label="Receita paga (total)" value={fmtBRL(m.receitaPaga)} note="pago pelos pacientes" tone="green" />
                     <Kpi icon={TrendingUp} label="Receita da plataforma" value={fmtBRL(m.receitaPlataforma)} note="taxa retida (congelada)" tone="brand" />
@@ -244,12 +326,12 @@ const AdminStrategyPage = () => {
 
             {/* Qualidade */}
             <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Qualidade &amp; operação</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Qualidade &amp; operação · {periodLabel}</p>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Kpi icon={CalendarCheck} label="Consultas atendidas" value={m.atendidos} tone="green" />
                     <Kpi icon={XCircle} label="Cancelamentos" value={m.cancelados} note={`${pct(m.cancelados, m.total)}% do total`} tone="red" />
-                    <Kpi icon={RotateCcw} label="Reembolsos" value={m.reembolsados} tone="amber" />
-                    <Kpi icon={Star} label="Avaliações recebidas" value={m.nAval} />
+                    <Kpi icon={RotateCcw} label="Reembolsos" value={m.reembolsados} note={fmtBRL(m.reembolsoValor)} tone="amber" />
+                    <Kpi icon={Landmark} label="Resultado da plataforma" value={fmtBRL(m.receitaPlataforma - m.reembolsoValor)} note="receita − reembolsos" tone="brand" />
                 </div>
             </div>
 
@@ -267,6 +349,10 @@ const AdminStrategyPage = () => {
                     </div>
                 </CardContent>
             </Card>
+
+            <p className="text-[11px] text-gray-400">
+                O recorte de período usa a <b>data de criação da guia</b> como competência. Base, médicos e nota média são acumulados (não dependem do período).
+            </p>
         </div>
     );
 };

@@ -9,8 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, Search, Filter, MoreHorizontal, Eye, Pencil, Trash2, Ban, Calendar as CalendarIcon, X, CheckCircle2, XCircle, Clock, FileText, DollarSign, User, Stethoscope, AlertTriangle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Loader2, Search, Filter, MoreHorizontal, Eye, Pencil, Trash2, Ban, Calendar as CalendarIcon, X, CheckCircle2, XCircle, Clock, FileText, DollarSign, User, Stethoscope, AlertTriangle, ArrowLeft, ArrowRight, FileDown } from 'lucide-react';
 import { format, parseISO, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
+import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 
@@ -371,6 +372,24 @@ const AppointmentsControlPage = () => {
     );
   }
 
+  const handleExport = () => {
+    downloadCsv(`agendamentos_${activeTab}_${csvDateSuffix()}`, [
+      { header: 'Protocolo', value: (a) => a.protocolo || '' },
+      { header: 'Criado em', value: (a) => safeFmt(a.created_at, 'dd/MM/yyyy HH:mm') },
+      { header: 'Data consulta', value: (a) => safeFmt(a.appointment_date, 'dd/MM/yyyy') },
+      { header: 'Hora', value: (a) => (a.appointment_time || '').slice(0, 5) },
+      { header: 'Paciente', value: (a) => a.paciente_nome || a.patient?.full_name || '' },
+      { header: 'CPF', value: (a) => a.patient?.cpf || '' },
+      { header: 'Médico', value: (a) => a.medicos?.name || '' },
+      { header: 'Status', value: (a) => a.status || 'pendente' },
+      { header: 'Pagamento', value: (a) => a.pagamento_status || 'pendente' },
+      { header: 'Valor pago (R$)', value: (a) => brNumber(calculateFinancials(a).totalValue) },
+      { header: 'Taxa (%)', value: (a) => calculateFinancials(a).feePercent },
+      { header: 'Receita plataforma (R$)', value: (a) => brNumber(calculateFinancials(a).siteFee) },
+      { header: 'Repasse médico (R$)', value: (a) => brNumber(calculateFinancials(a).doctorPayout) },
+    ], tabAppointments);
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -379,14 +398,17 @@ const AppointmentsControlPage = () => {
           <p className="text-muted-foreground">Gerencie todas as consultas da plataforma.</p>
         </div>
         <div className="flex gap-2">
-            <Button 
-                variant="destructive" 
-                size="sm" 
+            <Button
+                variant="destructive"
+                size="sm"
                 className="gap-2"
                 onClick={() => setIsWipeOpen(true)}
             >
                 <Trash2 className="w-4 h-4"/> Resetar Sistema
             </Button>
+           <Button onClick={handleExport} variant="outline" size="sm" className="gap-2" disabled={tabAppointments.length === 0}>
+             <FileDown className="w-4 h-4"/> Exportar CSV
+           </Button>
            <Button onClick={fetchData} variant="outline" size="sm" className="gap-2">
              <Filter className="w-4 h-4"/> Atualizar Lista
            </Button>

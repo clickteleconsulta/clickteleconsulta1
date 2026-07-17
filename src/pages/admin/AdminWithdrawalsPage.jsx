@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw, FileDown } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { format, parseISO } from 'date-fns';
+import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const AdminWithdrawalsPage = () => {
@@ -114,6 +115,18 @@ const AdminWithdrawalsPage = () => {
         }
     };
 
+    const safeDate = (v) => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : format(d, 'dd/MM/yyyy HH:mm'); };
+    const handleExport = () => {
+        downloadCsv(`saques_${csvDateSuffix()}`, [
+            { header: 'Solicitado em', value: (w) => safeDate(w.created_at) },
+            { header: 'Médico', value: (w) => w.medicos?.public_name || w.medicos?.name || '' },
+            { header: 'Valor (R$)', value: (w) => brNumber(w.valor) },
+            { header: 'Método', value: (w) => w.metodo_pagamento === 'transferencia' ? 'Transferência' : 'PIX' },
+            { header: 'Status', value: (w) => w.status },
+            { header: 'Processado em', value: (w) => safeDate(w.data_processamento) },
+        ], withdrawals);
+    };
+
     const getStatusBadge = (status) => {
         const styles = {
             'Aguardando Recebimento': 'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -132,9 +145,14 @@ const AdminWithdrawalsPage = () => {
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900">Solicitações de Saque</h2>
                     <p className="text-muted-foreground">Gerencie os pagamentos aos médicos parceiros.</p>
                 </div>
-                <Button variant="outline" onClick={fetchWithdrawals}>
-                    <RefreshCcw className="w-4 h-4 mr-2" /> Atualizar
-                </Button>
+                <div className="flex gap-2">
+                    <Button variant="outline" onClick={handleExport} disabled={withdrawals.length === 0}>
+                        <FileDown className="w-4 h-4 mr-2" /> Exportar CSV
+                    </Button>
+                    <Button variant="outline" onClick={fetchWithdrawals}>
+                        <RefreshCcw className="w-4 h-4 mr-2" /> Atualizar
+                    </Button>
+                </div>
             </div>
 
             <Card>
