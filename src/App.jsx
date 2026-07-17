@@ -1,74 +1,74 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import HomePage from '@/pages/HomePage';
-import AppointmentsPage from '@/pages/AppointmentsPage';
-import CheckoutPage from '@/pages/CheckoutPage';
-import ConfirmationPage from '@/pages/ConfirmationPage';
-import SupportPage from '@/pages/SupportPage';
+const HomePage = lazy(() => import('@/pages/HomePage'));
+const AppointmentsPage = lazy(() => import('@/pages/AppointmentsPage'));
+const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
+const ConfirmationPage = lazy(() => import('@/pages/ConfirmationPage'));
+const SupportPage = lazy(() => import('@/pages/SupportPage'));
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DoctorRouteGuard from '@/components/DoctorRouteGuard';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Loader2 } from 'lucide-react';
-import AuthPage from '@/pages/AuthPage';
-import DoctorArea from '@/pages/DoctorArea';
-import PatientArea from '@/pages/PatientArea';
-import PasswordRecoveryPage from '@/pages/PasswordRecoveryPage';
-import ResetPasswordPage from '@/pages/ResetPasswordPage';
+const AuthPage = lazy(() => import('@/pages/AuthPage'));
+const DoctorArea = lazy(() => import('@/pages/DoctorArea'));
+const PatientArea = lazy(() => import('@/pages/PatientArea'));
+const PasswordRecoveryPage = lazy(() => import('@/pages/PasswordRecoveryPage'));
+const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 import { TooltipProvider } from '@/components/ui/tooltip';
-import GuideViewerPage from '@/pages/GuideViewerPage';
-import AppointmentSuccessPage from '@/pages/AppointmentSuccessPage';
-import ConfirmationRequestPage from '@/pages/ConfirmationRequestPage';
-import ChangePasswordPage from '@/pages/ChangePasswordPage';
-import SignUpSuccessPage from '@/pages/SignUpSuccessPage';
-import DoctorInviteSignupPage from '@/pages/DoctorInviteSignupPage';
-import AuthConfirmPage from '@/pages/AuthConfirmPage';
-import DoctorPublicProfilePage from '@/pages/DoctorPublicProfilePage';
-import AppointmentReviewPage from '@/pages/AppointmentReviewPage';
-import AppointmentConfirmationPage from '@/pages/AppointmentConfirmationPage';
-import PatientRecordPage from '@/pages/prontuario/PatientRecordPage';
-import PatientPrescriptionsPage from '@/pages/prontuario/PatientPrescriptionsPage';
-import VerificationPage from '@/pages/VerificationPage';
-import VideoCallPage from '@/pages/VideoCallPage';
-import MemedPrescricaoPage from '@/pages/MemedPrescricaoPage';
-import LegalPage from '@/pages/LegalPage';
-import MessagesPage from '@/pages/MessagesPage';
-import DoctorReviewsPage from '@/pages/doctor/DoctorReviewsPage';
-import PatientReviewsPage from '@/pages/patient/PatientReviewsPage';
-import DoctorsListPage from '@/pages/DoctorsListPage';
+const GuideViewerPage = lazy(() => import('@/pages/GuideViewerPage'));
+const AppointmentSuccessPage = lazy(() => import('@/pages/AppointmentSuccessPage'));
+const ConfirmationRequestPage = lazy(() => import('@/pages/ConfirmationRequestPage'));
+const ChangePasswordPage = lazy(() => import('@/pages/ChangePasswordPage'));
+const SignUpSuccessPage = lazy(() => import('@/pages/SignUpSuccessPage'));
+const DoctorInviteSignupPage = lazy(() => import('@/pages/DoctorInviteSignupPage'));
+const AuthConfirmPage = lazy(() => import('@/pages/AuthConfirmPage'));
+const DoctorPublicProfilePage = lazy(() => import('@/pages/DoctorPublicProfilePage'));
+const AppointmentReviewPage = lazy(() => import('@/pages/AppointmentReviewPage'));
+const AppointmentConfirmationPage = lazy(() => import('@/pages/AppointmentConfirmationPage'));
+const PatientRecordPage = lazy(() => import('@/pages/prontuario/PatientRecordPage'));
+const PatientPrescriptionsPage = lazy(() => import('@/pages/prontuario/PatientPrescriptionsPage'));
+const VerificationPage = lazy(() => import('@/pages/VerificationPage'));
+const VideoCallPage = lazy(() => import('@/pages/VideoCallPage'));
+const MemedPrescricaoPage = lazy(() => import('@/pages/MemedPrescricaoPage'));
+const LegalPage = lazy(() => import('@/pages/LegalPage'));
+const MessagesPage = lazy(() => import('@/pages/MessagesPage'));
+const DoctorReviewsPage = lazy(() => import('@/pages/doctor/DoctorReviewsPage'));
+const PatientReviewsPage = lazy(() => import('@/pages/patient/PatientReviewsPage'));
+const DoctorsListPage = lazy(() => import('@/pages/DoctorsListPage'));
 import { FEATURES } from '@/config/features';
 
 // Admin Imports
-import AdminLoginPage from '@/pages/admin/AdminLoginPage';
-import AdminLayout from '@/layouts/AdminLayout';
-import AppointmentsControlPage from '@/pages/admin/AppointmentsControlPage';
-import ProfessionalsPage from '@/pages/admin/ProfessionalsPage';
-import AdminLegalPage from '@/pages/admin/AdminLegalPage';
-import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
-import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';
-import AdminWithdrawalsPage from '@/pages/admin/AdminWithdrawalsPage';
-import AdminReviewsPage from '@/pages/admin/AdminReviewsPage';
-import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
-import AdminProfessionalDocsPage from '@/pages/admin/AdminProfessionalDocsPage';
-import AdminStrategyPage from '@/pages/admin/AdminStrategyPage';
-import AdminRefundsPage from '@/pages/admin/AdminRefundsPage';
-import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
-import AdminAuditPage from '@/pages/admin/AdminAuditPage';
-import AdminSettingsPage from '@/pages/admin/AdminSettingsPage';
-import AdminPatientsPage from '@/pages/admin/AdminPatientsPage';
+const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'));
+const AdminLayout = lazy(() => import('@/layouts/AdminLayout'));
+const AppointmentsControlPage = lazy(() => import('@/pages/admin/AppointmentsControlPage'));
+const ProfessionalsPage = lazy(() => import('@/pages/admin/ProfessionalsPage'));
+const AdminLegalPage = lazy(() => import('@/pages/admin/AdminLegalPage'));
+const AdminAiTrainingPage = lazy(() => import('@/pages/admin/AdminAiTrainingPage'));
+const AdminPaymentMethodsPage = lazy(() => import('@/pages/admin/AdminPaymentMethodsPage'));
+const AdminWithdrawalsPage = lazy(() => import('@/pages/admin/AdminWithdrawalsPage'));
+const AdminReviewsPage = lazy(() => import('@/pages/admin/AdminReviewsPage'));
+const AdminSecurityPage = lazy(() => import('@/pages/admin/AdminSecurityPage'));
+const AdminProfessionalDocsPage = lazy(() => import('@/pages/admin/AdminProfessionalDocsPage'));
+const AdminStrategyPage = lazy(() => import('@/pages/admin/AdminStrategyPage'));
+const AdminRefundsPage = lazy(() => import('@/pages/admin/AdminRefundsPage'));
+const AdminBroadcastPage = lazy(() => import('@/pages/admin/AdminBroadcastPage'));
+const AdminAuditPage = lazy(() => import('@/pages/admin/AdminAuditPage'));
+const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage'));
+const AdminPatientsPage = lazy(() => import('@/pages/admin/AdminPatientsPage'));
 
 // Memed Integration
-import MemedPrescriptionPage from '@/integrations/memed/MemedPrescriptionPage';
+const MemedPrescriptionPage = lazy(() => import('@/integrations/memed/MemedPrescriptionPage'));
 
 // New Sprint Pages (21/03)
-import DoctorSchedulePage from '@/pages/doctor/DoctorSchedulePage';
-import ConsultaEncerradaPage from '@/pages/ConsultaEncerradaPage';
+const DoctorSchedulePage = lazy(() => import('@/pages/doctor/DoctorSchedulePage'));
+const ConsultaEncerradaPage = lazy(() => import('@/pages/ConsultaEncerradaPage'));
 
 // Components
 import AiChatWidget from '@/components/AiChatWidget';
-import GuestAppointmentPage from '@/pages/GuestAppointmentPage';
+const GuestAppointmentPage = lazy(() => import('@/pages/GuestAppointmentPage'));
 import Preloader from '@/components/Preloader';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ConsentBanner from '@/components/ConsentBanner';
@@ -139,6 +139,11 @@ function App() {
         <Preloader />
         
         <ErrorBoundary>
+        <Suspense fallback={
+          <div className="w-full h-[60vh] flex items-center justify-center">
+            <Loader2 className="w-10 h-10 text-primary animate-spin" />
+          </div>
+        }>
         <Routes>
           {/* Dashboard Route Aliases */}
           <Route path="/area-medico/avaliacoes" element={<Navigate to="/medico/dashboard/avaliacoes" replace />} />
@@ -335,6 +340,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </Routes>
+        </Suspense>
         </ErrorBoundary>
         <ConsentBanner />
       </TooltipProvider>
