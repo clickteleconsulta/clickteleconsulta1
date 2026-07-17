@@ -30,6 +30,24 @@ const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) 
   />
 ));
 
+// Força da senha (cadastro) — 3 níveis baseados em tamanho e variedade de caracteres.
+const getPasswordStrength = (pw) => {
+  if (!pw) return null;
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (pw.length >= 12) score++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+  if (/\d/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const level = pw.length < 8 ? 1 : score <= 2 ? 1 : score <= 3 ? 2 : 3;
+  return [
+    null,
+    { label: 'Fraca', bar: 'bg-red-500', text: 'text-red-600', width: '33%' },
+    { label: 'Média', bar: 'bg-amber-500', text: 'text-amber-600', width: '66%' },
+    { label: 'Forte', bar: 'bg-emerald-500', text: 'text-emerald-600', width: '100%' },
+  ][level];
+};
+
 const AuthPage = ({
   targetRole = 'paciente'
 }) => {
@@ -228,15 +246,17 @@ const AuthPage = ({
                     {!isLogin && !isDoctor && (
                     <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="relative">
-                           <Input 
-                                id="fullName" 
-                                value={fullName} 
-                                onChange={e => setFullName(e.target.value)} 
+                           <Input
+                                id="fullName"
+                                value={fullName}
+                                onChange={e => setFullName(e.target.value)}
                                 placeholder="Nome completo"
+                                aria-label="Nome completo"
+                                autoComplete="name"
                                 className="h-11 pl-4 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-100"
                            />
                         </div>
-                        
+
                         <div className="grid grid-cols-2 gap-3">
                             <MaskedInput
                                 id="cpf"
@@ -245,6 +265,8 @@ const AuthPage = ({
                                 value={cpf}
                                 onChange={e => setCpf(e.target.value)}
                                 placeholder="CPF"
+                                aria-label="CPF"
+                                inputMode="numeric"
                                 required
                             />
                             <Input
@@ -253,6 +275,8 @@ const AuthPage = ({
                                 value={birthDate}
                                 onChange={e => setBirthDate(e.target.value)}
                                 required
+                                aria-label="Data de nascimento"
+                                autoComplete="bday"
                                 max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
                                 className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-100 text-gray-500"
                             />
@@ -266,6 +290,9 @@ const AuthPage = ({
                                 value={whatsapp}
                                 onChange={e => setWhatsapp(e.target.value)}
                                 placeholder="WhatsApp"
+                                aria-label="WhatsApp"
+                                inputMode="numeric"
+                                autoComplete="tel"
                                 required
                             />
                             <select
@@ -273,6 +300,7 @@ const AuthPage = ({
                                 value={sexo}
                                 onChange={e => setSexo(e.target.value)}
                                 required
+                                aria-label="Sexo"
                                 className={`h-11 px-3 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none ${sexo ? 'text-gray-800' : 'text-gray-400'}`}
                             >
                                 <option value="" disabled>Sexo</option>
@@ -286,26 +314,31 @@ const AuthPage = ({
                     <div className="space-y-4">
                         <div className="relative group">
                           <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
-                          <Input 
-                            id="email" 
-                            type="email" 
-                            value={email} 
-                            onChange={e => setEmail(e.target.value)} 
+                          <Input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                             placeholder="E-mail"
                             required
+                            aria-label="E-mail"
+                            autoComplete="email"
+                            inputMode="email"
                             className="h-11 pl-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
                           />
                         </div>
 
                         <div className="relative group">
                           <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
-                          <Input 
-                            id="password" 
+                          <Input
+                            id="password"
                             type={showPassword ? "text" : "password"}
                             value={password}
-                            onChange={e => setPassword(e.target.value)} 
+                            onChange={e => setPassword(e.target.value)}
                             placeholder="Senha"
                             required
+                            aria-label="Senha"
+                            autoComplete={isLogin ? 'current-password' : 'new-password'}
                             className="h-11 pl-11 pr-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
                           />
                           <button
@@ -320,6 +353,21 @@ const AuthPage = ({
                             )}
                           </button>
                         </div>
+
+                        {/* Medidor de força da senha (apenas no cadastro) */}
+                        {!isLogin && !isDoctor && password && (() => {
+                          const s = getPasswordStrength(password);
+                          return (
+                            <div className="space-y-1 animate-in fade-in duration-200" aria-live="polite">
+                              <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+                                <div className={`h-full rounded-full transition-all duration-300 ${s.bar}`} style={{ width: s.width }} />
+                              </div>
+                              <p className={`text-[11px] font-medium ${s.text}`}>
+                                Senha {s.label}{password.length < 8 && ' · mínimo de 8 caracteres'}
+                              </p>
+                            </div>
+                          );
+                        })()}
                     </div>
 
                     {/* HOTFIX-05: LGPD consent checkbox — only on signup */}
