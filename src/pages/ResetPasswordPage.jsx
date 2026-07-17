@@ -56,7 +56,7 @@ const ResetPasswordPage = () => {
                 description: 'Você já pode fazer login com sua nova senha.',
             });
             await supabase.auth.signOut();
-            navigate('/acesso-paciente?reset=ok');
+            navigate('/acesso-cliente?reset=ok');
         }
     };
 
@@ -118,7 +118,7 @@ const ResetPasswordPage = () => {
                         </form>
                     </CardContent>
                      <CardFooter>
-                         <Link to="/acesso-paciente" className="text-sm text-primary hover:underline w-full text-center">
+                         <Link to="/acesso-cliente" className="text-sm text-primary hover:underline w-full text-center">
                             Lembrou a senha? Voltar para o login
                         </Link>
                      </CardFooter>

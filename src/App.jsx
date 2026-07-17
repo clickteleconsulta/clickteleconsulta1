@@ -266,8 +266,11 @@ function App() {
             <Route path="/suporte" element={<SupportPage />} />
             
             {/* Auth Routes */}
-            <Route path="/acesso-paciente" element={<AuthRedirect role="paciente" />} />
-            <Route path="/acesso-medico" element={<AuthRedirect role="medico" />} />
+            <Route path="/acesso-cliente" element={<AuthRedirect role="paciente" />} />
+            <Route path="/acesso-profissional" element={<AuthRedirect role="medico" />} />
+            {/* Compatibilidade: rotas antigas redirecionam para as novas */}
+            <Route path="/acesso-paciente" element={<Navigate to="/acesso-cliente" replace />} />
+            <Route path="/acesso-medico" element={<Navigate to="/acesso-profissional" replace />} />
             <Route path="/auth/confirmar" element={<AuthConfirmPage />} />
             <Route path="/cadastro-medico" element={<DoctorInviteSignupPage />} />
             <Route path="/cadastro-medico/:token" element={<DoctorInviteSignupPage />} />

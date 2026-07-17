@@ -461,7 +461,7 @@ const DoctorSignUpPage = () => {
 
           <p className="text-center text-sm text-gray-500">
             Já tem conta?{' '}
-            <Link to="/acesso-medico" className="font-medium text-primary hover:underline">Faça login aqui.</Link>
+            <Link to="/acesso-profissional" className="font-medium text-primary hover:underline">Faça login aqui.</Link>
           </p>
         </div>
       </div>

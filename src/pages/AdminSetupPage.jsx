@@ -79,7 +79,7 @@ const AdminSetupPage = ({ functionName }) => {
                         <CheckCircle className="w-12 h-12 text-green-500" />
                         <p className="mt-4 font-semibold text-foreground">{message}</p>
                         <Button asChild className="mt-6">
-                            <Link to="/acesso-medico">Ir para o Login do Médico</Link>
+                            <Link to="/acesso-profissional">Ir para o Login do Médico</Link>
                         </Button>
                     </>
                 );
@@ -90,7 +90,7 @@ const AdminSetupPage = ({ functionName }) => {
                         <p className="mt-4 font-semibold text-foreground">{message}</p>
                         <p className="text-sm text-muted-foreground">Nenhuma ação foi necessária.</p>
                         <Button asChild className="mt-6">
-                            <Link to="/acesso-medico">Ir para o Login do Médico</Link>
+                            <Link to="/acesso-profissional">Ir para o Login do Médico</Link>
                         </Button>
                     </>
                 );

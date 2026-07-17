@@ -84,7 +84,7 @@ const PasswordRecoveryPage = () => {
                         )}
                     </CardContent>
                      <CardFooter>
-                         <Link to="/acesso-paciente" className="text-sm text-primary hover:underline w-full text-center">
+                         <Link to="/acesso-cliente" className="text-sm text-primary hover:underline w-full text-center">
                             Voltar para o login
                         </Link>
                      </CardFooter>

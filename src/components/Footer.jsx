@@ -20,7 +20,7 @@ const Footer = () => {
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Teleconsulta com especialistas por videochamada — rápido, seguro e acessível.
             </p>
-            <Link to="/acesso-medico" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors group">
+            <Link to="/acesso-profissional" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors group">
               <Stethoscope className="w-4 h-4 text-blue-500" /> Acesso Sistema Profissionais
               <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </Link>
@@ -40,7 +40,7 @@ const Footer = () => {
             <p className="font-semibold text-slate-900 text-sm">Acesso</p>
             <nav className="flex flex-col gap-2.5">
               <Link to="/agendamentos" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Agendar Consulta</Link>
-              <Link to="/acesso-paciente" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Entrar</Link>
+              <Link to="/acesso-cliente" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Entrar</Link>
             </nav>
           </div>
 

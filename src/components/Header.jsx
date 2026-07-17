@@ -53,7 +53,7 @@ const Header = () => {
               </>
             ) : (
                <div className="flex items-center gap-2">
-                  <Button onClick={() => navigate('/acesso-paciente')} className="font-light bg-primary hover:bg-primary/90 rounded-full px-6">
+                  <Button onClick={() => navigate('/acesso-cliente')} className="font-light bg-primary hover:bg-primary/90 rounded-full px-6">
                       <User className="w-4 h-4 mr-2" />
                       Entrar
                   </Button>

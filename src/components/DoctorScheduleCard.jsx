@@ -207,7 +207,7 @@ export function DoctorScheduleCard({
     }
 
     if (!session) {
-      navigate('/acesso-paciente');
+      navigate('/acesso-cliente');
       return;
     }
     

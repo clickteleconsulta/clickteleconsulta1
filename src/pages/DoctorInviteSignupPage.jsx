@@ -123,7 +123,7 @@ const DoctorInviteSignupPage = () => {
                         <p className="text-sm text-slate-500 max-w-sm">
                             Sua conta de médico foi criada. Faça login para acessar seu painel (confirme o e-mail antes, se solicitado).
                         </p>
-                        <Button onClick={() => navigate('/acesso-medico')} className="mt-2">Ir para o login</Button>
+                        <Button onClick={() => navigate('/acesso-profissional')} className="mt-2">Ir para o login</Button>
                     </CardContent>
                 ) : (
                     <>

@@ -69,7 +69,7 @@ const AuthPage = ({
   
   // Helper to handle post-login redirects.
   // NÃO navegar imperativamente aqui: o componente AuthRedirect (que renderiza esta página em
-  // /acesso-paciente e /acesso-medico) redireciona por papel assim que sessão + perfil carregam
+  // /acesso-cliente e /acesso-profissional) redireciona por papel assim que sessão + perfil carregam
   // — paciente → /paciente/dashboard (→ consultas), médico → /medico/dashboard, admin → /admin/dashboard.
   // O antigo navigate('/') / '/patient/consultations' quebrava esse fluxo, jogando o paciente na home.
   const handlePostAuthRedirect = () => {

@@ -447,7 +447,7 @@ const DoctorProfilePage = () => {
         title: 'Login necessário',
         description: 'Faça login para agendar sua consulta.',
       });
-      navigate('/acesso-paciente', { state: { from: `/medico/${id}` } });
+      navigate('/acesso-cliente', { state: { from: `/medico/${id}` } });
       return;
     }
 
