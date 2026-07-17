@@ -4,8 +4,9 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff, Stethoscope, ShieldCheck } from 'lucide-react';
 import { Helmet } from 'react-helmet';
+import Logo from '@/components/Logo';
 import { cn } from "@/lib/utils";
 import { IMaskInput } from 'react-imask';
 import { trackSignup } from '@/lib/analytics';
@@ -204,13 +205,24 @@ const AuthPage = ({
       
       <div className="min-h-screen w-full flex flex-col items-center justify-center py-8 px-4 bg-gradient-to-b from-blue-50 to-white">
         
-        <div className="text-center mb-8 space-y-2">
-            <h1 className="text-3xl font-bold text-blue-950 tracking-tight">
-              {isDoctor ? 'Acesso Profissional' : 'Acesse sua conta'}
-            </h1>
-            <p className="text-gray-500 font-medium text-sm">
-               {isDoctor ? 'Portal exclusivo para médicos parceiros' : 'Entre para agendar e acompanhar suas consultas'}
-            </p>
+        <div className="flex flex-col items-center text-center mb-8 space-y-3">
+            <Link to="/" className="inline-flex items-center gap-2">
+                <Logo className="w-11 h-11" />
+                <span className="text-xl font-bold text-slate-900 tracking-tight">Click Teleconsulta</span>
+            </Link>
+            {isDoctor && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1">
+                    <Stethoscope className="w-3.5 h-3.5" /> Portal do Parceiro
+                </span>
+            )}
+            <div className="space-y-1">
+                <h1 className="text-2xl font-bold text-blue-950 tracking-tight">
+                  {isDoctor ? 'Acesso Profissional' : 'Acesse sua conta'}
+                </h1>
+                <p className="text-gray-500 font-medium text-sm">
+                   {isDoctor ? 'Área exclusiva para médicos parceiros — gerencie sua agenda e repasses' : 'Entre para agendar e acompanhar suas consultas'}
+                </p>
+            </div>
         </div>
 
         <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -367,10 +379,16 @@ const AuthPage = ({
                     )}
 
                     <div className="pt-4 flex justify-center">
-                        <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="text-gray-400 hover:text-gray-600 h-8 text-xs gap-1 px-2 font-normal"> 
+                        <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="text-gray-400 hover:text-gray-600 h-8 text-xs gap-1 px-2 font-normal">
                             <ArrowLeft className="w-3 h-3" /> Voltar para o início
                         </Button>
                     </div>
+                </div>
+
+                {/* Selo de confiança */}
+                <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-400 pt-4 border-t border-gray-100">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    Conexão segura · Dados protegidos conforme a LGPD
                 </div>
             </div>
         </div>
