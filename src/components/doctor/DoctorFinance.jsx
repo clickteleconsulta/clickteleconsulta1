@@ -8,6 +8,7 @@ import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Downloa
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { format, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -17,6 +18,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import WithdrawalDataForm from './WithdrawalDataForm';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+
+const TZ = 'America/Sao_Paulo';
+// Dia de calendário (yyyy-MM-dd) no fuso de São Paulo — para comparar por DIA,
+// não por hora exata (evita o saque só liberar no mesmo horário 7 dias depois).
+const spDayKey = (d) => format(utcToZonedTime(d, TZ), 'yyyy-MM-dd');
+const spDate = (d) => format(utcToZonedTime(d, TZ), 'dd/MM/yyyy');
 
 const PERIODS = [
     { v: 'mes', label: 'Este mês' },
@@ -219,12 +226,12 @@ const DoctorFinance = () => {
             return;
         }
 
-        // Intervalo de 7 dias entre solicitações
+        // Intervalo de 7 dias entre solicitações — comparado por DIA de calendário (fuso SP).
         const last = withdrawals[0];
         if (last?.created_at) {
             const nextDate = new Date(new Date(last.created_at).getTime() + 7 * 24 * 3600 * 1000);
-            if (nextDate > new Date()) {
-                toast({ variant: "destructive", title: "Aguarde o intervalo", description: `Novo saque disponível em ${format(nextDate, 'dd/MM/yyyy')}.` });
+            if (spDayKey(new Date()) < spDayKey(nextDate)) {
+                toast({ variant: "destructive", title: "Aguarde o intervalo", description: `Novo saque disponível em ${spDate(nextDate)}.` });
                 return;
             }
         }
@@ -360,7 +367,8 @@ const DoctorFinance = () => {
     let nextEligibleDate = null;
     if (lastWithdrawal?.created_at) {
         const nd = new Date(new Date(lastWithdrawal.created_at).getTime() + 7 * 24 * 3600 * 1000);
-        if (!isNaN(nd.getTime()) && nd > new Date()) { canRequestWithdraw = false; nextEligibleDate = nd; }
+        // Libera no INÍCIO do 7º dia (calendário SP), não no mesmo horário exato.
+        if (!isNaN(nd.getTime()) && spDayKey(new Date()) < spDayKey(nd)) { canRequestWithdraw = false; nextEligibleDate = nd; }
     }
 
     return (
@@ -384,7 +392,7 @@ const DoctorFinance = () => {
                     <Button
                         onClick={() => { setSelectedGuideIds([]); setIsWithdrawOpen(true); }}
                         disabled={!canRequestWithdraw || paidTransactions.length === 0}
-                        title={!canRequestWithdraw ? `Novo saque disponível em ${nextEligibleDate ? format(nextEligibleDate, 'dd/MM/yyyy') : ''}` : (paidTransactions.length === 0 ? 'Nenhuma guia disponível para saque' : 'Solicitar saque')}
+                        title={!canRequestWithdraw ? `Novo saque disponível em ${nextEligibleDate ? spDate(nextEligibleDate) : ''}` : (paidTransactions.length === 0 ? 'Nenhuma guia disponível para saque' : 'Solicitar saque')}
                         className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-blue-500/20 h-9 text-xs px-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
                     >
                         <Wallet className="w-3.5 h-3.5" /> Solicitar Saque
@@ -406,7 +414,7 @@ const DoctorFinance = () => {
                         </p>
                         {!canRequestWithdraw && nextEligibleDate && (
                             <p className="text-[11px] text-amber-600 mt-1 font-medium">
-                                Novo saque disponível em {format(nextEligibleDate, 'dd/MM/yyyy')}
+                                Novo saque disponível em {spDate(nextEligibleDate)}
                             </p>
                         )}
                     </CardContent>
