@@ -16,7 +16,8 @@ import {
   AlertTriangle,
   ShieldCheck,
   FolderCheck,
-  User
+  User,
+  LineChart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -44,6 +45,7 @@ const AdminLayout = () => {
     };
 
     const navItems = [
+        { href: '/admin/dashboard/estrategia', label: 'Estudo Estratégico', icon: LineChart },
         { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
         { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users },
         { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },

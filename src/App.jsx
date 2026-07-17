@@ -52,6 +52,7 @@ import AdminWithdrawalsPage from '@/pages/admin/AdminWithdrawalsPage';
 import AdminReviewsPage from '@/pages/admin/AdminReviewsPage';
 import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminProfessionalDocsPage from '@/pages/admin/AdminProfessionalDocsPage';
+import AdminStrategyPage from '@/pages/admin/AdminStrategyPage';
 import AdminPatientsPage from '@/pages/admin/AdminPatientsPage';
 
 // Memed Integration
@@ -165,6 +166,7 @@ function App() {
               <AdminLayout />
             </ProtectedRoute>
           }>
+             <Route path="estrategia" element={<AdminStrategyPage />} />
              <Route path="agendamentos" element={<AppointmentsControlPage />} />
              <Route path="profissionais" element={<ProfessionalsPage />} />
              <Route path="documentacao" element={<AdminProfessionalDocsPage />} />
