@@ -285,7 +285,7 @@ export function DoctorScheduleCard({
                           </h3>
                       </Link>
 
-                      {doctor?.reviewCount > 0 ? (
+                      {doctor?.reviewCount > 0 && (
                           <Link
                               to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
                               className="flex items-center gap-1 mt-1 w-fit group"
@@ -300,10 +300,6 @@ export function DoctorScheduleCard({
                               <span className="text-xs font-semibold text-slate-600 ml-0.5">{doctor.rating.toFixed(1).replace('.', ',')}</span>
                               <span className="text-xs text-slate-400">({doctor.reviewCount})</span>
                           </Link>
-                      ) : (
-                          <span className="inline-flex items-center mt-1 w-fit text-[11px] font-semibold text-slate-500 bg-slate-100 rounded-full px-2 py-0.5">
-                              Novo
-                          </span>
                       )}
                   </div>
               </div>
