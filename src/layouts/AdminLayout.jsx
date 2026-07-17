@@ -53,7 +53,7 @@ const AdminLayout = () => {
 
     const navSections = [
         { title: 'Visão geral', items: [
-            { href: '/admin/dashboard/estrategia', label: 'Estudo Estratégico', icon: LineChart },
+            { href: '/admin/dashboard/estrategia', label: 'Painel de Administrador', icon: LineChart },
         ]},
         { title: 'Operação', items: [
             { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },

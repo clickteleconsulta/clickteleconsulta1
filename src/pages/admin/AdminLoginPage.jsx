@@ -29,10 +29,10 @@ const AdminLoginPage = () => {
           if (data && data.nextLevel === 'aal2' && data.currentLevel === 'aal1') {
             setMfaStep(true);
           } else {
-            navigate('/admin/dashboard/agendamentos');
+            navigate('/admin/dashboard/estrategia');
           }
         })
-        .catch(() => navigate('/admin/dashboard/agendamentos'));
+        .catch(() => navigate('/admin/dashboard/estrategia'));
     }
   }, [user, profile, navigate]);
 
@@ -64,7 +64,7 @@ const AdminLoginPage = () => {
         return;
       }
 
-      navigate('/admin/dashboard/agendamentos');
+      navigate('/admin/dashboard/estrategia');
       setTimeout(() => hideLoader(), 1000);
     } catch (error) {
       toast({
@@ -96,7 +96,7 @@ const AdminLoginPage = () => {
       const { error: vErr } = await supabase.auth.mfa.verify({ factorId: totp.id, challengeId: ch.id, code: mfaCode.trim() });
       if (vErr) throw vErr;
 
-      navigate('/admin/dashboard/agendamentos');
+      navigate('/admin/dashboard/estrategia');
       setTimeout(() => hideLoader(), 1000);
     } catch (error) {
       toast({ variant: 'destructive', title: 'Código inválido', description: error.message });

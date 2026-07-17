@@ -240,7 +240,7 @@ const AdminStrategyPage = () => {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <AdminPageHeader icon={LineChart} title="Estudo Estratégico" subtitle="Métricas do projeto em tempo real — captação, funil e financeiro.">
+            <AdminPageHeader icon={LineChart} title="Painel de Administrador" subtitle="Métricas do projeto em tempo real — captação, funil e financeiro.">
                 {updatedAt && <span className="text-xs text-gray-400 hidden sm:inline">Atualizado {updatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>}
                 <Select value={period} onValueChange={setPeriod}>
                     <SelectTrigger className="w-[170px] h-9 gap-2 bg-white">
