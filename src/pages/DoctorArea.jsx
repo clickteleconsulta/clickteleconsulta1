@@ -92,76 +92,40 @@ const DoctorArea = () => {
         navigate('/');
     };
 
-    const menuItems = [
+    const menuSections = [
         {
-            id: 'consultas',
-            href: '/medico/dashboard/consultas',
-            label: 'Consultas',
-            icon: Calendar,
-            badge: badges.hoje
+            title: 'Atendimento',
+            items: [
+                { id: 'consultas', href: '/medico/dashboard/consultas', label: 'Consultas', icon: Calendar, badge: badges.hoje },
+                { id: 'painel', href: '/medico/dashboard/painel', label: 'Painel', icon: LayoutDashboard },
+                { id: 'agenda', href: '/medico/dashboard/agenda', label: 'Agenda', icon: Clock },
+                { id: 'pacientes', href: '/medico/dashboard/pacientes', label: 'Pacientes', icon: Users },
+                { id: 'mensagens', href: '/medico/dashboard/mensagens', label: 'Mensagens', icon: MessageSquare },
+            ],
         },
         {
-            id: 'painel',
-            href: '/medico/dashboard/painel',
-            label: 'Painel',
-            icon: LayoutDashboard
+            title: 'Financeiro',
+            items: [
+                { id: 'financeiro', href: '/medico/dashboard/financeiro', label: 'Financeiro', icon: Wallet, badge: saqueBadge },
+            ],
         },
         {
-            id: 'agenda',
-            href: '/medico/dashboard/agenda',
-            label: 'Agenda',
-            icon: Clock
+            title: 'Perfil & conta',
+            items: [
+                { id: 'procedimentos', href: '/medico/dashboard/procedimentos', label: 'Procedimentos', icon: Stethoscope },
+                { id: 'avaliacoes', href: '/medico/dashboard/avaliacoes', label: 'Avaliações', icon: Star, badge: badges.denuncias, urgent: true },
+                { id: 'configuracoes', href: '/medico/dashboard/perfil', label: 'Configurações', icon: Settings },
+                { id: 'ajuda', href: '/medico/dashboard/ajuda', label: 'Ajuda', icon: HelpCircle },
+            ],
         },
-        {
-            id: 'procedimentos',
-            href: '/medico/dashboard/procedimentos',
-            label: 'Procedimentos',
-            icon: Stethoscope
-        },
-        {
-            id: 'financeiro',
-            href: '/medico/dashboard/financeiro',
-            label: 'Financeiro',
-            icon: Wallet,
-            badge: saqueBadge
-        },
-        {
-            id: 'avaliacoes',
-            href: '/medico/dashboard/avaliacoes',
-            label: 'Avaliações',
-            icon: Star,
-            badge: badges.denuncias,
-            urgent: true
-        },
-        {
-            id: 'configuracoes',
-            href: '/medico/dashboard/perfil',
-            label: 'Configurações',
-            icon: Settings
-        },
-        {
-            id: 'ajuda',
-            href: '/medico/dashboard/ajuda',
-            label: 'Ajuda',
-            icon: HelpCircle
-        },
-        {
-            id: 'pacientes',
-            href: '/medico/dashboard/pacientes',
-            label: 'Pacientes',
-            icon: Users
-        },
-        {
-            id: 'mensagens',
-            href: '/medico/dashboard/mensagens',
-            label: 'Mensagens',
-            icon: MessageSquare
-        },
-    ].filter((item) => {
-        if (item.id === 'mensagens' && !FEATURES.MESSAGING) return false;
-        if (item.id === 'pacientes' && !FEATURES.PRONTUARIO) return false;
-        return true;
-    });
+    ].map((section) => ({
+        ...section,
+        items: section.items.filter((item) => {
+            if (item.id === 'mensagens' && !FEATURES.MESSAGING) return false;
+            if (item.id === 'pacientes' && !FEATURES.PRONTUARIO) return false;
+            return true;
+        }),
+    })).filter((section) => section.items.length > 0);
 
     if (loading) {
         return (
@@ -239,57 +203,67 @@ const DoctorArea = () => {
                     </Tooltip>
                 </div>
 
-                <nav className={`flex flex-col gap-2 w-full flex-1 overflow-y-auto max-h-[calc(100vh-180px)] px-3 no-scrollbar ${expanded ? 'items-stretch' : 'items-center'}`}>
-                    {menuItems.map((item) => {
-                        const isActive = location.pathname.startsWith(item.href);
+                <nav className={`flex flex-col w-full flex-1 overflow-y-auto max-h-[calc(100vh-180px)] px-3 no-scrollbar ${expanded ? 'items-stretch' : 'items-center'}`}>
+                    {menuSections.map((section, si) => (
+                        <div key={section.title} className={`flex flex-col gap-1 w-full ${expanded ? 'items-stretch' : 'items-center'} ${si > 0 ? (expanded ? 'mt-4' : 'mt-2') : ''}`}>
+                            {/* Cabeçalho de seção (expandido) ou divisória (recolhido) */}
+                            {expanded ? (
+                                <p className="px-3 mb-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">{section.title}</p>
+                            ) : (
+                                si > 0 && <div className="w-7 h-px bg-gray-200 mb-1" />
+                            )}
+                            {section.items.map((item) => {
+                                const isActive = location.pathname.startsWith(item.href);
 
-                        const link = (
-                            <Link
-                                to={item.href}
-                                className={`
-                                    relative flex items-center rounded-xl transition-all duration-300 group
-                                    ${expanded ? 'justify-start gap-3 px-3 h-11 w-full' : 'justify-center w-12 h-12'}
-                                    ${isActive
-                                        ? 'text-blue-600 bg-blue-50 shadow-sm'
-                                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                                    }
-                                `}
-                            >
-                                <item.icon
-                                    size={22}
-                                    strokeWidth={isActive ? 2 : 1.5}
-                                    className={`flex-shrink-0 transition-transform duration-300 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`}
-                                />
-                                {expanded && (
-                                    <span className="text-sm font-medium truncate flex-1">{item.label}</span>
-                                )}
-                                {/* Badge: pill no modo expandido, ponto no recolhido */}
-                                {item.badge > 0 && (expanded ? (
-                                    <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none ${item.urgent ? 'bg-red-500 text-white' : 'bg-blue-100 text-blue-700'}`}>
-                                        {item.badge > 99 ? '99+' : item.badge}
-                                    </span>
-                                ) : (
-                                    <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ring-2 ring-white ${item.urgent ? 'bg-red-500' : 'bg-blue-500'}`} />
-                                ))}
-                                {isActive && (
-                                    <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full" />
-                                )}
-                            </Link>
-                        );
+                                const link = (
+                                    <Link
+                                        to={item.href}
+                                        className={`
+                                            relative flex items-center rounded-xl transition-all duration-300 group
+                                            ${expanded ? 'justify-start gap-3 px-3 h-11 w-full' : 'justify-center w-12 h-12'}
+                                            ${isActive
+                                                ? 'text-blue-600 bg-blue-50 shadow-sm'
+                                                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                                            }
+                                        `}
+                                    >
+                                        <item.icon
+                                            size={22}
+                                            strokeWidth={isActive ? 2 : 1.5}
+                                            className={`flex-shrink-0 transition-transform duration-300 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`}
+                                        />
+                                        {expanded && (
+                                            <span className="text-sm font-medium truncate flex-1">{item.label}</span>
+                                        )}
+                                        {/* Badge: pill no modo expandido, ponto no recolhido */}
+                                        {item.badge > 0 && (expanded ? (
+                                            <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none ${item.urgent ? 'bg-red-500 text-white' : 'bg-blue-100 text-blue-700'}`}>
+                                                {item.badge > 99 ? '99+' : item.badge}
+                                            </span>
+                                        ) : (
+                                            <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ring-2 ring-white ${item.urgent ? 'bg-red-500' : 'bg-blue-500'}`} />
+                                        ))}
+                                        {isActive && (
+                                            <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full" />
+                                        )}
+                                    </Link>
+                                );
 
-                        if (expanded) {
-                            return <React.Fragment key={item.id}>{link}</React.Fragment>;
-                        }
+                                if (expanded) {
+                                    return <React.Fragment key={item.id}>{link}</React.Fragment>;
+                                }
 
-                        return (
-                            <Tooltip key={item.id} delayDuration={0}>
-                                <TooltipTrigger asChild>{link}</TooltipTrigger>
-                                <TooltipContent side="right" className="font-medium bg-gray-900 text-white border-0 ml-3 rounded-lg shadow-xl px-3 py-1.5">
-                                    {item.label}
-                                </TooltipContent>
-                            </Tooltip>
-                        );
-                    })}
+                                return (
+                                    <Tooltip key={item.id} delayDuration={0}>
+                                        <TooltipTrigger asChild>{link}</TooltipTrigger>
+                                        <TooltipContent side="right" className="font-medium bg-gray-900 text-white border-0 ml-3 rounded-lg shadow-xl px-3 py-1.5">
+                                            {item.label}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </nav>
 
                 <div className={`mt-auto pt-4 flex flex-col gap-2 w-full pb-4 px-3 ${expanded ? 'items-stretch' : 'items-center'}`}>
