@@ -18,7 +18,7 @@ const Footer = () => {
               <span className="text-lg font-bold text-slate-900">Click Teleconsulta</span>
             </Link>
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
-              Teleconsulta com especialistas por videochamada — rápido, seguro e acessível.
+              Agende teleconsultas com especialistas — rápido, seguro e acessível.
             </p>
             <Link to="/acesso-profissional" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors group">
               <Stethoscope className="w-4 h-4 text-blue-500" /> Acesso Sistema Profissionais

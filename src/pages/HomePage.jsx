@@ -15,6 +15,7 @@ import {
   Stethoscope,
   UserPlus,
   Calendar,
+  CalendarCheck,
   CheckCircle,
   ArrowRight,
   Sparkles,
@@ -37,7 +38,7 @@ import {
 import { supabase } from '@/lib/customSupabaseClient';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
-const CYCLING_WORDS = ['consultas médicas', 'exames online', 'prescrições digitais'];
+const CYCLING_WORDS = ['consultas médicas', 'especialistas de confiança', 'atendimento sem sair de casa'];
 
 // ─── Especialidades ─────────────────────────────────────────────────────────────
 const SPECIALTIES = [
@@ -64,7 +65,7 @@ const TRUST_METRICS = [
 const STEPS = [
   { icon: UserPlus, title: 'Cadastre-se', desc: 'Crie sua conta em segundos — sem burocracia.' },
   { icon: Calendar, title: 'Escolha o médico', desc: 'Filtre por especialidade, horário e preço.' },
-  { icon: Video, title: 'Consulte online', desc: 'Atendimento por videochamada, no conforto de casa.' },
+  { icon: Stethoscope, title: 'Seja atendido', desc: 'Após o pagamento, o médico entra em contato e realiza o atendimento pelos meios próprios.' },
 ];
 
 // ─── Features (Bento) ──────────────────────────────────────────────────────────
@@ -79,10 +80,10 @@ const FEATURES = [
 
 // ─── FAQ ────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
-  { q: 'O que é teleconsulta?', a: 'Teleconsulta é uma consulta médica realizada por videochamada, regulamentada pelo CFM. Você recebe atendimento profissional sem precisar se deslocar até um consultório.' },
+  { q: 'O que é teleconsulta?', a: 'É o atendimento médico à distância, regulamentado pelo CFM. Você encontra o especialista e agenda pela plataforma; o próprio médico realiza a consulta pelos meios que utiliza, sem você precisar se deslocar.' },
   { q: 'Preciso de convênio?', a: 'Não. O Click Teleconsulta funciona de forma particular. Você paga diretamente pela consulta com preços acessíveis, sem necessidade de convênio ou plano de saúde.' },
-  { q: 'Como funciona a videochamada?', a: 'Após agendar e confirmar o pagamento, você recebe um link para a sala virtual. No horário marcado, basta clicar e iniciar a consulta pelo navegador ou app.' },
-  { q: 'A prescrição é válida?', a: 'Sim. As prescrições digitais emitidas pelo Click Teleconsulta são assinadas eletronicamente e possuem validade legal em todo o território nacional, conforme regulamentação vigente.' },
+  { q: 'Como acontece o atendimento?', a: 'Após agendar e confirmar o pagamento, o médico entra em contato e conduz o atendimento pelos meios próprios dele (por exemplo telefone, vídeo ou a plataforma que utilizar), conforme as normas do CFM.' },
+  { q: 'A prescrição é válida?', a: 'Sim. Quando necessária, a prescrição é emitida pelo próprio médico, com assinatura e validade legal conforme a regulamentação vigente. A plataforma cuida apenas do agendamento e do pagamento.' },
   { q: 'Como pago?', a: 'Aceitamos cartão de crédito, débito e PIX. O pagamento é processado de forma segura antes da consulta.' },
   { q: 'É seguro?', a: 'Totalmente. Utilizamos criptografia de ponta a ponta, estamos em conformidade com a LGPD e todos os médicos são verificados junto ao CRM.' },
 ];
@@ -196,7 +197,7 @@ const HomePage = () => {
                 variants={fadeUp}
                 className="font-body mt-6 text-lg text-slate-300 leading-relaxed max-w-md"
               >
-                Consulte especialistas por videochamada, sem sair de casa.
+                Encontre especialistas, agende sua consulta e seja atendido de onde estiver.
                 Rápido, seguro e acessível.
               </motion.p>
 
@@ -224,17 +225,15 @@ const HomePage = () => {
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                    <Video className="w-5 h-5 text-blue-400" />
+                    <CalendarCheck className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <p className="font-display text-white text-sm font-bold">Consulta HD</p>
-                    <p className="text-slate-400 text-xs font-body">Agora — ao vivo</p>
+                    <p className="font-display text-white text-sm font-bold">Consulta agendada</p>
+                    <p className="text-slate-400 text-xs font-body">Confirmação imediata</p>
                   </div>
                 </div>
-                <div className="flex gap-1">
-                  {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  ))}
+                <div className="flex items-center gap-1.5 text-xs text-slate-300 font-body">
+                  <Shield className="w-3.5 h-3.5 text-green-400" /> Médico verificado (CFM)
                 </div>
               </motion.div>
 
@@ -296,7 +295,7 @@ const HomePage = () => {
               Como funciona? É simples!
             </h2>
             <p className="font-body mt-3 text-slate-500">
-              Em 3 passos você realiza sua consulta online
+              Em 3 passos você agenda sua consulta
             </p>
           </motion.div>
 

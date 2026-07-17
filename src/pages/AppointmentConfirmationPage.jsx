@@ -308,8 +308,8 @@ const AppointmentConfirmationPage = () => {
                   <div>
                     <h3 className="font-bold text-green-900 text-lg">Pagamento confirmado — sua consulta está garantida!</h3>
                     <p className="text-sm text-green-900/90 mt-1.5 leading-relaxed">
-                      O médico entrará em contato <strong>até 15 minutos antes</strong> do horário para enviar o link da sua consulta.
-                      Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>, siga as instruções do procedimento e tenha uma ótima consulta.
+                      O médico entrará em contato <strong>até 15 minutos antes</strong> do horário para conduzir o atendimento pelos meios próprios dele.
+                      Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>, siga as orientações do médico e tenha uma ótima consulta.
                     </p>
                   </div>
                 </CardContent>
@@ -433,7 +433,7 @@ const AppointmentConfirmationPage = () => {
                         <h2 className="text-sm font-bold uppercase tracking-wider text-blue-800 mb-4 border-b border-blue-200 pb-2">Informações da Consulta</h2>
                         <div className="space-y-3">
                             <div><p className="text-xs text-blue-600 font-semibold">DATA E HORA</p><p className="font-bold text-gray-800 text-lg">{shortDate} às {shortTime}</p></div>
-                            <div><p className="text-xs text-blue-600 font-semibold">TIPO DE ATENDIMENTO</p><p className="font-medium text-gray-800">Teleconsulta (Online por Vídeo)</p></div>
+                            <div><p className="text-xs text-blue-600 font-semibold">TIPO DE ATENDIMENTO</p><p className="font-medium text-gray-800">Teleconsulta (atendimento à distância)</p></div>
                             <div><p className="text-xs text-blue-600 font-semibold">STATUS DO AGENDAMENTO</p><p className="font-medium text-gray-800">{status === 'confirmado' ? 'Confirmado' : status}</p></div>
                         </div>
                     </div>
