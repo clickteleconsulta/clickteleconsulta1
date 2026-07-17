@@ -378,20 +378,18 @@ const DoctorProceduresPage = () => {
                                         <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3 flex-grow break-words">{proc.descricao}</p>
                                     )}
                                     
-                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 mt-auto pt-4">
+                                    <div className="mt-auto pt-4 space-y-2">
+                                        {/* Repasse: valor que o médico realmente recebe — destaque */}
                                         <div className="bg-blue-50/60 border border-blue-100 rounded-lg p-3 w-full">
                                             <p className="text-[10px] font-bold text-blue-800 uppercase tracking-wider mb-0.5 truncate">Valor de Repasse</p>
-                                            <p className="text-lg font-extrabold text-blue-700 truncate">
+                                            <p className="text-xl font-extrabold text-blue-700 truncate">
                                                 {formatCurrency(repassePrice)}
                                             </p>
                                         </div>
-                                        <div className="bg-green-50/60 border border-green-100 rounded-lg p-3 w-full">
-                                            <p className="text-[10px] font-bold text-green-800 uppercase tracking-wider mb-0.5 truncate flex items-center justify-between">
-                                                Preço Paciente
-                                            </p>
-                                            <p className="text-lg font-extrabold text-green-700 truncate">
-                                                {formatCurrency(finalPrice)}
-                                            </p>
+                                        {/* Preço ao paciente: apenas informativo (definido pela plataforma) */}
+                                        <div className="flex items-center justify-between px-1 text-[11px] text-gray-400">
+                                            <span className="uppercase tracking-wide">Preço ao paciente</span>
+                                            <span className="font-medium text-gray-500">{formatCurrency(finalPrice)}</span>
                                         </div>
                                     </div>
 

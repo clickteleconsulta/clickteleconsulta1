@@ -342,8 +342,6 @@ const DoctorFinance = () => {
     };
     const paidInPeriod = transactions.filter(t => t.pagamento_status === 'pago' && t.status !== 'cancelado' && inPeriod(t));
     const periodLiquido = round2(paidInPeriod.reduce((a, t) => a + t.netValue, 0));
-    const periodBruto = round2(paidInPeriod.reduce((a, t) => a + t.totalValue, 0));
-    const periodTaxa = round2(paidInPeriod.reduce((a, t) => a + t.platformFee, 0));
     const periodTicket = paidInPeriod.length ? round2(periodLiquido / paidInPeriod.length) : 0;
     const periodLabel = PERIODS.find(p => p.v === period)?.label || '';
 
@@ -354,8 +352,6 @@ const DoctorFinance = () => {
             { header: 'Protocolo', value: (t) => t.protocolo || '' },
             { header: 'Paciente', value: (t) => t.patientName },
             { header: 'Serviço', value: (t) => t.serviceName },
-            { header: 'Valor pago (R$)', value: (t) => brNumber(t.totalValue) },
-            { header: 'Taxa retida (R$)', value: (t) => brNumber(t.platformFee) },
             { header: 'Repasse líquido (R$)', value: (t) => brNumber(t.netValue) },
             { header: 'Situação', value: (t) => (t.saque_id ? 'Sacado' : 'Disponível') },
         ], paidInPeriod);
@@ -438,7 +434,7 @@ const DoctorFinance = () => {
                         </Button>
                     </div>
                 </CardHeader>
-                <CardContent className="p-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <CardContent className="p-4 grid grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
                         <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" /> Repasse líquido</p>
                         <p className="text-xl font-bold text-green-700 mt-1">{periodLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
@@ -450,11 +446,6 @@ const DoctorFinance = () => {
                     <div>
                         <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><Landmark className="w-3.5 h-3.5" /> Ticket médio</p>
                         <p className="text-xl font-bold text-gray-900 mt-1">{periodTicket.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                    </div>
-                    <div>
-                        <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500 flex items-center gap-1"><TrendingDown className="w-3.5 h-3.5" /> Bruto · taxa</p>
-                        <p className="text-sm font-semibold text-gray-700 mt-1">{periodBruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                        <p className="text-[11px] text-gray-400">taxa {periodTaxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     </div>
                 </CardContent>
             </Card>
