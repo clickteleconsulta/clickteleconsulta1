@@ -146,7 +146,10 @@ export function DoctorScheduleCard({
     const doctorChannel = supabase.channel(`public:medicos:id=eq.${doctor.id}`).on('postgres_changes', {
       event: 'UPDATE', schema: 'public', table: 'medicos', filter: `id=eq.${doctor.id}`
     }, payload => {
-      setDoctor(prev => JSON.stringify(prev) !== JSON.stringify(payload.new) ? payload.new : prev);
+      // Preserva a nota calculada no pai (não é coluna de medicos) ao aplicar o update em tempo real.
+      setDoctor(prev => JSON.stringify(prev) !== JSON.stringify(payload.new)
+        ? { ...payload.new, rating: prev?.rating, reviewCount: prev?.reviewCount }
+        : prev);
     }).subscribe();
     
     const appointmentsChannel = supabase.channel(`realtime-agendamentos-doctor-${doctor.id}`).on('postgres_changes', {
@@ -260,10 +263,6 @@ export function DoctorScheduleCard({
   const crmNumber = doctor?.crm ? String(doctor.crm).split('/')[0].trim() : '';
   const crmDisplay = crmNumber ? `CRM ${crmNumber}${doctor?.uf ? `/${doctor.uf}` : ''}` : '';
   const specialtyLabel = doctor?.specialty ? `Médico ${doctor.specialty}` : 'Médico';
-  
-  if (typeof patientPrice === 'number') {
-    console.log(`Rendering DoctorScheduleCard price for ${doctor?.name}:`, formattedPatientPrice);
-  }
 
   return (
     <motion.div 
@@ -286,16 +285,26 @@ export function DoctorScheduleCard({
                           </h3>
                       </Link>
 
-                      <Link
-                          to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
-                          className="flex items-center gap-0.5 mt-1 w-fit group"
-                          title="Ver avaliações"
-                          aria-label="Ver avaliações do médico"
-                      >
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400 transition-transform group-hover:scale-110" />
-                          ))}
-                      </Link>
+                      {doctor?.reviewCount > 0 ? (
+                          <Link
+                              to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
+                              className="flex items-center gap-1 mt-1 w-fit group"
+                              title="Ver avaliações"
+                              aria-label={`Nota ${doctor.rating.toFixed(1)} de 5, ${doctor.reviewCount} avaliações`}
+                          >
+                              <div className="flex items-center gap-0.5">
+                                  {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star key={i} className={cn("w-3.5 h-3.5 transition-transform group-hover:scale-110", i < Math.round(doctor.rating) ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200")} />
+                                  ))}
+                              </div>
+                              <span className="text-xs font-semibold text-slate-600 ml-0.5">{doctor.rating.toFixed(1).replace('.', ',')}</span>
+                              <span className="text-xs text-slate-400">({doctor.reviewCount})</span>
+                          </Link>
+                      ) : (
+                          <span className="inline-flex items-center mt-1 w-fit text-[11px] font-semibold text-slate-500 bg-slate-100 rounded-full px-2 py-0.5">
+                              Novo
+                          </span>
+                      )}
                   </div>
               </div>
               

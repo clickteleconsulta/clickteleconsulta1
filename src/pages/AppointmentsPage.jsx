@@ -59,6 +59,27 @@ const AppointmentsPage = () => {
       throw new Error("Não foi possível buscar os dados dos médicos. Tente novamente.");
     }
 
+    // Notas reais: média + contagem de avaliações publicadas por médico (medico_id = user_id).
+    const userIds = (publicDoctors || []).map(d => d.user_id).filter(Boolean);
+    const ratingsByUser = {};
+    if (userIds.length) {
+      const { data: revs } = await supabase
+        .from('avaliacoes')
+        .select('medico_id, rating')
+        .eq('status', 'publicada')
+        .in('medico_id', userIds);
+      const agg = {};
+      (revs || []).forEach(r => {
+        if (r.rating == null) return;
+        (agg[r.medico_id] = agg[r.medico_id] || { sum: 0, n: 0 });
+        agg[r.medico_id].sum += Number(r.rating);
+        agg[r.medico_id].n += 1;
+      });
+      Object.keys(agg).forEach(uid => {
+        ratingsByUser[uid] = { rating: agg[uid].sum / agg[uid].n, reviewCount: agg[uid].n };
+      });
+    }
+
     const newDoctorPrices = {};
 
     const processedDoctors = (publicDoctors || []).map(doc => {
@@ -68,9 +89,12 @@ const AppointmentsPage = () => {
       // Preço paciente: aplica a taxa e arredonda para cima ao próximo R$ 0,50 (sem valor quebrado).
       const precoFinal = patientPriceFromRepasse(precoRepasse, taxaPercentual);
       newDoctorPrices[doc.id] = precoFinal;
+      const r = ratingsByUser[doc.user_id];
       return {
         ...doc,
         price_in_cents: Math.round(precoFinal * 100),
+        rating: r ? r.rating : 0,
+        reviewCount: r ? r.reviewCount : 0,
       };
     });
 
@@ -349,6 +373,14 @@ const AppointmentsPage = () => {
         {/* Lista */}
         <div className="container mx-auto px-4 py-8 pb-12">
           <div className="max-w-6xl mx-auto">
+            {status === 'success' && filteredDoctors.length > 0 && (
+              <div className="mb-5">
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">Agende sua consulta</h1>
+                <p className="text-sm text-slate-500 mt-0.5">
+                  {filteredDoctors.length} {filteredDoctors.length === 1 ? 'médico disponível' : 'médicos disponíveis'}
+                </p>
+              </div>
+            )}
             {renderContent()}
           </div>
         </div>
