@@ -8,6 +8,7 @@ import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import { cn } from "@/lib/utils";
 import { IMaskInput } from 'react-imask';
+import { trackSignup } from '@/lib/analytics';
 import { useLoader } from '@/contexts/LoaderContext';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -168,6 +169,7 @@ const AuthPage = ({
               description: "Verifique seu email para ativar a conta.",
               variant: "success"
             });
+            trackSignup(isDoctor ? 'medico' : 'paciente');
             navigate('/cadastro-sucesso', { state: { email } });
             setTimeout(() => {
               hideLoader();

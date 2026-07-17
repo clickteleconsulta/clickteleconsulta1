@@ -66,6 +66,7 @@ import AiChatWidget from '@/components/AiChatWidget';
 import GuestAppointmentPage from '@/pages/GuestAppointmentPage';
 import Preloader from '@/components/Preloader';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import ConsentBanner from '@/components/ConsentBanner';
 
 // Public Layout Component
 const AppLayout = () => {
@@ -322,6 +323,7 @@ function App() {
           </Route>
         </Routes>
         </ErrorBoundary>
+        <ConsentBanner />
       </TooltipProvider>
     </>
   );

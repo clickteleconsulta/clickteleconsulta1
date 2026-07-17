@@ -7,6 +7,7 @@ import { Calendar, Clock, User, ArrowLeft, CheckCircle2, AlertCircle, Video } fr
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useAppointments } from '@/contexts/AppointmentsContext';
+import { trackBooking } from '@/lib/analytics';
 import { Helmet } from 'react-helmet';
 import { Loader2 } from 'lucide-react';
 
@@ -41,6 +42,7 @@ const AppointmentReviewPage = () => {
     }
 
     if (data) {
+      trackBooking({ value: (price_in_cents || 0) / 100, medico: doctor_name, especialidade: specialty });
       navigate('/agendamento/confirmado', { state: { appointmentId: data.id } });
     }
   };

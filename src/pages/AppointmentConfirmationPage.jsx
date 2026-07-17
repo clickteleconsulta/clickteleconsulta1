@@ -14,6 +14,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { trackPurchase } from '@/lib/analytics';
 
 // Telemedicine Components
 import DoctorTelemedicineButton from '@/components/telemedicine/DoctorTelemedicineButton';
@@ -63,13 +64,16 @@ const AppointmentConfirmationPage = () => {
             // estiver configurado na função notify-doctor-new-appointment).
             supabase.functions.invoke('notify-doctor-new-appointment', { body: { appointmentId } }).catch(() => {});
             // Re-busca o agendamento até refletir o pagamento na tela (não depende do realtime).
+            let paidValue = 0;
             for (let i = 0; i < 6; i++) {
               const { data: fresh } = await supabase
                 .from('agendamentos').select(APPT_SELECT).eq('id', appointmentId).single();
-              if (fresh) setAppointment(fresh);
+              if (fresh) { setAppointment(fresh); paidValue = (fresh.price_in_cents || 0) / 100; }
               if (fresh?.pagamento_status === 'pago') break;
               await new Promise((r) => setTimeout(r, 1200));
             }
+            // Evento de conversão do funil (uma vez, no retorno do checkout).
+            trackPurchase({ value: paidValue, transactionId: sessionId });
             // Clean URL params
             navigate('.', { replace: true, state: { appointmentId } });
           } else {
