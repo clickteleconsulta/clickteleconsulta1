@@ -37,7 +37,6 @@ const Footer = () => {
             <nav className="flex flex-col gap-2.5">
               <Link to="/agendamentos" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Agendar Consulta</Link>
               <Link to="/acesso-paciente" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Entrar</Link>
-              <Link to="/acesso-medico" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Acesso para Médicos</Link>
             </nav>
           </div>
 
@@ -59,9 +58,12 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+        <div className="mt-10 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
           <p>&copy; {year} Click Teleconsulta. Todos os direitos reservados.</p>
-          <p>Atendimentos em telemedicina com ética, segurança e respeito.</p>
+          <div className="flex flex-col sm:flex-row items-center gap-x-4 gap-y-1">
+            <span>Atendimentos em telemedicina com ética, segurança e respeito.</span>
+            <Link to="/acesso-medico" className="text-slate-400 hover:text-blue-600 transition-colors font-medium whitespace-nowrap">Acesso Sistema Profissionais</Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -199,17 +199,17 @@ const AuthPage = ({
   return (
     <>
       <Helmet>
-        <title>{isDoctor ? 'Acesso Médico' : (isLogin ? 'Login' : 'Cadastro')} - Click Teleconsulta</title>
+        <title>{isDoctor ? 'Acesso Profissional' : (isLogin ? 'Login' : 'Cadastro')} - Click Teleconsulta</title>
       </Helmet>
       
       <div className="min-h-screen w-full flex flex-col items-center justify-center py-8 px-4 bg-gradient-to-b from-blue-50 to-white">
         
         <div className="text-center mb-8 space-y-2">
             <h1 className="text-3xl font-bold text-blue-950 tracking-tight">
-              {isDoctor ? 'Área do Médico' : 'Acesse sua conta'}
+              {isDoctor ? 'Acesso Profissional' : 'Acesse sua conta'}
             </h1>
             <p className="text-gray-500 font-medium text-sm">
-               {isDoctor ? 'Acesso restrito para médicos' : 'Entre para agendar e acompanhar suas consultas'}
+               {isDoctor ? 'Portal exclusivo para médicos parceiros' : 'Entre para agendar e acompanhar suas consultas'}
             </p>
         </div>
 
