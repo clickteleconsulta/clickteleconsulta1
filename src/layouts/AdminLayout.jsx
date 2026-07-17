@@ -51,7 +51,6 @@ const AdminLayout = () => {
         { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
         { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users },
         { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
-        { href: '/admin/dashboard/documentacao', label: 'Documentação', icon: FolderCheck },
         { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle },
         { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote },
         { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw },

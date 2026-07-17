@@ -14,6 +14,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Loader2, User, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
+import DoctorDocumentsReview from '@/components/admin/DoctorDocumentsReview';
+import { FileText } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
@@ -42,6 +44,7 @@ const ProfessionalsPage = () => {
   // Edit Fee Modal State
   const [isFeeOpen, setIsFeeOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [docsTarget, setDocsTarget] = useState(null);
   const [newFee, setNewFee] = useState('');
   const [isUpdatingFee, setIsUpdatingFee] = useState(false);
 
@@ -421,7 +424,9 @@ const ProfessionalsPage = () => {
                     </TableCell>
                     <TableCell>
                         <div className="flex flex-col">
-                            <span className="font-medium">{doc.public_name || doc.name}</span>
+                            <button type="button" onClick={() => setDocsTarget(doc)} className="font-medium text-left text-blue-700 hover:underline w-fit" title="Ver documentação do profissional">
+                                {doc.public_name || doc.name}
+                            </button>
                             <span className="text-xs text-muted-foreground">{doc.specialty} • CRM {doc.crm}/{doc.uf}</span>
                         </div>
                     </TableCell>
@@ -524,6 +529,21 @@ const ProfessionalsPage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Documentação do profissional (ao clicar no nome) */}
+      <Dialog open={!!docsTarget} onOpenChange={(o) => { if (!o) { setDocsTarget(null); fetchProfessionals(); } }}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="w-5 h-5 text-primary" /> Documentação — {docsTarget?.public_name || docsTarget?.name}
+            </DialogTitle>
+            <DialogDescription>
+              {docsTarget?.specialty}{docsTarget?.crm ? ` • CRM ${docsTarget.crm}/${docsTarget.uf}` : ''} · {docsTarget?.perfis_usuarios?.email}
+            </DialogDescription>
+          </DialogHeader>
+          {docsTarget && <DoctorDocumentsReview userId={docsTarget.user_id} onChanged={fetchProfessionals} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
