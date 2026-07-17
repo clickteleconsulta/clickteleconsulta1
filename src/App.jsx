@@ -54,6 +54,7 @@ import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminProfessionalDocsPage from '@/pages/admin/AdminProfessionalDocsPage';
 import AdminStrategyPage from '@/pages/admin/AdminStrategyPage';
 import AdminRefundsPage from '@/pages/admin/AdminRefundsPage';
+import AdminSettingsPage from '@/pages/admin/AdminSettingsPage';
 import AdminPatientsPage from '@/pages/admin/AdminPatientsPage';
 
 // Memed Integration
@@ -178,6 +179,7 @@ function App() {
              <Route path="reembolsos" element={<AdminRefundsPage />} />
              <Route path="ai-training" element={<AdminAiTrainingPage />} />
              <Route path="legal" element={<AdminLegalPage />} />
+             <Route path="configuracoes" element={<AdminSettingsPage />} />
              <Route path="seguranca" element={<AdminSecurityPage />} />
              <Route index element={<Navigate to="agendamentos" replace />} />
           </Route>

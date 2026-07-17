@@ -18,7 +18,8 @@ import {
   FolderCheck,
   User,
   LineChart,
-  RotateCcw
+  RotateCcw,
+  SlidersHorizontal
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -57,6 +58,7 @@ const AdminLayout = () => {
         { href: '/admin/dashboard/metodos-recebimento', label: 'Métodos de Recebimento', icon: CreditCard },
         { href: '/admin/dashboard/ai-training', label: 'Assistente IA', icon: Bot },
         { href: '/admin/dashboard/legal', label: 'Documentos Legais', icon: FileText },
+        { href: '/admin/dashboard/configuracoes', label: 'Configurações', icon: SlidersHorizontal },
         { href: '/admin/dashboard/seguranca', label: 'Segurança', icon: ShieldCheck },
     ];
 
