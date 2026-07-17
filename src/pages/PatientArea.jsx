@@ -230,15 +230,23 @@ const PatientArea = () => {
         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
     }`;
 
-  // Itens de navegação — usados na sidebar (desktop) e na barra de navegação (mobile).
-  const navItems = [
-    { to: '/paciente/dashboard/consultas', label: 'Minhas Consultas', short: 'Consultas', icon: Calendar, badge: todayCount },
-    { to: '/paciente/dashboard/agendar', label: 'Agendar Consulta', short: 'Agendar', icon: PlusCircle },
-    ...(FEATURES.MESSAGING ? [{ to: '/paciente/dashboard/mensagens', label: 'Mensagens', short: 'Mensagens', icon: MessageSquare }] : []),
-    { to: '/paciente/dashboard/avaliacoes', label: 'Avaliações', short: 'Avaliações', icon: Star },
-    { to: '/paciente/dashboard/dados', label: 'Meus Dados', short: 'Meus Dados', icon: FileSignature },
-    { to: '/paciente/dashboard/suporte', label: 'Suporte', short: 'Suporte', icon: HelpCircle },
+  // Navegação agrupada por seção (sidebar desktop). A lista plana é reaproveitada no mobile.
+  const navSections = [
+    { title: 'Atendimento', items: [
+      { to: '/paciente/dashboard/consultas', label: 'Minhas Consultas', short: 'Consultas', icon: Calendar, badge: todayCount },
+      { to: '/paciente/dashboard/agendar', label: 'Agendar Consulta', short: 'Agendar', icon: PlusCircle },
+      ...(FEATURES.MESSAGING ? [{ to: '/paciente/dashboard/mensagens', label: 'Mensagens', short: 'Mensagens', icon: MessageSquare }] : []),
+    ]},
+    { title: 'Minha conta', items: [
+      { to: '/paciente/dashboard/avaliacoes', label: 'Avaliações', short: 'Avaliações', icon: Star },
+      { to: '/paciente/dashboard/dados', label: 'Meus Dados', short: 'Meus Dados', icon: FileSignature },
+    ]},
+    { title: 'Ajuda', items: [
+      { to: '/paciente/dashboard/suporte', label: 'Suporte', short: 'Suporte', icon: HelpCircle },
+    ]},
   ];
+  const navItems = navSections.flatMap((s) => s.items);
+  const initial = (profile?.full_name || 'Paciente').trim().charAt(0).toUpperCase();
 
   if (!session) {
     return <Navigate to="/" replace />;
@@ -252,11 +260,11 @@ const PatientArea = () => {
       <div className="grid md:grid-cols-[280px_1fr] gap-8 items-start">
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col gap-4 sticky top-24">
-          <div className="flex flex-col items-center text-center p-4 border border-border rounded-2xl bg-card shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <User className="w-8 h-8 text-primary" />
+          <div className="flex flex-col items-center text-center p-5 border border-border rounded-2xl bg-card shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-3 text-white text-2xl font-bold shadow-md shadow-blue-500/20">
+              {initial}
             </div>
-            <h2 className="text-base font-bold">{profile?.full_name}</h2>
+            <h2 className="text-base font-bold text-slate-900 truncate max-w-full">{profile?.full_name}</h2>
             <p className="text-xs text-muted-foreground">Paciente</p>
             {upcomingCount > 0 && (
               <Badge className="mt-2 bg-green-50 text-green-700 border-green-200 text-xs">
@@ -265,41 +273,44 @@ const PatientArea = () => {
             )}
           </div>
 
-          <Card className="p-4 rounded-2xl shadow-sm">
-            <p className="text-xs font-semibold text-muted-foreground uppercase px-3 mb-2">
-              Menu
-            </p>
-            <nav className="flex flex-col gap-1">
-              {navItems.map((item) => (
-                <NavLink key={item.to} to={item.to} className={navLinkClasses}>
-                  <item.icon className="w-5 h-5 shrink-0" />
-                  <span className="flex-1">{item.label}</span>
-                  {item.badge > 0 && (
-                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-amber-500 text-white text-[11px] font-bold leading-none" title="Consultas hoje">
-                      {item.badge > 99 ? '99+' : item.badge}
-                    </span>
-                  )}
-                </NavLink>
-              ))}
-            </nav>
+          <Card className="p-4 rounded-2xl shadow-sm space-y-4">
+            {navSections.map((section) => (
+              <div key={section.title}>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-3 mb-1.5">
+                  {section.title}
+                </p>
+                <nav className="flex flex-col gap-1">
+                  {section.items.map((item) => (
+                    <NavLink key={item.to} to={item.to} className={navLinkClasses}>
+                      <item.icon className="w-5 h-5 shrink-0" />
+                      <span className="flex-1">{item.label}</span>
+                      {item.badge > 0 && (
+                        <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-amber-500 text-white text-[11px] font-bold leading-none" title="Consultas hoje">
+                          {item.badge > 99 ? '99+' : item.badge}
+                        </span>
+                      )}
+                    </NavLink>
+                  ))}
+                </nav>
+              </div>
+            ))}
 
-            <p className="text-xs font-semibold text-muted-foreground uppercase px-3 mt-4 mb-2">
-              Outros
-            </p>
-            <nav className="flex flex-col gap-1">
-              <NavLink to="/" className={navLinkClasses}>
-                <Home className="w-5 h-5" />
-                Página Inicial
-              </NavLink>
-              <Button
-                variant="ghost"
-                onClick={handleSignOut}
-                className={`${navLinkClasses({ isActive: false })} w-full justify-start`}
-              >
-                <LogOut className="w-5 h-5" />
-                Sair
-              </Button>
-            </nav>
+            <div className="pt-1 border-t border-border">
+              <nav className="flex flex-col gap-1 pt-2">
+                <NavLink to="/" className={navLinkClasses}>
+                  <Home className="w-5 h-5" />
+                  Página Inicial
+                </NavLink>
+                <Button
+                  variant="ghost"
+                  onClick={handleSignOut}
+                  className={`${navLinkClasses({ isActive: false })} w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50`}
+                >
+                  <LogOut className="w-5 h-5" />
+                  Sair
+                </Button>
+              </nav>
+            </div>
           </Card>
         </aside>
 
