@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MessageCircle } from 'lucide-react';
+import { Mail, MessageCircle, Stethoscope, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 
@@ -20,6 +20,10 @@ const Footer = () => {
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Teleconsulta com especialistas por videochamada — rápido, seguro e acessível.
             </p>
+            <Link to="/acesso-medico" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors group">
+              <Stethoscope className="w-4 h-4 text-blue-500" /> Acesso Sistema Profissionais
+              <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+            </Link>
           </div>
 
           {/* Legal */}
@@ -58,12 +62,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+        <div className="mt-10 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
           <p>&copy; {year} Click Teleconsulta. Todos os direitos reservados.</p>
-          <div className="flex flex-col sm:flex-row items-center gap-x-4 gap-y-1">
-            <span>Atendimentos em telemedicina com ética, segurança e respeito.</span>
-            <Link to="/acesso-medico" className="text-slate-400 hover:text-blue-600 transition-colors font-medium whitespace-nowrap">Acesso Sistema Profissionais</Link>
-          </div>
+          <p>Atendimentos em telemedicina com ética, segurança e respeito.</p>
         </div>
       </div>
     </footer>
