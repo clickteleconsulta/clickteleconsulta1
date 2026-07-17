@@ -51,22 +51,6 @@ const DoctorArea = () => {
     const [expanded, setExpanded] = useState(false);
     const badges = useDoctorBadges(location.pathname);
 
-    // Badge de Financeiro é "vista": some após abrir o Financeiro e só reaparece
-    // se surgirem novas guias além das já vistas. (Não fica acesa só por haver saldo.)
-    const [seenSaque, setSeenSaque] = useState(() => {
-        try { return Number(localStorage.getItem('fin_saque_visto') || 0); } catch { return 0; }
-    });
-    useEffect(() => {
-        const onFinanceiro = location.pathname.startsWith('/medico/dashboard/financeiro');
-        // Ao visitar o Financeiro, marca o total atual como visto. Se o saldo caiu
-        // (houve saque), reduz a base para que novas guias voltem a acender a badge.
-        if ((onFinanceiro || badges.saque < seenSaque) && badges.saque !== seenSaque) {
-            setSeenSaque(badges.saque);
-            try { localStorage.setItem('fin_saque_visto', String(badges.saque)); } catch { /* ignore */ }
-        }
-    }, [location.pathname, badges.saque, seenSaque]);
-    const saqueBadge = badges.saque > seenSaque ? badges.saque : 0;
-
     useEffect(() => {
         let mounted = true;
         const fetchDoctorImage = async () => {
@@ -106,7 +90,7 @@ const DoctorArea = () => {
         {
             title: 'Financeiro',
             items: [
-                { id: 'financeiro', href: '/medico/dashboard/financeiro', label: 'Financeiro', icon: Wallet, badge: saqueBadge },
+                { id: 'financeiro', href: '/medico/dashboard/financeiro', label: 'Financeiro', icon: Wallet },
             ],
         },
         {

@@ -5,11 +5,12 @@ import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { format } from 'date-fns';
 
 const TZ = 'America/Sao_Paulo';
-const EMPTY = { hoje: 0, saque: 0, denuncias: 0 };
+const EMPTY = { hoje: 0, denuncias: 0 };
 const ATIVAS = ['confirmado', 'pendente', 'reagendado', 'agendado'];
 
 // Contadores para os badges do menu do médico:
-// hoje = consultas agendadas para hoje · saque = guias disponíveis para saque · denuncias = avaliações denunciadas.
+// hoje = consultas agendadas para hoje · denuncias = avaliações denunciadas.
+// (Financeiro não tem badge: saldo é estado permanente, não alerta acionável.)
 export function useDoctorBadges(pollKey) {
     const { session } = useAuth();
     const [badges, setBadges] = useState(EMPTY);
@@ -25,19 +26,15 @@ export function useDoctorBadges(pollKey) {
             const start = zonedTimeToUtc(`${todayStr} 00:00:00`, TZ).toISOString();
             const end = zonedTimeToUtc(`${todayStr} 23:59:59`, TZ).toISOString();
 
-            const [agRes, saqueRes, denRes] = await Promise.all([
+            const [agRes, denRes] = await Promise.all([
                 docId
                     ? supabase.from('agendamentos').select('id', { count: 'exact', head: true })
                         .eq('medico_id', docId).gte('horario_inicio', start).lte('horario_inicio', end).in('status', ATIVAS)
                     : Promise.resolve({ count: 0 }),
-                docId
-                    ? supabase.from('agendamentos').select('id', { count: 'exact', head: true })
-                        .eq('medico_id', docId).eq('pagamento_status', 'pago').is('saque_id', null).neq('status', 'cancelado')
-                    : Promise.resolve({ count: 0 }),
                 supabase.from('avaliacoes').select('id', { count: 'exact', head: true }).eq('medico_id', uid).eq('status', 'denunciada'),
             ]);
 
-            setBadges({ hoje: agRes.count || 0, saque: saqueRes.count || 0, denuncias: denRes.count || 0 });
+            setBadges({ hoje: agRes.count || 0, denuncias: denRes.count || 0 });
         } catch {
             /* silencioso — badges nunca quebram o layout */
         }
