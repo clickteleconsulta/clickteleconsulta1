@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Loader2, Star, Edit } from 'lucide-react';
+import PatientPageHeader from '@/components/patient/PatientPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -231,10 +232,7 @@ const PatientReviewsPage = () => {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Minhas Avaliações</h1>
-                <p className="text-gray-500 mt-1">Avalie os profissionais e ajude a manter a qualidade dos atendimentos.</p>
-            </div>
+            <PatientPageHeader icon={Star} title="Minhas Avaliações" subtitle="Avalie os profissionais e ajude a manter a qualidade dos atendimentos." />
 
             {loading ? (
                 <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>

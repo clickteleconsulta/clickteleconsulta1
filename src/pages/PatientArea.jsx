@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
+import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -203,19 +204,31 @@ const PatientArea = () => {
     navigate('/');
   };
 
-  // Próxima consulta (futura mais próxima)
-  const nextAppointment = useMemo(() => {
-    if (!appointments) return null;
-    const upcoming = appointments
-      .filter((a) =>
-        ['confirmado', 'reagendado', 'pendente'].includes(a.status)
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.horario_inicio) - new Date(b.horario_inicio)
-      );
-    return upcoming[0] || null;
+  // Consultas agendadas (futuras)
+  const upcomingList = useMemo(() => {
+    if (!appointments) return [];
+    return appointments
+      .filter((a) => ['confirmado', 'reagendado', 'pendente'].includes(a.status))
+      .sort((a, b) => new Date(a.horario_inicio) - new Date(b.horario_inicio));
   }, [appointments]);
+  const nextAppointment = upcomingList[0] || null;
+  const upcomingCount = upcomingList.length;
+
+  // Consultas atendidas ainda não avaliadas → badge "Avalie sua consulta"
+  const [reviewedIds, setReviewedIds] = useState(() => new Set());
+  useEffect(() => {
+    const uid = session?.user?.id;
+    if (!uid) return;
+    supabase.from('avaliacoes').select('agendamento_id').eq('paciente_id', uid)
+      .then(({ data }) => setReviewedIds(new Set((data || []).map((r) => r.agendamento_id))))
+      .catch(() => {});
+  }, [session?.user?.id, appointments]);
+  const pendingReviews = useMemo(() => {
+    if (!appointments) return 0;
+    return appointments.filter(
+      (a) => ['atendido', 'realizado', 'concluida'].includes(a.status) && !reviewedIds.has(a.id)
+    ).length;
+  }, [appointments, reviewedIds]);
 
   const navLinkClasses = ({ isActive }) =>
     `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -242,16 +255,16 @@ const PatientArea = () => {
             </div>
             <h2 className="text-base font-bold">{profile?.full_name}</h2>
             <p className="text-xs text-muted-foreground">Paciente</p>
-            {nextAppointment && (
+            {upcomingCount > 0 && (
               <Badge className="mt-2 bg-green-50 text-green-700 border-green-200 text-xs">
-                1 consulta agendada
+                {upcomingCount} consulta{upcomingCount > 1 ? 's' : ''} agendada{upcomingCount > 1 ? 's' : ''}
               </Badge>
             )}
           </div>
 
           <Card className="p-4 rounded-2xl shadow-sm">
             <p className="text-xs font-semibold text-muted-foreground uppercase px-3 mb-2">
-              Painel
+              Menu
             </p>
             <nav className="flex flex-col gap-1">
               <NavLink
@@ -282,7 +295,12 @@ const PatientArea = () => {
                 className={navLinkClasses}
               >
                 <Star className="w-5 h-5" />
-                Avaliações
+                <span className="flex-1">Avaliações</span>
+                {pendingReviews > 0 && (
+                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-amber-500 text-white text-[11px] font-bold leading-none">
+                    {pendingReviews > 99 ? '99+' : pendingReviews}
+                  </span>
+                )}
               </NavLink>
               <NavLink
                 to="/paciente/dashboard/dados"
