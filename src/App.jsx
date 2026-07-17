@@ -101,7 +101,7 @@ const AuthRedirect = ({ role }) => {
   }
 
   if (session && profile) {
-    if (profile.role === 'admin') return <Navigate to="/admin/dashboard/agendamentos" replace />;
+    if (profile.role === 'admin') return <Navigate to="/admin/dashboard/estrategia" replace />;
     
     const from = location.state?.from?.pathname || (profile.role === 'medico' ? '/medico/dashboard' : '/paciente/dashboard');
     return <Navigate to={from} replace />;
@@ -181,7 +181,7 @@ function App() {
              <Route path="legal" element={<AdminLegalPage />} />
              <Route path="configuracoes" element={<AdminSettingsPage />} />
              <Route path="seguranca" element={<AdminSecurityPage />} />
-             <Route index element={<Navigate to="agendamentos" replace />} />
+             <Route index element={<Navigate to="estrategia" replace />} />
           </Route>
 
           {/* 3. Specialized Routes */}

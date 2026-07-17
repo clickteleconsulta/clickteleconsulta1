@@ -1,15 +1,86 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useAdminPendingCounts } from '@/hooks/useAdminPendingCounts';
 import {
     Loader2, RefreshCw, Users, Stethoscope, Star, TrendingUp, DollarSign,
-    Wallet, Landmark, CalendarCheck, XCircle, RotateCcw, Repeat, Info, LineChart
+    Wallet, Landmark, CalendarCheck, XCircle, RotateCcw, Repeat, Info, LineChart,
+    FolderCheck, Banknote, AlertTriangle, CheckCircle2, ChevronRight, BellRing
 } from 'lucide-react';
 
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const pct = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
+
+// Painel "Precisa da sua atenção": transforma o Estudo Estratégico em centro de
+// comando, listando as pendências acionáveis com atalho direto para cada tela.
+const AttentionPanel = () => {
+    const { counts, loading, total } = useAdminPendingCounts();
+
+    const actions = [
+        { key: 'documentos', n: counts.documentos, to: '/admin/dashboard/profissionais', icon: FolderCheck,
+          label: 'Documentos para revisar', sub: 'profissional(is) com envio em análise', tone: 'blue' },
+        { key: 'saques', n: counts.saques, to: '/admin/dashboard/saques-pagamentos', icon: Banknote,
+          label: 'Saques a pagar', sub: 'solicitação(ões) aguardando pagamento', tone: 'teal' },
+        { key: 'reembolsos', n: counts.reembolsos, to: '/admin/dashboard/reembolsos', icon: RotateCcw,
+          label: 'Reembolsos a processar', sub: 'guia(s) paga(s) aguardando estorno', tone: 'amber' },
+        { key: 'denuncias', n: counts.denuncias, to: '/admin/avaliacoes', icon: AlertTriangle,
+          label: 'Denúncias a moderar', sub: 'avaliação(ões) denunciada(s)', tone: 'red' },
+    ];
+    const pending = actions.filter(a => a.n > 0);
+
+    const tones = {
+        blue: 'bg-blue-50 text-blue-700 border-blue-100',
+        teal: 'bg-teal-50 text-teal-700 border-teal-100',
+        amber: 'bg-amber-50 text-amber-700 border-amber-100',
+        red: 'bg-red-50 text-red-700 border-red-100',
+    };
+
+    return (
+        <Card className={total > 0 ? 'bg-white border-amber-200/70' : 'bg-emerald-50/50 border-emerald-100'}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="dashboard-title flex items-center gap-2 text-base">
+                    {total > 0
+                        ? <><BellRing className="w-4 h-4 text-amber-600" /> Precisa da sua atenção</>
+                        : <><CheckCircle2 className="w-4 h-4 text-emerald-600" /> Tudo em dia</>}
+                </CardTitle>
+                {total > 0 && (
+                    <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-amber-500 text-white text-xs font-bold">
+                        {total > 99 ? '99+' : total}
+                    </span>
+                )}
+            </CardHeader>
+            <CardContent className="pt-0">
+                {loading ? (
+                    <div className="flex items-center gap-2 text-sm text-gray-400 py-2"><Loader2 className="w-4 h-4 animate-spin" /> Verificando pendências…</div>
+                ) : pending.length === 0 ? (
+                    <p className="text-sm text-emerald-700">Nenhuma ação pendente no momento. Documentos, saques, reembolsos e denúncias estão todos resolvidos. 🎉</p>
+                ) : (
+                    <div className="grid gap-2.5 sm:grid-cols-2">
+                        {pending.map((a) => (
+                            <Link key={a.key} to={a.to}
+                                className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5">
+                                <span className={`flex items-center justify-center w-10 h-10 rounded-lg border shrink-0 ${tones[a.tone]}`}>
+                                    <a.icon className="w-5 h-5" />
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                                        {a.label}
+                                        <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-gray-900 text-white text-[11px] font-bold">{a.n}</span>
+                                    </p>
+                                    <p className="text-xs text-gray-500 truncate">{a.n} {a.sub}</p>
+                                </div>
+                                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-primary shrink-0" />
+                            </Link>
+                        ))}
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+    );
+};
 
 const AdminStrategyPage = () => {
     const { toast } = useToast();
@@ -120,6 +191,9 @@ const AdminStrategyPage = () => {
                     </Button>
                 </div>
             </div>
+
+            {/* Precisa da sua atenção */}
+            <AttentionPanel />
 
             {/* Base */}
             <div>

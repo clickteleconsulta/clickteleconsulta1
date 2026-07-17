@@ -23,12 +23,15 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
+import { useAdminPendingCounts } from '@/hooks/useAdminPendingCounts';
 
 const AdminLayout = () => {
     const { signOut, profile } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    // Recarrega os contadores a cada troca de rota (após o admin processar algo).
+    const { counts } = useAdminPendingCounts(location.pathname);
 
     // Enforce 2FA: se a conta exige aal2 e está em aal1 (2FA não concluído), volta ao login
     useEffect(() => {
@@ -49,11 +52,11 @@ const AdminLayout = () => {
     const navItems = [
         { href: '/admin/dashboard/estrategia', label: 'Estudo Estratégico', icon: LineChart },
         { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
-        { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users },
+        { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users, badge: counts.documentos },
         { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
-        { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle },
-        { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote },
-        { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw },
+        { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle, badge: counts.denuncias, urgent: true },
+        { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote, badge: counts.saques },
+        { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw, badge: counts.reembolsos },
         { href: '/admin/dashboard/configuracoes', label: 'Configurações', icon: SlidersHorizontal },
     ];
 
@@ -115,14 +118,26 @@ const AdminLayout = () => {
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`
                                         flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                                        ${isActive 
-                                            ? 'bg-primary text-white shadow-md shadow-primary/20' 
+                                        ${isActive
+                                            ? 'bg-primary text-white shadow-md shadow-primary/20'
                                             : 'text-gray-600 hover:bg-gray-50 hover:text-primary'
                                         }
                                     `}
                                 >
                                     <item.icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-primary'}`} />
-                                    {item.label}
+                                    <span className="flex-1">{item.label}</span>
+                                    {item.badge > 0 && (
+                                        <span className={`
+                                            inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none
+                                            ${isActive
+                                                ? 'bg-white text-primary'
+                                                : item.urgent
+                                                    ? 'bg-red-500 text-white'
+                                                    : 'bg-primary/10 text-primary'}
+                                        `}>
+                                            {item.badge > 99 ? '99+' : item.badge}
+                                        </span>
+                                    )}
                                 </Link>
                             );
                         })}
