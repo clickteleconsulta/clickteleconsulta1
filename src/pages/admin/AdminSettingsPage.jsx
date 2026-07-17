@@ -5,7 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info } from 'lucide-react';
+import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';
+import AdminLegalPage from '@/pages/admin/AdminLegalPage';
+import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
+import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
 
 const DEFAULTS = {
     default_fee_percent: 25,
@@ -30,7 +36,7 @@ const Field = ({ label, suffix, value, onChange, step = '1', min = '0' }) => (
     </div>
 );
 
-const AdminSettingsPage = () => {
+const PlatformRules = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -91,13 +97,7 @@ const AdminSettingsPage = () => {
         : 0;
 
     return (
-        <div className="space-y-6 max-w-4xl mx-auto">
-            <div>
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-                    <SlidersHorizontal className="w-7 h-7 text-primary" /> Configurações da Plataforma
-                </h2>
-                <p className="text-muted-foreground">Regras de negócio que valem para todo o sistema. Alterações entram em vigor imediatamente.</p>
-            </div>
+        <div className="space-y-6 max-w-4xl">
 
             {/* Repasse & taxa */}
             <Card className="dashboard-card">
@@ -144,6 +144,47 @@ const AdminSettingsPage = () => {
                     {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando…</> : <><Save className="w-4 h-4 mr-2" /> Salvar configurações</>}
                 </Button>
             </div>
+        </div>
+    );
+};
+
+const TABS = [
+    { v: 'regras', label: 'Regras', icon: SlidersHorizontal },
+    { v: 'pagamentos', label: 'Métodos de Recebimento', icon: CreditCard },
+    { v: 'legal', label: 'Documentos Legais', icon: FileText },
+    { v: 'seguranca', label: 'Segurança', icon: ShieldCheck },
+    { v: 'ia', label: 'Assistente IA', icon: Bot },
+];
+
+const AdminSettingsPage = () => {
+    const [params, setParams] = useSearchParams();
+    const active = TABS.some(t => t.v === params.get('tab')) ? params.get('tab') : 'regras';
+
+    return (
+        <div className="space-y-6 animate-in fade-in duration-500">
+            <div>
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
+                    <SlidersHorizontal className="w-7 h-7 text-primary" /> Configurações
+                </h2>
+                <p className="text-muted-foreground">Regras de negócio, recebimento, documentos legais, segurança e assistente de IA.</p>
+            </div>
+
+            <Tabs value={active} onValueChange={(v) => setParams({ tab: v }, { replace: true })} className="w-full">
+                <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-gray-100/80 rounded-xl">
+                    {TABS.map((t) => (
+                        <TabsTrigger key={t.v} value={t.v}
+                            className="gap-1.5 rounded-lg text-sm px-3 py-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
+                            <t.icon className="w-3.5 h-3.5" /> {t.label}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+
+                <TabsContent value="regras" className="mt-5"><PlatformRules /></TabsContent>
+                <TabsContent value="pagamentos" className="mt-5"><AdminPaymentMethodsPage /></TabsContent>
+                <TabsContent value="legal" className="mt-5"><AdminLegalPage /></TabsContent>
+                <TabsContent value="seguranca" className="mt-5"><AdminSecurityPage /></TabsContent>
+                <TabsContent value="ia" className="mt-5"><AdminAiTrainingPage /></TabsContent>
+            </Tabs>
         </div>
     );
 };
