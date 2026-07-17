@@ -226,11 +226,11 @@ const HomePage = () => {
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                    <CalendarCheck className="w-5 h-5 text-blue-400" />
+                    <Clock className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <p className="font-display text-white text-sm font-bold">Consulta agendada</p>
-                    <p className="text-slate-400 text-xs font-body">Confirmação imediata</p>
+                    <p className="font-display text-white text-sm font-bold">Agende a qualquer hora</p>
+                    <p className="text-slate-400 text-xs font-body">Horários disponíveis todos os dias</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-slate-300 font-body">
