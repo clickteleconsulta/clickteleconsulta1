@@ -301,16 +301,13 @@ export function DoctorScheduleCard({
                               <span className="text-xs text-slate-400">({doctor.reviewCount})</span>
                           </Link>
                       )}
+                      <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap mt-0.5" title={specialtyLabel}>
+                          {specialtyLabel}
+                      </p>
+                      {crmDisplay && (
+                          <p className="text-[13px] text-slate-400">{crmDisplay}</p>
+                      )}
                   </div>
-              </div>
-              
-              <div className="mt-1">
-                  <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap" title={specialtyLabel}>
-                      {specialtyLabel}
-                  </p>
-                  {crmDisplay && (
-                      <p className="text-[13px] text-slate-400">{crmDisplay}</p>
-                  )}
               </div>
 
               <div className="mt-2 text-[13px] text-slate-500">
