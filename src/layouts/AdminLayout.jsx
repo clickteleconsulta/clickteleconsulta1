@@ -51,17 +51,25 @@ const AdminLayout = () => {
         navigate('/acesso-administrador');
     };
 
-    const navItems = [
-        { href: '/admin/dashboard/estrategia', label: 'Estudo Estratégico', icon: LineChart },
-        { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
-        { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users, badge: counts.documentos },
-        { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
-        { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle, badge: counts.denuncias, urgent: true },
-        { href: '/admin/dashboard/comunicados', label: 'Comunicados', icon: Megaphone },
-        { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote, badge: counts.saques },
-        { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw, badge: counts.reembolsos },
-        { href: '/admin/dashboard/auditoria', label: 'Auditoria', icon: ScrollText },
-        { href: '/admin/dashboard/configuracoes', label: 'Configurações', icon: SlidersHorizontal },
+    const navSections = [
+        { title: 'Visão geral', items: [
+            { href: '/admin/dashboard/estrategia', label: 'Estudo Estratégico', icon: LineChart },
+        ]},
+        { title: 'Operação', items: [
+            { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
+            { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users, badge: counts.documentos },
+            { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
+            { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle, badge: counts.denuncias, urgent: true },
+            { href: '/admin/dashboard/comunicados', label: 'Comunicados', icon: Megaphone },
+        ]},
+        { title: 'Financeiro', items: [
+            { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote, badge: counts.saques },
+            { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw, badge: counts.reembolsos },
+        ]},
+        { title: 'Sistema', items: [
+            { href: '/admin/dashboard/auditoria', label: 'Auditoria', icon: ScrollText },
+            { href: '/admin/dashboard/configuracoes', label: 'Configurações', icon: SlidersHorizontal },
+        ]},
     ];
 
     return (
@@ -112,39 +120,44 @@ const AdminLayout = () => {
                         </div>
                     </div>
 
-                    <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-                        {navItems.map((item) => {
-                            const isActive = location.pathname.startsWith(item.href);
-                            return (
-                                <Link
-                                    key={item.href}
-                                    to={item.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className={`
-                                        flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                                        ${isActive
-                                            ? 'bg-primary text-white shadow-md shadow-primary/20'
-                                            : 'text-gray-600 hover:bg-gray-50 hover:text-primary'
-                                        }
-                                    `}
-                                >
-                                    <item.icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-primary'}`} />
-                                    <span className="flex-1">{item.label}</span>
-                                    {item.badge > 0 && (
-                                        <span className={`
-                                            inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none
-                                            ${isActive
-                                                ? 'bg-white text-primary'
-                                                : item.urgent
-                                                    ? 'bg-red-500 text-white'
-                                                    : 'bg-primary/10 text-primary'}
-                                        `}>
-                                            {item.badge > 99 ? '99+' : item.badge}
-                                        </span>
-                                    )}
-                                </Link>
-                            );
-                        })}
+                    <nav className="flex-1 p-4 space-y-5 overflow-y-auto">
+                        {navSections.map((section) => (
+                            <div key={section.title} className="space-y-1">
+                                <p className="px-4 mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">{section.title}</p>
+                                {section.items.map((item) => {
+                                    const isActive = location.pathname.startsWith(item.href);
+                                    return (
+                                        <Link
+                                            key={item.href}
+                                            to={item.href}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className={`
+                                                flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                                                ${isActive
+                                                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                                    : 'text-gray-600 hover:bg-gray-50 hover:text-primary'
+                                                }
+                                            `}
+                                        >
+                                            <item.icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-primary'}`} />
+                                            <span className="flex-1">{item.label}</span>
+                                            {item.badge > 0 && (
+                                                <span className={`
+                                                    inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none
+                                                    ${isActive
+                                                        ? 'bg-white text-primary'
+                                                        : item.urgent
+                                                            ? 'bg-red-500 text-white'
+                                                            : 'bg-primary/10 text-primary'}
+                                                `}>
+                                                    {item.badge > 99 ? '99+' : item.badge}
+                                                </span>
+                                            )}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        ))}
                     </nav>
 
                     <div className="p-4 border-t border-gray-100">
