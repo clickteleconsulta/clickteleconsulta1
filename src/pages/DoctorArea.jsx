@@ -21,7 +21,8 @@ import {
     Stethoscope,
     Star,
     ChevronsLeft,
-    ChevronsRight
+    ChevronsRight,
+    LayoutDashboard
 } from 'lucide-react';
 import DoctorConsultations from '@/components/doctor/DoctorConsultations';
 import DoctorProfile from '@/components/doctor/DoctorProfile';
@@ -38,6 +39,8 @@ import DoctorReviewsPage from '@/pages/doctor/DoctorReviewsPage';
 import DoctorProceduresPage from '@/pages/doctor/DoctorProceduresPage';
 import { FEATURES } from '@/config/features';
 import ComunicadosBanner from '@/components/ComunicadosBanner';
+import DoctorOverview from '@/components/doctor/DoctorOverview';
+import { useDoctorBadges } from '@/hooks/useDoctorBadges';
 
 const DoctorArea = () => {
     const { signOut, profile, session, loading } = useAuth();
@@ -46,6 +49,7 @@ const DoctorArea = () => {
     const [doctorImageUrl, setDoctorImageUrl] = useState(null);
     const [medicoInfo, setMedicoInfo] = useState(null);
     const [expanded, setExpanded] = useState(false);
+    const badges = useDoctorBadges(location.pathname);
 
     useEffect(() => {
         let mounted = true;
@@ -77,7 +81,14 @@ const DoctorArea = () => {
             id: 'consultas',
             href: '/medico/dashboard/consultas',
             label: 'Consultas',
-            icon: Calendar
+            icon: Calendar,
+            badge: badges.hoje
+        },
+        {
+            id: 'painel',
+            href: '/medico/dashboard/painel',
+            label: 'Painel',
+            icon: LayoutDashboard
         },
         {
             id: 'agenda',
@@ -95,13 +106,16 @@ const DoctorArea = () => {
             id: 'financeiro',
             href: '/medico/dashboard/financeiro',
             label: 'Financeiro',
-            icon: Wallet
+            icon: Wallet,
+            badge: badges.saque
         },
         {
             id: 'avaliacoes',
             href: '/medico/dashboard/avaliacoes',
             label: 'Avaliações',
-            icon: Star
+            icon: Star,
+            badge: badges.denuncias,
+            urgent: true
         },
         {
             id: 'configuracoes',
@@ -231,8 +245,16 @@ const DoctorArea = () => {
                                     className={`flex-shrink-0 transition-transform duration-300 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`}
                                 />
                                 {expanded && (
-                                    <span className="text-sm font-medium truncate">{item.label}</span>
+                                    <span className="text-sm font-medium truncate flex-1">{item.label}</span>
                                 )}
+                                {/* Badge: pill no modo expandido, ponto no recolhido */}
+                                {item.badge > 0 && (expanded ? (
+                                    <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none ${item.urgent ? 'bg-red-500 text-white' : 'bg-blue-100 text-blue-700'}`}>
+                                        {item.badge > 99 ? '99+' : item.badge}
+                                    </span>
+                                ) : (
+                                    <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ring-2 ring-white ${item.urgent ? 'bg-red-500' : 'bg-blue-500'}`} />
+                                ))}
                                 {isActive && (
                                     <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full" />
                                 )}
@@ -307,6 +329,7 @@ const DoctorArea = () => {
                         <Routes>
                             <Route path="/" element={<Navigate to="consultas" replace />} />
                             <Route path="consultas" element={<DoctorConsultations />} />
+                            <Route path="painel" element={<DoctorOverview />} />
                             {FEATURES.PRONTUARIO && <Route path="pacientes" element={<PacientesListPage />} />}
                             {FEATURES.MESSAGING && <Route path="mensagens" element={<MessagesPage />} />}
                             <Route path="avaliacoes" element={<DoctorReviewsPage />} />
