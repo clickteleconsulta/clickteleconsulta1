@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff, Stethoscope, ShieldCheck } from 'lucide-react';
 import { Helmet } from 'react-helmet';
-import Logo from '@/components/Logo';
+import AuthLayout from '@/components/auth/AuthLayout';
 import { cn } from "@/lib/utils";
 import { IMaskInput } from 'react-imask';
 import { trackSignup } from '@/lib/analytics';
@@ -203,30 +203,24 @@ const AuthPage = ({
         <title>{isDoctor ? 'Acesso Profissional' : (isLogin ? 'Login' : 'Cadastro')} - Click Teleconsulta</title>
       </Helmet>
       
-      <div className="min-h-screen w-full flex flex-col items-center justify-center py-8 px-4 bg-gradient-to-b from-blue-50 to-white">
-        
-        <div className="flex flex-col items-center text-center mb-8 space-y-3">
-            <Link to="/" className="inline-flex items-center gap-2">
-                <Logo className="w-11 h-11" />
-                <span className="text-xl font-bold text-slate-900 tracking-tight">Click Teleconsulta</span>
-            </Link>
+      <AuthLayout variant={isDoctor ? 'profissional' : 'cliente'}>
+
+        <div className="text-center mb-6 space-y-2">
             {isDoctor && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1">
+                <span className="lg:hidden inline-flex items-center gap-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1">
                     <Stethoscope className="w-3.5 h-3.5" /> Portal do Parceiro
                 </span>
             )}
-            <div className="space-y-1">
-                <h1 className="text-2xl font-bold text-blue-950 tracking-tight">
-                  {isDoctor ? 'Acesso Profissional' : 'Acesse sua conta'}
-                </h1>
-                <p className="text-gray-500 font-medium text-sm">
-                   {isDoctor ? 'Área exclusiva para médicos parceiros — gerencie sua agenda e repasses' : 'Entre para agendar e acompanhar suas consultas'}
-                </p>
-            </div>
+            <h1 className="text-2xl font-bold text-blue-950 tracking-tight">
+              {isDoctor ? 'Acesso Profissional' : 'Acesse sua conta'}
+            </h1>
+            <p className="text-gray-500 font-medium text-sm">
+               {isDoctor ? 'Área exclusiva para médicos parceiros' : 'Entre para agendar e acompanhar suas consultas'}
+            </p>
         </div>
 
-        <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            
+        <div className="w-full">
+
             <div className="space-y-6">
 
                 <form onSubmit={handleAuth} className="space-y-4">
@@ -385,14 +379,14 @@ const AuthPage = ({
                     </div>
                 </div>
 
-                {/* Selo de confiança */}
-                <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-400 pt-4 border-t border-gray-100">
+                {/* Selo de confiança (no desktop já aparece no painel de marca) */}
+                <div className="lg:hidden flex items-center justify-center gap-1.5 text-[11px] text-gray-400 pt-4 border-t border-gray-100">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
                     Conexão segura · Dados protegidos conforme a LGPD
                 </div>
             </div>
         </div>
-      </div>
+      </AuthLayout>
 
     </>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import AuthLayout from '@/components/auth/AuthLayout';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,9 +41,9 @@ const PasswordRecoveryPage = () => {
                 <title>Recuperar Senha - Click Teleconsulta</title>
                 <meta name="description" content="Recupere o acesso à sua conta na Click Teleconsulta. Insira seu e-mail para receber um link de redefinição de senha." />
             </Helmet>
-            <div className="w-full flex justify-center items-center py-12">
-                <Card className="w-full max-w-md">
-                    <CardHeader>
+            <AuthLayout variant="cliente">
+                <Card className="w-full border-0 shadow-none">
+                    <CardHeader className="px-0">
                         <CardTitle>Recuperar Senha</CardTitle>
                         <CardDescription>
                             {submitted 
@@ -50,7 +51,7 @@ const PasswordRecoveryPage = () => {
                                 : "Insira seu e-mail para receber um link para redefinir sua senha."}
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="px-0">
                         {submitted ? (
                             <div className="text-center py-8">
                                 <MailCheck className="w-16 h-16 mx-auto text-green-500"/>
@@ -83,13 +84,13 @@ const PasswordRecoveryPage = () => {
                             </form>
                         )}
                     </CardContent>
-                     <CardFooter>
+                     <CardFooter className="px-0">
                          <Link to="/acesso-cliente" className="text-sm text-primary hover:underline w-full text-center">
                             Voltar para o login
                         </Link>
                      </CardFooter>
                 </Card>
-            </div>
+            </AuthLayout>
         </>
     );
 };

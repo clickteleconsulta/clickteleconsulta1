@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import AuthLayout from '@/components/auth/AuthLayout';
 import { useForm } from 'react-hook-form';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
@@ -68,15 +69,15 @@ const ResetPasswordPage = () => {
                 <title>Redefinir Senha - Click Teleconsulta</title>
                 <meta name="description" content="Crie uma nova senha segura para acessar sua conta na Click Teleconsulta." />
             </Helmet>
-            <div className="w-full flex justify-center items-center py-12">
-                <Card className="w-full max-w-md">
-                    <CardHeader>
+            <AuthLayout variant="cliente">
+                <Card className="w-full border-0 shadow-none">
+                    <CardHeader className="px-0">
                         <CardTitle>Crie sua nova senha</CardTitle>
                         <CardDescription>
                             Escolha uma senha forte com no mínimo 8 caracteres.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="px-0">
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                             <div className="space-y-1 relative">
                                 <Label htmlFor="password">Nova Senha</Label>
@@ -117,13 +118,13 @@ const ResetPasswordPage = () => {
                             </Button>
                         </form>
                     </CardContent>
-                     <CardFooter>
+                     <CardFooter className="px-0">
                          <Link to="/acesso-cliente" className="text-sm text-primary hover:underline w-full text-center">
                             Lembrou a senha? Voltar para o login
                         </Link>
                      </CardFooter>
                 </Card>
-            </div>
+            </AuthLayout>
         </>
     );
 };
