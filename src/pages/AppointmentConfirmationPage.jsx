@@ -4,7 +4,7 @@ import { useLocation, useNavigate, Link, useSearchParams } from 'react-router-do
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Helmet } from 'react-helmet';
-import { Loader2, CheckCircle, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope } from 'lucide-react';
+import { Loader2, CheckCircle, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -389,31 +389,26 @@ const AppointmentConfirmationPage = () => {
                         </div>
                      </div>
                 ) : (
-                    <Tabs defaultValue="pix" className="w-full">
-                        <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-12">
-                            <TabsTrigger value="pix" className="rounded-none h-full">PIX / Transferência</TabsTrigger>
-                            <TabsTrigger value="card" className="rounded-none border-r h-full">Cartão de Crédito</TabsTrigger>
-                        </TabsList>
-                        
-                        <TabsContent value="card" className="p-6 space-y-6 mt-0">
-                             <Button size="lg" className="w-full bg-indigo-600 hover:bg-indigo-700" onClick={handleStripePayment} disabled={processingPayment}>
-                                {processingPayment ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
-                                Pagar R$ {(price_in_cents / 100).toFixed(2).replace('.', ',')}
-                            </Button>
-                        </TabsContent>
-
-                        <TabsContent value="pix" className="p-6 space-y-6 mt-0">
-                           <p className="text-sm text-muted-foreground mb-2">Realize o pagamento e envie o comprovante.</p>
-                           {paymentSettings.pix_key && (
-                               <div className="bg-muted p-2 rounded mb-3">
-                                    <code className="text-xs block overflow-hidden font-bold">{paymentSettings.pix_key}</code>
-                               </div>
-                           )}
-                           <Button className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white" onClick={handleWhatsApp}>
-                                <MessageCircle className="w-4 h-4" /> Enviar Comprovante
-                           </Button>
-                        </TabsContent>
-                    </Tabs>
+                    <div className="p-6 space-y-4">
+                        <div className="flex items-start gap-3 rounded-lg bg-blue-50/60 border border-blue-100 p-3">
+                            <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <p className="text-sm text-blue-900">
+                                Pague com segurança para <strong>confirmar sua consulta</strong>. Assim que o pagamento é aprovado, o agendamento é liberado para o médico.
+                            </p>
+                        </div>
+                        <Button
+                            size="lg"
+                            className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                            onClick={handleStripePayment}
+                            disabled={processingPayment}
+                        >
+                            {processingPayment ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
+                            Pagar R$ {(price_in_cents / 100).toFixed(2).replace('.', ',')}
+                        </Button>
+                        <p className="text-[11px] text-center text-gray-400 flex items-center justify-center gap-1">
+                            <Lock className="w-3 h-3" /> Pagamento processado com segurança.
+                        </p>
+                    </div>
                 )}
               </CardContent>
             </Card>
