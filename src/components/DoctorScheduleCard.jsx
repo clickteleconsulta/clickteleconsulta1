@@ -297,8 +297,7 @@ export function DoctorScheduleCard({
                                     <Star key={i} className={cn("w-3 h-3 transition-transform group-hover:scale-110", i < Math.round(doctor.rating) ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200")} />
                                   ))}
                               </div>
-                              <span className="text-xs font-semibold text-slate-600 ml-0.5">{doctor.rating.toFixed(1).replace('.', ',')}</span>
-                              <span className="text-xs text-slate-400">({doctor.reviewCount})</span>
+                              <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
                       ) : (
                           <div className="flex items-center gap-0.5 mt-1" aria-hidden="true">
