@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot, Stethoscope } from 'lucide-react';
+import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot, Stethoscope, ShieldAlert } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';
@@ -14,6 +14,7 @@ import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import AdminSpecialties from '@/components/admin/AdminSpecialties';
+import AdminSystemReset from '@/components/admin/AdminSystemReset';
 
 const DEFAULTS = {
     default_fee_percent: 25,
@@ -157,6 +158,7 @@ const TABS = [
     { v: 'legal', label: 'Documentos Legais', icon: FileText },
     { v: 'seguranca', label: 'Segurança', icon: ShieldCheck },
     { v: 'ia', label: 'Assistente IA', icon: Bot },
+    { v: 'manutencao', label: 'Manutenção', icon: ShieldAlert },
 ];
 
 const AdminSettingsPage = () => {
@@ -184,6 +186,7 @@ const AdminSettingsPage = () => {
                 <TabsContent value="legal" className="mt-5"><AdminLegalPage /></TabsContent>
                 <TabsContent value="seguranca" className="mt-5"><AdminSecurityPage /></TabsContent>
                 <TabsContent value="ia" className="mt-5"><AdminAiTrainingPage /></TabsContent>
+                <TabsContent value="manutencao" className="mt-5"><AdminSystemReset /></TabsContent>
             </Tabs>
         </div>
     );

@@ -45,8 +45,6 @@ const AppointmentsControlPage = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isCancelOpen, setIsCancelOpen] = useState(false);
-  const [isWipeOpen, setIsWipeOpen] = useState(false);
-  const [wipeConfirmText, setWipeConfirmText] = useState('');
   const [processing, setProcessing] = useState(false);
 
   // Edit Form State
@@ -304,43 +302,6 @@ const AppointmentsControlPage = () => {
     }
   };
 
-  const handleWipeAllData = async () => {
-    if (wipeConfirmText !== 'DELETAR TUDO') return;
-    setProcessing(true);
-    try {
-        console.warn('wipe_system_data triggered by admin at', new Date().toISOString());
-        
-        // Use the server-side RPC function for atomic and complete deletion
-        const { error } = await supabase.rpc('wipe_system_data');
-        
-        if (error) throw error;
-
-        toast({ 
-            title: 'Sistema Resetado com Sucesso', 
-            description: 'A página será recarregada para atualizar todos os dados.',
-            variant: 'default',
-            className: 'bg-green-600 text-white border-none'
-        });
-        
-        setIsWipeOpen(false);
-        setWipeConfirmText('');
-
-        // Force reload to clear all caches in Admin, Patient and Doctor panels
-        setTimeout(() => {
-            window.location.reload();
-        }, 1500);
-
-    } catch (error) {
-        console.error("Wipe error full trace:", error);
-        toast({ 
-            title: 'Erro ao Resetar', 
-            description: error.message || "Erro desconhecido ao executar limpeza.",
-            variant: 'destructive'
-        });
-        setProcessing(false);
-    }
-  };
-
   const getStatusBadge = (status) => {
     const styles = {
       confirmado: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200',
@@ -394,9 +355,6 @@ const AppointmentsControlPage = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <AdminPageHeader icon={CalendarIcon} title="Agendamentos" subtitle="Gerencie todas as consultas da plataforma.">
-        <Button variant="destructive" size="sm" className="gap-2" onClick={() => setIsWipeOpen(true)}>
-            <Trash2 className="w-4 h-4"/> Resetar Sistema
-        </Button>
         <Button onClick={handleExport} variant="outline" size="sm" className="gap-2" disabled={tabAppointments.length === 0}>
             <FileDown className="w-4 h-4"/> Exportar CSV
         </Button>
@@ -910,50 +868,6 @@ const AppointmentsControlPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* FULL WIPE / RESET SYSTEM Dialog — Double Confirmation */}
-      <Dialog open={isWipeOpen} onOpenChange={(open) => { setIsWipeOpen(open); if (!open) setWipeConfirmText(''); }}>
-        <DialogContent className="border-red-200">
-          <DialogHeader>
-             <DialogTitle className="text-red-600 flex items-center gap-2">
-               <AlertTriangle className="w-6 h-6 text-red-600"/> ATENÇÃO: Esta ação é IRREVERSÍVEL
-             </DialogTitle>
-             <DialogDescription className="text-gray-700 pt-2">
-               Reset para novo teste: apaga os <strong>dados operacionais</strong>, mantendo as contas cadastradas.
-               <br/><br/>
-               Esta ação irá excluir permanentemente:
-               <ul className="list-disc pl-5 my-2 space-y-1 text-red-700 font-medium text-xs">
-                   <li>Todos os agendamentos registrados</li>
-                   <li>Histórico de guias médicas</li>
-                   <li>Registros financeiros e de pagamentos (saques)</li>
-                   <li>Avaliações dos pacientes</li>
-                   <li>Logs de auditoria e notificações</li>
-               </ul>
-               <span className="block text-green-700 font-medium text-xs mb-2">As contas de médicos e pacientes (e suas configurações de agenda e procedimentos) serão mantidas.</span>
-               <span className="font-bold">Para confirmar, digite exatamente: DELETAR TUDO</span>
-             </DialogDescription>
-          </DialogHeader>
-          <div className="py-2">
-            <Input
-              placeholder="Digite DELETAR TUDO para confirmar"
-              value={wipeConfirmText}
-              onChange={(e) => setWipeConfirmText(e.target.value)}
-              className="border-red-300 focus:border-red-500 focus:ring-red-200"
-            />
-          </div>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => { setIsWipeOpen(false); setWipeConfirmText(''); }}>Cancelar, manter dados</Button>
-            <Button 
-              variant="destructive" 
-              onClick={handleWipeAllData} 
-              disabled={processing || wipeConfirmText !== 'DELETAR TUDO'} 
-              className="bg-red-600 hover:bg-red-700"
-            >
-               {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-               Sim, Apagar Tudo
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
