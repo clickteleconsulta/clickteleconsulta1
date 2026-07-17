@@ -61,6 +61,14 @@ const DoctorProfile = () => {
     const { register, handleSubmit, formState: { errors, isDirty }, reset, control, setValue, watch } = useForm();
     const [uploading, setUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [especialidades, setEspecialidades] = useState([]);
+
+    // Especialidades cadastradas pelo admin (Configurações → Especialidades).
+    useEffect(() => {
+        supabase.from('especialidades').select('nome').eq('ativo', true).order('ordem').order('nome')
+            .then(({ data }) => setEspecialidades((data || []).map((e) => e.nome)))
+            .catch(() => {});
+    }, []);
     const { toast } = useToast();
     const fileInputRef = useRef(null);
 
@@ -275,7 +283,10 @@ const DoctorProfile = () => {
                                                     <SelectValue placeholder="Selecione a especialidade" />
                                                 </SelectTrigger>
                                                 <SelectContent className="rounded-lg border-gray-200">
-                                                    {specialtiesList.map((spec) => (
+                                                    {[...new Set([
+                                                        ...(especialidades.length ? especialidades : specialtiesList),
+                                                        ...(field.value ? [field.value] : []),
+                                                    ])].map((spec) => (
                                                         <SelectItem key={spec} value={spec}>
                                                             {spec}
                                                         </SelectItem>

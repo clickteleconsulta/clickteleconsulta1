@@ -54,6 +54,8 @@ import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminProfessionalDocsPage from '@/pages/admin/AdminProfessionalDocsPage';
 import AdminStrategyPage from '@/pages/admin/AdminStrategyPage';
 import AdminRefundsPage from '@/pages/admin/AdminRefundsPage';
+import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
+import AdminAuditPage from '@/pages/admin/AdminAuditPage';
 import AdminSettingsPage from '@/pages/admin/AdminSettingsPage';
 import AdminPatientsPage from '@/pages/admin/AdminPatientsPage';
 
@@ -177,6 +179,8 @@ function App() {
              <Route path="metodos-recebimento" element={<AdminPaymentMethodsPage />} />
              <Route path="saques-pagamentos" element={<AdminWithdrawalsPage />} />
              <Route path="reembolsos" element={<AdminRefundsPage />} />
+             <Route path="comunicados" element={<AdminBroadcastPage />} />
+             <Route path="auditoria" element={<AdminAuditPage />} />
              <Route path="ai-training" element={<AdminAiTrainingPage />} />
              <Route path="legal" element={<AdminLegalPage />} />
              <Route path="configuracoes" element={<AdminSettingsPage />} />

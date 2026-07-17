@@ -30,6 +30,7 @@ import PatientReviewsPage from '@/pages/patient/PatientReviewsPage';
 import { Link } from 'react-router-dom';
 import { differenceInMinutes, differenceInSeconds } from 'date-fns';
 import { FEATURES } from '@/config/features';
+import ComunicadosBanner from '@/components/ComunicadosBanner';
 
 // ─── Countdown Hook ───────────────────────────────────────────────────────────
 const useCountdown = (targetDate) => {
@@ -321,6 +322,7 @@ const PatientArea = () => {
 
         {/* Conteúdo */}
         <main>
+          <ComunicadosBanner audience="paciente" />
           <Routes>
             <Route path="/" element={<Navigate to="consultas" replace />} />
             <Route

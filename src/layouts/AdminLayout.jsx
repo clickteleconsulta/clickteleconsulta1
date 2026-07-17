@@ -19,7 +19,9 @@ import {
   User,
   LineChart,
   RotateCcw,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Megaphone,
+  ScrollText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -55,8 +57,10 @@ const AdminLayout = () => {
         { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users, badge: counts.documentos },
         { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
         { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle, badge: counts.denuncias, urgent: true },
+        { href: '/admin/dashboard/comunicados', label: 'Comunicados', icon: Megaphone },
         { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote, badge: counts.saques },
         { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw, badge: counts.reembolsos },
+        { href: '/admin/dashboard/auditoria', label: 'Auditoria', icon: ScrollText },
         { href: '/admin/dashboard/configuracoes', label: 'Configurações', icon: SlidersHorizontal },
     ];
 

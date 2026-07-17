@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot } from 'lucide-react';
+import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot, Stethoscope } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';
@@ -13,6 +13,7 @@ import AdminLegalPage from '@/pages/admin/AdminLegalPage';
 import AdminSecurityPage from '@/pages/admin/AdminSecurityPage';
 import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import AdminSpecialties from '@/components/admin/AdminSpecialties';
 
 const DEFAULTS = {
     default_fee_percent: 25,
@@ -151,6 +152,7 @@ const PlatformRules = () => {
 
 const TABS = [
     { v: 'regras', label: 'Regras', icon: SlidersHorizontal },
+    { v: 'especialidades', label: 'Especialidades', icon: Stethoscope },
     { v: 'pagamentos', label: 'Métodos de Recebimento', icon: CreditCard },
     { v: 'legal', label: 'Documentos Legais', icon: FileText },
     { v: 'seguranca', label: 'Segurança', icon: ShieldCheck },
@@ -177,6 +179,7 @@ const AdminSettingsPage = () => {
                 </TabsList>
 
                 <TabsContent value="regras" className="mt-5"><PlatformRules /></TabsContent>
+                <TabsContent value="especialidades" className="mt-5"><AdminSpecialties /></TabsContent>
                 <TabsContent value="pagamentos" className="mt-5"><AdminPaymentMethodsPage /></TabsContent>
                 <TabsContent value="legal" className="mt-5"><AdminLegalPage /></TabsContent>
                 <TabsContent value="seguranca" className="mt-5"><AdminSecurityPage /></TabsContent>

@@ -37,6 +37,7 @@ import MessagesPage from '@/pages/MessagesPage';
 import DoctorReviewsPage from '@/pages/doctor/DoctorReviewsPage';
 import DoctorProceduresPage from '@/pages/doctor/DoctorProceduresPage';
 import { FEATURES } from '@/config/features';
+import ComunicadosBanner from '@/components/ComunicadosBanner';
 
 const DoctorArea = () => {
     const { signOut, profile, session, loading } = useAuth();
@@ -288,6 +289,7 @@ const DoctorArea = () => {
                 {/* Page content with Outlet/Routes */}
                 <main className="flex-1 overflow-auto p-6 bg-gray-100">
                     <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+                        <ComunicadosBanner audience="medico" />
                         {medicoInfo && medicoInfo.is_active !== false && medicoInfo.is_public === false && (
                             <div className="mb-6 flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                                 <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
