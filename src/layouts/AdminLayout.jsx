@@ -17,7 +17,8 @@ import {
   ShieldCheck,
   FolderCheck,
   User,
-  LineChart
+  LineChart,
+  RotateCcw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -52,6 +53,7 @@ const AdminLayout = () => {
         { href: '/admin/dashboard/documentacao', label: 'Documentação', icon: FolderCheck },
         { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle },
         { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote },
+        { href: '/admin/dashboard/reembolsos', label: 'Reembolsos', icon: RotateCcw },
         { href: '/admin/dashboard/metodos-recebimento', label: 'Métodos de Recebimento', icon: CreditCard },
         { href: '/admin/dashboard/ai-training', label: 'Assistente IA', icon: Bot },
         { href: '/admin/dashboard/legal', label: 'Documentos Legais', icon: FileText },
