@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import Logo from '@/components/Logo';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -117,6 +118,10 @@ const AdminLoginPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-slate-900 p-4">
       <Card className="w-full max-w-md border-slate-800 bg-slate-950 text-slate-100">
         <CardHeader className="space-y-1 text-center">
+          <Link to="/" className="inline-flex items-center justify-center gap-2 mb-4">
+            <Logo className="w-7 h-7" />
+            <span className="text-base font-bold text-white tracking-tight">Click Teleconsulta</span>
+          </Link>
           <div className="flex justify-center mb-4">
             <div className="p-3 rounded-full bg-slate-900 border border-slate-800">
               {mfaStep ? <Smartphone className="w-8 h-8 text-slate-100" /> : <Lock className="w-8 h-8 text-slate-100" />}

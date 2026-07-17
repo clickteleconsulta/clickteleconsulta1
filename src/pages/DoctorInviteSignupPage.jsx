@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
+import AuthLayout from '@/components/auth/AuthLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -93,12 +94,10 @@ const DoctorInviteSignupPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-4">
+        <AuthLayout variant="profissional">
             <Helmet><title>Cadastro de Médico — Click Teleconsulta</title></Helmet>
 
-            <Link to="/" className="mb-6 font-bold text-slate-800 text-lg">Click Teleconsulta</Link>
-
-            <Card className="w-full max-w-lg shadow-lg">
+            <Card className="w-full border-0 shadow-none">
                 {checking ? (
                     <CardContent className="py-16 flex flex-col items-center gap-3">
                         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -223,7 +222,7 @@ const DoctorInviteSignupPage = () => {
                     </>
                 )}
             </Card>
-        </div>
+        </AuthLayout>
     );
 };
 

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { MailCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import AuthLayout from '@/components/auth/AuthLayout';
 
 const SignUpSuccessPage = () => {
   const location = useLocation();
@@ -16,14 +17,14 @@ const SignUpSuccessPage = () => {
         <title>Cadastro Realizado com Sucesso - Click Teleconsulta</title>
         <meta name="description" content="Seu cadastro foi realizado com sucesso. Verifique seu e-mail para confirmar sua conta." />
       </Helmet>
+      <AuthLayout variant="cliente">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex items-center justify-center py-12"
       >
-        <Card className="w-full max-w-lg text-center shadow-lg">
-          <CardHeader>
+        <Card className="w-full text-center border-0 shadow-none">
+          <CardHeader className="px-0">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
               <MailCheck className="h-8 w-8 text-green-600" />
             </div>
@@ -34,7 +35,7 @@ const SignUpSuccessPage = () => {
               Obrigado por se juntar a nós.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 px-0">
             <div>
               <p className="mb-2">
                 Enviamos um link de confirmação para o seu e-mail:
@@ -51,6 +52,7 @@ const SignUpSuccessPage = () => {
           </CardContent>
         </Card>
       </motion.div>
+      </AuthLayout>
     </>
   );
 };
