@@ -36,7 +36,7 @@ const ProfessionalsPage = () => {
     uf: '',
     phone: '',
     price: '',
-    fee_percent: '10'
+    fee_percent: '25'
   });
 
   // Edit Fee Modal State
@@ -229,7 +229,7 @@ const ProfessionalsPage = () => {
         
         setIsCreateOpen(false);
         setNewDoctor({
-            full_name: '', email: '', password: '', specialty: '', crm: '', uf: '', phone: '', price: '', fee_percent: '10'
+            full_name: '', email: '', password: '', specialty: '', crm: '', uf: '', phone: '', price: '', fee_percent: '25'
         });
         fetchProfessionals();
 

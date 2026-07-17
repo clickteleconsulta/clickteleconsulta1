@@ -18,7 +18,7 @@ const TELECONSULTA_NOME = 'Teleconsulta';
 const TELECONSULTA_DESC = 'Código TUSS 10101012';
 const REPASSE_MIN = 30;
 const REPASSE_MAX = 150;
-const REPASSE_DEFAULT = 40;
+const REPASSE_DEFAULT = 30;
 // Detecta o procedimento protegido (funciona mesmo antes da coluna `bloqueado` existir no banco).
 const isProtectedProc = (p) =>
     !!p && (p.bloqueado === true || String(p.nome || '').trim().toLowerCase() === 'teleconsulta');

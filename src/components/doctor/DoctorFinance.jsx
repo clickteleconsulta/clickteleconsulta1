@@ -84,7 +84,7 @@ const DoctorFinance = () => {
             if (procedures.length === 0) {
                 const { data: created, error: seedErr } = await supabase
                     .from('procedimentos')
-                    .insert({ medico_id: doc.id, nome: 'Teleconsulta', descricao: 'Código TUSS 10101012', preco: 40.00, principal: true })
+                    .insert({ medico_id: doc.id, nome: 'Teleconsulta', descricao: 'Código TUSS 10101012', preco: 30.00, principal: true })
                     .select('id, nome, preco, principal')
                     .single();
                 if (seedErr) console.warn('Erro ao criar procedimento padrão:', seedErr.message);
