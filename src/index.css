@@ -116,3 +116,7 @@ p, span, div, li {
   pointer-events: none;
   transition: opacity 200ms ease-out;
 }
+
+/* Esconde a barra de rolagem (navegação horizontal mobile, menus recolhíveis) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

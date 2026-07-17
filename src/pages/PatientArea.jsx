@@ -3,7 +3,8 @@ import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { utcToZonedTime } from 'date-fns-tz';
+import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -214,21 +215,13 @@ const PatientArea = () => {
   const nextAppointment = upcomingList[0] || null;
   const upcomingCount = upcomingList.length;
 
-  // Consultas atendidas ainda não avaliadas → badge "Avalie sua consulta"
-  const [reviewedIds, setReviewedIds] = useState(() => new Set());
-  useEffect(() => {
-    const uid = session?.user?.id;
-    if (!uid) return;
-    supabase.from('avaliacoes').select('agendamento_id').eq('paciente_id', uid)
-      .then(({ data }) => setReviewedIds(new Set((data || []).map((r) => r.agendamento_id))))
-      .catch(() => {});
-  }, [session?.user?.id, appointments]);
-  const pendingReviews = useMemo(() => {
-    if (!appointments) return 0;
-    return appointments.filter(
-      (a) => ['atendido', 'realizado', 'concluida'].includes(a.status) && !reviewedIds.has(a.id)
+  // Consultas agendadas para HOJE (fuso SP) → badge no menu "Minhas Consultas"
+  const todayCount = useMemo(() => {
+    const today = format(utcToZonedTime(new Date(), 'America/Sao_Paulo'), 'yyyy-MM-dd');
+    return upcomingList.filter(
+      (a) => a.horario_inicio && format(utcToZonedTime(new Date(a.horario_inicio), 'America/Sao_Paulo'), 'yyyy-MM-dd') === today
     ).length;
-  }, [appointments, reviewedIds]);
+  }, [upcomingList]);
 
   const navLinkClasses = ({ isActive }) =>
     `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -236,6 +229,16 @@ const PatientArea = () => {
         ? 'bg-primary text-primary-foreground'
         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
     }`;
+
+  // Itens de navegação — usados na sidebar (desktop) e na barra de navegação (mobile).
+  const navItems = [
+    { to: '/paciente/dashboard/consultas', label: 'Minhas Consultas', short: 'Consultas', icon: Calendar, badge: todayCount },
+    { to: '/paciente/dashboard/agendar', label: 'Agendar Consulta', short: 'Agendar', icon: PlusCircle },
+    ...(FEATURES.MESSAGING ? [{ to: '/paciente/dashboard/mensagens', label: 'Mensagens', short: 'Mensagens', icon: MessageSquare }] : []),
+    { to: '/paciente/dashboard/avaliacoes', label: 'Avaliações', short: 'Avaliações', icon: Star },
+    { to: '/paciente/dashboard/dados', label: 'Meus Dados', short: 'Meus Dados', icon: FileSignature },
+    { to: '/paciente/dashboard/suporte', label: 'Suporte', short: 'Suporte', icon: HelpCircle },
+  ];
 
   if (!session) {
     return <Navigate to="/" replace />;
@@ -267,55 +270,17 @@ const PatientArea = () => {
               Menu
             </p>
             <nav className="flex flex-col gap-1">
-              <NavLink
-                to="/paciente/dashboard/consultas"
-                className={navLinkClasses}
-              >
-                <Calendar className="w-5 h-5" />
-                Minhas Consultas
-              </NavLink>
-              <NavLink
-                to="/paciente/dashboard/agendar"
-                className={navLinkClasses}
-              >
-                <PlusCircle className="w-5 h-5" />
-                Agendar Consulta
-              </NavLink>
-              {FEATURES.MESSAGING && (
-              <NavLink
-                to="/paciente/dashboard/mensagens"
-                className={navLinkClasses}
-              >
-                <MessageSquare className="w-5 h-5" />
-                Mensagens
-              </NavLink>
-              )}
-              <NavLink
-                to="/paciente/dashboard/avaliacoes"
-                className={navLinkClasses}
-              >
-                <Star className="w-5 h-5" />
-                <span className="flex-1">Avaliações</span>
-                {pendingReviews > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-amber-500 text-white text-[11px] font-bold leading-none">
-                    {pendingReviews > 99 ? '99+' : pendingReviews}
-                  </span>
-                )}
-              </NavLink>
-              <NavLink
-                to="/paciente/dashboard/dados"
-                className={navLinkClasses}
-              >
-                <FileSignature className="w-5 h-5" />
-                Meus Dados
-              </NavLink>
-              <NavLink
-                to="/paciente/dashboard/suporte"
-                className={navLinkClasses}
-              >
-                <HelpCircle className="w-5 h-5" />
-                Suporte
-              </NavLink>
+              {navItems.map((item) => (
+                <NavLink key={item.to} to={item.to} className={navLinkClasses}>
+                  <item.icon className="w-5 h-5 shrink-0" />
+                  <span className="flex-1">{item.label}</span>
+                  {item.badge > 0 && (
+                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-amber-500 text-white text-[11px] font-bold leading-none" title="Consultas hoje">
+                      {item.badge > 99 ? '99+' : item.badge}
+                    </span>
+                  )}
+                </NavLink>
+              ))}
             </nav>
 
             <p className="text-xs font-semibold text-muted-foreground uppercase px-3 mt-4 mb-2">
@@ -340,6 +305,28 @@ const PatientArea = () => {
 
         {/* Conteúdo */}
         <main>
+          {/* Navegação mobile (a sidebar fica oculta no mobile) */}
+          <nav className="md:hidden -mx-1 mb-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `flex items-center gap-1.5 shrink-0 h-9 px-3 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                    isActive ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-white border border-slate-200 text-slate-600'
+                  }`
+                }
+              >
+                <item.icon className="w-4 h-4" />
+                {item.short}
+                {item.badge > 0 && (
+                  <span className="inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold leading-none">
+                    {item.badge}
+                  </span>
+                )}
+              </NavLink>
+            ))}
+          </nav>
           <ComunicadosBanner audience="paciente" />
           <Routes>
             <Route path="/" element={<Navigate to="consultas" replace />} />
