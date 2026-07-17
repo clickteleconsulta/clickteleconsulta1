@@ -285,7 +285,7 @@ export function DoctorScheduleCard({
                           </h3>
                       </Link>
 
-                      {doctor?.reviewCount > 0 && (
+                      {doctor?.reviewCount > 0 ? (
                           <Link
                               to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
                               className="flex items-center gap-1 mt-1 w-fit group"
@@ -294,12 +294,18 @@ export function DoctorScheduleCard({
                           >
                               <div className="flex items-center gap-0.5">
                                   {Array.from({ length: 5 }).map((_, i) => (
-                                    <Star key={i} className={cn("w-3.5 h-3.5 transition-transform group-hover:scale-110", i < Math.round(doctor.rating) ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200")} />
+                                    <Star key={i} className={cn("w-3 h-3 transition-transform group-hover:scale-110", i < Math.round(doctor.rating) ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200")} />
                                   ))}
                               </div>
                               <span className="text-xs font-semibold text-slate-600 ml-0.5">{doctor.rating.toFixed(1).replace('.', ',')}</span>
                               <span className="text-xs text-slate-400">({doctor.reviewCount})</span>
                           </Link>
+                      ) : (
+                          <div className="flex items-center gap-0.5 mt-1" aria-hidden="true">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className="w-3 h-3 text-slate-300" />
+                              ))}
+                          </div>
                       )}
                       <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap mt-0.5" title={specialtyLabel}>
                           {specialtyLabel}
