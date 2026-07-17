@@ -7,6 +7,7 @@ import {
     Stethoscope, FileText, ShieldCheck, Wallet, Star, HeartPulse
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 
 // Manual de Boas Práticas — exclusivo do dashboard médico (medico/dashboard/ajuda).
 // Conteúdo original, simplificado e alinhado às funcionalidades da Click Teleconsulta.
@@ -97,10 +98,7 @@ const manual = [
 const DoctorHelp = () => {
     return (
         <div className="space-y-6 max-w-4xl mx-auto pb-8">
-            <div>
-                <h1 className="dash-page-title text-2xl">Central de Ajuda</h1>
-                <p className="text-sm text-gray-500 mt-1">Manual de boas práticas e canais de suporte para médicos parceiros.</p>
-            </div>
+            <DoctorPageHeader icon={LifeBuoy} title="Central de Ajuda" subtitle="Manual de boas práticas e canais de suporte para médicos parceiros." />
 
             <Card className="dashboard-card bg-gradient-to-br from-primary/5 to-transparent border-primary/10 p-0">
                 <CardContent className="text-center py-6 px-4">

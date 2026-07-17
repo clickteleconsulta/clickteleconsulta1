@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { format } from 'date-fns';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
+import ConsultationStatusBadge from '@/components/doctor/ConsultationStatusBadge';
 import {
     Loader2, LayoutDashboard, CalendarDays, Wallet, Star, Clock, ChevronRight,
     BellRing, CheckCircle2, Circle, AlertTriangle, FileWarning, CalendarClock, Landmark, ArrowRight, ExternalLink
@@ -139,13 +141,7 @@ const DoctorOverview = () => {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                    <h2 className="dash-page-title text-3xl flex items-center gap-2">
-                        <LayoutDashboard className="w-7 h-7 text-primary" /> Painel
-                    </h2>
-                    <p className="text-muted-foreground mt-0.5">Sua visão geral do dia — consultas, saldo e pendências.</p>
-                </div>
+            <DoctorPageHeader icon={LayoutDashboard} title="Painel" subtitle="Sua visão geral do dia — consultas, saldo e pendências.">
                 {med?.id && med?.is_active && (
                     <Button asChild variant="outline" size="sm" className="gap-2 shrink-0 border-gray-300 text-gray-700 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50">
                         <Link to={`/medico/${med.id}`} target="_blank" rel="noopener noreferrer">
@@ -153,7 +149,7 @@ const DoctorOverview = () => {
                         </Link>
                     </Button>
                 )}
-            </div>
+            </DoctorPageHeader>
 
             {/* KPIs */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -197,7 +193,7 @@ const DoctorOverview = () => {
                             <div key={a.id} className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50/50 px-3 py-2">
                                 <span className="flex items-center gap-1.5 text-sm font-semibold text-gray-900 tabular-nums"><Clock className="w-3.5 h-3.5 text-primary" /> {horaDe(a)}</span>
                                 <span className="flex-1 text-sm text-gray-700 truncate">{nomePaciente(a)}</span>
-                                <span className="text-[11px] uppercase font-medium text-gray-400">{a.status}</span>
+                                <ConsultationStatusBadge status={a.status} size="sm" />
                             </div>
                         ))}
                         {hoje.length > 6 && <p className="text-xs text-gray-400 text-center pt-1">+{hoje.length - 6} mais</p>}

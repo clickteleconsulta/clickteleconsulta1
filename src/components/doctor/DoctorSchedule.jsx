@@ -9,7 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, PlusCircle, Trash2, CalendarOff } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2, CalendarOff, Clock } from 'lucide-react';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import useAsync from '@/hooks/useAsync';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format, parseISO } from 'date-fns';
@@ -173,10 +174,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-2xl mx-auto">
-             <div className="flex flex-col gap-1 mb-2">
-                <h1 className="font-[Manrope] text-2xl font-extrabold tracking-tight text-gray-900">Configuração da Agenda</h1>
-                <p className="text-sm text-gray-500">Gerencie seus horários de atendimento semanais.</p>
-             </div>
+             <DoctorPageHeader icon={Clock} title="Configuração da Agenda" subtitle="Gerencie seus horários de atendimento semanais." />
 
             <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5">
                 <CardHeader className="px-6 pt-6 pb-4">

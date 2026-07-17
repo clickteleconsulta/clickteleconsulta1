@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import TwoFactorCard from '@/components/TwoFactorCard';
 import DoctorDocumentation from '@/components/doctor/DoctorDocumentation';
 import DeleteAccountCard from '@/components/DeleteAccountCard';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { maskCRM, maskPhone } from '@/lib/masks';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName, stripDoctorTitle } from '@/lib/doctorName';
@@ -205,14 +206,8 @@ const DoctorProfile = () => {
 
     return (
         <div className="space-y-4 max-w-5xl mx-auto pb-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                <div>
-                    <h1 className="dash-page-title text-2xl">Meu Perfil</h1>
-                    <div className="flex items-center gap-2 mt-1">
-                        <p className="text-sm text-gray-500">Gerencie suas informações profissionais.</p>
-                        {isDirty && <span className="text-xs text-amber-600 font-medium animate-pulse">• Alterações não salvas</span>}
-                    </div>
-                </div>
+            <DoctorPageHeader icon={UserIcon} title="Meu Perfil"
+                subtitle={<span className="inline-flex items-center gap-2">Gerencie suas informações profissionais.{isDirty && <span className="text-xs text-amber-600 font-medium animate-pulse">• Alterações não salvas</span>}</span>}>
                 {doctorData?.id && (
                     <Button asChild variant="outline" size="sm" className="gap-2 shadow-sm border-gray-300 font-medium text-gray-700 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50 h-9 rounded-xl transition-all duration-200">
                         <Link to={`/medico/${doctorData.id}`} target="_blank">
@@ -221,7 +216,7 @@ const DoctorProfile = () => {
                         </Link>
                     </Button>
                 )}
-            </div>
+            </DoctorPageHeader>
 
             <Tabs defaultValue="perfil" className="w-full">
                 <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto gap-1 bg-gray-100/80 p-1 rounded-xl">

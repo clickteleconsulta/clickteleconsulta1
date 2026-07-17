@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Loader2, Star, AlertTriangle, CheckCircle, ShieldAlert } from 'lucide-react';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -197,10 +198,7 @@ const DoctorReviewsPage = () => {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="dash-page-title text-2xl">Avaliações dos Pacientes</h1>
-                <p className="text-gray-500 mt-1">Gerencie as avaliações recebidas após as consultas.</p>
-            </div>
+            <DoctorPageHeader icon={Star} title="Avaliações dos Pacientes" subtitle="Gerencie as avaliações recebidas após as consultas." />
 
             <Tabs defaultValue="pendentes" className="w-full">
                 <TabsList className="mb-4 h-10 p-1 bg-gray-100/80 rounded-xl">

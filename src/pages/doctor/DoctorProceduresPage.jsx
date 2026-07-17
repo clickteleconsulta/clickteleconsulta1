@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Stethoscope, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Lock } from 'lucide-react';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { patientPriceFromRepasse } from '@/lib/price';
 
 // Procedimento padrão da plataforma — imutável (exceto o valor de repasse).
@@ -235,17 +236,13 @@ const DoctorProceduresPage = () => {
 
     return (
         <div className="w-full space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div className="w-full sm:w-auto flex-1">
-                    <h1 className="dash-page-title text-2xl break-words">Meus Procedimentos</h1>
-                    <p className="text-sm text-gray-500 mt-1">Gerencie os serviços, descrições e valores do seu atendimento.</p>
-                </div>
+            <DoctorPageHeader icon={Stethoscope} title="Meus Procedimentos" subtitle="Gerencie os serviços, descrições e valores do seu atendimento.">
                 {!isFormOpen && (
                     <Button onClick={() => handleOpenForm()} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md shadow-blue-500/20 h-9 text-sm shrink-0 w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
                         <Plus className="w-4 h-4 mr-2" /> Novo Procedimento
                     </Button>
                 )}
-            </div>
+            </DoctorPageHeader>
 
             {isFormOpen && (
                 <Card className="border-blue-100 shadow-md rounded-xl overflow-hidden mb-6 w-full">

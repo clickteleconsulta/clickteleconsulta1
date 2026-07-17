@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import ConsultationStatusBadge from '@/components/doctor/ConsultationStatusBadge';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock, Filter, SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, DialogDescription } from "@/components/ui/dialog";
@@ -797,62 +799,12 @@ const DoctorConsultations = () => {
   const handleConfirmPayment = id => handleAction(id, () => markAppointmentAsPaidByDoctor(id), { title: 'Pagamento Confirmado!', description: 'O status foi atualizado para Confirmado.', variant: 'success' }, { title: 'Falha ao Confirmar Pagamento' });
   const handleCancel = id => handleAction(id, () => cancelAppointmentByDoctor(id), null, { title: 'Falha ao Cancelar' });
 
-  // StatusBadge Logic (reused)
-  const StatusBadge = ({ status, paymentStatus, reminderSentAt, whatsappStatus, appointmentId }) => {
-    let text = status;
-    let icon = null;
-    let containerClass = "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm";
-    
-    switch (status) {
-      case 'confirmado':
-      case 'agendado':
-        text = 'Confirmado';
-        icon = <CheckCircle2 className="w-3 h-3 mr-1.5" />;
-        containerClass += " bg-emerald-50 text-emerald-700 border-emerald-100";
-        break;
-      case 'pendente':
-        text = 'Pendente';
-        icon = <AlertTriangle className="w-3 h-3 mr-1.5" />;
-        containerClass += " bg-amber-50 text-amber-700 border-amber-100";
-        break;
-      case 'reagendado':
-        text = 'Reagendado';
-        icon = <Clock className="w-3 h-3 mr-1.5" />;
-        containerClass += " bg-amber-50 text-amber-700 border-amber-100";
-        break;
-      case 'atendido':
-      case 'concluida':
-        text = 'Concluído';
-        icon = <Check className="w-3 h-3 mr-1.5" />;
-        containerClass += " bg-blue-50 text-blue-700 border-blue-100";
-        break;
-      case 'cancelado':
-      case 'expirado':
-        text = status === 'cancelado' ? 'Cancelado' : 'Expirado';
-        icon = <XCircle className="w-3 h-3 mr-1.5" />;
-        containerClass += " bg-red-50 text-red-700 border-red-100";
-        break;
-      default:
-        text = status;
-        containerClass += " bg-gray-50 text-gray-600 border-gray-100";
-    }
-
-    const isWhatsappSent = localWhatsappSentStatus[appointmentId] || whatsappStatus === 'sent' || !!reminderSentAt;
-    const whatsappTooltip = isWhatsappSent ? "Lembrete WhatsApp enviado (Simulado)" : "Enviar lembrete WhatsApp (Simulado)";
-    const whatsappIconClass = isWhatsappSent ? "text-blue-600 bg-blue-50 hover:bg-blue-100" : "text-gray-400 bg-gray-50 hover:bg-gray-100";
-
-    const isEmailSent = localEmailSentStatus[appointmentId];
-    const emailTooltip = isEmailSent ? "Email enviado (Simulado)" : "Enviar Email (Simulado)";
-    const emailIconClass = isEmailSent ? "text-blue-600 bg-blue-50 hover:bg-blue-100" : "text-gray-400 bg-gray-50 hover:bg-gray-100";
-    const isLoading = isResending[appointmentId];
-    const isEmailLoading = isSendingEmail[appointmentId];
-    
-    return (
-      <div className="flex items-center gap-1.5">
-        <span className={containerClass}>{icon}{text}</span>
-      </div>
-    );
-  };
+  // Badge de status — usa o componente compartilhado (cores consistentes em todo o dashboard)
+  const StatusBadge = ({ status }) => (
+    <div className="flex items-center gap-1.5">
+      <ConsultationStatusBadge status={status} />
+    </div>
+  );
 
   const renderSkeleton = () => <TableBody>{Array.from({ length: 5 }).map((_, index) => <TableRow key={index} className="border-b border-gray-100"><TableCell><Skeleton className="h-4 w-[100px] rounded-full" /></TableCell><TableCell><Skeleton className="h-4 w-[120px] rounded-full" /></TableCell><TableCell><Skeleton className="h-4 w-[180px] rounded-full" /></TableCell><TableCell><Skeleton className="h-6 w-[100px] rounded-full" /></TableCell><TableCell className="text-center"><Skeleton className="h-8 w-8 rounded-full mx-auto" /></TableCell><TableCell className="text-right"><Skeleton className="h-8 w-8 rounded-lg inline-block" /></TableCell></TableRow>)}</TableBody>;
 
@@ -1012,7 +964,8 @@ const DoctorConsultations = () => {
     </>;
   };
 
-  return <div className="space-y-8 pb-12 pt-8 px-6 min-h-screen">
+  return <div className="space-y-6 pb-12 pt-8 px-6 min-h-screen">
+      <DoctorPageHeader icon={CalendarIcon} title="Consultas" subtitle="Seus agendamentos — pacientes do dia e próximos atendimentos." />
       <div className="flex flex-col md:flex-row gap-4 items-center mb-4">
         <div className="relative flex-1 w-full flex items-center gap-3">
             <div className="relative w-full">

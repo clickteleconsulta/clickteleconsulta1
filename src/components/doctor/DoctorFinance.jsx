@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import WithdrawalDataForm from './WithdrawalDataForm';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 
 const TZ = 'America/Sao_Paulo';
 // Dia de calendário (yyyy-MM-dd) no fuso de São Paulo — para comparar por DIA,
@@ -369,32 +370,26 @@ const DoctorFinance = () => {
 
     return (
         <div className="space-y-6 max-w-6xl mx-auto pb-10">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 className="dash-page-title text-2xl">Financeiro</h1>
-                    <p className="text-sm text-gray-500">Gerencie seus recebimentos e fluxo de caixa.</p>
-                </div>
-                <div className="flex gap-2">
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-xl border-gray-300 text-gray-700 transition-all duration-200 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm">
-                                <Wallet className="w-3.5 h-3.5" /> Dados para saque
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent align="end" className="w-[380px] p-0 rounded-sm max-h-[80vh] overflow-y-auto border-gray-200 shadow-lg">
-                            <WithdrawalDataForm onSave={fetchFinancialData} />
-                        </PopoverContent>
-                    </Popover>
-                    <Button
-                        onClick={() => { setSelectedGuideIds([]); setIsWithdrawOpen(true); }}
-                        disabled={!canRequestWithdraw || paidTransactions.length === 0}
-                        title={!canRequestWithdraw ? `Novo saque disponível em ${nextEligibleDate ? spDate(nextEligibleDate) : ''}` : (paidTransactions.length === 0 ? 'Nenhuma guia disponível para saque' : 'Solicitar saque')}
-                        className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-blue-500/20 h-9 text-xs px-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
-                    >
-                        <Wallet className="w-3.5 h-3.5" /> Solicitar Saque
-                    </Button>
-                </div>
-            </div>
+            <DoctorPageHeader icon={Wallet} title="Financeiro" subtitle="Gerencie seus recebimentos e fluxo de caixa.">
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-xl border-gray-300 text-gray-700 transition-all duration-200 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm">
+                            <Wallet className="w-3.5 h-3.5" /> Dados para saque
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-[380px] p-0 rounded-sm max-h-[80vh] overflow-y-auto border-gray-200 shadow-lg">
+                        <WithdrawalDataForm onSave={fetchFinancialData} />
+                    </PopoverContent>
+                </Popover>
+                <Button
+                    onClick={() => { setSelectedGuideIds([]); setIsWithdrawOpen(true); }}
+                    disabled={!canRequestWithdraw || paidTransactions.length === 0}
+                    title={!canRequestWithdraw ? `Novo saque disponível em ${nextEligibleDate ? spDate(nextEligibleDate) : ''}` : (paidTransactions.length === 0 ? 'Nenhuma guia disponível para saque' : 'Solicitar saque')}
+                    className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-blue-500/20 h-9 text-xs px-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                    <Wallet className="w-3.5 h-3.5" /> Solicitar Saque
+                </Button>
+            </DoctorPageHeader>
 
             <div className="max-w-sm">
                 <Card className="bg-white border-l-4 border-l-green-500 border-gray-200 shadow-sm p-4 rounded-2xl transition-all duration-300 hover:shadow-md">
