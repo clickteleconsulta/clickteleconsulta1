@@ -28,9 +28,13 @@ const DoctorOverview = () => {
         setLoading(true);
         try {
             const { data: med } = await supabase.from('medicos')
-                .select('id, public_name, name, specialty, sexo, formacao, bio, description, status, is_public, is_active, payment_settings, withdrawal_payment_method, withdrawal_pix_key, withdrawal_bank_account, withdrawal_bank_agency')
+                .select('id, public_name, name, specialty, sexo, formacao, bio, description, status, is_public, is_active, payment_settings')
                 .eq('user_id', uid).maybeSingle();
             const docId = med?.id;
+            // Dados bancários na tabela privada (RLS dono+admin)
+            const { data: bank } = await supabase.from('medico_dados_bancarios')
+                .select('withdrawal_payment_method, withdrawal_pix_key, withdrawal_bank_account, withdrawal_bank_agency')
+                .eq('user_id', uid).maybeSingle();
 
             const todayStr = format(utcToZonedTime(new Date(), TZ), 'yyyy-MM-dd');
             const start = zonedTimeToUtc(`${todayStr} 00:00:00`, TZ).toISOString();
@@ -64,7 +68,7 @@ const DoctorOverview = () => {
             const docStatuses = docs.map(d => d.status);
 
             setData({
-                med,
+                med, bank: bank || {},
                 hoje: hojeRes.data || [],
                 saldo, saldoCount: saldoGuias.length,
                 notaMedia, nAval: ratings.length,
@@ -86,17 +90,17 @@ const DoctorOverview = () => {
         return <div className="flex h-[40vh] items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
     }
 
-    const { med, hoje, saldo, saldoCount, notaMedia, nAval, agendaCount, temDocs, docRejeitado, docEmAnalise } = data;
+    const { med, bank, hoje, saldo, saldoCount, notaMedia, nAval, agendaCount, temDocs, docRejeitado, docEmAnalise } = data;
 
     const horaDe = (a) => a.horario_inicio ? format(utcToZonedTime(new Date(a.horario_inicio), TZ), 'HH:mm') : (a.appointment_time || '').slice(0, 5);
     const nomePaciente = (a) => a.paciente_nome || a.patient?.full_name || 'Paciente';
     const proxima = hoje[0];
 
-    // Dados bancários completos?
-    const bancoOk = med?.withdrawal_payment_method === 'pix'
-        ? !!med?.withdrawal_pix_key
-        : med?.withdrawal_payment_method === 'transferencia'
-            ? !!(med?.withdrawal_bank_account && med?.withdrawal_bank_agency)
+    // Dados bancários completos? (tabela privada medico_dados_bancarios)
+    const bancoOk = bank?.withdrawal_payment_method === 'pix'
+        ? !!bank?.withdrawal_pix_key
+        : bank?.withdrawal_payment_method === 'transferencia'
+            ? !!(bank?.withdrawal_bank_account && bank?.withdrawal_bank_agency)
             : false;
     const perfilOk = !!(med?.public_name && med?.specialty && med?.sexo && (med?.formacao || med?.bio || med?.description));
     const agendaOk = agendaCount > 0;

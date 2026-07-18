@@ -99,7 +99,13 @@ const DoctorFinance = () => {
                 setLoading(false);
                 return;
             }
-            setDoctorData(doc);
+            // Dados bancários vêm da tabela privada (RLS dono+admin) e são mesclados no doctorData.
+            const { data: bank } = await supabase
+                .from('medico_dados_bancarios')
+                .select('withdrawal_payment_method, withdrawal_pix_key, withdrawal_bank_name, withdrawal_bank_agency, withdrawal_bank_account, withdrawal_holder_name, withdrawal_document, withdrawal_account_type')
+                .eq('user_id', user.id)
+                .maybeSingle();
+            setDoctorData({ ...doc, ...(bank || {}) });
 
             // Procedimentos do médico (fonte do "Serviço"). Cria um padrão se não houver.
             let procedures = [];

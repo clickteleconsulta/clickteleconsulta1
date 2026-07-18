@@ -28,8 +28,9 @@ const WithdrawalDataForm = ({ onSave }) => {
 
     const fetchDoctorData = async () => {
         try {
+            // Dados bancários ficam em tabela privada (RLS dono+admin), fora da tabela pública medicos.
             const { data, error } = await supabase
-                .from('medicos')
+                .from('medico_dados_bancarios')
                 .select('*')
                 .eq('user_id', user.id)
                 .maybeSingle();
@@ -57,8 +58,9 @@ const WithdrawalDataForm = ({ onSave }) => {
         setSaving(true);
         try {
             const { error } = await supabase
-                .from('medicos')
-                .update({
+                .from('medico_dados_bancarios')
+                .upsert({
+                    user_id: user.id,
                     withdrawal_payment_method: data.withdrawal_payment_method,
                     withdrawal_holder_name: data.withdrawal_holder_name,
                     withdrawal_document: data.withdrawal_document,
@@ -68,8 +70,7 @@ const WithdrawalDataForm = ({ onSave }) => {
                     withdrawal_bank_agency: data.withdrawal_bank_agency,
                     withdrawal_bank_account: data.withdrawal_bank_account,
                     updated_at: new Date().toISOString()
-                })
-                .eq('user_id', user.id);
+                }, { onConflict: 'user_id' });
 
             if (error) throw error;
 
