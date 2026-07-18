@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { Loader2, Frown, Star, MapPin, Shield, Edit, Save, Info, MessageCircle, CheckCircle, Phone, Calendar } from 'lucide-react';
@@ -232,12 +233,12 @@ const DoctorPublicProfilePage = () => {
     const isUUID = /^[0-9a-f-]{36}$/.test(id);
 
     if (isUUID) {
-      const { data, error } = await supabase.from('medicos').select('*').eq('id', id).eq('is_active', true).single();
+      const { data, error } = await supabase.from('medicos').select(PUBLIC_DOCTOR_COLUMNS).eq('id', id).eq('is_active', true).single();
       if (error || !data) throw new Error("Médico não encontrado.");
       doctorData = data;
     } else {
       // Slug lookup: try to match public_name + specialty
-      const { data, error } = await supabase.from('medicos').select('*').eq('is_active', true);
+      const { data, error } = await supabase.from('medicos').select(PUBLIC_DOCTOR_COLUMNS).eq('is_active', true);
       if (error) throw error;
       doctorData = data?.find(d => {
         const name = slugify(d.public_name || d.name);

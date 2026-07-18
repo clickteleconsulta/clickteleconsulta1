@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { patientPriceFromRepasse } from '@/lib/price';
+import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { Loader2, Frown, Edit, Search, Filter, X } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -50,7 +51,7 @@ const AppointmentsPage = () => {
   const fetchPublicDoctors = useCallback(async () => {
     const { data: publicDoctors, error: fetchError } = await supabase
       .from('medicos')
-      .select('*, agenda_medico(*), procedimentos(*)')
+      .select(`${PUBLIC_DOCTOR_COLUMNS}, agenda_medico(*), procedimentos(*)`)
       .eq('is_public', true)
       .eq('is_active', true)
       .order('created_at', { ascending: true });
