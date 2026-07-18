@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Mail, Send, Copy, Ban, CheckCircle2, Clock, RefreshCw } from 'lucide-react';
+import { Loader2, Mail, Send, Copy, Ban, CheckCircle2, Clock, RefreshCw, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 
 const StatusBadge = ({ status }) => {
@@ -29,6 +29,7 @@ const DoctorInviteSection = () => {
     const [loading, setLoading] = useState(true);
     const [email, setEmail] = useState('');
     const [sending, setSending] = useState(false);
+    const [clearing, setClearing] = useState(false);
 
     const inviteLink = (token) => `${window.location.origin}/cadastro-medico/${token}`;
 
@@ -104,6 +105,26 @@ const DoctorInviteSection = () => {
         else { toast({ title: 'Convite cancelado.' }); fetchInvites(); }
     };
 
+    // Limpar histórico: remove convites já resolvidos (aceitos/cancelados/expirados),
+    // preservando os pendentes/enviados (que ainda têm link de convite válido).
+    const RESOLVIDOS = ['aceito', 'cancelado', 'expirado', 'recusado'];
+    const resolvidosCount = invites.filter((i) => RESOLVIDOS.includes(i.status)).length;
+    const handleClearHistory = async () => {
+        if (resolvidosCount === 0) return;
+        if (!window.confirm(`Limpar ${resolvidosCount} convite(s) já resolvido(s) (aceitos, cancelados ou expirados)? Os convites pendentes serão mantidos.`)) return;
+        setClearing(true);
+        try {
+            const { error } = await supabase.from('convites_medico').delete().in('status', RESOLVIDOS);
+            if (error) throw error;
+            toast({ title: 'Histórico limpo', description: 'Convites resolvidos removidos.' });
+            fetchInvites();
+        } catch (e) {
+            toast({ variant: 'destructive', title: 'Erro ao limpar', description: e.message });
+        } finally {
+            setClearing(false);
+        }
+    };
+
     return (
         <Card>
             <CardHeader>
@@ -135,9 +156,16 @@ const DoctorInviteSection = () => {
 
                 <div className="flex items-center justify-between">
                     <h4 className="text-sm font-semibold text-gray-700">Convites enviados</h4>
-                    <Button variant="ghost" size="sm" onClick={fetchInvites} disabled={loading}>
-                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                    </Button>
+                    <div className="flex items-center gap-1">
+                        {resolvidosCount > 0 && (
+                            <Button variant="ghost" size="sm" onClick={handleClearHistory} disabled={clearing || loading} className="gap-1.5 h-8 text-xs text-red-600 hover:text-red-700 hover:bg-red-50">
+                                {clearing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />} Limpar histórico
+                            </Button>
+                        )}
+                        <Button variant="ghost" size="sm" onClick={fetchInvites} disabled={loading}>
+                            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                        </Button>
+                    </div>
                 </div>
 
                 {loading ? (
