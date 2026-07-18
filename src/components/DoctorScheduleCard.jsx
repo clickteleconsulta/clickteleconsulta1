@@ -285,7 +285,7 @@ export function DoctorScheduleCard({
                           </h3>
                       </Link>
 
-                      {doctor?.reviewCount > 0 ? (
+                      {doctor?.reviewCount > 0 && (
                           <Link
                               to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
                               className="flex items-center gap-1 mt-1 w-fit group"
@@ -299,12 +299,6 @@ export function DoctorScheduleCard({
                               </div>
                               <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
-                      ) : (
-                          <div className="flex items-center gap-0.5 mt-1" aria-hidden="true">
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} className="w-3 h-3 text-slate-300" />
-                              ))}
-                          </div>
                       )}
                       <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap mt-0.5" title={specialtyLabel}>
                           {specialtyLabel}
