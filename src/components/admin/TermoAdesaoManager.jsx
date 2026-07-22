@@ -20,6 +20,8 @@ const TermoAdesaoManager = () => {
     const [previewDoc, setPreviewDoc] = useState(null);
     const [deleteDoc, setDeleteDoc] = useState(null);
     const [activateDoc, setActivateDoc] = useState(null);
+    const [confirmClear, setConfirmClear] = useState(false);
+    const [clearing, setClearing] = useState(false);
 
     const fetchVersions = useCallback(async () => {
         setLoading(true);
@@ -105,7 +107,24 @@ const TermoAdesaoManager = () => {
         }
     };
 
+    const handleClearHistory = async () => {
+        setClearing(true);
+        try {
+            const inativas = versions.filter(v => !v.is_active).length;
+            const { error } = await supabase.from('termo_adesao').delete().eq('is_active', false);
+            if (error) throw error;
+            toast({ title: 'Histórico limpo', description: `${inativas} versão(ões) antiga(s) removida(s). A versão ativa foi mantida.` });
+            setConfirmClear(false);
+            fetchVersions();
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro ao limpar histórico', description: err.message });
+        } finally {
+            setClearing(false);
+        }
+    };
+
     const activeVersion = versions.find(v => v.is_active);
+    const inactiveCount = versions.filter(v => !v.is_active).length;
 
     return (
         <div className="mt-6 space-y-6">
@@ -141,7 +160,15 @@ const TermoAdesaoManager = () => {
             </Card>
 
             <Card>
-                <CardHeader><CardTitle className="text-lg">Histórico de Versões</CardTitle></CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle className="text-lg">Histórico de Versões</CardTitle>
+                    {inactiveCount > 0 && (
+                        <Button variant="outline" size="sm" onClick={() => setConfirmClear(true)} disabled={loading || clearing}
+                            className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">
+                            <Trash2 className="w-4 h-4 mr-2" /> Limpar histórico
+                        </Button>
+                    )}
+                </CardHeader>
                 <CardContent>
                     <div className="rounded-md border">
                         <Table>
@@ -216,6 +243,21 @@ const TermoAdesaoManager = () => {
                 <DialogContent>
                     <DialogHeader><DialogTitle>Excluir versão v{deleteDoc?.version}?</DialogTitle><DialogDescription>Esta ação não pode ser desfeita.</DialogDescription></DialogHeader>
                     <DialogFooter><Button variant="outline" onClick={() => setDeleteDoc(null)}>Cancelar</Button><Button variant="destructive" onClick={handleDelete}>Excluir</Button></DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={confirmClear} onOpenChange={(o) => !o && !clearing && setConfirmClear(false)}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Limpar histórico do Termo de Adesão?</DialogTitle>
+                        <DialogDescription>Todas as {inactiveCount} versão(ões) inativa(s) serão removidas permanentemente. A <strong>versão ativa é mantida</strong>. Esta ação não pode ser desfeita.</DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setConfirmClear(false)} disabled={clearing}>Cancelar</Button>
+                        <Button variant="destructive" onClick={handleClearHistory} disabled={clearing}>
+                            {clearing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Limpando…</> : 'Limpar histórico'}
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
 

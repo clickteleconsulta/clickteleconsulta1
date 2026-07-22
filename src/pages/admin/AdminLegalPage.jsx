@@ -34,6 +34,8 @@ const AdminLegalPage = () => {
     const [previewDoc, setPreviewDoc] = useState(null);
     const [deleteDoc, setDeleteDoc] = useState(null);
     const [activateDoc, setActivateDoc] = useState(null);
+    const [confirmClear, setConfirmClear] = useState(false);
+    const [clearing, setClearing] = useState(false);
 
     useEffect(() => {
         fetchDocumentVersions();
@@ -225,7 +227,30 @@ const AdminLegalPage = () => {
         }
     };
 
+    const handleClearHistory = async () => {
+        setClearing(true);
+        try {
+            const inativas = versions.filter(v => !v.is_active);
+            for (const ver of inativas) {
+                const { error } = await supabase.functions.invoke('manage-documents', {
+                    method: 'DELETE',
+                    body: { documentId: ver.id }
+                });
+                if (error) throw new Error(error.message || 'Falha ao excluir versão');
+            }
+            toast({ title: 'Histórico limpo', description: `${inativas.length} versão(ões) antiga(s) removida(s). A versão ativa foi mantida.`, variant: 'success' });
+            setConfirmClear(false);
+            fetchDocumentVersions();
+        } catch (error) {
+            console.error('[AdminLegal] Erro ao limpar histórico:', error);
+            toast({ variant: 'destructive', title: 'Erro ao limpar histórico', description: error.message });
+        } finally {
+            setClearing(false);
+        }
+    };
+
     const activeVersion = versions.find(v => v.is_active);
+    const inactiveCount = versions.filter(v => !v.is_active).length;
 
     return (
         <div className="space-y-6">
@@ -313,9 +338,17 @@ const AdminLegalPage = () => {
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-lg">Histórico de Versões</CardTitle>
-                            <Button variant="ghost" size="sm" onClick={fetchDocumentVersions} disabled={loading}>
-                                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                {inactiveCount > 0 && (
+                                    <Button variant="outline" size="sm" onClick={() => setConfirmClear(true)} disabled={loading || clearing}
+                                        className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700">
+                                        <Trash2 className="w-4 h-4 mr-2" /> Limpar histórico
+                                    </Button>
+                                )}
+                                <Button variant="ghost" size="sm" onClick={fetchDocumentVersions} disabled={loading}>
+                                    <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                                </Button>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="rounded-md border">
@@ -462,6 +495,24 @@ const AdminLegalPage = () => {
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setDeleteDoc(null)}>Cancelar</Button>
                         <Button variant="destructive" onClick={handleDelete}>Excluir</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Clear History Confirmation */}
+            <Dialog open={confirmClear} onOpenChange={(open) => !open && !clearing && setConfirmClear(false)}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Limpar histórico de {DOC_TYPES[activeTab]}?</DialogTitle>
+                        <DialogDescription>
+                            Todas as {inactiveCount} versão(ões) inativa(s) serão removidas permanentemente. A <strong>versão ativa é mantida</strong>. Esta ação não pode ser desfeita.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setConfirmClear(false)} disabled={clearing}>Cancelar</Button>
+                        <Button variant="destructive" onClick={handleClearHistory} disabled={clearing}>
+                            {clearing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Limpando…</> : <>Limpar histórico</>}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
