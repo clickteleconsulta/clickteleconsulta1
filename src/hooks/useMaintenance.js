@@ -10,12 +10,8 @@ export function useMaintenance() {
     let active = true;
     (async () => {
       try {
-        const { data } = await supabase
-          .from('configuracoes_site')
-          .select('settings')
-          .limit(1)
-          .maybeSingle();
-        const m = data?.settings?.maintenance || {};
+        const { data } = await supabase.rpc('get_public_site_config');
+        const m = data?.maintenance || {};
         if (active) setState({ loading: false, enabled: !!m.enabled, message: m.message || '' });
       } catch {
         if (active) setState({ loading: false, enabled: false, message: '' });

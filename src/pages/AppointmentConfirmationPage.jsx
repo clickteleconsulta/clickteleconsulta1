@@ -109,15 +109,9 @@ const AppointmentConfirmationPage = () => {
     const fetchAppointmentAndSettings = async () => {
       setLoading(true);
       try {
-        // Fetch Admin Settings
-        const { data: configData, error: configError } = await supabase
-          .from('configuracoes_site')
-          .select('settings')
-          .limit(1)
-          .maybeSingle();
-
-        if (configError) throw configError;
-        setAdminSettings(configData?.settings?.payment_settings || {});
+        // Fetch payment instructions (RPC restrita a usuários autenticados)
+        const { data: payData } = await supabase.rpc('get_payment_instructions');
+        setAdminSettings(payData || {});
 
         // Fetch Appointment
         const { data, error } = await supabase

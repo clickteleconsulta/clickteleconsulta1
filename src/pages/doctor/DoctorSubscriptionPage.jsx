@@ -20,7 +20,6 @@ const DoctorSubscriptionPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState(null);
-  const [doctorId, setDoctorId] = useState(null);
 
   // State for the modification flow
   const [selectedPlanId, setSelectedPlanId] = useState(null);
@@ -35,12 +34,12 @@ const DoctorSubscriptionPage = () => {
       const {
         data,
         error
-      } = await supabase.from('medicos').select('id, subscription_plan, subscription_status, subscription_start_date, subscription_renewal_date, subscription_payment_method').eq('user_id', user.id).single();
+      } = await supabase.from('medico_dados_privados').select('subscription_plan, subscription_status, subscription_start_date, subscription_renewal_date, subscription_payment_method').eq('user_id', user.id).maybeSingle();
       if (error) throw error;
-      setDoctorId(data.id);
-      setSubscriptionData(data);
-      setSelectedPlanId(data.subscription_plan || 'basic');
-      setSelectedPaymentMethod(data.subscription_payment_method || 'credit_card');
+      const sub = data || {};
+      setSubscriptionData(sub);
+      setSelectedPlanId(sub.subscription_plan || 'basic');
+      setSelectedPaymentMethod(sub.subscription_payment_method || 'credit_card');
     } catch (error) {
       console.error('Error fetching subscription:', error);
       toast({
@@ -94,7 +93,7 @@ const DoctorSubscriptionPage = () => {
       };
       const {
         error
-      } = await supabase.from('medicos').update(updates).eq('id', doctorId);
+      } = await supabase.from('medico_dados_privados').upsert({ user_id: user.id, ...updates }, { onConflict: 'user_id' });
       if (error) throw error;
       toast({
         variant: "success",
