@@ -15,6 +15,7 @@ import AdminAiTrainingPage from '@/pages/admin/AdminAiTrainingPage';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import AdminSpecialties from '@/components/admin/AdminSpecialties';
 import AdminSystemReset from '@/components/admin/AdminSystemReset';
+import MaintenanceToggle from '@/components/admin/MaintenanceToggle';
 
 const DEFAULTS = {
     default_fee_percent: 25,
@@ -186,7 +187,12 @@ const AdminSettingsPage = () => {
                 <TabsContent value="legal" className="mt-5"><AdminLegalPage /></TabsContent>
                 <TabsContent value="seguranca" className="mt-5"><AdminSecurityPage /></TabsContent>
                 <TabsContent value="ia" className="mt-5"><AdminAiTrainingPage /></TabsContent>
-                <TabsContent value="manutencao" className="mt-5"><AdminSystemReset /></TabsContent>
+                <TabsContent value="manutencao" className="mt-5">
+                    <div className="space-y-6">
+                        <MaintenanceToggle />
+                        <AdminSystemReset />
+                    </div>
+                </TabsContent>
             </Tabs>
         </div>
     );

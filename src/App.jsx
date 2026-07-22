@@ -11,6 +11,8 @@ const SupportPage = lazy(() => import('@/pages/SupportPage'));
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DoctorRouteGuard from '@/components/DoctorRouteGuard';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { useMaintenance } from '@/hooks/useMaintenance';
+import MaintenancePage from '@/pages/MaintenancePage';
 import { Loader2 } from 'lucide-react';
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
 const DoctorArea = lazy(() => import('@/pages/DoctorArea'));
@@ -112,14 +114,24 @@ const AuthRedirect = ({ role }) => {
 };
 
 function App() {
-  const { loading: authLoading } = useAuth();
+  const { loading: authLoading, profile } = useAuth();
+  const maintenance = useMaintenance();
+  const location = useLocation();
 
-  if (authLoading) {
+  if (authLoading || maintenance.loading) {
     return (
       <div className="w-screen h-screen flex items-center justify-center bg-white">
         <Loader2 className="w-12 h-12 text-primary animate-spin" />
       </div>
     );
+  }
+
+  // Modo manutenção: esconde o site de visitantes e pacientes.
+  // O admin (logado ou pelas rotas de administração) sempre passa, para poder desligar.
+  const isAdmin = profile?.role === 'admin';
+  const onAdminPath = location.pathname.startsWith('/admin') || location.pathname.startsWith('/acesso-administrador');
+  if (maintenance.enabled && !isAdmin && !onAdminPath) {
+    return <MaintenancePage message={maintenance.message} />;
   }
 
   return (
