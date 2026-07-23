@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
-import { Stethoscope, Video, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone } from 'lucide-react';
+import { Stethoscope, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
 
 // Painel de marca por público — o lado esquerdo (desktop) muda conforme cliente/profissional.
 const PANELS = {
     cliente: {
         eyebrow: null,
         title: 'Sua saúde a um clique de distância.',
-        subtitle: 'Agende teleconsultas com especialistas e cuide de você com segurança.',
+        subtitle: 'Marketplace de agendamento: escolha o médico e agende. O atendimento é feito pelo próprio profissional.',
         features: [
-            { icon: Video, label: 'Consultas por videochamada com especialistas' },
+            { icon: UserCheck, label: 'Escolha entre médicos parceiros verificados (CFM)' },
             { icon: CalendarCheck, label: 'Agende em minutos, sem filas' },
             { icon: ShieldCheck, label: 'Seguro e sigiloso — conforme a LGPD' },
         ],
