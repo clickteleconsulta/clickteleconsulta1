@@ -164,7 +164,7 @@ const DoctorArea = () => {
                         </Tooltip>
                         {expanded && (
                             <div className="min-w-0">
-                                <p className="text-sm font-semibold text-gray-900 truncate">{profile?.full_name}</p>
+                                <p className="text-sm font-semibold text-gray-900 break-words">{profile?.full_name}</p>
                                 <p className="text-xs text-gray-400">Médico</p>
                             </div>
                         )}

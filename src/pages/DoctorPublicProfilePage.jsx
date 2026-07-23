@@ -431,19 +431,17 @@ const DoctorPublicProfilePage = () => {
         <title>{doctor ? `${doctor.public_name || doctor.name} — ${doctor.specialty} | Click Teleconsulta` : 'Perfil do Médico - Click Teleconsulta'}</title>
         <meta name="description" content={doctor ? `Agende uma consulta online com ${doctor.public_name || doctor.name}, especialista em ${doctor.specialty}. Telemedicina segura e conveniente.` : "Veja o perfil do médico e agende sua consulta."} />
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
-        {doctor && <>
-          <meta property="og:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />
-          <meta property="og:description" content={doctor.bio?.slice(0, 150) || `Especialista em ${doctor.specialty}. Agende sua teleconsulta agora.`} />
-          <meta property="og:image" content={ogImage} />
-          <meta property="og:type" content="profile" />
-          <meta property="og:url" content={canonicalUrl} />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />
-          <meta name="twitter:description" content={`Teleconsulta com ${doctor.specialty} · Click Teleconsulta`} />
-          <meta name="twitter:image" content={ogImage} />
-        </>}
-        {doctor && <PhysicianSchema doctor={doctor} />}
+        {doctor && <meta property="og:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />}
+        {doctor && <meta property="og:description" content={doctor.bio?.slice(0, 150) || `Especialista em ${doctor.specialty}. Agende sua teleconsulta agora.`} />}
+        {doctor && <meta property="og:image" content={ogImage} />}
+        {doctor && <meta property="og:type" content="profile" />}
+        {doctor && <meta property="og:url" content={canonicalUrl} />}
+        {doctor && <meta name="twitter:card" content="summary_large_image" />}
+        {doctor && <meta name="twitter:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />}
+        {doctor && <meta name="twitter:description" content={`Teleconsulta com ${doctor.specialty} · Click Teleconsulta`} />}
+        {doctor && <meta name="twitter:image" content={ogImage} />}
       </Helmet>
+      {doctor && <PhysicianSchema doctor={doctor} />}
 
       <div className="container mx-auto px-4 py-6 md:py-8 min-h-screen">
         <div className="mb-5">
