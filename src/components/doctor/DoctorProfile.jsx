@@ -82,8 +82,8 @@ const DoctorProfile = () => {
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
-        if (newPassword.length < 6) {
-            toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 6 caracteres.' });
+        if (newPassword.length < 8) {
+            toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 8 caracteres.' });
             return;
         }
         if (newPassword !== confirmPassword) {
@@ -407,7 +407,7 @@ const DoctorProfile = () => {
                                         type={showPassword ? 'text' : 'password'}
                                         value={newPassword}
                                         onChange={(e) => setNewPassword(e.target.value)}
-                                        placeholder="Mínimo 6 caracteres"
+                                        placeholder="Mínimo 8 caracteres"
                                         autoComplete="new-password"
                                         className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm pr-10"
                                     />

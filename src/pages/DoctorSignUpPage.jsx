@@ -178,7 +178,7 @@ const DoctorSignUpPage = () => {
     }
     if (step === 5) {
       if (!form.email.includes('@')) e.email = 'E-mail inválido';
-      if (form.password.length < 6) e.password = 'Mínimo 6 caracteres';
+      if (form.password.length < 8) e.password = 'Mínimo 8 caracteres';
       if (form.password !== form.password_confirm) e.password_confirm = 'As senhas não coincidem';
     }
     setErrors(e);
@@ -416,7 +416,7 @@ const DoctorSignUpPage = () => {
                     </div>
                     <div className="space-y-1.5">
                       <Label>Senha *</Label>
-                      <Input type="password" value={form.password} onChange={e => update('password', e.target.value)} placeholder="Mínimo 6 caracteres" className={errors.password ? 'border-red-300' : ''} />
+                      <Input type="password" value={form.password} onChange={e => update('password', e.target.value)} placeholder="Mínimo 8 caracteres" className={errors.password ? 'border-red-300' : ''} />
                       {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
                     </div>
                     <div className="space-y-1.5">

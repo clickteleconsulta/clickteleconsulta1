@@ -62,7 +62,7 @@ const DoctorInviteSignupPage = () => {
         if (!form.sexo) { toast({ variant: 'destructive', title: 'Informe o sexo', description: 'Selecione o sexo para definir o tratamento (Dr./Dra.).' }); return; }
         if (form.cpf && !isValidCPF(form.cpf)) { toast({ variant: 'destructive', title: 'CPF inválido', description: 'Verifique os números do CPF.' }); return; }
         if (form.whatsapp && !isValidPhone(form.whatsapp)) { toast({ variant: 'destructive', title: 'Telefone inválido', description: 'Informe o DDD + número.' }); return; }
-        if (form.password.length < 6) { toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 6 caracteres.' }); return; }
+        if (form.password.length < 8) { toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 8 caracteres.' }); return; }
         if (form.password !== form.confirm) { toast({ variant: 'destructive', title: 'As senhas não coincidem' }); return; }
         if (!termo) { toast({ variant: 'destructive', title: 'Aceite o Termo de Adesão', description: 'É necessário aceitar o Termo de Adesão para continuar.' }); return; }
 
@@ -179,7 +179,7 @@ const DoctorInviteSignupPage = () => {
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">Senha</Label>
-                                        <Input type="password" value={form.password} onChange={e => set('password', e.target.value)} placeholder="Mínimo 6 caracteres" autoComplete="new-password" />
+                                        <Input type="password" value={form.password} onChange={e => set('password', e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" />
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold text-slate-600">Confirmar senha</Label>
