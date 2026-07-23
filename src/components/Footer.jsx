@@ -59,11 +59,13 @@ const Footer = () => {
         </div>
 
         <div className="mt-10 pt-6 border-t border-slate-200 space-y-2 text-xs text-slate-400">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="leading-relaxed">
+            Click Teleconsulta, pague somente quando usar, sem assinaturas ou mensalidades. Somos uma plataforma de marketplace de agendamentos, não trabalhamos com planos de saúde. Somente atendimentos particulares avulsos.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1">
             <p>&copy; {year} Click Teleconsulta. Todos os direitos reservados.</p>
-            <p>Atendimentos em telemedicina com ética, segurança e respeito.</p>
           </div>
-          <p className="text-center sm:text-left leading-relaxed">
+          <p className="leading-relaxed">
             CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50 · R. Antônio Pereira Ramos, nº 118, Centro, Coroaci/MG, CEP 39.710-000
           </p>
         </div>
