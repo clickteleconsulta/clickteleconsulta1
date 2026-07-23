@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import {
-    LifeBuoy, Mail, MessageCircle, ArrowRight, BookOpen, Video, CalendarClock,
+    LifeBuoy, Mail, ArrowRight, BookOpen, Video, CalendarClock,
     Stethoscope, FileText, ShieldCheck, Wallet, Star, HeartPulse
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -163,7 +163,7 @@ const DoctorHelp = () => {
                 </CardContent>
             </Card>
 
-            <div className="grid md:grid-cols-2 gap-3">
+            <div className="grid gap-3">
                 <Card className="dashboard-card hover:border-primary/30 group cursor-pointer transition-all p-0">
                     <CardContent className="flex items-start gap-3 p-4">
                         <div className="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -176,26 +176,6 @@ const DoctorHelp = () => {
                         </div>
                     </CardContent>
                 </Card>
-
-                <a
-                    href="https://wa.me/552139550563"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                >
-                    <Card className="dashboard-card hover:border-green-500/30 group cursor-pointer transition-all h-full p-0">
-                        <CardContent className="flex items-start gap-3 p-4">
-                            <div className="p-2 bg-green-50 text-green-600 rounded-lg group-hover:bg-green-600 group-hover:text-white transition-colors">
-                                <MessageCircle className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-semibold text-gray-800 mb-0.5">WhatsApp Oficial</h3>
-                                <p className="text-xs text-gray-500 mb-1">Atendimento rápido em horário comercial.</p>
-                                <p className="text-xs font-medium text-green-600 hover:underline">(21) 3955-0563</p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </a>
             </div>
         </div>
     );
