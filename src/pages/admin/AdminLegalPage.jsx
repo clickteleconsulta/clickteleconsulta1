@@ -403,7 +403,7 @@ const AdminLegalPage = () => {
                         <CardHeader>
                             <CardTitle className="text-lg">Enviar Nova Versão</CardTitle>
                             <CardDescription>
-                                Faça upload de um PDF. Ele será automaticamente publicado como a versão ativa (v{(versions[0]?.version || 0) + 1}).
+                                Faça upload de um PDF. Ele será automaticamente publicado como a versão ativa (v{Math.max(0, ...versions.map(v => Number(v.version) || 0)) + 1}).
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">

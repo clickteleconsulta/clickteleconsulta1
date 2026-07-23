@@ -63,7 +63,7 @@ const TermoAdesaoManager = () => {
             if (upErr) throw upErr;
             const { data: pub } = supabase.storage.from('legal-documents').getPublicUrl(path);
 
-            const nextVersion = (versions[0]?.version || 0) + 1;
+            const nextVersion = Math.max(0, ...versions.map(v => Number(v.version) || 0)) + 1;
             // desativa as anteriores e insere a nova como ativa
             await supabase.from('termo_adesao').update({ is_active: false }).eq('is_active', true);
             const { error: insErr } = await supabase.from('termo_adesao').insert({
@@ -212,7 +212,7 @@ const TermoAdesaoManager = () => {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-lg">Enviar Nova Versão</CardTitle>
-                    <CardDescription>Faça upload de um PDF. Ele será publicado como a versão ativa (v{(versions[0]?.version || 0) + 1}).</CardDescription>
+                    <CardDescription>Faça upload de um PDF. Ele será publicado como a versão ativa (v{Math.max(0, ...versions.map(v => Number(v.version) || 0)) + 1}).</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
