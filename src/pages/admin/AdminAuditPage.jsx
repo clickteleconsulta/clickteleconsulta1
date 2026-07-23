@@ -20,6 +20,8 @@ const ACAO_LABEL = {
     agendamento_criado: 'Agendamento criado',
     pagamento_confirmado: 'Pagamento confirmado',
     reagendado: 'Reagendado',
+    termo_aceito: 'Aceitou o Termo de Adesão',
+    documento_enviado: 'Enviou documento p/ análise',
 };
 const prettyAcao = (a) => ACAO_LABEL[a] || (a || '').replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
 
@@ -100,6 +102,11 @@ const AdminAuditPage = () => {
         if (d.motivo && d.motivo !== 'Nao informado') parts.push(`motivo: ${d.motivo}`);
         if (d.refund_percent != null) parts.push(`reembolso: ${d.refund_percent}%`);
         if (d.horas_antecedencia != null) parts.push(`${Math.round(d.horas_antecedencia)}h antes`);
+        if (d.crm) parts.push(`CRM ${d.crm}${d.uf ? '/' + d.uf : ''}`);
+        if (d.termo_versao != null) parts.push(`termo v${d.termo_versao}`);
+        if (d.slot) parts.push(`tipo: ${d.slot}`);
+        if (d.arquivo) parts.push(`arquivo: ${d.arquivo}`);
+        if (d.reenvio) parts.push('reenvio');
         return parts.length ? parts.join(' · ') : Object.keys(d).length ? JSON.stringify(d) : '—';
     };
 
@@ -116,7 +123,7 @@ const AdminAuditPage = () => {
 
     return (
         <div className="space-y-6">
-            <AdminPageHeader icon={ScrollText} title="Auditoria" subtitle="Registro de quem fez o quê e quando nos agendamentos.">
+            <AdminPageHeader icon={ScrollText} title="Auditoria" subtitle="Registro de quem fez o quê e quando na plataforma — agendamentos, cadastros e documentos.">
                 <Button variant="outline" size="sm" className="gap-2" onClick={handleExport} disabled={filtered.length === 0}>
                     <FileDown className="w-4 h-4" /> Exportar CSV
                 </Button>
