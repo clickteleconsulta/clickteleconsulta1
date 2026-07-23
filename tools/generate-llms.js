@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { pathToFileURL } from 'url';
 
 const CLEAN_CONTENT_REGEX = {
   comments: /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
@@ -26,6 +27,15 @@ const EXTRACTION_REGEX = {
   title: /<title[^>]*?>\s*(.*?)\s*<\/title>/i,
   description: /<meta\s+name=["']description["']\s+content=["'](.*?)["']/i
 };
+
+// Páginas de recursos desativados (atrás de feature flags) não devem aparecer
+// no llms.txt público — evita sugerir que a plataforma oferece videochamada.
+const EXCLUDED_PAGES = new Set([
+  'VideoCallPage',        // FEATURES.VIDEO_CALL desativado
+  'GuestAppointmentPage', // fluxo de vídeo para convidado — desativado
+  'StorePage',            // página de loja legada (marca "DocConnect") — fora do produto
+  'ProductDetailPage',    // idem
+]);
 
 function cleanContent(content) {
   return content
@@ -82,7 +92,9 @@ function extractRoutes(appJsxPath) {
 }
 
 function findReactFiles(dir) {
-  return fs.readdirSync(dir).map(item => path.join(dir, item));
+  return fs.readdirSync(dir)
+    .map(item => path.join(dir, item))
+    .filter(p => fs.statSync(p).isFile() && /\.jsx?$/.test(p));
 }
 
 function extractHelmetData(content, filePath, routes) {
@@ -155,7 +167,8 @@ function main() {
     pages = pages.filter(Boolean);
   } else {
     const routes = extractRoutes(appJsxPath);
-    const reactFiles = findReactFiles(pagesDir);
+    const reactFiles = findReactFiles(pagesDir)
+      .filter(filePath => !EXCLUDED_PAGES.has(path.basename(filePath, path.extname(filePath))));
 
     pages = reactFiles
       .map(filePath => processPageFile(filePath, routes))
@@ -175,7 +188,9 @@ function main() {
   fs.writeFileSync(outputPath, llmsTxtContent, 'utf8');
 }
 
-const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+// Usa pathToFileURL para casar corretamente mesmo com espaços no caminho
+// (ex.: "Claude - Click Teleconsulta") — antes o build nunca rodava o gerador.
+const isMainModule = import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   main();
