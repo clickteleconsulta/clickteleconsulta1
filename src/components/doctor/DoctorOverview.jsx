@@ -10,7 +10,7 @@ import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import ConsultationStatusBadge from '@/components/doctor/ConsultationStatusBadge';
 import {
     Loader2, LayoutDashboard, CalendarDays, Wallet, Star, Clock, ChevronRight,
-    BellRing, CheckCircle2, Circle, AlertTriangle, FileWarning, CalendarClock, Landmark, ArrowRight, ExternalLink
+    BellRing, CheckCircle2, Circle, AlertTriangle, FileWarning, CalendarClock, Landmark, ArrowRight, ExternalLink, Stethoscope
 } from 'lucide-react';
 
 const TZ = 'America/Sao_Paulo';
@@ -28,7 +28,7 @@ const DoctorOverview = () => {
         setLoading(true);
         try {
             const { data: med } = await supabase.from('medicos')
-                .select('id, public_name, name, specialty, sexo, formacao, bio, description, status, is_public, is_active, payment_settings')
+                .select('id, public_name, name, specialty, sexo, formacao, bio, description, status, is_public, is_active, payment_settings, ferramentas_atendimento')
                 .eq('user_id', uid).maybeSingle();
             const docId = med?.id;
             // Dados bancários na tabela privada (RLS dono+admin)
@@ -105,6 +105,7 @@ const DoctorOverview = () => {
     const perfilOk = !!(med?.public_name && med?.specialty && med?.sexo && (med?.formacao || med?.bio || med?.description));
     const agendaOk = agendaCount > 0;
     const ativoOk = med?.status === 'ativo';
+    const declaracaoOk = !!med?.ferramentas_atendimento?.declaracao;
 
     // Checklist de ativação
     const checklist = [
@@ -124,6 +125,7 @@ const DoctorOverview = () => {
     if (!bancoOk) pend.push({ key: 'banco', tone: 'amber', icon: Landmark, label: 'Dados bancários pendentes', sub: 'Cadastre para poder sacar seus repasses', to: '/medico/dashboard/financeiro' });
     if (!ativoOk && !docRejeitado) pend.push({ key: 'pausado', tone: 'blue', icon: AlertTriangle, label: docEmAnalise ? 'Documentação em análise' : 'Perfil pausado', sub: docEmAnalise ? 'Aguarde a aprovação da administração' : 'Envie sua documentação para ativar o perfil', to: '/medico/dashboard/perfil' });
     if (saldo > 0) pend.push({ key: 'saque', tone: 'teal', icon: Wallet, label: `${fmtBRL(saldo)} disponível para saque`, sub: `${saldoCount} guia(s) paga(s) prontas para retirada`, to: '/medico/dashboard/financeiro' });
+    if (!declaracaoOk) pend.push({ key: 'declaracao', tone: 'amber', icon: Stethoscope, label: 'Confirme suas ferramentas de atendimento', sub: 'Marque a declaração na aba Atendimento do seu perfil', to: '/medico/dashboard/perfil' });
 
     const toneCls = {
         red: 'bg-red-50 text-red-700 border-red-100', amber: 'bg-amber-50 text-amber-700 border-amber-100',

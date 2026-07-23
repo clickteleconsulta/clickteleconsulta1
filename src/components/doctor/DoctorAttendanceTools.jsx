@@ -64,7 +64,8 @@ const DoctorAttendanceTools = () => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const payload = { declaracao: true, atualizado_em: new Date().toISOString() };
+            const now = new Date().toISOString();
+            const payload = { declaracao: true, declaracao_em: now, declaracao_texto: DECLARACAO, atualizado_em: now };
             CATEGORIES.forEach((c) => {
                 payload[c.key] = sel[c.key] || [];
                 payload[`${c.key}_outra`] = outraOn[c.key] ? (outra[c.key] || '').trim() : '';

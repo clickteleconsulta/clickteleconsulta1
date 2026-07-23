@@ -22,6 +22,7 @@ const ACAO_LABEL = {
     reagendado: 'Reagendado',
     termo_aceito: 'Aceitou o Termo de Adesão',
     documento_enviado: 'Enviou documento p/ análise',
+    declaracao_ferramentas: 'Declaração de ferramentas (LGPD)',
 };
 const prettyAcao = (a) => ACAO_LABEL[a] || (a || '').replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
 
@@ -107,6 +108,7 @@ const AdminAuditPage = () => {
         if (d.slot) parts.push(`tipo: ${d.slot}`);
         if (d.arquivo) parts.push(`arquivo: ${d.arquivo}`);
         if (d.reenvio) parts.push('reenvio');
+        if (d.grandfathered) parts.push('médico já ativo (grandfathered)');
         return parts.length ? parts.join(' · ') : Object.keys(d).length ? JSON.stringify(d) : '—';
     };
 
