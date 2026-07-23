@@ -11,7 +11,7 @@ import { Loader2, Save, AlertTriangle, Wrench } from 'lucide-react';
 // Categorias e opções de ferramentas. Os nomes são apenas produtos de mercado;
 // os textos de aviso/declaração foram redigidos de forma própria da Click.
 const CATEGORIES = [
-    { key: 'videoconferencia', label: 'Videoconferência', options: ['Conexa', 'Google Meet', 'GoTo Meeting', 'Skype', 'WhatsApp Business', 'Zoom'] },
+    { key: 'videoconferencia', label: 'Videoconferência', options: ['Conexa', 'Doctoralia', 'Google Meet', 'GoTo Meeting', 'Zoom'] },
     { key: 'prontuario', label: 'Prontuário eletrônico', options: ['Amplimed', 'Bionexo', 'Doctoralia', 'iClinic', 'iMedicina', 'Link Saúde', 'Memed'] },
     { key: 'prescricao', label: 'Prescrição digital', options: ['Amplimed', 'Diagnes', 'Doctoralia', 'iClinic', 'iMedicina', 'Laudo Online', 'Memed', 'Prescrição Eletrônica - CFM', 'Pulsares', 'Receita Digital'] },
     { key: 'atestado', label: 'Declaração e atestado', options: ['Diagnes', 'Doctoralia', 'iClinic', 'iMedicina', 'Laudo Online', 'Memed', 'Pró Laudo', 'Pulsares'] },
