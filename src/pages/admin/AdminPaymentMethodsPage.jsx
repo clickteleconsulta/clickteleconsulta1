@@ -5,37 +5,20 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import {
-    Loader2, Save, ShieldCheck, CheckCircle2, Circle, Lock, Info, CreditCard, Zap, Landmark, FlaskConical
+    Loader2, Save, ShieldCheck, CheckCircle2, Circle, Lock, Info, Landmark, FlaskConical
 } from 'lucide-react';
 
-// Provedores suportados. "ready" = já tem integração no código (Stripe: checkout + webhook).
+// Provedor de pagamento da plataforma: Asaas (checkout hospedado · Pix e cartão).
+// "ready" vira true quando as Edge Functions do Asaas estiverem no ar.
 const PROVIDERS = [
     {
         id: 'asaas',
         name: 'Asaas',
         icon: Landmark,
-        tagline: 'Gateway brasileiro · Pix, boleto e cartão',
-        desc: 'Split de pagamento nativo (facilita o repasse automático aos médicos). Conta exige CNPJ.',
+        tagline: 'Gateway brasileiro · Pix e cartão de crédito',
+        desc: 'Checkout hospedado: o paciente paga numa página segura do Asaas (Pix ou cartão). Split nativo facilita o repasse automático aos médicos. Conta exige CNPJ.',
         ready: false,
         secrets: ['ASAAS_API_KEY', 'ASAAS_WEBHOOK_TOKEN'],
-    },
-    {
-        id: 'pagarme',
-        name: 'Pagar.me',
-        icon: Zap,
-        tagline: 'Gateway brasileiro (Stone) · Pix e cartão',
-        desc: 'Split de recebíveis e antifraude robustos. Conta exige CNPJ.',
-        ready: false,
-        secrets: ['PAGARME_API_KEY', 'PAGARME_WEBHOOK_SECRET'],
-    },
-    {
-        id: 'stripe',
-        name: 'Stripe',
-        icon: CreditCard,
-        tagline: 'Internacional · Cartão de crédito',
-        desc: 'Já integrado no código (checkout e confirmação de pagamento). Ideal para começar em modo teste.',
-        ready: true,
-        secrets: ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'],
     },
 ];
 
@@ -45,7 +28,7 @@ const AdminPaymentMethodsPage = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [rowId, setRowId] = useState(null);
-    const [provider, setProvider] = useState(null);       // 'asaas' | 'pagarme' | 'stripe' | null
+    const [provider, setProvider] = useState('asaas');    // Asaas é o provedor da plataforma
     const [environment, setEnvironment] = useState('test'); // 'test' | 'live'
 
     useEffect(() => {
@@ -57,7 +40,7 @@ const AdminPaymentMethodsPage = () => {
                     setRowId(data.id);
                     const gw = data.settings?.payment_gateway;
                     if (gw) {
-                        setProvider(gw.provider ?? null);
+                        setProvider(PROVIDERS.some(p => p.id === gw.provider) ? gw.provider : 'asaas');
                         setEnvironment(gw.environment ?? 'test');
                     }
                 }

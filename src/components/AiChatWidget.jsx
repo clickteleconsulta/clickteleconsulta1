@@ -248,7 +248,7 @@ const AiChatWidget = () => {
       const hasAnyToken = (tokens) => tokens.some(t => userTokens.includes(t) || userTokens.some(ut => ut.includes(t)));
 
       if (hasAnyToken(['preco', 'valor', 'custa', 'pagamento', 'pagar', 'cartao', 'pix'])) {
-        responseText = 'Nossos especialistas definem seus próprios valores, mas a maioria das consultas inicia-se a partir de R$ 80,00. Aceitamos Pix e Cartão de Crédito via Stripe.';
+        responseText = 'Nossos especialistas definem seus próprios valores, mas a maioria das consultas inicia-se a partir de R$ 80,00. Aceitamos Pix e Cartão de Crédito.';
       } else if (hasAnyToken(['agendar', 'marcar', 'horario', 'data', 'disponivel'])) {
         responseText = 'Para agendar, basta navegar até a lista de "Agendamentos" no menu principal, escolher um médico e selecionar o melhor horário para você!';
       } else if (hasAnyToken(['medico', 'doutor', 'especialista', 'cardiologista', 'pediatra'])) {
