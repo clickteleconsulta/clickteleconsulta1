@@ -230,15 +230,17 @@ const AdminLegalPage = () => {
     const handleClearHistory = async () => {
         setClearing(true);
         try {
-            const inativas = versions.filter(v => !v.is_active);
-            for (const ver of inativas) {
-                const { error } = await supabase.functions.invoke('manage-documents', {
-                    method: 'DELETE',
-                    body: { documentId: ver.id }
-                });
-                if (error) throw new Error(error.message || 'Falha ao excluir versão');
-            }
-            toast({ title: 'Histórico limpo', description: `${inativas.length} versão(ões) antiga(s) removida(s). A versão ativa foi mantida.`, variant: 'success' });
+            const removidas = versions.filter(v => !v.is_active).length;
+            // Exclui direto na tabela (admin tem policy) em vez de percorrer a edge
+            // function — ela falha ao tentar limpar o storage de versões antigas
+            // cujas URLs apontam para fora do bucket (dados de seed).
+            const { error } = await supabase
+                .from('platform_legal_documents')
+                .delete()
+                .eq('type', activeTab)
+                .eq('is_active', false);
+            if (error) throw error;
+            toast({ title: 'Histórico limpo', description: `${removidas} versão(ões) antiga(s) removida(s). A versão ativa foi mantida.`, variant: 'success' });
             setConfirmClear(false);
             fetchDocumentVersions();
         } catch (error) {
