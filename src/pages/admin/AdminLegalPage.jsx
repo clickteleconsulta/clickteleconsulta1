@@ -50,25 +50,14 @@ const AdminLegalPage = () => {
         setLoading(true);
         setFetchError(null);
         try {
-
-            // Using supabase.functions.invoke with GET method (via query params)
-            const { data, error } = await supabase.functions.invoke(`manage-documents?type=${activeTab}`, {
-                method: 'GET'
-            });
-
-            if (error) {
-                console.error(`[AdminLegal] Fetch error response:`, error);
-                throw new Error(error.message || 'Erro ao buscar documentos');
-            }
-            
-            
-            if (!Array.isArray(data)) {
-                console.error("Resposta inválida da API (esperado array):", data);
-                throw new Error("Formato de resposta inválido da API");
-            }
-            
-            setVersions(data);
-
+            // Lê direto da tabela (admin tem policy), igual ao LegalPage público.
+            const { data, error } = await supabase
+                .from('platform_legal_documents')
+                .select('*')
+                .eq('type', activeTab)
+                .order('created_at', { ascending: false });
+            if (error) throw error;
+            setVersions(data || []);
         } catch (error) {
             console.error("[AdminLegal] Erro ao buscar documentos:", error);
             setFetchError(error.message);
@@ -142,23 +131,19 @@ const AdminLegalPage = () => {
             const finalPdfUrl = await uploadPDF(selectedFile);
             const finalFileName = selectedFile.name;
 
-            // 2. Save metadata via API using invoke
-            const requestBody = {
+            // 2. Grava direto: desativa as anteriores do tipo e insere a nova como ativa
+            const nextVersion = Math.max(0, ...versions.map(v => Number(v.version) || 0)) + 1;
+            await supabase.from('platform_legal_documents')
+                .update({ is_active: false }).eq('type', activeTab).eq('is_active', true);
+            const { error } = await supabase.from('platform_legal_documents').insert({
                 type: activeTab,
+                title: DOC_TYPES[activeTab],
+                version: String(nextVersion),
                 pdf_url: finalPdfUrl,
-                pdf_file_name: finalFileName
-            };
-            
-
-            const { data, error } = await supabase.functions.invoke('manage-documents', {
-                method: 'POST',
-                body: requestBody
+                pdf_file_name: finalFileName,
+                is_active: true,
             });
-
-            if (error) {
-                console.error(`[AdminLegal] Create API error response:`, error);
-                throw new Error(error.message || 'Erro ao criar versão');
-            }
+            if (error) throw error;
 
 
             toast({ title: 'Sucesso!', description: 'Nova versão publicada e ativada.', variant: 'success' });
@@ -186,12 +171,11 @@ const AdminLegalPage = () => {
     const handleSetActive = async () => {
         if (!activateDoc) return;
         try {
-            const { error } = await supabase.functions.invoke('manage-documents', {
-                method: 'PATCH',
-                body: { documentId: activateDoc.id }
-            });
-
-            if (error) throw new Error(error.message || "Falha ao ativar versão");
+            await supabase.from('platform_legal_documents')
+                .update({ is_active: false }).eq('type', activeTab).eq('is_active', true);
+            const { error } = await supabase.from('platform_legal_documents')
+                .update({ is_active: true }).eq('id', activateDoc.id);
+            if (error) throw error;
 
             toast({ title: 'Sucesso!', description: 'Versão ativada com sucesso.', variant: 'success' });
             setActivateDoc(null);
@@ -205,14 +189,9 @@ const AdminLegalPage = () => {
     const handleDelete = async () => {
         if (!deleteDoc) return;
         try {
-            const { error } = await supabase.functions.invoke('manage-documents', {
-                method: 'DELETE',
-                body: { documentId: deleteDoc.id }
-            });
-
-            if (error) {
-                throw new Error(error.message || "Falha ao excluir");
-            }
+            const { error } = await supabase.from('platform_legal_documents')
+                .delete().eq('id', deleteDoc.id);
+            if (error) throw error;
 
             toast({ title: 'Sucesso', description: 'Versão excluída.', variant: 'success' });
             setDeleteDoc(null);
