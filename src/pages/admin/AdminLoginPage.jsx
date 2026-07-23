@@ -43,15 +43,16 @@ const AdminLoginPage = () => {
     showLoader();
 
     try {
-      const { error } = await signIn(email, password);
+      const { data: signInData, error } = await signIn(email, password);
       if (error) throw error;
 
-      // Verifica papel
+      // Verifica papel pelo ID do usuário (não pelo e-mail, que pode ser alterado)
+      const uid = signInData?.user?.id;
       const { data: profileCheck } = await supabase
         .from('perfis_usuarios')
         .select('role')
-        .eq('email', email)
-        .single();
+        .eq('id', uid)
+        .maybeSingle();
 
       if (profileCheck?.role !== 'admin') {
         throw new Error('Acesso não autorizado. Apenas administradores.');
