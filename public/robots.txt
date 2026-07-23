@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /legal/
 Sitemap: https://clickteleconsulta.online/sitemap.xml
