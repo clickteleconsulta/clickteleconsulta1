@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MessageCircle, Stethoscope, ArrowRight } from 'lucide-react';
+import { Mail, Stethoscope, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 
@@ -49,22 +49,23 @@ const Footer = () => {
             <p className="font-semibold text-slate-900 text-sm">Contato e Suporte</p>
             <div className="flex flex-col gap-1.5 text-sm text-slate-500">
               <a href="mailto:suporte@clickteleconsulta.online" className="hover:text-blue-600 transition-colors break-all">suporte@clickteleconsulta.online</a>
-              <p>WhatsApp: (21) 3955-0563</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm" asChild className="gap-2 h-9 border-slate-200 hover:bg-blue-50 hover:border-blue-200 text-slate-600 hover:text-blue-600 text-xs">
                 <a href="mailto:suporte@clickteleconsulta.online"><Mail className="w-3.5 h-3.5" /> Email</a>
               </Button>
-              <Button variant="outline" size="sm" asChild className="gap-2 h-9 border-emerald-200 hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 text-xs">
-                <a href="https://wa.me/552139550563" target="_blank" rel="noopener noreferrer"><MessageCircle className="w-3.5 h-3.5" /> WhatsApp</a>
-              </Button>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-          <p>&copy; {year} Click Teleconsulta. Todos os direitos reservados.</p>
-          <p>Atendimentos em telemedicina com ética, segurança e respeito.</p>
+        <div className="mt-10 pt-6 border-t border-slate-200 space-y-2 text-xs text-slate-400">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>&copy; {year} Click Teleconsulta. Todos os direitos reservados.</p>
+            <p>Atendimentos em telemedicina com ética, segurança e respeito.</p>
+          </div>
+          <p className="text-center sm:text-left leading-relaxed">
+            CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50 · R. Antônio Pereira Ramos, nº 118, Centro, Coroaci/MG, CEP 39.710-000
+          </p>
         </div>
       </div>
     </footer>
