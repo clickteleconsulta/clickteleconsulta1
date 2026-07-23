@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, KeyRound, Eye, EyeOff, ShieldCheck, Smartphone, Copy } from 'lucide-react';
+import { Loader2, KeyRound, Eye, EyeOff, ShieldCheck, Smartphone, Copy, Mail } from 'lucide-react';
 
 const AdminSecurityPage = () => {
   const { toast } = useToast();
@@ -37,6 +37,38 @@ const AdminSecurityPage = () => {
       toast({ variant: 'destructive', title: 'Erro ao alterar senha', description: err.message });
     } finally {
       setSavingPwd(false);
+    }
+  };
+
+  // ── E-mail ─────────────────────────────────────────────
+  const [currentEmail, setCurrentEmail] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [savingEmail, setSavingEmail] = useState(false);
+  const [emailSent, setEmailSent] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentEmail(data?.user?.email || ''));
+  }, []);
+
+  const handleChangeEmail = async (e) => {
+    e.preventDefault();
+    const email = newEmail.trim().toLowerCase();
+    const valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!valido) { toast({ variant: 'destructive', title: 'E-mail inválido', description: 'Verifique o endereço digitado.' }); return; }
+    if (email !== confirmEmail.trim().toLowerCase()) { toast({ variant: 'destructive', title: 'Os e-mails não coincidem', description: 'Digite o mesmo e-mail nos dois campos.' }); return; }
+    if (email === (currentEmail || '').toLowerCase()) { toast({ variant: 'destructive', title: 'Nenhuma mudança', description: 'Este já é o e-mail atual da conta.' }); return; }
+    setSavingEmail(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ email });
+      if (error) throw error;
+      setEmailSent(email);
+      setNewEmail(''); setConfirmEmail('');
+      toast({ title: 'Confirmação enviada', description: `Abra o link enviado para ${email} para concluir a troca.` });
+    } catch (err) {
+      toast({ variant: 'destructive', title: 'Erro ao alterar e-mail', description: err.message });
+    } finally {
+      setSavingEmail(false);
     }
   };
 
@@ -129,8 +161,49 @@ const AdminSecurityPage = () => {
     <div className="space-y-6 max-w-3xl">
       <div>
         <h3 className="dashboard-title text-xl">Segurança</h3>
-        <p className="text-sm text-gray-500 mt-1">Gerencie a senha e a autenticação de 2 fatores desta conta.</p>
+        <p className="text-sm text-gray-500 mt-1">Gerencie o e-mail, a senha e a autenticação de 2 fatores desta conta.</p>
       </div>
+
+      {/* Alterar E-mail */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Mail className="w-5 h-5 text-primary" /> Alterar E-mail
+          </CardTitle>
+          <CardDescription>Troque o e-mail de login desta conta de administrador.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleChangeEmail} className="grid gap-4 max-w-md">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-bold text-gray-700 uppercase tracking-wide">E-mail atual</Label>
+              <Input value={currentEmail} disabled className="bg-gray-50" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="newEmail" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Novo E-mail</Label>
+              <Input id="newEmail" type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="novo@exemplo.com" autoComplete="email" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="confirmEmail" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Confirmar Novo E-mail</Label>
+              <Input id="confirmEmail" type="email" value={confirmEmail} onChange={(e) => setConfirmEmail(e.target.value)} placeholder="Repita o novo e-mail" autoComplete="email" />
+            </div>
+            <div className="flex items-start gap-2 text-xs text-blue-800 bg-blue-50/60 border border-blue-100 rounded-lg p-3">
+              <Mail className="w-4 h-4 shrink-0 mt-0.5 text-blue-600" />
+              <span>Por segurança, enviaremos um <strong>link de confirmação</strong> para o novo e-mail (e, se ativado no projeto, também para o atual). A troca só é concluída após clicar no link — até lá, continue usando o e-mail atual para entrar.</span>
+            </div>
+            {emailSent && (
+              <div className="text-xs text-green-800 bg-green-50 border border-green-100 rounded-lg p-3">
+                Link de confirmação enviado para <strong>{emailSent}</strong>. Verifique a caixa de entrada (e o spam).
+              </div>
+            )}
+            <div>
+              <Button type="submit" disabled={savingEmail || !newEmail || !confirmEmail} className="min-w-[150px]">
+                {savingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+                Alterar E-mail
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {/* Alterar Senha */}
       <Card>
