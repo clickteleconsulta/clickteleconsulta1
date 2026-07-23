@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff, FileText, ShieldCheck, Trash2 } from 'lucide-react';
+import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff, FileText, ShieldCheck, Trash2, Stethoscope } from 'lucide-react';
+import DoctorAttendanceTools from '@/components/doctor/DoctorAttendanceTools';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -219,8 +220,9 @@ const DoctorProfile = () => {
             </DoctorPageHeader>
 
             <Tabs defaultValue="perfil" className="w-full">
-                <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto gap-1 bg-gray-100/80 p-1 rounded-xl">
+                <TabsList className="grid grid-cols-2 sm:grid-cols-5 h-auto gap-1 bg-gray-100/80 p-1 rounded-xl">
                     <TabsTrigger value="perfil" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><UserIcon className="w-3.5 h-3.5" /> Perfil</TabsTrigger>
+                    <TabsTrigger value="atendimento" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><Stethoscope className="w-3.5 h-3.5" /> Atendimento</TabsTrigger>
                     <TabsTrigger value="documentacao" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><FileText className="w-3.5 h-3.5" /> Documentação</TabsTrigger>
                     <TabsTrigger value="seguranca" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
                     <TabsTrigger value="conta" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
@@ -374,6 +376,10 @@ const DoctorProfile = () => {
                     </Button>
                 </div>
             </form>
+                </TabsContent>
+
+                <TabsContent value="atendimento" className="mt-4">
+                    <DoctorAttendanceTools />
                 </TabsContent>
 
                 <TabsContent value="documentacao" className="mt-4">
