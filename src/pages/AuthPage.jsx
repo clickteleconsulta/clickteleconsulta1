@@ -240,7 +240,7 @@ const AuthPage = ({
             <CalendarCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-blue-900 leading-snug">
               <b>Quase lá!</b> Você está agendando com <b>{pendingBooking.doctorName}</b> em <b>{pendingBooking.whenLabel}</b>.{' '}
-              {isLogin ? 'Entre na sua conta' : 'Crie sua conta grátis'} para confirmar — seu horário está guardado.
+              {isLogin ? 'Entre na sua conta' : 'Crie sua conta grátis'} para continuar. O horário só é reservado após o pagamento.
             </div>
           </div>
         )}

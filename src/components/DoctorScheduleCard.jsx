@@ -441,9 +441,9 @@ export function DoctorScheduleCard({
             </div>
             <h3 className="text-lg font-bold text-slate-900">Falta pouco para agendar!</h3>
             <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-              Para confirmar sua consulta com <b className="text-slate-700">{authPrompt.doctorName}</b> em{' '}
+              Para agendar sua consulta com <b className="text-slate-700">{authPrompt.doctorName}</b> em{' '}
               <b className="text-slate-700">{authPrompt.whenLabel}</b>, você precisa de uma conta gratuita.
-              Leva menos de 1 minuto — e o horário fica guardado.
+              Leva menos de 1 minuto. <b className="text-slate-700">O horário só é reservado após o pagamento</b>, então finalize para garantir.
             </p>
             <div className="mt-5 space-y-2">
               <Button onClick={() => goToAuth('signup')} className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
