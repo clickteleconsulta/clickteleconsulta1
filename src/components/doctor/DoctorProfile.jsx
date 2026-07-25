@@ -126,7 +126,7 @@ const DoctorProfile = () => {
             const formData = {
                 ...doctorData,
                 instructions: doctorData.instructions || '',
-                specialty: doctorData.specialty || "Médico",
+                specialty: doctorData.specialty || "Generalista",
                 phone_number: doctorData.phone_number || '',
                 formacao: doctorData.formacao || ''
             };

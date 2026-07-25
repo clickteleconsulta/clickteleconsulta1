@@ -262,7 +262,10 @@ export function DoctorScheduleCard({
   // CRM: usa somente a parte numérica (o campo pode já vir com "/UF") e anexa a UF uma única vez
   const crmNumber = doctor?.crm ? String(doctor.crm).split('/')[0].trim() : '';
   const crmDisplay = crmNumber ? `CRM ${crmNumber}${doctor?.uf ? `/${doctor.uf}` : ''}` : '';
-  const specialtyLabel = doctor?.specialty ? `Médico ${doctor.specialty}` : 'Médico';
+  const rawSpecialty = doctor?.specialty?.trim();
+  const specialtyLabel = rawSpecialty && rawSpecialty.toLowerCase() !== 'médico'
+    ? `Médico - ${rawSpecialty}`
+    : 'Médico';
 
   return (
     <motion.div 
