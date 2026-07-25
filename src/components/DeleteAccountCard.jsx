@@ -58,7 +58,7 @@ const DeleteAccountCard = () => {
                     <AlertTriangle className="w-4 h-4" /> Excluir Conta
                 </CardTitle>
                 <CardDescription className="text-sm">
-                    A exclusão é permanente. Todos os seus dados serão removidos e esta ação não poderá ser desfeita.
+                    A exclusão encerra sua conta e desativa o acesso. Por exigência legal e de auditoria, os registros de consultas e agendamentos já realizados são preservados.
                 </CardDescription>
             </CardHeader>
             <CardContent className="px-6 pb-6 pt-4">
@@ -80,8 +80,9 @@ const DeleteAccountCard = () => {
                                 <AlertTriangle className="w-5 h-5" /> Excluir conta definitivamente
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                                Esta ação é <strong>irreversível</strong>. Sua conta, dados de perfil e informações associadas
-                                serão permanentemente removidos. Para confirmar, digite{' '}
+                                Esta ação é <strong>irreversível</strong>. Sua conta será encerrada e seu acesso, desativado.
+                                Os registros de consultas e agendamentos já realizados são preservados, por
+                                exigência legal e de auditoria. Para confirmar, digite{' '}
                                 <span className="font-semibold text-gray-900">{CONFIRM_WORD}</span> abaixo.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
