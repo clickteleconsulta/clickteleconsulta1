@@ -3,6 +3,26 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "admin.clickteleconsulta.online" }],
+      "destination": "https://clickteleconsulta.online/acesso-administrador",
+      "permanent": false
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "agendamentos.clickteleconsulta.online" }],
+      "destination": "https://clickteleconsulta.online/agendamentos",
+      "permanent": false
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "parceiros.clickteleconsulta.online" }],
+      "destination": "https://clickteleconsulta.online/acesso-profissional",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/cdn/:path*", "destination": "https://api.clickteleconsulta.online/storage/v1/object/public/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
