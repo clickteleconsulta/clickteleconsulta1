@@ -39,7 +39,7 @@ const PatientNewAppointmentPage = () => {
                 <CardHeader>
                     <CardTitle>Agendar Nova Consulta</CardTitle>
                     <CardDescription>
-                        Pronto para sua próxima consulta? Escolha um de nossos especialistas.
+                        Pronto para sua próxima consulta? Escolha um de nossos profissionais.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center py-10">

@@ -318,7 +318,7 @@ const AppointmentsPage = () => {
     <>
       <Helmet>
         <title>Agendar Consulta - Click Teleconsulta</title>
-        <meta name="description" content="Encontre especialistas, veja horários e agende sua teleconsulta de forma rápida e segura." />
+        <meta name="description" content="Encontre profissionais, veja horários e agende sua teleconsulta de forma rápida e segura." />
         <link rel="canonical" href="https://clickteleconsulta.online/agendamentos" />
       </Helmet>
 

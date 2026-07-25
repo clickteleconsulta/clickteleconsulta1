@@ -124,7 +124,7 @@ const ReviewsSection = ({ reviews }) => {
         </div>
       ) : (
         <div className="text-center py-6 bg-muted/20 rounded-md border border-dashed">
-          <p className="text-muted-foreground text-sm">Este especialista ainda não possui avaliações visíveis.</p>
+          <p className="text-muted-foreground text-sm">Este profissional ainda não possui avaliações visíveis.</p>
         </div>
       )}
     </div>
@@ -357,7 +357,7 @@ const DoctorPublicProfilePage = () => {
 
             {/* Bio */}
             <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
-              <h2 className="text-base font-semibold text-foreground">Sobre o Especialista</h2>
+              <h2 className="text-base font-semibold text-foreground">Sobre o Profissional</h2>
               <div className="prose prose-sm max-w-none text-muted-foreground text-sm">
                 {doctor.bio ? doctor.bio.split('\n').map((p, i) => <p key={i}>{p}</p>) : <p className="italic">O médico ainda não adicionou uma descrição profissional.</p>}
               </div>
@@ -429,10 +429,10 @@ const DoctorPublicProfilePage = () => {
     <>
       <Helmet>
         <title>{doctor ? `${doctor.public_name || doctor.name} — ${doctor.specialty} | Click Teleconsulta` : 'Perfil do Médico - Click Teleconsulta'}</title>
-        <meta name="description" content={doctor ? `Agende uma consulta online com ${doctor.public_name || doctor.name}, especialista em ${doctor.specialty}. Telemedicina segura e conveniente.` : "Veja o perfil do médico e agende sua consulta."} />
+        <meta name="description" content={doctor ? `Agende uma consulta online com ${doctor.public_name || doctor.name}, profissional em ${doctor.specialty}. Telemedicina segura e conveniente.` : "Veja o perfil do médico e agende sua consulta."} />
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         {doctor && <meta property="og:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />}
-        {doctor && <meta property="og:description" content={doctor.bio?.slice(0, 150) || `Especialista em ${doctor.specialty}. Agende sua teleconsulta agora.`} />}
+        {doctor && <meta property="og:description" content={doctor.bio?.slice(0, 150) || `Profissional em ${doctor.specialty}. Agende sua teleconsulta agora.`} />}
         {doctor && <meta property="og:image" content={ogImage} />}
         {doctor && <meta property="og:type" content="profile" />}
         {doctor && <meta property="og:url" content={canonicalUrl} />}

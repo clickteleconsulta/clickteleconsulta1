@@ -138,7 +138,7 @@ function App() {
     <>
       <Helmet>
         <title>Click Teleconsulta</title>
-        <meta name="description" content="Sua saúde a um clique de distância. Agende teleconsultas com especialistas de forma rápida e segura." />
+        <meta name="description" content="Sua saúde a um clique de distância. Agende teleconsultas com profissionais de forma rápida e segura." />
         <meta property="og:title" content="Click Teleconsulta" />
         <meta property="og:description" content="Sua saúde a um clique de distância." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

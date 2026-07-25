@@ -103,7 +103,8 @@ const DoctorListCard = ({ doctor, price }) => (
 
 // ─── Filtros ──────────────────────────────────────────────────────────────────
 const SPECIALTIES = [
-  'Clínico Geral',
+  'Médico',
+  'Generalista',
   'Cardiologia',
   'Dermatologia',
   'Neurologia',
@@ -259,14 +260,14 @@ const DoctorsListPage = () => {
     <>
       <Helmet>
         <title>Encontre seu Médico — Click Teleconsulta</title>
-        <meta name="description" content="Encontre especialistas disponíveis e agende sua teleconsulta agora." />
+        <meta name="description" content="Encontre profissionais disponíveis e agende sua teleconsulta agora." />
       </Helmet>
 
       {/* Fundo de página cinza (full-bleed dentro do container) */}
       <div className="-mx-4 -my-8 px-4 py-8 bg-slate-50 min-h-[calc(100vh-4rem)]">
         {/* Cabeçalho enxuto */}
         <div className="mb-5">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Nossos Especialistas</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Nossos Profissionais</h1>
           <p className="text-sm text-slate-500 mt-1">Escolha o profissional ideal e agende online.</p>
         </div>
 
@@ -357,7 +358,7 @@ const DoctorsListPage = () => {
             {!loading && (
               <p className="text-sm text-slate-400 mb-3">
                 {filteredDoctors.length}{' '}
-                {filteredDoctors.length === 1 ? 'especialista encontrado' : 'especialistas encontrados'}
+                {filteredDoctors.length === 1 ? 'profissional encontrado' : 'profissionais encontrados'}
               </p>
             )}
 
@@ -368,7 +369,7 @@ const DoctorsListPage = () => {
             ) : filteredDoctors.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-xl border border-dashed border-slate-200 shadow-sm">
                 <Stethoscope className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                <p className="text-slate-500 text-base font-medium">Nenhum especialista encontrado</p>
+                <p className="text-slate-500 text-base font-medium">Nenhum profissional encontrado</p>
                 <p className="text-sm text-slate-400 mt-1">Tente ajustar os filtros ou limpar a busca.</p>
                 <Button variant="outline" onClick={clearFilters} className="mt-4 rounded-lg">Limpar Filtros</Button>
               </div>

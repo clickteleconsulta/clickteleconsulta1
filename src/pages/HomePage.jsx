@@ -38,11 +38,11 @@ import {
 import { supabase } from '@/lib/customSupabaseClient';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
-const CYCLING_WORDS = ['consultas médicas', 'especialistas de confiança', 'atendimento sem sair de casa'];
+const CYCLING_WORDS = ['consultas médicas', 'profissionais de confiança', 'atendimento sem sair de casa'];
 
 // ─── Especialidades ─────────────────────────────────────────────────────────────
 const SPECIALTIES = [
-  { name: 'Clínico Geral', icon: Stethoscope, color: 'bg-sky-50 text-sky-600' },
+  { name: 'Médico', icon: Stethoscope, color: 'bg-sky-50 text-sky-600' },
   { name: 'Cardiologia', icon: Heart, color: 'bg-rose-50 text-rose-500' },
   { name: 'Dermatologia', icon: Sparkles, color: 'bg-amber-50 text-amber-500' },
   { name: 'Neurologia', icon: Brain, color: 'bg-slate-100 text-slate-600' },
@@ -73,19 +73,19 @@ const FEATURES = [
   { icon: Clock, title: 'Sem filas de espera', desc: 'Consulte no horário que funciona para você, sem esperar em salas lotadas.', span: 'md:col-span-2' },
   { icon: Shield, title: 'CFM Certificado', desc: 'Todos os profissionais são habilitados pelo Conselho Federal de Medicina.' },
   { icon: Calendar, title: 'Agendamento Rápido', desc: 'Escolha especialidade, médico e horário e agende em poucos cliques.' },
-  { icon: Lock, title: 'Seguro LGPD', desc: 'Seus dados protegidos com criptografia de ponta a ponta.' },
+  { icon: Lock, title: 'Proteção LGPD', desc: 'Seus dados protegidos com criptografia de ponta a ponta.' },
   { icon: CheckCircle, title: 'Confirmação na Hora', desc: 'Seu agendamento é confirmado imediatamente após o pagamento.' },
-  { icon: Users, title: 'Especialistas Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
+  { icon: Users, title: 'Profissionais Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
 ];
 
 // ─── FAQ ────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
-  { q: 'O que é teleconsulta?', a: 'É o atendimento médico à distância, regulamentado pelo CFM. Você encontra o especialista e agenda pela plataforma; o próprio médico realiza a consulta pelos meios que utiliza, sem você precisar se deslocar.' },
+  { q: 'O que é teleconsulta?', a: 'É o atendimento médico à distância, regulamentado pelo CFM. Você encontra o profissional e agenda pela plataforma; o próprio médico realiza a consulta pelos meios que utiliza, sem você precisar se deslocar.' },
   { q: 'Preciso de convênio?', a: 'Não. O Click Teleconsulta funciona de forma particular. Você paga diretamente pela consulta com preços acessíveis, sem necessidade de convênio ou plano de saúde.' },
   { q: 'Como acontece o atendimento?', a: 'Após agendar e confirmar o pagamento, o médico entra em contato e conduz o atendimento pelos meios próprios dele (por exemplo telefone, vídeo ou a plataforma que utilizar), conforme as normas do CFM.' },
   { q: 'A prescrição é válida?', a: 'Sim. Quando necessária, a prescrição é emitida pelo próprio médico, com assinatura e validade legal conforme a regulamentação vigente. A plataforma cuida apenas do agendamento e do pagamento.' },
   { q: 'Como pago?', a: 'Aceitamos cartão de crédito, débito e PIX. O pagamento é processado de forma segura antes da consulta.' },
-  { q: 'É seguro?', a: 'Totalmente. Utilizamos criptografia de ponta a ponta, estamos em conformidade com a LGPD e todos os médicos são verificados junto ao CRM.' },
+  { q: 'É seguro?', a: 'Utilizamos criptografia de ponta a ponta, estamos em conformidade com a LGPD e os médicos parceiros são verificados junto ao CRM do respectivo estado.' },
 ];
 
 // ─── Animações ──────────────────────────────────────────────────────────────────
@@ -127,7 +127,7 @@ const HomePage = () => {
         <title>Click Teleconsulta — Sua saúde a um clique de distância</title>
         <meta
           name="description"
-          content="Agende teleconsultas com especialistas de forma rápida e segura. Sem filas, sem deslocamento."
+          content="Agende teleconsultas com profissionais de forma rápida e segura. Sem filas, sem deslocamento."
         />
         <link rel="canonical" href="https://clickteleconsulta.online/" />
         <link
@@ -198,7 +198,7 @@ const HomePage = () => {
                 variants={fadeUp}
                 className="font-body mt-6 text-lg text-slate-300 leading-relaxed max-w-md"
               >
-                Encontre especialistas, agende sua consulta e seja atendido de onde estiver.
+                Encontre profissionais, agende sua consulta e seja atendido de onde estiver.
                 Rápido, seguro e acessível.
               </motion.p>
 
@@ -250,7 +250,7 @@ const HomePage = () => {
                   </div>
                   <div>
                     <p className="font-display text-white text-xs font-bold">LGPD Compliant</p>
-                    <p className="text-blue-400 text-xs font-body">100% seguro</p>
+                    <p className="text-blue-400 text-xs font-body">Dados protegidos</p>
                   </div>
                 </div>
               </motion.div>

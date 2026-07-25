@@ -248,11 +248,11 @@ const AiChatWidget = () => {
       const hasAnyToken = (tokens) => tokens.some(t => userTokens.includes(t) || userTokens.some(ut => ut.includes(t)));
 
       if (hasAnyToken(['preco', 'valor', 'custa', 'pagamento', 'pagar', 'cartao', 'pix'])) {
-        responseText = 'Nossos especialistas definem seus próprios valores, mas a maioria das consultas inicia-se a partir de R$ 80,00. Aceitamos Pix e Cartão de Crédito.';
+        responseText = 'Nossos profissionais definem seus próprios valores, mas a maioria das consultas inicia-se a partir de R$ 80,00. Aceitamos Pix e Cartão de Crédito.';
       } else if (hasAnyToken(['agendar', 'marcar', 'horario', 'data', 'disponivel'])) {
         responseText = 'Para agendar, basta navegar até a lista de "Agendamentos" no menu principal, escolher um médico e selecionar o melhor horário para você!';
-      } else if (hasAnyToken(['medico', 'doutor', 'especialista', 'cardiologista', 'pediatra'])) {
-        responseText = 'Temos diversos especialistas qualificados em nossa plataforma. Você pode filtrar por especialidade na página de busca.';
+      } else if (hasAnyToken(['medico', 'doutor', 'profissional', 'cardiologista', 'pediatra'])) {
+        responseText = 'Temos diversos profissionais qualificados em nossa plataforma. Você pode filtrar por especialidade na página de busca.';
       } else if (hasAnyToken(['cancelar', 'reembolso', 'desistir'])) {
         responseText = 'Você pode cancelar sua consulta em "Minhas Consultas", na sua conta. O reembolso é processado conforme a política de cancelamento.';
       } else if (hasAnyToken(['ajuda', 'suporte', 'problema', 'erro'])) {

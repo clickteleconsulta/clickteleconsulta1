@@ -502,7 +502,7 @@ const DoctorProfilePage = () => {
         </title>
         <meta
           name="description"
-          content={`Agende uma consulta online com ${doctor.public_name || doctor.name}, especialista em ${doctor.specialty}.`}
+          content={`Agende uma consulta online com ${doctor.public_name || doctor.name}, profissional em ${doctor.specialty}.`}
         />
       </Helmet>
 
@@ -638,7 +638,7 @@ const DoctorProfilePage = () => {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                   <h2 className="text-base font-bold flex items-center gap-2 mb-3">
                     <GraduationCap className="w-4 h-4 text-primary" />
-                    Sobre o especialista
+                    Sobre o profissional
                   </h2>
                   <div className="prose prose-sm max-w-none text-muted-foreground">
                     {doctor.bio ? (

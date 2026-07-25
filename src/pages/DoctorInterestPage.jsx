@@ -79,7 +79,7 @@ const DoctorInterestPage = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">Cadastro Médico</h1>
           <p className="text-lg text-muted-foreground">
-            Faça parte da nossa rede de especialistas e leve saúde de qualidade a mais pessoas. Preencha o formulário abaixo para iniciar sua jornada conosco.
+            Faça parte da nossa rede de profissionais e leve saúde de qualidade a mais pessoas. Preencha o formulário abaixo para iniciar sua jornada conosco.
           </p>
         </div>
 

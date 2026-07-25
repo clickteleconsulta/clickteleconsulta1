@@ -61,7 +61,7 @@ export function DoctorCard({ doctor }) {
           {doctor.specialty}
         </p>
         <p className="text-sm text-muted-foreground mt-3 line-clamp-2" title={doctor.bio}>
-          {doctor.bio || 'Especialista em telemedicina.'}
+          {doctor.bio || 'Profissional em telemedicina.'}
         </p>
       </CardContent>
       <CardFooter className="p-5 pt-0 flex flex-col gap-4">

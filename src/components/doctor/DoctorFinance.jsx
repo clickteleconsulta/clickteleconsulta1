@@ -473,7 +473,7 @@ const DoctorFinance = () => {
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Status</TableHead>
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Data da Consulta</TableHead>
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Paciente</TableHead>
-                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Especialista</TableHead>
+                                        <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Profissional</TableHead>
                                         <TableHead className="text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Serviço</TableHead>
                                         <TableHead className="text-right text-[10px] font-bold text-gray-600 uppercase tracking-wide py-2 px-4">Ações</TableHead>
                                     </TableRow>
@@ -643,7 +643,7 @@ const DoctorFinance = () => {
                                     <p className="text-xs text-gray-700 flex items-center gap-1"><UserIcon className="w-3 h-3 text-gray-400" /> {detailTx.patientName}</p>
                                 </div>
                                 <div className="space-y-0.5">
-                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Especialista</p>
+                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Profissional</p>
                                     <p className="text-xs text-gray-700">{doctorData?.public_name || doctorData?.name || '—'}</p>
                                 </div>
                             </div>

@@ -523,7 +523,7 @@ const AppointmentsControlPage = () => {
                 <TableHead className="text-center">Status</TableHead>
                 <TableHead>Data da Consulta</TableHead>
                 <TableHead>Paciente</TableHead>
-                <TableHead>Especialista</TableHead>
+                <TableHead>Profissional</TableHead>
                 <TableHead>Serviço</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>

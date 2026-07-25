@@ -12,7 +12,7 @@ const PANELS = {
         features: [
             { icon: UserCheck, label: 'Escolha entre médicos parceiros verificados (CFM)' },
             { icon: CalendarCheck, label: 'Agende em minutos, sem filas' },
-            { icon: ShieldCheck, label: 'Seguro e sigiloso — conforme a LGPD' },
+            { icon: ShieldCheck, label: 'Protegido e sigiloso — conforme a LGPD' },
         ],
     },
     profissional: {

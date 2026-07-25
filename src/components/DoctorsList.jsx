@@ -7,7 +7,7 @@ export const doctors = [
     id: '1',
     name: 'Dr. Lucas Farias',
     specialty: 'Cardiologia',
-    bio: 'Especialista em saúde do coração com mais de 15 anos de experiência em hospitais de renome.',
+    bio: 'Profissional em saúde do coração com mais de 15 anos de experiência em hospitais de renome.',
     image_url: null,
   },
   {

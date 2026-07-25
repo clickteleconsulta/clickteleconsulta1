@@ -50,7 +50,8 @@ const ProfileSkeleton = () => (
 );
 
 const specialtiesList = [
-    "Clínico Geral"
+    "Médico",
+    "Generalista"
 ];
 
 const BRAZIL_UFS = [
@@ -125,7 +126,7 @@ const DoctorProfile = () => {
             const formData = {
                 ...doctorData,
                 instructions: doctorData.instructions || '',
-                specialty: doctorData.specialty || "Clínico Geral",
+                specialty: doctorData.specialty || "Médico",
                 phone_number: doctorData.phone_number || '',
                 formacao: doctorData.formacao || ''
             };
