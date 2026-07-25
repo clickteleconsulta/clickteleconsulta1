@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff, Stethoscope, ShieldCheck } from 'lucide-react';
+import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff, Stethoscope, ShieldCheck, CalendarCheck } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { cn } from "@/lib/utils";
@@ -62,7 +62,19 @@ const AuthPage = ({
   const { showLoader, hideLoader } = useLoader();
   const isDoctor = targetRole === 'medico';
 
-  const [isLogin, setIsLogin] = useState(true);
+  // Agendamento pendente iniciado por um convidado (guardado ao clicar num horário).
+  const pendingBooking = (() => {
+    try {
+      const raw = localStorage.getItem('pendingBooking');
+      if (!raw) return null;
+      const pb = JSON.parse(raw);
+      if (pb?.ts && (Date.now() - pb.ts) < 30 * 60 * 1000) return pb;
+    } catch (_) { /* storage indisponível */ }
+    return null;
+  })();
+
+  // Se veio de um horário, já abre no modo indicado (criar conta x entrar).
+  const [isLogin, setIsLogin] = useState(location.state?.authMode ? location.state.authMode === 'login' : true);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -222,6 +234,16 @@ const AuthPage = ({
       </Helmet>
       
       <AuthLayout variant={isDoctor ? 'profissional' : 'cliente'}>
+
+        {!isDoctor && pendingBooking && (
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-3.5 text-left animate-in fade-in slide-in-from-top-2 duration-300">
+            <CalendarCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-blue-900 leading-snug">
+              <b>Quase lá!</b> Você está agendando com <b>{pendingBooking.doctorName}</b> em <b>{pendingBooking.whenLabel}</b>.{' '}
+              {isLogin ? 'Entre na sua conta' : 'Crie sua conta grátis'} para confirmar — seu horário está guardado.
+            </div>
+          </div>
+        )}
 
         <div className="text-center mb-6 space-y-2">
             {isDoctor && (

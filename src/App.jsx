@@ -105,7 +105,21 @@ const AuthRedirect = ({ role }) => {
 
   if (session && profile) {
     if (profile.role === 'admin') return <Navigate to="/admin/dashboard/estrategia" replace />;
-    
+
+    // Convidado que iniciou um agendamento e acabou de logar/cadastrar: retoma a revisão
+    // do horário guardado em vez de cair no dashboard.
+    if (profile.role === 'paciente') {
+      try {
+        const raw = localStorage.getItem('pendingBooking');
+        if (raw) {
+          const pb = JSON.parse(raw);
+          if (pb?.details && pb?.ts && (Date.now() - pb.ts) < 30 * 60 * 1000) {
+            return <Navigate to="/agendamento/revisao" replace />;
+          }
+        }
+      } catch (_) { /* storage indisponível */ }
+    }
+
     const from = location.state?.from?.pathname || (profile.role === 'medico' ? '/medico/dashboard' : '/paciente/dashboard');
     return <Navigate to={from} replace />;
   }

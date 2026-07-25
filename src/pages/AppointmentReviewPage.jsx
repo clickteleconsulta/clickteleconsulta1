@@ -17,7 +17,23 @@ const AppointmentReviewPage = () => {
   const { createConfirmedAppointment } = useAppointments();
   const [isLoading, setIsLoading] = useState(false);
 
-  const appointmentDetails = location.state?.appointmentDetails;
+  // Aceita os detalhes vindos da navegação OU do agendamento guardado (fluxo do convidado que
+  // logou/cadastrou depois de escolher o horário). Consome o guardado uma única vez.
+  const [appointmentDetails] = useState(() => {
+    if (location.state?.appointmentDetails) return location.state.appointmentDetails;
+    try {
+      const raw = localStorage.getItem('pendingBooking');
+      if (raw) {
+        const pb = JSON.parse(raw);
+        if (pb?.details && pb?.ts && (Date.now() - pb.ts) < 30 * 60 * 1000) return pb.details;
+      }
+    } catch (_) { /* storage indisponível */ }
+    return null;
+  });
+
+  useEffect(() => {
+    try { localStorage.removeItem('pendingBooking'); } catch (_) { /* noop */ }
+  }, []);
 
   useEffect(() => {
     if (!appointmentDetails) {

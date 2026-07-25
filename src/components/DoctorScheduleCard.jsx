@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart } from 'lucide-react';
+import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart, CalendarCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -89,6 +89,7 @@ export function DoctorScheduleCard({
   const [doctorAgenda, setDoctorAgenda] = useState([]);
   const [bookedSlots, setBookedSlots] = useState(new Map());
   const [isFavorite, setIsFavorite] = useState(false);
+  const [authPrompt, setAuthPrompt] = useState(null); // convidado tentando agendar
   // Dias visíveis por página: 3 no mobile (uma linha), 5 no desktop.
   const [perPage, setPerPage] = useState(typeof window !== 'undefined' && window.innerWidth < 640 ? 3 : 5);
 
@@ -209,11 +210,6 @@ export function DoctorScheduleCard({
       return;
     }
 
-    if (!session) {
-      navigate('/acesso-cliente');
-      return;
-    }
-    
     // O horário do slot está no fuso de Brasília. Converte explicitamente para UTC
     // (independe do fuso do navegador), evitando gravar a hora local como se fosse UTC.
     const timeZone = 'America/Sao_Paulo';
@@ -237,7 +233,29 @@ export function DoctorScheduleCard({
       price_in_cents: priceToUse
     };
 
+    // Convidado (sem conta): guarda o horário escolhido e explica que precisa de cadastro,
+    // em vez de jogá-lo numa tela de login sem contexto (evita perda de conversão).
+    if (!session) {
+      try {
+        localStorage.setItem('pendingBooking', JSON.stringify({
+          details: appointmentDetails,
+          doctorName: appointmentDetails.doctor_name,
+          whenLabel: `${format(day, "dd/MM")} às ${time}`,
+          ts: Date.now()
+        }));
+      } catch (_) { /* storage indisponível */ }
+      setAuthPrompt({
+        doctorName: appointmentDetails.doctor_name,
+        whenLabel: `${format(day, "dd 'de' MMMM", { locale: ptBR })} às ${time}`
+      });
+      return;
+    }
+
     navigate('/agendamento/revisao', { state: { appointmentDetails } });
+  };
+
+  const goToAuth = (mode) => {
+    navigate('/acesso-cliente', { state: { from: { pathname: '/agendamento/revisao' }, authMode: mode } });
   };
 
   const handleFavorite = e => {
@@ -407,6 +425,40 @@ export function DoctorScheduleCard({
                   </>}
           </div>
       </div>
+      {authPrompt && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setAuthPrompt(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
+              <CalendarCheck className="w-7 h-7 text-blue-600" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900">Falta pouco para agendar!</h3>
+            <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+              Para confirmar sua consulta com <b className="text-slate-700">{authPrompt.doctorName}</b> em{' '}
+              <b className="text-slate-700">{authPrompt.whenLabel}</b>, você precisa de uma conta gratuita.
+              Leva menos de 1 minuto — e o horário fica guardado.
+            </p>
+            <div className="mt-5 space-y-2">
+              <Button onClick={() => goToAuth('signup')} className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
+                Criar conta grátis
+              </Button>
+              <Button variant="outline" onClick={() => goToAuth('login')} className="w-full h-11 font-semibold rounded-lg border-slate-300 text-slate-700">
+                Já tenho conta — Entrar
+              </Button>
+            </div>
+            <button onClick={() => setAuthPrompt(null)} className="mt-3 text-xs text-slate-400 hover:text-slate-600">
+              Agora não
+            </button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
