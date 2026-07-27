@@ -50,7 +50,6 @@ const ProfileSkeleton = () => (
 );
 
 const specialtiesList = [
-    "Médico",
     "Generalista"
 ];
 

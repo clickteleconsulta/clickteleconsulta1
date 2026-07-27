@@ -103,7 +103,6 @@ const DoctorListCard = ({ doctor, price }) => (
 
 // ─── Filtros ──────────────────────────────────────────────────────────────────
 const SPECIALTIES = [
-  'Médico',
   'Generalista',
   'Cardiologia',
   'Dermatologia',

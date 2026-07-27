@@ -42,7 +42,7 @@ const CYCLING_WORDS = ['consultas médicas', 'profissionais de confiança', 'ate
 
 // ─── Especialidades ─────────────────────────────────────────────────────────────
 const SPECIALTIES = [
-  { name: 'Médico', icon: Stethoscope, color: 'bg-sky-50 text-sky-600' },
+  { name: 'Generalista', icon: Stethoscope, color: 'bg-sky-50 text-sky-600' },
   { name: 'Cardiologia', icon: Heart, color: 'bg-rose-50 text-rose-500' },
   { name: 'Dermatologia', icon: Sparkles, color: 'bg-amber-50 text-amber-500' },
   { name: 'Neurologia', icon: Brain, color: 'bg-slate-100 text-slate-600' },
