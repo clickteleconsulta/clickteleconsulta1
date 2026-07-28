@@ -266,12 +266,13 @@ const CheckoutPage = () => {
       setTimeout(() => navigate('/agendamentos'), 4000);
     } else if (newAppointment) {
       toast({
-        title: 'Guia gerada!',
-        description: 'Seu agendamento foi confirmado e a guia enviada ao médico.',
-        duration: 5000,
+        title: 'Agendamento criado',
+        description: 'Falta só o pagamento para confirmar seu horário.',
+        duration: 4000,
       });
       await refetchAppointments();
-      navigate('/agendamento-sucesso', {
+      // Segue para o pagamento (Asaas), em vez de uma tela de sucesso sem cobrança.
+      navigate('/agendamento/confirmado', {
         replace: true,
         state: { appointmentId: newAppointment.id },
       });
