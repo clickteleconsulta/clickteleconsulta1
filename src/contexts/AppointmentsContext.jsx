@@ -406,6 +406,23 @@ export const AppointmentsProvider = ({ children }) => {
             }
 
             toast({ title: "Sucesso", description: data[0].message, variant: 'success' });
+
+            // Se o agendamento estava pago, estorna automaticamente no Asaas (100%).
+            // Best-effort: o cancelamento já foi feito; se o estorno falhar, avisa para
+            // tratar manualmente (painel Asaas / admin).
+            try {
+                const { data: refundData, error: refundError } = await supabase.functions.invoke('refund-asaas-payment', {
+                    body: { appointmentId }
+                });
+                if (refundError) throw refundError;
+                if (refundData?.refunded) {
+                    toast({ title: 'Reembolso enviado', description: 'O valor pago será estornado ao paciente.', variant: 'success' });
+                }
+            } catch (refundErr) {
+                console.error('Falha ao estornar no Asaas:', refundErr);
+                toast({ variant: 'destructive', title: 'Atenção: estorno pendente', description: 'O agendamento foi cancelado, mas o estorno automático falhou. Verifique no painel de reembolsos.' });
+            }
+
             return { error: null };
         } catch (err) {
             console.error("Error cancelling appointment:", err);
