@@ -420,6 +420,8 @@ export const AppointmentsProvider = ({ children }) => {
                 if (refundError) throw refundError;
                 if (refundData?.refunded) {
                     toast({ title: 'Reembolso enviado', description: 'O valor pago será estornado ao paciente.', variant: 'success' });
+                } else if (refundData && refundData.error) {
+                    toast({ variant: 'destructive', title: 'Estorno pendente', description: `Consulta cancelada. O estorno não foi concluído: ${refundData.error} Conclua no painel de reembolsos quando houver saldo.`, duration: 9000 });
                 }
             } catch (refundErr) {
                 console.error('Falha ao estornar no Asaas:', refundErr);
