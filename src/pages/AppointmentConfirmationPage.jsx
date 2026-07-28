@@ -40,65 +40,55 @@ const AppointmentConfirmationPage = () => {
 
   // Get ID from state (normal flow) or URL (after Stripe redirect)
   const appointmentId = location.state?.appointmentId || searchParams.get('appointmentId');
-  const sessionId = searchParams.get('session_id');
+  const paidReturn = searchParams.get('paid');
 
-  // Verify Stripe Payment if session_id exists
+  // Retorno do checkout do Asaas (?paid=1): o pagamento é confirmado pelo webhook do Asaas.
+  // Aqui apenas aguardamos o status refletir no agendamento.
   useEffect(() => {
-    const verifyPayment = async () => {
-      if (sessionId && appointmentId && !verifyingPayment) {
+    const confirmPayment = async () => {
+      if (paidReturn && appointmentId && !verifyingPayment) {
         setVerifyingPayment(true);
         try {
-          const { data, error } = await supabase.functions.invoke('verify-stripe-payment', {
-            body: { sessionId, appointmentId }
-          });
+          let paid = false;
+          let paidValue = 0;
+          for (let i = 0; i < 8; i++) {
+            const { data: fresh } = await supabase
+              .from('agendamentos').select(APPT_SELECT).eq('id', appointmentId).single();
+            if (fresh) { setAppointment(fresh); paidValue = (fresh.price_in_cents || 0) / 100; }
+            if (fresh?.pagamento_status === 'pago') { paid = true; break; }
+            await new Promise((r) => setTimeout(r, 1500));
+          }
 
-          if (error) throw error;
-
-          if (data.success) {
+          if (paid) {
             toast({
               title: "Pagamento Confirmado!",
               description: "Sua consulta foi confirmada com sucesso.",
               variant: "success"
             });
-            // Notifica o médico por WhatsApp (best-effort; só envia quando o provedor
-            // estiver configurado na função notify-doctor-new-appointment).
+            // Notifica o médico (best-effort).
             supabase.functions.invoke('notify-doctor-new-appointment', { body: { appointmentId } }).catch(() => {});
-            // Re-busca o agendamento até refletir o pagamento na tela (não depende do realtime).
-            let paidValue = 0;
-            for (let i = 0; i < 6; i++) {
-              const { data: fresh } = await supabase
-                .from('agendamentos').select(APPT_SELECT).eq('id', appointmentId).single();
-              if (fresh) { setAppointment(fresh); paidValue = (fresh.price_in_cents || 0) / 100; }
-              if (fresh?.pagamento_status === 'pago') break;
-              await new Promise((r) => setTimeout(r, 1200));
-            }
             // Evento de conversão do funil (uma vez, no retorno do checkout).
-            trackPurchase({ value: paidValue, transactionId: sessionId });
-            // Clean URL params
-            navigate('.', { replace: true, state: { appointmentId } });
+            trackPurchase({ value: paidValue, transactionId: appointmentId });
           } else {
-             toast({
-              title: "Pagamento não confirmado",
-              description: "Ainda não identificamos o pagamento. Tente novamente ou aguarde alguns instantes.",
+            toast({
+              title: "Aguardando confirmação",
+              description: "Assim que o pagamento for compensado, sua consulta é confirmada automaticamente.",
               variant: "warning"
             });
           }
+          // Limpa os parâmetros da URL
+          navigate('.', { replace: true, state: { appointmentId } });
         } catch (err) {
-          console.error("Payment verification failed:", err);
-          toast({
-            title: "Erro na verificação",
-            description: "Não foi possível verificar o status do pagamento.",
-            variant: "destructive"
-          });
+          console.error("Confirmação de pagamento falhou:", err);
         } finally {
           setVerifyingPayment(false);
         }
       }
     };
-    
-    verifyPayment();
+
+    confirmPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId, appointmentId]);
+  }, [paidReturn, appointmentId]);
 
   useEffect(() => {
     if (!appointmentId) {
@@ -163,18 +153,15 @@ const AppointmentConfirmationPage = () => {
     };
   }, [appointmentId, navigate, toast]);
 
-  const handleStripePayment = async () => {
+  const handleAsaasPayment = async () => {
     if (!appointment) return;
-    
+
     setProcessingPayment(true);
     try {
-        const { data, error } = await supabase.functions.invoke('create-stripe-session', {
+        const { data, error } = await supabase.functions.invoke('create-asaas-payment', {
             body: {
                 appointmentId: appointment.id,
-                priceInCents: appointment.price_in_cents,
-                title: `Consulta com ${appointment.medico?.public_name}`,
-                successUrl: `${window.location.origin}/agendamento/confirmado?appointmentId=${appointment.id}&session_id={CHECKOUT_SESSION_ID}`,
-                cancelUrl: `${window.location.origin}/agendamento/confirmado?appointmentId=${appointment.id}`
+                origin: window.location.origin
             }
         });
 
@@ -182,14 +169,14 @@ const AppointmentConfirmationPage = () => {
         if (data?.url) {
             window.location.href = data.url;
         } else {
-            throw new Error("No checkout URL returned");
+            throw new Error(data?.error || "Nenhuma URL de pagamento retornada");
         }
     } catch (err) {
-        console.error("Stripe error:", err);
+        console.error("Asaas error:", err);
         toast({
             variant: "destructive",
             title: "Erro ao iniciar pagamento",
-            description: "Não foi possível conectar com o Stripe. Tente novamente."
+            description: "Não foi possível iniciar o pagamento. Tente novamente."
         });
         setProcessingPayment(false);
     }
@@ -393,7 +380,7 @@ const AppointmentConfirmationPage = () => {
                         <Button
                             size="lg"
                             className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
-                            onClick={handleStripePayment}
+                            onClick={handleAsaasPayment}
                             disabled={processingPayment}
                         >
                             {processingPayment ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
