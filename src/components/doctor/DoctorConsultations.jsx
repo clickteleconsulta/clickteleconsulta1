@@ -940,7 +940,14 @@ const DoctorConsultations = () => {
                                 <AlertDialogContent className="rounded-xl border-gray-100 shadow-xl">
                                   <AlertDialogHeader>
                                     <AlertDialogTitle className="text-lg font-bold text-gray-900">Cancelar Agendamento?</AlertDialogTitle>
-                                    <AlertDialogDescription className="text-sm">Esta ação não pode ser desfeita. O paciente será notificado.</AlertDialogDescription>
+                                    <AlertDialogDescription className="text-sm">
+                                      Esta ação não pode ser desfeita. O paciente será notificado.
+                                      {appt.pagamento_status === 'pago' && (
+                                        <span className="mt-2 block rounded-lg bg-amber-50 border border-amber-200 p-2.5 text-amber-800 font-medium">
+                                          ⚠️ Este agendamento está <b>pago</b>. Ao cancelar, o valor será <b>estornado automaticamente</b> para o paciente.
+                                        </span>
+                                      )}
+                                    </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
                                     <AlertDialogCancel className="h-9 text-xs rounded-lg">Voltar</AlertDialogCancel>

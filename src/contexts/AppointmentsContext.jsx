@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from './SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -106,11 +106,14 @@ export const AppointmentsProvider = ({ children }) => {
         }
 
         try {
+            // O horário só fica indisponível quando o agendamento está PAGO.
+            // Agendamentos apenas criados (pendentes, sem pagamento) NÃO bloqueiam o horário.
             const { data, error } = await supabase
                 .from('agendamentos')
                 .select('horario_inicio, status')
-                .in('status', ['confirmado', 'atendido', 'reagendado', 'pendente', 'agendado', 'concluida'])
-                .eq('medico_id', doctorId);
+                .eq('medico_id', doctorId)
+                .eq('pagamento_status', 'pago')
+                .not('status', 'in', '(cancelado,expirado)');
 
             if(error) throw error;
             
@@ -509,12 +512,17 @@ export const AppointmentsProvider = ({ children }) => {
         }
     }, [session, profile, fetchAppointments]);
 
+    // Referência à lista atual para o handler de realtime decidir entre atualizar
+    // em memória ou recarregar (quando um agendamento passa a ser visível).
+    const appointmentsRef = useRef(appointments);
+    useEffect(() => { appointmentsRef.current = appointments; }, [appointments]);
+
     useEffect(() => {
         if (!session || !profile) return;
 
         const handleRealtimeUpdate = (payload) => {
             const { eventType, new: newRecord, old: oldRecord } = payload;
-            
+
             if (eventType === 'DELETE') {
                 if (oldRecord && oldRecord.id) {
                     setAppointments(prev => prev.filter(appt => appt.id !== oldRecord.id));
@@ -522,11 +530,18 @@ export const AppointmentsProvider = ({ children }) => {
                     fetchAppointments();
                 }
             } else if (eventType === 'INSERT') {
-                fetchAppointments(); 
+                fetchAppointments();
             } else if (eventType === 'UPDATE') {
-                 setAppointments(prev => prev.map(appt => 
-                    appt.id === newRecord.id ? { ...appt, ...newRecord } : appt
-                ));
+                const exists = appointmentsRef.current.some(appt => appt.id === newRecord.id);
+                if (exists) {
+                    setAppointments(prev => prev.map(appt =>
+                        appt.id === newRecord.id ? { ...appt, ...newRecord } : appt
+                    ));
+                } else {
+                    // Não estava na lista (ex.: pagamento confirmado -> virou 'pago' e ficou
+                    // visível para o médico). Recarrega para trazê-lo automaticamente.
+                    fetchAppointments();
+                }
             }
         };
 
