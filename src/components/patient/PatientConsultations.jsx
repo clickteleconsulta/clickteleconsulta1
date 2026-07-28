@@ -4,7 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, Clock, Video, PlusCircle, CheckCircle2, AlertTriangle, XCircle, MousePointerClick, ExternalLink, Copy, FileText, Lock, Phone } from 'lucide-react';
+import { Loader2, Calendar, Clock, Video, PlusCircle, CheckCircle2, AlertTriangle, XCircle, MousePointerClick, ExternalLink, Copy, FileText, Lock, Phone, RotateCcw } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -96,7 +96,13 @@ const PatientConsultations = () => {
         let icon = <CheckCircle2 className="w-3 h-3 mr-1.5" />;
         let className = "";
     
-        if (status === 'confirmado' || status === 'reagendado' || status === 'pendente') {
+        if (paymentStatus === 'reembolsado') {
+            // Estornada tem prioridade: informa que houve devolução do valor.
+            variant = 'custom';
+            className = "bg-violet-100 text-violet-700 border-violet-200";
+            text = 'Estornada';
+            icon = <RotateCcw className="w-3 h-3 mr-1.5" />;
+        } else if (status === 'confirmado' || status === 'reagendado' || status === 'pendente' || status === 'agendado') {
             if (paymentStatus === 'pago') {
                 variant = 'custom';
                 className = "bg-blue-600 hover:bg-blue-700 text-white border-transparent"; // Blue for paid
@@ -106,12 +112,16 @@ const PatientConsultations = () => {
                 text = 'Aguardando Pagamento';
                 icon = <AlertTriangle className="w-3 h-3 mr-1.5" />;
             }
-        } else if (status === 'atendido') {
+        } else if (status === 'atendido' || status === 'concluida' || status === 'realizado') {
             variant = 'success';
             text = 'Realizada';
+        } else if (status === 'expirado') {
+            variant = 'destructive';
+            text = 'Expirada';
+            icon = <XCircle className="w-3 h-3 mr-1.5" />;
         } else {
             variant = 'destructive';
-            text = status === 'cancelado' ? 'Cancelada' : 'Expirada';
+            text = 'Cancelada';
             icon = <XCircle className="w-3 h-3 mr-1.5" />;
         }
     
@@ -351,7 +361,7 @@ const PatientConsultations = () => {
                     {cancelTarget && (() => {
                         const hoursUntil = (new Date(cancelTarget.horario_inicio).getTime() - Date.now()) / 3600000;
                         const isPaid = cancelTarget.pagamento_status === 'pago';
-                        const refund = !isPaid ? null : hoursUntil >= 48 ? 100 : hoursUntil >= 24 ? 50 : 0;
+                        const canRefund = isPaid && hoursUntil >= 2;
                         return (
                             <div className="py-2 text-sm">
                                 <p className="text-gray-700">
@@ -359,11 +369,15 @@ const PatientConsultations = () => {
                                     {new Date(cancelTarget.horario_inicio).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' })}
                                 </p>
                                 {isPaid ? (
-                                    <p className={`mt-2 rounded-md p-2 border text-xs ${refund > 0 ? 'bg-green-50 border-green-100 text-green-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
-                                        {refund === 100 && 'Você receberá reembolso integral (100%).'}
-                                        {refund === 50 && 'Você receberá reembolso parcial (50%).'}
-                                        {refund === 0 && 'Sem reembolso (menos de 24h de antecedência).'}
-                                    </p>
+                                    canRefund ? (
+                                        <p className="mt-2 rounded-md p-2 border bg-green-50 border-green-100 text-green-800 text-xs">
+                                            Você receberá <strong>reembolso integral</strong>, descontada apenas a taxa de processamento do pagamento.
+                                        </p>
+                                    ) : (
+                                        <p className="mt-2 rounded-md p-2 border bg-amber-50 border-amber-100 text-amber-800 text-xs">
+                                            Consultas pagas só podem ser canceladas com <strong>2 horas ou mais de antecedência</strong>. Com menos de 2h, não há reembolso.
+                                        </p>
+                                    )
                                 ) : (
                                     <p className="mt-2 rounded-md p-2 border bg-gray-50 border-gray-100 text-gray-600 text-xs">
                                         Agendamento não pago — cancelamento sem custo.
