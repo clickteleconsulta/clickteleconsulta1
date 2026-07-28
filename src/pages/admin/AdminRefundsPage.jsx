@@ -27,6 +27,7 @@ const AdminRefundsPage = () => {
     const [rows, setRows] = useState([]);
     const [tab, setTab] = useState('pendentes');
     const [target, setTarget] = useState(null);
+    const [refundingId, setRefundingId] = useState(null);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -68,6 +69,25 @@ const AdminRefundsPage = () => {
             toast({ variant: 'destructive', title: 'Erro', description: err.message });
         } finally {
             setProcessing(false);
+        }
+    };
+
+    // Estorno automático via Asaas (reprocessa estornos pendentes; retém a taxa de processamento).
+    const estornarNoAsaas = async (a) => {
+        setRefundingId(a.id);
+        try {
+            const { data, error } = await supabase.functions.invoke('refund-asaas-payment', { body: { appointmentId: a.id } });
+            if (error) throw error;
+            if (data?.refunded) {
+                toast({ title: 'Estorno realizado', description: `Valor devolvido ao paciente${data.refundValue ? ` (${fmtBRL(data.refundValue)})` : ''}.`, variant: 'success' });
+                fetchData();
+            } else {
+                toast({ variant: 'destructive', title: 'Estorno não concluído', description: data?.error || 'Não foi possível estornar agora. Tente novamente quando houver saldo na conta Asaas.', duration: 9000 });
+            }
+        } catch (err) {
+            toast({ variant: 'destructive', title: 'Erro no estorno', description: err.message });
+        } finally {
+            setRefundingId(null);
         }
     };
 
@@ -169,9 +189,14 @@ const AdminRefundsPage = () => {
                                     <TableCell className="text-right font-bold text-amber-700">{fmtBRL(refundValue(a))}</TableCell>
                                     <TableCell className="text-right">
                                         {tab === 'pendentes' ? (
-                                            <Button size="sm" className="h-8 gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs" onClick={() => setTarget(a)}>
-                                                <CheckCircle2 className="w-3.5 h-3.5" /> Reembolsado
-                                            </Button>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Button size="sm" className="h-8 gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs" onClick={() => estornarNoAsaas(a)} disabled={refundingId === a.id}>
+                                                    {refundingId === a.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />} Estornar no Asaas
+                                                </Button>
+                                                <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs" onClick={() => setTarget(a)} title="Marcar como reembolsado manualmente (se você já estornou por fora)" disabled={refundingId === a.id}>
+                                                    <CheckCircle2 className="w-3.5 h-3.5" /> Manual
+                                                </Button>
+                                            </div>
                                         ) : (
                                             <Badge className="bg-green-100 text-green-700 border-green-200" variant="outline">Devolvido</Badge>
                                         )}
