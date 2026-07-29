@@ -17,13 +17,14 @@ import { supabase } from '@/lib/customSupabaseClient';
 
 // Regras de cancelamento do paciente:
 // - Não pagas (pendente): pode cancelar a qualquer momento.
-// - Pagas: só pode cancelar/reagendar até 3 horas antes do horário.
+// - Pagas: pode cancelar a qualquer momento antes do horário (≥2h = 100%, <2h = 50%).
+//   Após o horário não é possível cancelar (não comparecimento = sem reembolso).
 // - Já atendidas: não pode cancelar.
 const canPatientCancel = (appt) => {
     if (['atendido', 'concluida', 'realizado', 'cancelado', 'expirado'].includes(appt.status)) return false;
     if (appt.pagamento_status !== 'pago') return true;
     const hoursUntil = (new Date(appt.horario_inicio).getTime() - Date.now()) / 3600000;
-    return hoursUntil >= 3;
+    return hoursUntil > 0;
 };
 
 const PatientConsultations = () => {
@@ -336,7 +337,7 @@ const PatientConsultations = () => {
                                                         </div>
                                                     </TooltipTrigger>
                                                     <TooltipContent side="bottom" className="bg-slate-800 text-white border-slate-700 max-w-[240px]">
-                                                        <p className="text-xs">Consultas pagas só podem ser canceladas ou reagendadas até <strong>3 horas antes</strong> do horário.</p>
+                                                        <p className="text-xs">O horário já passou. Não é possível cancelar; em caso de não comparecimento, não há reembolso.</p>
                                                     </TooltipContent>
                                                 </Tooltip>
                                             )
@@ -437,7 +438,8 @@ const PatientConsultations = () => {
                     {cancelTarget && (() => {
                         const hoursUntil = (new Date(cancelTarget.horario_inicio).getTime() - Date.now()) / 3600000;
                         const isPaid = cancelTarget.pagamento_status === 'pago';
-                        const canRefund = isPaid && hoursUntil >= 2;
+                        const fullRefund = isPaid && hoursUntil >= 2;
+                        const partialRefund = isPaid && hoursUntil > 0 && hoursUntil < 2;
                         return (
                             <div className="py-2 text-sm">
                                 <p className="text-gray-700">
@@ -445,13 +447,17 @@ const PatientConsultations = () => {
                                     {new Date(cancelTarget.horario_inicio).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' })}
                                 </p>
                                 {isPaid ? (
-                                    canRefund ? (
+                                    fullRefund ? (
                                         <p className="mt-2 rounded-md p-2 border bg-green-50 border-green-100 text-green-800 text-xs">
-                                            Você receberá <strong>reembolso integral</strong>, descontada apenas a taxa de processamento do pagamento.
+                                            Cancelando com <strong>2h ou mais de antecedência</strong>, você recebe <strong>reembolso integral (100%)</strong>, descontada apenas a taxa de processamento do pagamento.
+                                        </p>
+                                    ) : partialRefund ? (
+                                        <p className="mt-2 rounded-md p-2 border bg-amber-50 border-amber-100 text-amber-800 text-xs">
+                                            Faltam <strong>menos de 2 horas</strong> para a consulta: o reembolso será de <strong>50% do valor pago</strong> (os outros 50% ficam retidos como taxa por cancelamento tardio).
                                         </p>
                                     ) : (
-                                        <p className="mt-2 rounded-md p-2 border bg-amber-50 border-amber-100 text-amber-800 text-xs">
-                                            Consultas pagas só podem ser canceladas com <strong>2 horas ou mais de antecedência</strong>. Com menos de 2h, não há reembolso.
+                                        <p className="mt-2 rounded-md p-2 border bg-red-50 border-red-100 text-red-800 text-xs">
+                                            O horário já passou — não há reembolso.
                                         </p>
                                     )
                                 ) : (

@@ -77,11 +77,13 @@ Deno.serve(async (req: Request) => {
     const pct = appt.refund_percent != null ? Number(appt.refund_percent) : 100;
     let target = value * (pct / 100);
 
-    // Cancelamento POR OPÇÃO DO PACIENTE retém a taxa de processamento; cancelamento pelo
-    // Médico/Plataforma é integral (a Plataforma absorve a taxa).
+    // Cancelamento POR OPÇÃO DO PACIENTE com reembolso INTEGRAL (≥2h) retém a taxa de
+    // processamento; no reembolso PARCIAL (<2h, 50%) devolve-se o percentual exato (a própria
+    // retenção de 50% já é a taxa por cancelamento tardio). Cancelamento pelo Médico/Plataforma
+    // é integral sem desconto (a Plataforma absorve a taxa).
     const byPatient = !!appt.cancelado_por && appt.cancelado_por === appt.patient_id;
     const fee = Math.max(0, value - netValue);
-    if (byPatient) target = Math.max(0, target - fee);
+    if (byPatient && pct >= 100) target = Math.max(0, target - fee);
 
     if (target <= 0) {
       return json({ refunded: false, error: "não há valor a estornar conforme a política de cancelamento." });
