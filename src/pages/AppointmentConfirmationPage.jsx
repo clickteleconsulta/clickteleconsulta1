@@ -389,6 +389,10 @@ const AppointmentConfirmationPage = () => {
                         <p className="text-[11px] text-center text-gray-400 flex items-center justify-center gap-1">
                             <Lock className="w-3 h-3" /> Pagamento processado com segurança.
                         </p>
+                        <div className="rounded-lg bg-gray-50 border border-gray-100 p-3 text-[11px] text-gray-500 leading-relaxed">
+                            <strong className="text-gray-600">Política de cancelamento:</strong> reembolso integral se cancelar com <strong>2 horas ou mais</strong> de antecedência. Com <strong>menos de 2 horas ou não comparecimento, não há reembolso</strong>. Em reembolsos, a taxa de processamento do pagamento é retida. Ao pagar, você concorda com os{' '}
+                            <a href="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">Termos de Serviço</a>.
+                        </div>
                     </div>
                 )}
               </CardContent>

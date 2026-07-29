@@ -12,6 +12,7 @@ import { IMaskInput } from 'react-imask';
 import { trackSignup } from '@/lib/analytics';
 import { useLoader } from '@/contexts/LoaderContext';
 import { Checkbox } from '@/components/ui/checkbox';
+import { supabase } from '@/lib/customSupabaseClient';
 
 // Masked Input Component for CPF and Phone
 const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) => (
@@ -200,6 +201,8 @@ const AuthPage = ({
               description: "Verifique seu email para ativar a conta.",
               variant: "success"
             });
+            // Complementa o registro de aceite (versão/data já gravados no cadastro) com IP e user agent.
+            supabase.functions.invoke('record-legal-consent', { body: { email } }).catch(() => {});
             trackSignup(isDoctor ? 'medico' : 'paciente');
             navigate('/cadastro-sucesso', { state: { email } });
             setTimeout(() => {
