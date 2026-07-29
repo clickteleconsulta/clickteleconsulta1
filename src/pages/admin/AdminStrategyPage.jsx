@@ -39,6 +39,11 @@ const periodStart = (period) => {
 };
 
 const refundPct = (a) => (a.refund_percent == null ? 100 : Number(a.refund_percent));
+// Valor REAL do estorno (contábil): sempre o valor efetivamente devolvido (coluna
+// valor_estornado). Só cai na estimativa por percentual se o valor real não existir.
+const realRefundValue = (a) => (a.valor_estornado != null
+    ? Number(a.valor_estornado)
+    : ((a.price_in_cents || 0) / 100) * (refundPct(a) / 100));
 
 // Métricas derivadas do período. Base atual (pacientes/médicos) e notas são cumulativas;
 // funil, financeiro e qualidade usam a DATA DE CRIAÇÃO da guia (competência).
@@ -64,7 +69,7 @@ const computeDerived = (raw, period) => {
     const repasse = receitaPaga - receitaPlataforma;
     const ticket = pagos.length ? receitaPaga / pagos.length : 0;
 
-    const reembolsoValor = reembolsados.reduce((s, a) => s + ((a.price_in_cents || 0) / 100) * (refundPct(a) / 100), 0);
+    const reembolsoValor = reembolsados.reduce((s, a) => s + realRefundValue(a), 0);
 
     const porPaciente = {};
     pagos.forEach(a => { if (a.patient_id) porPaciente[a.patient_id] = (porPaciente[a.patient_id] || 0) + 1; });
@@ -163,7 +168,7 @@ const AdminStrategyPage = () => {
                 supabase.from('perfis_usuarios').select('id', { count: 'exact', head: true }).eq('role', 'paciente'),
                 supabase.from('medicos').select('id, is_public, is_active, status'),
                 supabase.from('agenda_medico').select('medico_id'),
-                supabase.from('agendamentos').select('status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id, refund_percent, created_at, appointment_date, protocolo'),
+                supabase.from('agendamentos').select('status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id, refund_percent, valor_estornado, created_at, appointment_date, protocolo'),
                 supabase.from('avaliacoes').select('rating'),
             ]);
 
