@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { patientPriceFromRepasse } from '@/lib/price';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
+import { nextAvailableSlotMs } from '@/lib/doctorAvailability';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { Loader2, Frown, Edit, Search, Filter, X } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -98,6 +99,27 @@ const AppointmentsPage = () => {
         rating: r ? r.rating : 0,
         reviewCount: r ? r.reviewCount : 0,
       };
+    });
+
+    // Próximo horário disponível de cada médico (para ranking por proximidade).
+    // Uma única consulta traz os horários já reservados (pagos) de todos os médicos.
+    const doctorIds = processedDoctors.map((d) => d.id);
+    const bookedByDoctor = {};
+    if (doctorIds.length) {
+      const { data: booked } = await supabase
+        .from('agendamentos')
+        .select('medico_id, horario_inicio')
+        .in('medico_id', doctorIds)
+        .eq('pagamento_status', 'pago')
+        .not('status', 'in', '(cancelado,expirado)')
+        .gte('horario_inicio', new Date().toISOString());
+      (booked || []).forEach((b) => {
+        if (!b.horario_inicio) return;
+        (bookedByDoctor[b.medico_id] ||= new Set()).add(new Date(b.horario_inicio).getTime());
+      });
+    }
+    processedDoctors.forEach((d) => {
+      d.nextSlotMs = nextAvailableSlotMs(d.agenda_medico, bookedByDoctor[d.id]);
     });
 
     setDoctorPrices(newDoctorPrices);
@@ -214,21 +236,30 @@ const AppointmentsPage = () => {
       });
     }
 
-    // Médicos com agenda disponível aparecem primeiro; sem horários vão para o fim.
-    // (mesmo critério do card: sem agenda configurada = "Sem horários disponíveis")
-    const hasAvailability = (doc) => !doc.is_fallback && (doc.agenda_medico?.length > 0);
+    // Ranking para dar mais visualizações a quem tem agenda disponível:
+    // 1) Quem tem próximo horário disponível vem sempre antes de quem não tem
+    //    (sem horário não é agendável, então vai para o fim).
+    // 2) Se um filtro de preço estiver ativo, ele manda dentro do grupo disponível
+    //    (Menor preço = mais barato no topo, mais caro no fim).
+    // 3) Sem filtro de preço: horário mais próximo primeiro (mais cedo = mais no topo).
+    //    Desempate: melhor nota e mais avaliações.
+    const nextSlot = (doc) => (doc.nextSlotMs != null ? doc.nextSlotMs : Infinity);
 
-    // Ordenação estável: disponibilidade primeiro; dentro de cada grupo, preço (se ativo)
-    // ou a ordem original (por antiguidade do cadastro).
     result.sort((a, b) => {
-      const availDiff = (hasAvailability(b) ? 1 : 0) - (hasAvailability(a) ? 1 : 0);
-      if (availDiff !== 0) return availDiff;
+      const aAvail = a.nextSlotMs != null;
+      const bAvail = b.nextSlotMs != null;
+      if (aAvail !== bAvail) return aAvail ? -1 : 1;
+
       if (activeFilters.priceSort) {
         const priceA = doctorPrices[a.id] || 0;
         const priceB = doctorPrices[b.id] || 0;
-        return activeFilters.priceSort === 'asc' ? priceA - priceB : priceB - priceA;
+        if (priceA !== priceB) return activeFilters.priceSort === 'asc' ? priceA - priceB : priceB - priceA;
+        return nextSlot(a) - nextSlot(b);
       }
-      return 0;
+
+      if (nextSlot(a) !== nextSlot(b)) return nextSlot(a) - nextSlot(b);
+      if ((b.rating || 0) !== (a.rating || 0)) return (b.rating || 0) - (a.rating || 0);
+      return (b.reviewCount || 0) - (a.reviewCount || 0);
     });
 
     return result;
