@@ -426,7 +426,7 @@ const AppointmentConfirmationPage = () => {
                         </div>
                         <div className="text-white">
                             <p className="text-2xl font-black tracking-tight leading-none">Click Teleconsulta</p>
-                            <p className="text-white/85 text-sm mt-1">Plataforma de Telemedicina</p>
+                            <p className="text-white/85 text-sm mt-1">Marketplace de agendamento de consultas</p>
                         </div>
                     </div>
                     <div className="text-right text-white">
@@ -508,7 +508,7 @@ const AppointmentConfirmationPage = () => {
                 <div className="border-t border-gray-200 px-10 py-5 text-center">
                     <p className="text-xs font-bold text-gray-600">CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50</p>
                     <p className="text-[11px] text-gray-400 mt-1">Coroaci/MG · clickteleconsulta.online · suporte@clickteleconsulta.online</p>
-                    <p className="text-[10px] text-gray-400 mt-2">Documento gerado eletronicamente pela plataforma em {new Date().toLocaleString('pt-BR')}. Não constitui documento fiscal nem laudo médico.</p>
+                    <p className="text-[10px] text-gray-400 mt-2">Documento gerado eletronicamente em {new Date().toLocaleString('pt-BR')}.</p>
                 </div>
             </div>
         </div>

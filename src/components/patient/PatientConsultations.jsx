@@ -138,7 +138,7 @@ const PatientConsultations = () => {
               <span class="tag ${estornado ? 'rf' : 'ok'}">${estornado ? 'Estornada' : 'Pagamento confirmado'}</span>
               <table><tbody>${rows}</tbody></table>
             </div>
-            <div class="foot">Documento gerado eletronicamente pela plataforma Click Teleconsulta. O pagamento é processado pela Asaas (IP Pagamentos). Este comprovante não é documento fiscal. Emitido em ${esc(new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }))}.</div>
+            <div class="foot">Documento gerado eletronicamente por Click Teleconsulta Online LTDA. Pagamento processado pela Asaas. Emitido em ${esc(new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }))}.</div>
           </div>
           <script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
         </body></html>`;
