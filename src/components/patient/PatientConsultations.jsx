@@ -90,6 +90,63 @@ const PatientConsultations = () => {
         toast({ title: "Copiado!", description: "Link e senha copiados para a área de transferência." });
     };
 
+    const formatBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const apptValue = (appt) => appt.price_in_cents ? appt.price_in_cents / 100 : (Number(appt.preco) || 0);
+
+    // Comprovante de pagamento (gerado no navegador, imprimível/salvável em PDF).
+    const openReceipt = (appt) => {
+        const esc = (s) => String(s ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+        const medico = appt.medicos?.public_name || appt.medicos?.name || 'Profissional';
+        const dataConsulta = new Date(appt.horario_inicio).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'long', timeStyle: 'short' });
+        const pago = appt.pagamento_status === 'pago' || appt.pagamento_status === 'reembolsado';
+        const dataPag = appt.pagamento_confirmado_em ? new Date(appt.pagamento_confirmado_em).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'long', timeStyle: 'short' }) : '—';
+        const estornado = appt.pagamento_status === 'reembolsado';
+        const linhas = [
+            ['Protocolo', esc(appt.guias?.protocolo || appt.protocolo || appt.id)],
+            ['Profissional', esc(medico)],
+            ['Especialidade', esc(appt.medicos?.specialty || 'Médico')],
+            ['Data da consulta', esc(dataConsulta)],
+            ['Valor', formatBRL(apptValue(appt))],
+            ['Forma de pagamento', 'Asaas (Pix / cartão)'],
+            ['Data do pagamento', esc(dataPag)],
+            ['ID da transação', esc(appt.checkout_session_id || '—')],
+            ['Situação', estornado ? 'Estornada (valor devolvido)' : (pago ? 'Pagamento confirmado' : 'Pendente')],
+        ];
+        if (estornado && appt.valor_estornado != null) {
+            const de = appt.estornado_em ? new Date(appt.estornado_em).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'long', timeStyle: 'short' }) : '—';
+            linhas.push(['Valor estornado', `${formatBRL(appt.valor_estornado)} em ${esc(de)}`]);
+        }
+        const rows = linhas.map(([k, v]) => `<tr><td class="k">${k}</td><td class="v">${v}</td></tr>`).join('');
+        const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Comprovante ${esc(appt.id)}</title>
+        <style>
+          *{box-sizing:border-box} body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1e293b;margin:0;padding:40px;background:#fff}
+          .wrap{max-width:640px;margin:0 auto;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}
+          .head{background:#2563eb;color:#fff;padding:24px 28px}
+          .head h1{margin:0;font-size:20px;font-weight:700} .head p{margin:4px 0 0;font-size:13px;opacity:.9}
+          .body{padding:24px 28px}
+          .tag{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:16px}
+          .ok{background:#dbeafe;color:#1d4ed8} .rf{background:#ede9fe;color:#6d28d9}
+          table{width:100%;border-collapse:collapse;font-size:14px} td{padding:10px 0;border-bottom:1px solid #f1f5f9;vertical-align:top}
+          td.k{color:#64748b;width:42%} td.v{font-weight:600;text-align:right}
+          .foot{padding:18px 28px;background:#f8fafc;font-size:11px;color:#94a3b8;line-height:1.5}
+          @media print{body{padding:0} .wrap{border:none}}
+        </style></head><body>
+          <div class="wrap">
+            <div class="head"><h1>Comprovante de Pagamento</h1><p>Click Teleconsulta Online LTDA — CNPJ 68.171.336/0001-50</p></div>
+            <div class="body">
+              <span class="tag ${estornado ? 'rf' : 'ok'}">${estornado ? 'Estornada' : 'Pagamento confirmado'}</span>
+              <table><tbody>${rows}</tbody></table>
+            </div>
+            <div class="foot">Documento gerado eletronicamente pela plataforma Click Teleconsulta. O pagamento é processado pela Asaas (IP Pagamentos). Este comprovante não é documento fiscal. Emitido em ${esc(new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }))}.</div>
+          </div>
+          <script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
+        </body></html>`;
+        const w = window.open('', '_blank');
+        if (!w) { toast({ variant: 'destructive', title: 'Pop-up bloqueado', description: 'Permita pop-ups para abrir o comprovante.' }); return; }
+        w.document.write(html);
+        w.document.close();
+    };
+
     const StatusInfo = ({ status, paymentStatus }) => {
         let variant = 'default';
         let text = 'Confirmada';
@@ -209,6 +266,13 @@ const PatientConsultations = () => {
                                                 <Phone size={14} className="text-primary" /> Contato do médico: <strong>{appt.medicos.phone_number}</strong>
                                             </p>
                                         )}
+                                        {appt.pagamento_status === 'reembolsado' && (
+                                            <p className="mt-2 flex items-center gap-1.5 text-xs text-violet-700 bg-violet-50 border border-violet-100 rounded-md p-2">
+                                                <RotateCcw size={13} className="text-violet-500 shrink-0" />
+                                                Valor devolvido{appt.valor_estornado != null && <>: <strong>{formatBRL(appt.valor_estornado)}</strong></>}
+                                                {appt.estornado_em && ` em ${new Date(appt.estornado_em).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`}. O prazo para aparecer na fatura/conta depende da instituição.
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div className="flex flex-col items-end gap-3 w-full sm:w-auto">
@@ -276,6 +340,18 @@ const PatientConsultations = () => {
                                                     </TooltipContent>
                                                 </Tooltip>
                                             )
+                                        )}
+
+                                        {/* Comprovante de pagamento — disponível para consultas pagas ou estornadas */}
+                                        {(appt.pagamento_status === 'pago' || appt.pagamento_status === 'reembolsado') && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => openReceipt(appt)}
+                                                className="w-full sm:w-[200px] text-gray-700 border-gray-200 hover:bg-gray-50 rounded-lg"
+                                            >
+                                                <FileText className="w-4 h-4 mr-2" /> Comprovante
+                                            </Button>
                                         )}
                                     </div>
                                 </div>

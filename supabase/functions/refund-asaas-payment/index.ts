@@ -116,7 +116,7 @@ Deno.serve(async (req: Request) => {
         "Content-Type": "application/json",
         Prefer: "return=minimal",
       },
-      body: JSON.stringify({ pagamento_status: "reembolsado", refund_percent: pctReal }),
+      body: JSON.stringify({ pagamento_status: "reembolsado", refund_percent: pctReal, valor_estornado: refundValue, estornado_em: new Date().toISOString() }),
     });
 
     // Trilha de auditoria do estorno (agendamento_logs é imutável).

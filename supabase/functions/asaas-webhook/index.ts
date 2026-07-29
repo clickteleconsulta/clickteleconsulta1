@@ -95,6 +95,8 @@ Deno.serve(async (req: Request) => {
             refund_percent: 100,
             cancelado_em: new Date().toISOString(),
             checkout_session_id: paymentId,
+            valor_estornado: rf.ok ? Number(body?.payment?.value || 0) || null : null,
+            estornado_em: rf.ok ? new Date().toISOString() : null,
           });
           await logAppt(apptId, "estorno_horario_indisponivel", { asaas_payment_id: paymentId, estornado: rf.ok });
           return ok({ status: realStatus, doubleBooking: true, refunded: rf.ok });
@@ -109,7 +111,7 @@ Deno.serve(async (req: Request) => {
       });
       await logAppt(apptId, "pagamento_confirmado", { asaas_payment_id: paymentId, status: realStatus });
     } else if (isRefund && REFUND_STATUS.includes(realStatus)) {
-      await patchAppt(`id=eq.${apptId}`, { pagamento_status: "reembolsado" });
+      await patchAppt(`id=eq.${apptId}`, { pagamento_status: "reembolsado", estornado_em: new Date().toISOString() });
     }
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e) }), { status: 500 });

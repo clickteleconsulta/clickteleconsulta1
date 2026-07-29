@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, KeyRound, User as UserIcon, ShieldCheck, Trash2 } from 'lucide-react';
+import { Loader2, KeyRound, User as UserIcon, ShieldCheck, Trash2, Download } from 'lucide-react';
 import PatientPageHeader from '@/components/patient/PatientPageHeader';
 import { maskPhone } from '@/lib/masks';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -42,10 +42,46 @@ const PatientData = () => {
     }
   } = useForm();
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const {
     toast
   } = useToast();
   const navigate = useNavigate();
+
+  // Exportar meus dados (LGPD, art. 18 — portabilidade/acesso). Reúne perfil,
+  // agendamentos e registros de aceite do próprio usuário e baixa em JSON.
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const [perfilRes, agendaRes, aceitesRes] = await Promise.all([
+        supabase.from('perfis_usuarios').select('full_name, email, cpf, data_nasc, whatsapp, role, created_at').eq('id', user.id).maybeSingle(),
+        supabase.from('agendamentos').select('id, protocolo, status, pagamento_status, horario_inicio, horario_fim, price_in_cents, refund_percent, valor_estornado, estornado_em, cancelado_em, pagamento_confirmado_em, created_at, medicos!inner(name, public_name, specialty)').eq('patient_id', user.id).order('horario_inicio', { ascending: false }),
+        supabase.from('aceites_legais').select('doc_type, doc_title, doc_version, accepted_at, ip_address').eq('user_id', user.id).order('accepted_at', { ascending: false }),
+      ]);
+      const payload = {
+        exportado_em: new Date().toISOString(),
+        plataforma: 'Click Teleconsulta Online LTDA — CNPJ 68.171.336/0001-50',
+        titular: { id: user.id, email: user.email },
+        perfil: perfilRes.data || null,
+        consultas: agendaRes.data || [],
+        aceites_legais: aceitesRes.data || [],
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `meus-dados-click-teleconsulta-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Dados exportados', description: 'O download do arquivo com seus dados foi iniciado.' });
+    } catch (err) {
+      toast({ variant: 'destructive', title: 'Erro ao exportar dados', description: err.message });
+    } finally {
+      setExporting(false);
+    }
+  };
   useEffect(() => {
     const meta = user?.user_metadata || {};
     if (profile || user) {
@@ -165,7 +201,19 @@ const PatientData = () => {
             <TwoFactorCard />
             </TabsContent>
 
-            <TabsContent value="conta" className="mt-4">
+            <TabsContent value="conta" className="mt-4 space-y-6">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Download className="w-4 h-4 text-primary" /> Exportar meus dados</CardTitle>
+                    <CardDescription>Baixe uma cópia dos seus dados na plataforma — cadastro, histórico de consultas e registros de aceite dos termos (LGPD, art. 18).</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Button variant="outline" onClick={handleExportData} disabled={exporting}>
+                        {exporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                        Baixar meus dados (JSON)
+                    </Button>
+                </CardContent>
+            </Card>
             <DeleteAccountCard />
             </TabsContent>
         </Tabs>
