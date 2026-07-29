@@ -15,6 +15,7 @@ import html2canvas from 'html2canvas';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { trackPurchase } from '@/lib/analytics';
+import Logo from '@/components/Logo';
 
 // Telemedicine Components
 import DoctorTelemedicineButton from '@/components/telemedicine/DoctorTelemedicineButton';
@@ -270,11 +271,25 @@ const AppointmentConfirmationPage = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center justify-center p-3 bg-green-100 text-green-600 rounded-full mb-4">
-             <CheckCircle className="w-10 h-10" />
-          </div>
-          <h1 className="text-3xl font-bold text-foreground">Agendamento Realizado com Sucesso!</h1>
-          <p className="text-muted-foreground mt-2 text-lg">Seu horário está reservado. {isPaid ? 'O pagamento foi confirmado.' : 'Finalize o pagamento para garantir sua consulta.'}</p>
+          {isPaid ? (
+            <>
+              <div className="inline-flex items-center justify-center p-3 bg-green-100 text-green-600 rounded-full mb-4">
+                 <CheckCircle className="w-10 h-10" />
+              </div>
+              <h1 className="text-3xl font-bold text-foreground">Consulta confirmada!</h1>
+              <p className="text-muted-foreground mt-2 text-lg">Seu pagamento foi confirmado e sua teleconsulta está garantida.</p>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center justify-center p-3 bg-amber-100 text-amber-600 rounded-full mb-4">
+                 <CreditCard className="w-9 h-9" />
+              </div>
+              <h1 className="text-3xl font-bold text-foreground">Falta pouco: finalize o pagamento</h1>
+              <p className="text-muted-foreground mt-2 text-lg">
+                Sua consulta <strong className="text-amber-600">ainda não está confirmada</strong>. O agendamento só é efetivado após o pagamento — conclua abaixo para confirmar.
+              </p>
+            </>
+          )}
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -329,8 +344,8 @@ const AppointmentConfirmationPage = () => {
                 <div className="pt-4 border-t">
                   <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-muted-foreground">Status do Agendamento:</span>
-                      <Badge variant="outline" className={cn("text-sm font-semibold", status === 'confirmado' ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800")}>
-                        {status === 'confirmado' ? 'Confirmado' : status}
+                      <Badge variant="outline" className={cn("text-sm font-semibold", isPaid ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800")}>
+                        {isPaid ? 'Confirmado' : 'Aguardando pagamento'}
                       </Badge>
                   </div>
                 </div>
@@ -400,58 +415,100 @@ const AppointmentConfirmationPage = () => {
           </div>
         </div>
 
-        {/* HIDDEN PDF TEMPLATE */}
+        {/* HIDDEN PDF TEMPLATE — guia institucional */}
         <div className="absolute left-[-9999px] top-0 z-[-1] overflow-hidden pointer-events-none">
-            <div id="pdf-content-container" className="w-[800px] bg-white p-12 text-gray-900 font-sans border border-gray-100">
-                {/* PDF Header */}
-                <div className="flex flex-col items-center border-b-2 border-primary/20 pb-6 mb-8 text-center">
-                    <h1 className="text-3xl font-black uppercase text-primary tracking-tight">GUIA DE AGENDAMENTO</h1>
-                    <p className="text-gray-500 font-medium mt-1 text-lg">Click Teleconsulta</p>
-                    <div className="mt-4 px-4 py-1.5 bg-gray-100 rounded-full text-sm font-mono text-gray-700 font-bold border border-gray-200">
-                        Protocolo: {protocolo || 'N/A'}
+            <div id="pdf-content-container" className="w-[800px] bg-white text-gray-900 font-sans">
+                {/* Cabeçalho institucional */}
+                <div className="bg-gradient-to-r from-sky-500 to-teal-500 px-10 py-7 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="bg-white/15 rounded-2xl p-2 flex items-center justify-center ring-1 ring-white/30">
+                            <Logo className="w-12 h-12" />
+                        </div>
+                        <div className="text-white">
+                            <p className="text-2xl font-black tracking-tight leading-none">Click Teleconsulta</p>
+                            <p className="text-white/85 text-sm mt-1">Plataforma de Telemedicina</p>
+                        </div>
+                    </div>
+                    <div className="text-right text-white">
+                        <p className="text-[11px] uppercase tracking-widest text-white/80">Protocolo</p>
+                        <p className="font-mono font-bold text-lg leading-tight">{protocolo || 'N/A'}</p>
+                        <p className="text-[11px] text-white/80 mt-1">Emitido em {new Date().toLocaleDateString('pt-BR')}</p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 mb-8">
-                    {/* Appointment Info */}
-                    <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
-                        <h2 className="text-sm font-bold uppercase tracking-wider text-blue-800 mb-4 border-b border-blue-200 pb-2">Informações da Consulta</h2>
-                        <div className="space-y-3">
-                            <div><p className="text-xs text-blue-600 font-semibold">DATA E HORA</p><p className="font-bold text-gray-800 text-lg">{shortDate} às {shortTime}</p></div>
-                            <div><p className="text-xs text-blue-600 font-semibold">TIPO DE ATENDIMENTO</p><p className="font-medium text-gray-800">Teleconsulta (atendimento à distância)</p></div>
-                            <div><p className="text-xs text-blue-600 font-semibold">STATUS DO AGENDAMENTO</p><p className="font-medium text-gray-800">{status === 'confirmado' ? 'Confirmado' : status}</p></div>
+                <div className="px-10 py-8">
+                    {/* Título + situação */}
+                    <div className="flex items-center justify-between mb-7">
+                        <h1 className="text-xl font-extrabold uppercase tracking-tight text-gray-800">Guia de Agendamento</h1>
+                        <span className={cn("px-3 py-1.5 rounded-full text-sm font-bold border", isPaid ? "bg-green-50 text-green-700 border-green-200" : "bg-amber-50 text-amber-700 border-amber-200")}>
+                            {isPaid ? 'Pagamento confirmado' : 'Aguardando pagamento'}
+                        </span>
+                    </div>
+
+                    {/* Consulta + Profissional */}
+                    <div className="grid grid-cols-2 gap-6 mb-6">
+                        <div className="rounded-xl border border-gray-200 p-5">
+                            <h2 className="text-xs font-bold uppercase tracking-wider text-sky-700 mb-4 pb-2 border-b border-gray-100">Informações da Consulta</h2>
+                            <div className="space-y-3">
+                                <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Data e hora</p><p className="font-bold text-gray-800 text-lg">{shortDate} às {shortTime}</p></div>
+                                <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Tipo de atendimento</p><p className="font-medium text-gray-800">Teleconsulta (à distância)</p></div>
+                                <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Status</p><p className="font-medium text-gray-800">{isPaid ? 'Confirmado' : 'Aguardando pagamento'}</p></div>
+                            </div>
+                        </div>
+
+                        <div className="rounded-xl border border-gray-200 p-5">
+                            <h2 className="text-xs font-bold uppercase tracking-wider text-teal-700 mb-4 pb-2 border-b border-gray-100">Profissional</h2>
+                            <div className="space-y-3">
+                                <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Médico(a)</p><p className="font-bold text-gray-800">{medico?.public_name || medico?.name || 'Não informado'}</p></div>
+                                <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Especialidade</p><p className="font-medium text-gray-800">{medico?.specialty || 'Não informado'}</p></div>
+                                <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Registro (CRM)</p><p className="font-medium text-gray-800">{medico?.crm ? `${medico.crm} - ${medico.uf || ''}` : 'Não informado'}</p></div>
+                                {isPaid && medico?.phone_number && (
+                                    <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Contato</p><p className="font-bold text-gray-800">{medico.phone_number}</p></div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Doctor Info */}
-                    <div className="bg-indigo-50/50 p-5 rounded-xl border border-indigo-100">
-                        <h2 className="text-sm font-bold uppercase tracking-wider text-indigo-800 mb-4 border-b border-indigo-200 pb-2">Profissional</h2>
-                        <div className="space-y-3">
-                            <div><p className="text-xs text-indigo-600 font-semibold">NOME DO MÉDICO(A)</p><p className="font-bold text-gray-800">{medico?.public_name || medico?.name || 'Não informado'}</p></div>
-                            <div><p className="text-xs text-indigo-600 font-semibold">ESPECIALIDADE</p><p className="font-medium text-gray-800">{medico?.specialty || 'Não informado'}</p></div>
-                            <div><p className="text-xs text-indigo-600 font-semibold">REGISTRO (CRM)</p><p className="font-medium text-gray-800">{medico?.crm ? `${medico.crm} - ${medico.uf || ''}` : 'Não informado'}</p></div>
-                            {isPaid && medico?.phone_number && (
-                                <div><p className="text-xs text-indigo-600 font-semibold">NÚMERO DE CONTATO</p><p className="font-bold text-gray-800">{medico.phone_number}</p></div>
-                            )}
+                    {/* Paciente */}
+                    <div className="mb-6">
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Dados do Paciente</h2>
+                        <div className="rounded-xl border border-gray-200 p-5 grid grid-cols-2 gap-4">
+                            <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Nome completo</p><p className="font-medium text-gray-800">{patient?.full_name || 'Não informado'}</p></div>
+                            <div><p className="text-[11px] text-gray-400 font-semibold uppercase">CPF</p><p className="font-medium text-gray-800">{patient?.cpf || 'Não informado'}</p></div>
+                            <div><p className="text-[11px] text-gray-400 font-semibold uppercase">E-mail</p><p className="font-medium text-gray-800">{patient?.email || 'Não informado'}</p></div>
+                            <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Telefone (WhatsApp)</p><p className="font-medium text-gray-800">{patient?.whatsapp || 'Não informado'}</p></div>
                         </div>
                     </div>
-                </div>
 
-                {/* Patient Info */}
-                <div className="mb-8">
-                    <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 border-b border-gray-200 pb-2">Dados do Paciente</h2>
-                    <div className="bg-gray-50 p-5 rounded-xl border border-gray-100 grid grid-cols-2 gap-4">
-                        <div><p className="text-xs text-gray-500 font-semibold">NOME COMPLETO</p><p className="font-medium text-gray-800">{patient?.full_name || 'Não informado'}</p></div>
-                        <div><p className="text-xs text-gray-500 font-semibold">CPF</p><p className="font-medium text-gray-800">{patient?.cpf || 'Não informado'}</p></div>
-                        <div><p className="text-xs text-gray-500 font-semibold">E-MAIL</p><p className="font-medium text-gray-800">{patient?.email || 'Não informado'}</p></div>
-                        <div><p className="text-xs text-gray-500 font-semibold">TELEFONE (WHATSAPP)</p><p className="font-medium text-gray-800">{patient?.whatsapp || 'Não informado'}</p></div>
+                    {/* Pagamento */}
+                    <div className="mb-6">
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Pagamento</h2>
+                        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-5">
+                            <div>
+                                <p className="text-[11px] text-gray-400 font-semibold uppercase">Valor da consulta</p>
+                                <p className="text-2xl font-black text-gray-800">R$ {((price_in_cents || 0) / 100).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[11px] text-gray-400 font-semibold uppercase">Situação</p>
+                                <p className={cn("font-bold", isPaid ? "text-green-700" : "text-amber-700")}>{isPaid ? 'Pago' : 'Pendente'}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Política de cancelamento */}
+                    <div className="rounded-xl border border-gray-200 p-5">
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Política de Cancelamento e Reembolso</h2>
+                        <p className="text-[11px] text-gray-600 leading-relaxed">
+                            Cancelamento pelo paciente com <b>2h ou mais</b> de antecedência: reembolso <b>integral (100%)</b>, descontada a taxa de processamento. Com <b>menos de 2h</b>: reembolso de <b>50%</b> (retida a taxa por cancelamento tardio). Em caso de <b>não comparecimento</b> comprovado pelo médico: <b>sem reembolso</b>. Política completa nos Termos de Serviço em clickteleconsulta.online.
+                        </p>
                     </div>
                 </div>
 
-                {/* PDF Footer */}
-                <div className="mt-12 pt-6 border-t border-gray-200 text-center text-xs text-gray-400 flex justify-between items-center">
-                    <p>Gerado em: {new Date().toLocaleString('pt-BR')}</p>
-                    <p className="font-bold">Click Teleconsulta - Plataforma de Telemedicina</p>
+                {/* Rodapé institucional */}
+                <div className="border-t border-gray-200 px-10 py-5 text-center">
+                    <p className="text-xs font-bold text-gray-600">CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50</p>
+                    <p className="text-[11px] text-gray-400 mt-1">Coroaci/MG · clickteleconsulta.online · suporte@clickteleconsulta.online</p>
+                    <p className="text-[10px] text-gray-400 mt-2">Documento gerado eletronicamente pela plataforma em {new Date().toLocaleString('pt-BR')}. Não constitui documento fiscal nem laudo médico.</p>
                 </div>
             </div>
         </div>
