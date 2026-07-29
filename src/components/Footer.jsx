@@ -60,7 +60,7 @@ const Footer = () => {
 
         <div className="mt-10 pt-6 border-t border-slate-200 space-y-2 text-xs text-slate-400">
           <p className="leading-relaxed">
-            Click Teleconsulta, pague somente quando usar, sem assinaturas ou mensalidades. Somos uma plataforma de marketplace de agendamentos, não trabalhamos com planos de saúde. Somente atendimentos particulares avulsos.
+            A Click Teleconsulta é um <strong className="text-slate-500">marketplace de agendamentos</strong>: fazemos apenas a intermediação do agendamento e do pagamento entre pacientes e médicos. <strong className="text-slate-500">Não somos uma plataforma de teleconsulta</strong> — a teleconsulta e o ato médico são de responsabilidade exclusiva do profissional que realiza o atendimento. Pague somente quando usar, sem assinaturas ou mensalidades; não trabalhamos com planos de saúde, apenas atendimentos particulares avulsos.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1">
             <p>&copy; {year} Click Teleconsulta. Todos os direitos reservados.</p>
