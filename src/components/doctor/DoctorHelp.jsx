@@ -86,6 +86,15 @@ const manual = [
         ],
     },
     {
+        icon: FileText,
+        title: 'Notas fiscais',
+        points: [
+            'A Click Teleconsulta emite nota fiscal apenas da taxa de processamento dos agendamentos (o valor referente à intermediação da plataforma).',
+            'Você, médico(a), é o responsável por emitir suas próprias notas fiscais referentes ao valor de repasse que recebe pelos atendimentos.',
+            'A soma da taxa de processamento (nota emitida pela plataforma) com o valor de repasse (nota emitida por você) corresponde ao valor total pago pelo paciente.',
+        ],
+    },
+    {
         icon: Star,
         title: 'Avaliações dos pacientes',
         points: [

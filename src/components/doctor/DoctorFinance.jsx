@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope, FileDown, CalendarDays, DollarSign, Landmark } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope, FileDown, CalendarDays, DollarSign, Landmark, FileText } from 'lucide-react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { format, parseISO } from 'date-fns';
@@ -677,6 +677,11 @@ const DoctorFinance = () => {
 
                          <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-sm p-2.5">
                              Após solicitar, um novo saque só poderá ser feito depois de <strong>7 dias</strong>, e o administrador processará o pagamento em <strong>até 7 dias</strong>.
+                         </div>
+
+                         <div className="text-[11px] text-blue-900 bg-blue-50 border border-blue-100 rounded-sm p-2.5">
+                             <strong className="flex items-center gap-1.5 mb-1"><FileText className="w-3.5 h-3.5" /> Notas fiscais</strong>
+                             A Click Teleconsulta emite nota fiscal <strong>apenas da taxa de processamento</strong> dos agendamentos. Você é o responsável por emitir suas próprias notas fiscais referentes ao <strong>valor de repasse</strong> que recebe. A soma das duas corresponde ao <strong>valor total pago pelo paciente</strong>.
                          </div>
 
                          {paidTransactions.length === 0 ? (
