@@ -17,8 +17,7 @@ import { patientPriceFromRepasse } from '@/lib/price';
 // Procedimento padrão da plataforma — imutável (exceto o valor de repasse).
 const TELECONSULTA_NOME = 'Teleconsulta';
 const TELECONSULTA_DESC = 'Código TUSS 10101012';
-const REPASSE_MIN = 30;
-const REPASSE_MAX = 150;
+// Valor sugerido/inicial de repasse (NÃO é limite — o médico define livremente o preço).
 const REPASSE_DEFAULT = 30;
 // Detecta o procedimento protegido (funciona mesmo antes da coluna `bloqueado` existir no banco).
 const isProtectedProc = (p) =>
@@ -159,13 +158,9 @@ const DoctorProceduresPage = () => {
             return;
         }
 
-        // Regra de repasse do procedimento Teleconsulta: mínimo R$30, máximo R$150.
-        if (formLocked && (priceVal < REPASSE_MIN || priceVal > REPASSE_MAX)) {
-            toast({
-                variant: "destructive",
-                title: "Valor fora do permitido",
-                description: `O repasse da Teleconsulta deve ser entre ${formatCurrency(REPASSE_MIN)} e ${formatCurrency(REPASSE_MAX)}.`
-            });
+        // O médico define livremente o valor de repasse (a plataforma não impõe teto/piso).
+        if (priceVal <= 0) {
+            toast({ variant: "destructive", title: "Valor inválido", description: "Informe um valor de repasse maior que zero." });
             return;
         }
 
@@ -274,7 +269,7 @@ const DoctorProceduresPage = () => {
                                     <Lock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                                     <p className="text-[12px] text-blue-800 leading-relaxed">
                                         Este é o procedimento padrão da plataforma. O nome e a descrição são fixos —
-                                        você pode ajustar o <strong>valor de repasse</strong> (entre {formatCurrency(REPASSE_MIN)} e {formatCurrency(REPASSE_MAX)}) e as <strong>instruções ao paciente</strong>.
+                                        você pode ajustar o <strong>valor de repasse</strong> e as <strong>instruções ao paciente</strong>.
                                     </p>
                                 </div>
                             )}
@@ -317,17 +312,14 @@ const DoctorProceduresPage = () => {
                                     id="preco"
                                     type="number"
                                     step="0.01"
-                                    min={formLocked ? REPASSE_MIN : 0}
-                                    max={formLocked ? REPASSE_MAX : undefined}
+                                    min={0}
                                     value={formData.preco}
                                     onChange={(e) => setFormData({...formData, preco: e.target.value})}
                                     placeholder="0.00"
                                     className="text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full"
                                 />
                                 <p className="text-[11px] text-gray-500 font-medium">
-                                    {formLocked
-                                        ? `Valor líquido que você receberá. Permitido entre ${formatCurrency(REPASSE_MIN)} e ${formatCurrency(REPASSE_MAX)}.`
-                                        : 'Este é o valor líquido que você receberá.'}
+                                    Este é o valor líquido que você receberá. Você define livremente — valor sugerido: {formatCurrency(REPASSE_DEFAULT)}.
                                 </p>
                             </div>
 
