@@ -105,7 +105,7 @@ const PlatformRules = () => {
                 </CardHeader>
                 <CardContent className="px-0 grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Field label="Taxa da plataforma" suffix="%" value={r.default_fee_percent} onChange={set('default_fee_percent')} />
-                    <Field label="Repasse sugerido (novas contas)" suffix="R$" value={r.default_repasse} onChange={set('default_repasse')} />
+                    <Field label="Repasse inicial (novas contas)" suffix="R$" value={r.default_repasse} onChange={set('default_repasse')} />
                     <div className="md:col-span-2 flex items-start gap-2 text-xs text-blue-800 bg-blue-50/60 border border-blue-100 rounded-lg p-3">
                         <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-600" />
                         <span>Com repasse <strong>R$ {Number(r.default_repasse).toFixed(2)}</strong> e taxa <strong>{Number(r.default_fee_percent)}%</strong>, o paciente pagaria ~<strong>R$ {previewPaciente.toFixed(2)}</strong> (repasse ÷ (1 − taxa), arredondado).</span>

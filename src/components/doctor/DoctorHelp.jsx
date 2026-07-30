@@ -26,7 +26,7 @@ const manual = [
         title: 'Configurando sua agenda e procedimentos',
         points: [
             'Em Agenda, cadastre seus blocos de disponibilidade por dia da semana, com horário de início, fim e o intervalo entre consultas. Só aparecem para o paciente os horários que você liberar.',
-            'Em Procedimentos, o serviço padrão "Teleconsulta" já vem criado como principal. Você define livremente o seu valor de repasse (valor sugerido: R$ 30) e as instruções ao paciente.',
+            'Em Procedimentos, o serviço padrão "Teleconsulta" já vem criado como principal. Você define livremente o seu valor de repasse e as instruções ao paciente.',
             'O valor que o paciente paga é o seu repasse acrescido da taxa da plataforma. A taxa aplicada fica registrada no momento do pagamento e não muda depois.',
         ],
     },

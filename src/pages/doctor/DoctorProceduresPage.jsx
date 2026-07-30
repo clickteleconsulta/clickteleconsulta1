@@ -319,7 +319,7 @@ const DoctorProceduresPage = () => {
                                     className="text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full"
                                 />
                                 <p className="text-[11px] text-gray-500 font-medium">
-                                    Este é o valor líquido que você receberá. Você define livremente — valor sugerido: {formatCurrency(REPASSE_DEFAULT)}.
+                                    Este é o valor líquido que você receberá. Você define livremente o valor do seu atendimento.
                                 </p>
                             </div>
 
