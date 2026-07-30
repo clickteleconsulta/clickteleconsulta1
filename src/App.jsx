@@ -11,6 +11,7 @@ const SupportPage = lazy(() => import('@/pages/SupportPage'));
 const ComoFuncionaPage = lazy(() => import('@/pages/ComoFuncionaPage'));
 const FaqPage = lazy(() => import('@/pages/FaqPage'));
 const QuemSomosPage = lazy(() => import('@/pages/QuemSomosPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogArticlePage = lazy(() => import('@/pages/BlogArticlePage'));
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -370,7 +371,7 @@ function App() {
             {/* Dynamic Routes */}
             <Route path="/medico/:id" element={<DoctorPublicProfilePage />} />
             
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
         </Suspense>

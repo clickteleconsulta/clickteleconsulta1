@@ -239,13 +239,6 @@ const AuthPage = ({
     }
   };
 
-  const handleGoogleLogin = async () => {
-    toast({
-      title: "Funcionalidade em desenvolvimento",
-      description: "O login com Google estará disponível em breve.",
-    });
-  };
-
   return (
     <>
       <Helmet>

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 // Provedor de pagamento da plataforma: Asaas (checkout hospedado · Pix e cartão).
-// "ready" vira true quando as Edge Functions do Asaas estiverem no ar.
+// Ativo em produção: Edge Functions (create-asaas-payment, asaas-webhook, refund, reconcile) no ar e chaves configuradas.
 const PROVIDERS = [
     {
         id: 'asaas',
@@ -17,7 +17,7 @@ const PROVIDERS = [
         icon: Landmark,
         tagline: 'Gateway brasileiro · Pix e cartão de crédito',
         desc: 'Checkout hospedado: o paciente paga numa página segura do Asaas (Pix ou cartão). Split nativo facilita o repasse automático aos médicos. Conta exige CNPJ.',
-        ready: false,
+        ready: true,
         secrets: ['ASAAS_API_KEY', 'ASAAS_WEBHOOK_TOKEN'],
     },
 ];

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart, CalendarCheck, ShieldCheck } from 'lucide-react';
+import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, CalendarCheck, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -299,16 +299,6 @@ export function DoctorScheduleCard({
     navigate('/acesso-cliente', { state: { from: { pathname: '/agendamento/revisao' }, authMode: mode } });
   };
 
-  const handleFavorite = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    toast({
-      title: "🚧 Esta funcionalidade não está implementada ainda",
-      description: "Você pode solicitá-la em seu próximo prompt! 🚀",
-      variant: "default"
-    });
-  };
-
   const isScheduleAvailable = scheduleByDay.some(d => d.slots.length > 0);
   // Se o médico tem agenda configurada, sempre mostramos a grade + setas de navegação
   // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
@@ -412,7 +402,7 @@ export function DoctorScheduleCard({
                       <p className="text-xs">{isFallback ? 'A agenda do médico não pôde ser carregada.' : 'Este médico está ajustando seus horários. Volte mais tarde.'}</p>
                   </div> : <>
                       <div className="flex items-center justify-between mb-2.5 px-1">
-                           <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => Math.max(0, d - perPage))} disabled={dayOffset === 0} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
+                           <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => Math.max(0, d - perPage))} disabled={dayOffset === 0} aria-label="Dias anteriores" title="Dias anteriores" className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                               <ChevronLeft className="w-5 h-5" />
                           </Button>
                           {nextAvailable && !day0HasSlots ? (
@@ -420,7 +410,7 @@ export function DoctorScheduleCard({
                           ) : (
                               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider hidden sm:block">Selecione um horário</span>
                           )}
-                          <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => d + perPage)} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
+                          <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => d + perPage)} aria-label="Próximos dias" title="Próximos dias" className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                              <ChevronRight className="w-5 h-5" />
                           </Button>
                       </div>

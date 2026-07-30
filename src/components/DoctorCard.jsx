@@ -40,10 +40,11 @@ export function DoctorCard({ doctor }) {
       <CardHeader className="p-0">
         <div className="h-48 bg-gray-100 relative overflow-hidden">
           {doctor.image_url ? (
-            <img 
-              src={doctor.image_url} 
+            <img
+              src={doctor.image_url}
               alt={formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}
-              className="w-full h-full object-cover" 
+              loading="lazy"
+              className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">

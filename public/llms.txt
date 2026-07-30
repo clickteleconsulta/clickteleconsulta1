@@ -1,6 +1,7 @@
 ## Pages
 - [- Click Teleconsulta](/auth): No description available
 - [— Click Teleconsulta](/doctorprofile): No description available
+- [· Click Teleconsulta](/blogarticle): No description available
 - [| Click Teleconsulta](/legal): No description available
 - [Agendamento Concluído! — Click Teleconsulta](/appointmentsuccess): No description available
 - [Agendamento Confirmado! - Click Teleconsulta](/confirmation): No description available
@@ -8,16 +9,17 @@
 - [Cadastro de Médico - Click Teleconsulta](/doctorsignup): Cadastre-se como médico parceiro na Click Teleconsulta e comece a atender pacientes por telemedicina.
 - [Cadastro de Médico — Click Teleconsulta](/doctorinvitesignup): No description available
 - [Cadastro Realizado com Sucesso - Click Teleconsulta](/signupsuccess): Seu cadastro foi realizado com sucesso. Verifique seu e-mail para confirmar sua conta.
-- [Click Teleconsulta — Sua saúde a um clique de distância](/home): Agende teleconsultas com especialistas de forma rápida e segura. Sem filas, sem deslocamento.
+- [Click Teleconsulta — Sua saúde a um clique de distância](/home): Agende teleconsultas com profissionais de forma rápida e segura. Sem filas, sem deslocamento.
 - [Confirmando — Click Teleconsulta](/authconfirm): No description available
 - [Confirmar Agendamento — Click Teleconsulta](/checkout): No description available
 - [Consulta Encerrada — Click Teleconsulta](/consultaencerrada): No description available
 - [Em manutenção · Click Teleconsulta](/maintenance): No description available
-- [Encontre seu Médico — Click Teleconsulta](/doctorslist): Encontre especialistas disponíveis e agende sua teleconsulta agora.
+- [Encontre seu Médico — Click Teleconsulta](/doctorslist): Encontre profissionais disponíveis e agende sua teleconsulta agora.
 - [Google Calendar - Painel do Médico](/doctorgooglecalendar): No description available
 - [Guia de Agendamento:  - Click Teleconsulta](/guideviewer): No description available
 - [Minha conta — Click Teleconsulta](/patientarea): No description available
 - [Pagamento - Click Teleconsulta](/payment): No description available
+- [Página não encontrada · Click Teleconsulta](/notfound): No description available
 - [Painel do Médico - Click Teleconsulta](/doctordashboard): No description available
 - [Processando Solicitação - Click Teleconsulta](/handleapplication): No description available
 - [Recuperar Senha - Click Teleconsulta](/passwordrecovery): Recupere o acesso à sua conta na Click Teleconsulta. Insira seu e-mail para receber um link de redefinição de senha.

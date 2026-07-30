@@ -4,6 +4,7 @@ import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { gerarGuiaPdf } from '@/lib/guiaPdf';
 import { Loader2, AlertCircle, FileText, User, Stethoscope, Calendar, Clock, DollarSign, Download, ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import QRCode from 'qrcode.react';
@@ -39,10 +40,25 @@ const GuideViewerPage = () => {
     }, [guideId, getGuideById, navigate, toast]);
 
     const handleDownload = () => {
-        toast({
-            title: "Em desenvolvimento",
-            description: "A funcionalidade de download do PDF estará disponível em breve."
-        });
+        try {
+            const p = guide?.paciente_snapshot, d = guide?.medico_snapshot, s = guide?.servico_snapshot;
+            let whenLabel;
+            if (s?.data) {
+                whenLabel = new Date(`${s.data}T${s.hora || '00:00:00'}`)
+                    .toLocaleString('pt-BR', { dateStyle: 'full', timeStyle: 'short' });
+            }
+            gerarGuiaPdf({
+                protocolo: guide?.protocolo,
+                patientName: p?.nome,
+                doctorName: d?.nome,
+                specialty: d?.especialidade,
+                whenLabel,
+                priceLabel: s?.preco_centavos != null ? `R$ ${(s.preco_centavos / 100).toFixed(2).replace('.', ',')}` : undefined,
+                geradoEm: new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }),
+            });
+        } catch (e) {
+            toast({ variant: 'destructive', title: 'Não foi possível gerar a guia', description: 'Tente novamente.' });
+        }
     };
 
     if (loading) {

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowRight, Loader2, User, Calendar, FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { gerarGuiaPdf } from '@/lib/guiaPdf';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -80,10 +81,22 @@ const ConfirmationPage = () => {
   }, [appointmentId, navigate, toast]);
 
   const handleDownloadGuide = () => {
-    toast({
-      title: "🚧 Em Breve!",
-      description: "A geração do PDF da guia está sendo finalizada. Você poderá baixá-la em breve!",
-    });
+    try {
+      let whenLabel;
+      if (appointment?.appointment_date && appointment?.appointment_time) {
+        whenLabel = new Date(`${appointment.appointment_date}T${appointment.appointment_time}`)
+          .toLocaleString('pt-BR', { dateStyle: 'full', timeStyle: 'short' });
+      }
+      gerarGuiaPdf({
+        protocolo: appointment?.protocolo,
+        doctorName: appointment?.medico?.public_name,
+        specialty: appointment?.medico?.specialty,
+        whenLabel,
+        geradoEm: new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }),
+      });
+    } catch (e) {
+      toast({ variant: 'destructive', title: 'Não foi possível gerar a guia', description: 'Tente novamente em instantes.' });
+    }
   };
 
   if (loading) {

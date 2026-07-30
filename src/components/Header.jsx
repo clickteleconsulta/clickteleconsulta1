@@ -44,11 +44,11 @@ const Header = () => {
           <div className="flex items-center gap-3">
             {session ? (
               <>
-                <Button variant="ghost" size="sm" onClick={handleDashboardRedirect} className="flex items-center gap-2 font-normal text-gray-600 hover:text-primary hover:bg-primary/5 px-2 sm:px-3 shrink-0">
+                <Button variant="ghost" size="sm" onClick={handleDashboardRedirect} aria-label="Minha conta" title="Minha conta" className="flex items-center gap-2 font-normal text-gray-600 hover:text-primary hover:bg-primary/5 px-2 sm:px-3 shrink-0">
                   <LayoutDashboard className="w-4 h-4" />
                   <span className="hidden sm:inline">Minha conta</span>
                 </Button>
-                <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-500 hover:text-red-600 hover:bg-red-50">
+                <Button variant="ghost" size="sm" onClick={handleSignOut} aria-label="Sair da conta" title="Sair da conta" className="text-gray-500 hover:text-red-600 hover:bg-red-50">
                   <LogOut className="w-4 h-4" />
                 </Button>
               </>

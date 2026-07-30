@@ -17,6 +17,7 @@ import {
   Clock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { gerarGuiaPdf } from '@/lib/guiaPdf';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import {
@@ -164,14 +165,23 @@ const AppointmentSuccessPage = () => {
   }, [appointmentId, navigate, toast]);
 
   const handleDownloadGuide = () => {
+    // Se o backend já gerou o PDF, usa-o; senão, gera a guia no próprio navegador.
     if (appointment?.guia?.pdf_url) {
       window.open(appointment.guia.pdf_url, '_blank');
-    } else {
-      toast({
-        title: '🚧 Em Breve!',
-        description:
-          'A geração do PDF da guia está sendo finalizada. Você poderá baixá-la em breve no seu painel!',
+      return;
+    }
+    try {
+      const inicio = appointment?.horario_inicio ? new Date(appointment.horario_inicio) : null;
+      gerarGuiaPdf({
+        protocolo: appointment?.guia?.protocolo,
+        doctorName: appointment?.medico?.public_name,
+        specialty: appointment?.medico?.specialty,
+        whenLabel: inicio ? inicio.toLocaleString('pt-BR', { dateStyle: 'full', timeStyle: 'short' }) : undefined,
+        patientName: appointment?.patient?.full_name,
+        geradoEm: new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }),
       });
+    } catch (e) {
+      toast({ variant: 'destructive', title: 'Não foi possível gerar a guia', description: 'Tente novamente em instantes.' });
     }
   };
 

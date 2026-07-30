@@ -304,7 +304,16 @@ export default defineConfig({
 				'@babel/traverse',
 				'@babel/generator',
 				'@babel/types'
-			]
+			],
+			output: {
+				// Separa dependências grandes em chunks próprios (melhora o TTI do first load).
+				manualChunks: {
+					'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+					'ui-vendor': ['framer-motion', 'lucide-react'],
+					'data-vendor': ['@supabase/supabase-js'],
+					'charts': ['recharts'],
+				},
+			},
 		}
 	}
 });

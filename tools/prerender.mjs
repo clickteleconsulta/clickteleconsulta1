@@ -42,6 +42,23 @@ async function loadArticles() {
   catch (e) { console.warn('[prerender] sem artigos:', e.message); return []; }
 }
 
+// Mesmo slug canônico do DoctorPublicProfilePage / sitemap.
+const slugify = (str = '') =>
+  str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+async function loadDoctors() {
+  const url = process.env.VITE_SUPABASE_URL || 'https://fnzvopspcoefzybtmwlg.supabase.co';
+  const anon = process.env.VITE_SUPABASE_ANON_KEY
+    || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuenZvcHNwY29lZnp5YnRtd2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3OTU0NjgsImV4cCI6MjA4OTM3MTQ2OH0.mMDj-2NKx88cQz8cCsljKtscG5ayYEYbmISq04wAEOg';
+  try {
+    const res = await fetch(`${url}/rest/v1/medicos?select=id,public_name,name,specialty&is_active=eq.true&is_public=eq.true`,
+      { headers: { apikey: anon, Authorization: `Bearer ${anon}` } });
+    if (!res.ok) { console.warn('[prerender] fetch médicos status', res.status); return []; }
+    return await res.json();
+  } catch (e) { console.warn('[prerender] fetch médicos falhou:', e.message); return []; }
+}
+
 async function main() {
   let base;
   try { base = readFileSync(join(DIST, 'index.html'), 'utf8'); }
@@ -54,13 +71,27 @@ async function main() {
   }
 
   const articles = await loadArticles();
+  const doctors = await loadDoctors();
   const routes = [
     { path: '/como-funciona', title: 'Como funciona a teleconsulta · Click Teleconsulta', description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
     { path: '/quem-somos', title: 'Quem somos · Click Teleconsulta', description: 'A Click Teleconsulta é um marketplace de agendamentos que conecta pacientes a médicos parceiros. Cuidamos do agendamento e do pagamento; o atendimento é conduzido pelo próprio médico.' },
     { path: '/perguntas-frequentes', title: 'Perguntas frequentes · Click Teleconsulta', description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.' },
     { path: '/blog', title: 'Blog · Click Teleconsulta — Saúde e teleconsulta', description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
     { path: '/agendamentos', title: 'Agendar Consulta · Click Teleconsulta', description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.' },
+    { path: '/suporte', title: 'Suporte · Click Teleconsulta', description: 'Central de ajuda da Click Teleconsulta: dúvidas sobre agendamento, pagamento, reembolso e atendimento.' },
+    { path: '/legal', title: 'Termos e Privacidade · Click Teleconsulta', description: 'Termos de Serviço e Política de Privacidade (LGPD) da Click Teleconsulta.' },
     ...articles.map((a) => ({ path: `/blog/${a.slug}`, title: `${a.title} · Click Teleconsulta`, description: a.description, ogType: 'article' })),
+    ...doctors.map((d) => {
+      const nome = d.public_name || d.name || 'Médico';
+      const esp = d.specialty || '';
+      const slug = `${slugify(nome)}-${slugify(esp)}`.replace(/^-|-$/g, '');
+      return {
+        path: slug ? `/medico/${slug}` : `/medico/${d.id}`,
+        title: `${nome}${esp ? ' — ' + esp : ''} · Click Teleconsulta`,
+        description: `Agende uma teleconsulta com ${nome}${esp ? ', ' + esp : ''}. Veja horários e valores e agende online, com Pix ou cartão, na Click Teleconsulta.`,
+        ogType: 'profile',
+      };
+    }),
   ];
 
   let n = 0;

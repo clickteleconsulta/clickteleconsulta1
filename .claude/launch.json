@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "click-dev",
+      "runtimeExecutable": "/Users/ryanbrito/.local/node-v20.19.1-darwin-arm64/bin/npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    }
+  ]
+}

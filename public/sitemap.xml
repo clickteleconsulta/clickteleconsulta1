@@ -2,37 +2,97 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://clickteleconsulta.online/</loc>
-    <lastmod>2026-07-18</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://clickteleconsulta.online/agendamentos</loc>
-    <lastmod>2026-07-18</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://clickteleconsulta.online/como-funciona</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/quem-somos</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/perguntas-frequentes</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/blog</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/blog/como-funciona-a-teleconsulta</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/blog/renovacao-de-receita-por-teleconsulta</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/blog/teleconsulta-e-confiavel-o-que-diz-o-cfm</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://clickteleconsulta.online/suporte</loc>
-    <lastmod>2026-07-18</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://clickteleconsulta.online/legal</loc>
-    <lastmod>2026-07-18</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://clickteleconsulta.online/medico/celso-coelho-de-carvalho-clinico-geral</loc>
-    <lastmod>2026-07-14</lastmod>
+    <loc>https://clickteleconsulta.online/medico/gustavo-r-ayres-generalista</loc>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://clickteleconsulta.online/medico/ryan-oliveira-clinico-geral</loc>
-    <lastmod>2026-07-14</lastmod>
+    <loc>https://clickteleconsulta.online/medico/ryan-de-brito-silva-oliveira-generalista</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/medico/renata-de-oliveira-dias-mouli-generalista</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/medico/celso-coelho-de-carvalho-generalista</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://clickteleconsulta.online/medico/maria-eduarda-senra-generalista</loc>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
