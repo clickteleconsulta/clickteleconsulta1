@@ -20,8 +20,6 @@ import MaintenanceToggle from '@/components/admin/MaintenanceToggle';
 const DEFAULTS = {
     default_fee_percent: 25,
     default_repasse: 30,
-    repasse_min: 30,
-    repasse_max: 150,
     cancel_window_hours: 3,
     refund_full_hours: 48,
     refund_partial_hours: 24,
@@ -69,10 +67,6 @@ const PlatformRules = () => {
         // Normaliza para número e valida
         const rules = {};
         Object.keys(DEFAULTS).forEach((k) => { rules[k] = Number(r[k]); });
-        if (rules.repasse_min > rules.repasse_max) {
-            toast({ variant: 'destructive', title: 'Valores inconsistentes', description: 'O repasse mínimo não pode ser maior que o máximo.' });
-            return;
-        }
         setSaving(true);
         try {
             const { data: current } = await supabase.from('configuracoes_site').select('id, settings').limit(1).maybeSingle();
@@ -111,9 +105,7 @@ const PlatformRules = () => {
                 </CardHeader>
                 <CardContent className="px-0 grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Field label="Taxa da plataforma" suffix="%" value={r.default_fee_percent} onChange={set('default_fee_percent')} />
-                    <Field label="Repasse padrão" suffix="R$" value={r.default_repasse} onChange={set('default_repasse')} />
-                    <Field label="Repasse mínimo" suffix="R$" value={r.repasse_min} onChange={set('repasse_min')} />
-                    <Field label="Repasse máximo" suffix="R$" value={r.repasse_max} onChange={set('repasse_max')} />
+                    <Field label="Repasse sugerido (novas contas)" suffix="R$" value={r.default_repasse} onChange={set('default_repasse')} />
                     <div className="md:col-span-2 flex items-start gap-2 text-xs text-blue-800 bg-blue-50/60 border border-blue-100 rounded-lg p-3">
                         <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-600" />
                         <span>Com repasse <strong>R$ {Number(r.default_repasse).toFixed(2)}</strong> e taxa <strong>{Number(r.default_fee_percent)}%</strong>, o paciente pagaria ~<strong>R$ {previewPaciente.toFixed(2)}</strong> (repasse ÷ (1 − taxa), arredondado).</span>
