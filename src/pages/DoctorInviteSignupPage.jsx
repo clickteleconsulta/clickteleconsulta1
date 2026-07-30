@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import AuthLayout from '@/components/auth/AuthLayout';
+import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,6 +30,9 @@ const DoctorInviteSignupPage = () => {
     const [form, setForm] = useState({ full_name: '', cpf: '', crm: '', uf: '', whatsapp: '', sexo: '', password: '', confirm: '' });
     const [termo, setTermo] = useState(false);
     const [termoUrl, setTermoUrl] = useState(null);
+    const [captchaToken, setCaptchaToken] = useState('');
+    const turnstileRef = useRef(null);
+    const handleCaptcha = useCallback((token) => setCaptchaToken(token), []);
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
     useEffect(() => {
@@ -65,6 +69,7 @@ const DoctorInviteSignupPage = () => {
         if (form.password.length < 8) { toast({ variant: 'destructive', title: 'Senha muito curta', description: 'Use pelo menos 8 caracteres.' }); return; }
         if (form.password !== form.confirm) { toast({ variant: 'destructive', title: 'As senhas não coincidem' }); return; }
         if (!termo) { toast({ variant: 'destructive', title: 'Aceite o Termo de Adesão', description: 'É necessário aceitar o Termo de Adesão para continuar.' }); return; }
+        if (TURNSTILE_ENABLED && !captchaToken) { toast({ variant: 'destructive', title: 'Confirmação necessária', description: 'Aguarde a verificação de segurança concluir e tente novamente.' }); return; }
 
         setSubmitting(true);
         try {
@@ -72,6 +77,7 @@ const DoctorInviteSignupPage = () => {
                 email: invite.email,
                 password: form.password,
                 options: {
+                    captchaToken,
                     data: {
                         full_name: form.full_name.trim(),
                         role: 'medico',
@@ -90,6 +96,7 @@ const DoctorInviteSignupPage = () => {
             toast({ variant: 'destructive', title: 'Erro ao criar conta', description: err.message });
         } finally {
             setSubmitting(false);
+            if (TURNSTILE_ENABLED) { setCaptchaToken(''); turnstileRef.current?.reset(); }
         }
     };
 
@@ -213,7 +220,8 @@ const DoctorInviteSignupPage = () => {
                                     <span>Após criar a conta, seu perfil ficará <strong>pausado</strong> até que você envie sua documentação e ela seja aprovada pela administração. Só então ele passa a aparecer publicamente.</span>
                                 </div>
 
-                                <Button type="submit" disabled={submitting || !termo} className="w-full">
+                                <TurnstileWidget ref={turnstileRef} onVerify={handleCaptcha} />
+                                <Button type="submit" disabled={submitting || !termo || (TURNSTILE_ENABLED && !captchaToken)} className="w-full">
                                     {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Stethoscope className="w-4 h-4 mr-2" />}
                                     Criar minha conta
                                 </Button>
