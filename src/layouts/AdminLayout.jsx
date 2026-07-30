@@ -21,6 +21,7 @@ import {
   RotateCcw,
   SlidersHorizontal,
   Megaphone,
+  Share2,
   ScrollText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -61,6 +62,7 @@ const AdminLayout = () => {
             { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
             { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle, badge: counts.denuncias, urgent: true },
             { href: '/admin/dashboard/comunicados', label: 'Comunicados', icon: Megaphone },
+            { href: '/admin/dashboard/redes-sociais', label: 'Redes Sociais', icon: Share2 },
         ]},
         { title: 'Financeiro', items: [
             { href: '/admin/dashboard/saques-pagamentos', label: 'Saques e Pagamentos', icon: Banknote, badge: counts.saques },

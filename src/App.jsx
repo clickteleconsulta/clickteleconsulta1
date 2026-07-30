@@ -57,6 +57,7 @@ const AdminStrategyPage = lazy(() => import('@/pages/admin/AdminStrategyPage'));
 const AdminRefundsPage = lazy(() => import('@/pages/admin/AdminRefundsPage'));
 const AdminBroadcastPage = lazy(() => import('@/pages/admin/AdminBroadcastPage'));
 const AdminAuditPage = lazy(() => import('@/pages/admin/AdminAuditPage'));
+const AdminSocialPage = lazy(() => import('@/pages/admin/AdminSocialPage'));
 const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage'));
 const AdminPatientsPage = lazy(() => import('@/pages/admin/AdminPatientsPage'));
 
@@ -209,6 +210,7 @@ function App() {
              <Route path="saques-pagamentos" element={<AdminWithdrawalsPage />} />
              <Route path="reembolsos" element={<AdminRefundsPage />} />
              <Route path="comunicados" element={<AdminBroadcastPage />} />
+             <Route path="redes-sociais" element={<AdminSocialPage />} />
              <Route path="auditoria" element={<AdminAuditPage />} />
              <Route path="ai-training" element={<AdminAiTrainingPage />} />
              <Route path="legal" element={<AdminLegalPage />} />
