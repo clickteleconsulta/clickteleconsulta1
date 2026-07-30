@@ -37,10 +37,20 @@ export function generateTimeSlotsFromAgenda(agenda, day) {
   return [...new Set(slots)].sort();
 }
 
+// Verifica se um instante (ms) cai dentro de algum bloqueio do médico.
+// `blocks` é um array de { inicio: ms, fim: ms }.
+export function isInstantBlocked(instantMs, blocks) {
+  if (!blocks || blocks.length === 0) return false;
+  for (const b of blocks) {
+    if (instantMs >= b.inicio && instantMs < b.fim) return true;
+  }
+  return false;
+}
+
 // Próximo horário disponível do médico, como instante (ms epoch), ignorando horários
-// já reservados (pagos). Retorna null se não houver disponibilidade dentro do horizonte.
-// `bookedSetMs` é um Set de timestamps (ms) dos horario_inicio já ocupados desse médico.
-export function nextAvailableSlotMs(agenda, bookedSetMs, horizonDays = 30) {
+// já reservados (pagos) e bloqueios. Retorna null se não houver disponibilidade no horizonte.
+// `bookedSetMs` = Set de timestamps (ms) ocupados; `blocks` = array de { inicio, fim } em ms.
+export function nextAvailableSlotMs(agenda, bookedSetMs, blocks = [], horizonDays = 30) {
   if (!agenda || agenda.length === 0) return null;
   const base = startOfToday();
   const nowMs = Date.now();
@@ -54,6 +64,7 @@ export function nextAvailableSlotMs(agenda, bookedSetMs, horizonDays = 30) {
       const instant = zonedTimeToUtc(`${dayStr} ${time}:00`, TZ).getTime();
       if (Number.isNaN(instant) || instant <= nowMs) continue;
       if (bookedSetMs && bookedSetMs.has(instant)) continue;
+      if (isInstantBlocked(instant, blocks)) continue;
       return instant;
     }
   }

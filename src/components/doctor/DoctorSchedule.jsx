@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2, PlusCircle, Trash2, CalendarOff, Clock } from 'lucide-react';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
+import DoctorBlocks from '@/components/doctor/DoctorBlocks';
 import useAsync from '@/hooks/useAsync';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format, parseISO } from 'date-fns';
@@ -173,9 +174,17 @@ const DoctorSchedule = ({ onScheduleSave }) => {
     if (status === 'error' || doctorProfileStatus === 'error' || !doctorProfile) return <div className="text-center p-6 text-sm text-red-600 border border-red-200 rounded-sm bg-red-50">{loadError?.message || "Erro no perfil"}</div>;
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-2xl mx-auto">
-             <DoctorPageHeader icon={Clock} title="Configuração da Agenda" subtitle="Gerencie seus horários de atendimento semanais." />
+        <div className="space-y-4 max-w-2xl mx-auto">
+             <DoctorPageHeader icon={Clock} title="Agenda" subtitle="Configure seus horários de atendimento e os bloqueios de indisponibilidade." />
 
+            <Tabs defaultValue="agenda" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 max-w-md bg-gray-100/80 p-1 rounded-xl h-auto">
+                    <TabsTrigger value="agenda" className="rounded-lg text-sm font-semibold py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-700 text-gray-500">Configuração da Agenda</TabsTrigger>
+                    <TabsTrigger value="bloqueios" className="rounded-lg text-sm font-semibold py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-700 text-gray-500">Bloqueios</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="agenda" className="mt-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5">
                 <CardHeader className="px-6 pt-6 pb-4">
                     <CardTitle className="font-[Manrope] text-lg font-bold tracking-tight text-gray-900">Horários de Atendimento</CardTitle>
@@ -239,7 +248,14 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                     <Button type="submit" disabled={isSaving} className="min-w-[150px] bg-primary hover:bg-primary/90 text-white h-11 text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-80 disabled:hover:translate-y-0">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
                 </CardFooter>
             </Card>
-        </form>
+                </form>
+                </TabsContent>
+
+                <TabsContent value="bloqueios" className="mt-4">
+                    <DoctorBlocks doctorId={doctorProfile.id} onChange={onScheduleSave} />
+                </TabsContent>
+            </Tabs>
+        </div>
     );
 };
 

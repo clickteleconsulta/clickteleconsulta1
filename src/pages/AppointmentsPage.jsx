@@ -118,8 +118,20 @@ const AppointmentsPage = () => {
         (bookedByDoctor[b.medico_id] ||= new Set()).add(new Date(b.horario_inicio).getTime());
       });
     }
+    // Bloqueios (indisponibilidade) de cada médico — também escondem horários no ranking.
+    const blocksByDoctor = {};
+    if (doctorIds.length) {
+      const { data: blk } = await supabase
+        .from('bloqueios_agenda')
+        .select('medico_id, inicio, fim')
+        .in('medico_id', doctorIds)
+        .gte('fim', new Date().toISOString());
+      (blk || []).forEach((b) => {
+        (blocksByDoctor[b.medico_id] ||= []).push({ inicio: new Date(b.inicio).getTime(), fim: new Date(b.fim).getTime() });
+      });
+    }
     processedDoctors.forEach((d) => {
-      d.nextSlotMs = nextAvailableSlotMs(d.agenda_medico, bookedByDoctor[d.id]);
+      d.nextSlotMs = nextAvailableSlotMs(d.agenda_medico, bookedByDoctor[d.id], blocksByDoctor[d.id]);
     });
 
     setDoctorPrices(newDoctorPrices);

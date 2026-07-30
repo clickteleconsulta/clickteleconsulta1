@@ -17,6 +17,7 @@ import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
+import { isInstantBlocked } from '@/lib/doctorAvailability';
 import { Skeleton } from './ui/skeleton';
 
 const generateTimeSlotsFromAgenda = (agenda, day) => {
@@ -88,6 +89,7 @@ export function DoctorScheduleCard({
   const [isExpanded, setIsExpanded] = useState(false);
   const [doctorAgenda, setDoctorAgenda] = useState([]);
   const [bookedSlots, setBookedSlots] = useState(new Map());
+  const [blocks, setBlocks] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [authPrompt, setAuthPrompt] = useState(null); // convidado tentando agendar
   // Dias visíveis por página: 3 no mobile (uma linha), 5 no desktop.
@@ -113,15 +115,17 @@ export function DoctorScheduleCard({
     setLoadingSlots(true);
     
     try {
-      const [agendaResult, bookedSlotsResult] = await Promise.all([
+      const [agendaResult, bookedSlotsResult, blocksResult] = await Promise.all([
         supabase.from('agenda_medico').select('*').eq('medico_id', doctor.id).eq('status', 'disponivel'),
-        getBookedSlots(doctor.id)
+        getBookedSlots(doctor.id),
+        supabase.from('bloqueios_agenda').select('inicio, fim').eq('medico_id', doctor.id).gte('fim', new Date().toISOString())
       ]);
-      
+
       if (agendaResult.error) throw agendaResult.error;
-      
+
       setDoctorAgenda(agendaResult.data || []);
       setBookedSlots(bookedSlotsResult);
+      setBlocks((blocksResult.data || []).map(b => ({ inicio: new Date(b.inicio).getTime(), fim: new Date(b.fim).getTime() })));
     } catch (err) {
       console.error(err);
       toast({
@@ -190,7 +194,12 @@ export function DoctorScheduleCard({
       slots: []
     }));
     return visibleDays.map(day => {
-      const allSlots = generateTimeSlotsFromAgenda(doctorAgenda, day);
+      const dayStr = format(day, 'yyyy-MM-dd');
+      // Esconde horários que caem em um bloqueio de indisponibilidade do médico.
+      const allSlots = generateTimeSlotsFromAgenda(doctorAgenda, day).filter(time => {
+        const instant = zonedTimeToUtc(`${dayStr} ${time}:00`, 'America/Sao_Paulo').getTime();
+        return !isInstantBlocked(instant, blocks);
+      });
       return {
         date: day,
         dayName: isToday(day) ? 'HOJE' : format(day, 'EEEE', { locale: ptBR }).split('-')[0].toUpperCase(),
@@ -198,7 +207,7 @@ export function DoctorScheduleCard({
         slots: allSlots
       };
     });
-  }, [doctorAgenda, visibleDays, isFallback]);
+  }, [doctorAgenda, visibleDays, isFallback, blocks]);
 
   const handleBooking = async (day, time) => {
     if (isFallback) {
