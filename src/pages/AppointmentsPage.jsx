@@ -376,51 +376,51 @@ const AppointmentsPage = () => {
         {/* Barra de busca / filtros — compacta no mobile (busca em cima, filtros em 3 colunas, botão embaixo) */}
         <div className="bg-white/90 backdrop-blur-md border-y border-slate-200 py-3 shadow-sm sticky top-16 z-20">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-2">
-              {/* Filtros: no mobile, Especialidade em linha cheia + Data/Preço lado a lado;
-                  no desktop fluem na linha (md:contents) */}
-              <div className="grid grid-cols-2 gap-2 w-full md:contents">
-                <div className="col-span-2 md:w-52">
-                  <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
-                    <SelectTrigger className="h-10 px-2.5 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700"><SelectValue placeholder="Especialidade" /></SelectTrigger>
-                    <SelectContent className="max-h-60">
-                      <SelectItem value="all">Todas Especialidades</SelectItem>
-                      {specialties.length > 0 ? (
-                        specialties.map((spec) => (
-                          <SelectItem key={spec} value={spec} className="cursor-pointer text-sm">{spec}</SelectItem>
-                        ))
-                      ) : (
-                        <div className="p-2 text-xs text-muted-foreground text-center">Carregando...</div>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="md:w-40">
-                  <Input
-                    type="date"
-                    className="h-10 px-2 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700 block"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    min={new Date().toISOString().split('T')[0]}
-                  />
-                </div>
-
-                <div className="md:w-36">
-                  <Select value={priceSort} onValueChange={setPriceSort}>
-                    <SelectTrigger className="h-10 px-2.5 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700"><SelectValue placeholder="Preço" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="asc">Menor Preço</SelectItem>
-                      <SelectItem value="desc">Maior Preço</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* Mobile: grade 2×2 (Especialidade | Data / Preço | Buscar). Desktop: tudo numa linha. */}
+            <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:justify-center">
+              {/* Especialidade */}
+              <div className="md:w-52">
+                <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
+                  <SelectTrigger className="h-10 px-2.5 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700"><SelectValue placeholder="Especialidade" /></SelectTrigger>
+                  <SelectContent className="max-h-60">
+                    <SelectItem value="all">Todas Especialidades</SelectItem>
+                    {specialties.length > 0 ? (
+                      specialties.map((spec) => (
+                        <SelectItem key={spec} value={spec} className="cursor-pointer text-sm">{spec}</SelectItem>
+                      ))
+                    ) : (
+                      <div className="p-2 text-xs text-muted-foreground text-center">Carregando...</div>
+                    )}
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Ações */}
-              <div className="flex items-center gap-2 w-full md:w-auto">
+              {/* Data */}
+              <div className="md:w-40">
+                <Input
+                  type="date"
+                  className="h-10 px-2 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700 block"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+
+              {/* Preço */}
+              <div className="md:w-36">
+                <Select value={priceSort} onValueChange={setPriceSort}>
+                  <SelectTrigger className="h-10 px-2.5 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700"><SelectValue placeholder="Preço" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="asc">Menor Preço</SelectItem>
+                    <SelectItem value="desc">Maior Preço</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Ações: Buscar (+ limpar quando houver filtro) */}
+              <div className="flex items-center gap-2 md:w-auto">
                 <Button
-                  className="h-10 px-6 flex-1 md:flex-grow-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md transition"
+                  className="h-10 px-4 md:px-6 flex-1 md:flex-grow-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md transition"
                   onClick={handleSearch}
                 >
                   <Search className="mr-2 h-4 w-4" /> Buscar
