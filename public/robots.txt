@@ -1,3 +1,15 @@
 User-agent: *
 Allow: /
+
+# Áreas privadas / sem valor de indexação
+Disallow: /admin
+Disallow: /acesso-administrador
+Disallow: /dashboard
+Disallow: /paciente/dashboard
+Disallow: /medico/dashboard
+Disallow: /agendamento/
+Disallow: /conta/
+Disallow: /cadastro-medico/
+Disallow: /auth/
+
 Sitemap: https://clickteleconsulta.online/sitemap.xml

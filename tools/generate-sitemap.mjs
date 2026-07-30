@@ -20,6 +20,12 @@ const slugify = (str = '') =>
 const STATIC = [
   { loc: '/', priority: '1.0', changefreq: 'daily' },
   { loc: '/agendamentos', priority: '0.9', changefreq: 'daily' },
+  { loc: '/como-funciona', priority: '0.8', changefreq: 'monthly' },
+  { loc: '/perguntas-frequentes', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/blog', priority: '0.7', changefreq: 'weekly' },
+  { loc: '/blog/como-funciona-a-teleconsulta', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/blog/renovacao-de-receita-por-teleconsulta', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/blog/teleconsulta-e-confiavel-o-que-diz-o-cfm', priority: '0.6', changefreq: 'monthly' },
   { loc: '/suporte', priority: '0.5', changefreq: 'monthly' },
   { loc: '/legal', priority: '0.3', changefreq: 'yearly' },
 ];

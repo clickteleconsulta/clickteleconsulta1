@@ -8,6 +8,10 @@ const AppointmentsPage = lazy(() => import('@/pages/AppointmentsPage'));
 const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const ConfirmationPage = lazy(() => import('@/pages/ConfirmationPage'));
 const SupportPage = lazy(() => import('@/pages/SupportPage'));
+const ComoFuncionaPage = lazy(() => import('@/pages/ComoFuncionaPage'));
+const FaqPage = lazy(() => import('@/pages/FaqPage'));
+const BlogPage = lazy(() => import('@/pages/BlogPage'));
+const BlogArticlePage = lazy(() => import('@/pages/BlogArticlePage'));
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DoctorRouteGuard from '@/components/DoctorRouteGuard';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -292,6 +296,10 @@ function App() {
             {/* Lista unificada em /agendamentos (evita conteúdo duplicado) */}
             <Route path="/medicos" element={<Navigate to="/agendamentos" replace />} />
             <Route path="/suporte" element={<SupportPage />} />
+            <Route path="/como-funciona" element={<ComoFuncionaPage />} />
+            <Route path="/perguntas-frequentes" element={<FaqPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogArticlePage />} />
             
             {/* Auth Routes */}
             <Route path="/acesso-cliente" element={<AuthRedirect role="paciente" />} />
