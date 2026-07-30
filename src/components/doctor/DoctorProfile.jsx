@@ -283,7 +283,7 @@ const DoctorProfile = () => {
                                                     {[...new Set([
                                                         ...(especialidades.length ? especialidades : specialtiesList),
                                                         ...(field.value ? [field.value] : []),
-                                                    ])].map((spec) => (
+                                                    ])].filter((spec) => !/cl[íi]nico\s*geral/i.test(spec)).map((spec) => (
                                                         <SelectItem key={spec} value={spec}>
                                                             {spec}
                                                         </SelectItem>
