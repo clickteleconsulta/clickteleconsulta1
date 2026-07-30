@@ -377,21 +377,10 @@ const AppointmentsPage = () => {
         <div className="bg-white/90 backdrop-blur-md border-y border-slate-200 py-3 shadow-sm sticky top-16 z-20">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-2">
-              {/* Busca por nome */}
-              <div className="relative w-full md:w-56">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                <Input
-                  type="text"
-                  value={searchName}
-                  onChange={(e) => setSearchName(e.target.value)}
-                  placeholder="Buscar por nome"
-                  className="h-10 pl-9 pr-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-slate-700"
-                />
-              </div>
-
-              {/* Filtros: 3 colunas no mobile; fluem na linha no desktop (md:contents) */}
-              <div className="grid grid-cols-3 gap-2 w-full md:contents">
-                <div className="w-full md:w-52">
+              {/* Filtros: no mobile, Especialidade em linha cheia + Data/Preço lado a lado;
+                  no desktop fluem na linha (md:contents) */}
+              <div className="grid grid-cols-2 gap-2 w-full md:contents">
+                <div className="col-span-2 md:w-52">
                   <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
                     <SelectTrigger className="h-10 px-2.5 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700"><SelectValue placeholder="Especialidade" /></SelectTrigger>
                     <SelectContent className="max-h-60">
@@ -407,7 +396,7 @@ const AppointmentsPage = () => {
                   </Select>
                 </div>
 
-                <div className="w-full md:w-40">
+                <div className="md:w-40">
                   <Input
                     type="date"
                     className="h-10 px-2 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700 block"
@@ -417,7 +406,7 @@ const AppointmentsPage = () => {
                   />
                 </div>
 
-                <div className="w-full md:w-36">
+                <div className="md:w-36">
                   <Select value={priceSort} onValueChange={setPriceSort}>
                     <SelectTrigger className="h-10 px-2.5 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700"><SelectValue placeholder="Preço" /></SelectTrigger>
                     <SelectContent>
