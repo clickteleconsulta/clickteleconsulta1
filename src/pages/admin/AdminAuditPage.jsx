@@ -15,10 +15,14 @@ import { downloadCsv, csvDateSuffix } from '@/lib/exportCsv';
 // Rótulos legíveis para as ações registradas nos logs.
 const ACAO_LABEL = {
     paciente_cancelou_agendamento: 'Paciente cancelou',
+    paciente_cancelou: 'Paciente cancelou',
     medico_cancelou_agendamento: 'Médico cancelou',
     medico_confirmou_atendimento: 'Médico confirmou atendimento',
     agendamento_criado: 'Agendamento criado',
     pagamento_confirmado: 'Pagamento confirmado',
+    estorno_processado: 'Estorno processado',
+    estorno_horario_indisponivel: 'Estorno automático (horário indisponível)',
+    estorno_reconciliado: 'Estorno reconciliado (Asaas)',
     reagendado: 'Reagendado',
     termo_aceito: 'Aceitou o Termo de Adesão',
     documento_enviado: 'Enviou documento p/ análise',
@@ -102,6 +106,9 @@ const AdminAuditPage = () => {
         if (d.status_anterior) parts.push(`de: ${d.status_anterior}`);
         if (d.motivo && d.motivo !== 'Nao informado') parts.push(`motivo: ${d.motivo}`);
         if (d.refund_percent != null) parts.push(`reembolso: ${d.refund_percent}%`);
+        if (d.valor_estornado != null) parts.push(`estornado: ${Number(d.valor_estornado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);
+        if (d.percentual != null) parts.push(`${d.percentual}%`);
+        if (d.retido_taxa) parts.push('taxa retida');
         if (d.horas_antecedencia != null) parts.push(`${Math.round(d.horas_antecedencia)}h antes`);
         if (d.crm) parts.push(`CRM ${d.crm}${d.uf ? '/' + d.uf : ''}`);
         if (d.termo_versao != null) parts.push(`termo v${d.termo_versao}`);
@@ -109,6 +116,8 @@ const AdminAuditPage = () => {
         if (d.arquivo) parts.push(`arquivo: ${d.arquivo}`);
         if (d.reenvio) parts.push('reenvio');
         if (d.grandfathered) parts.push('médico já ativo (grandfathered)');
+        if (d.via) parts.push(`via ${d.via}`);
+        if (d.source && !d.status_anterior) parts.push(`origem: ${d.source}`);
         return parts.length ? parts.join(' · ') : Object.keys(d).length ? JSON.stringify(d) : '—';
     };
 
