@@ -393,6 +393,24 @@ export const AppointmentsProvider = ({ children }) => {
         }
     };
 
+    // Marca não comparecimento (só após o horário, só pago). Retém 100% (sem reembolso),
+    // registra na auditoria e notifica o paciente.
+    const markNoShow = async (appointmentId) => {
+        try {
+            const { data, error } = await supabase.rpc('medico_marcar_nao_comparecimento', {
+                p_agendamento_id: appointmentId
+            });
+            if (error) throw error;
+            if (data && data[0] && data[0].success === false) {
+                throw new Error(data[0].message);
+            }
+            return { data, error: null };
+        } catch (err) {
+            console.error("Error marking no-show:", err);
+            return { error: { message: err.message || "Erro ao marcar não comparecimento" } };
+        }
+    };
+
     const cancelAppointmentByDoctor = async (appointmentId) => {
         try {
             if (profile?.role !== 'medico') {
@@ -563,7 +581,7 @@ export const AppointmentsProvider = ({ children }) => {
     
 
     return (
-        <AppointmentsContext.Provider value={{ appointments, loading, createConfirmedAppointment, createGuestAppointment, rescheduleAppointment, getBookedSlots, markAppointmentAsPaidByDoctor, confirmAttendance, cancelAppointmentByDoctor, saveMeetingLink, getGuideById, refetchAppointments: fetchAppointments, updateAppointmentStatus, resendWhatsapp, currentDoctorId, clearAppointments }}>
+        <AppointmentsContext.Provider value={{ appointments, loading, createConfirmedAppointment, createGuestAppointment, rescheduleAppointment, getBookedSlots, markAppointmentAsPaidByDoctor, confirmAttendance, markNoShow, cancelAppointmentByDoctor, saveMeetingLink, getGuideById, refetchAppointments: fetchAppointments, updateAppointmentStatus, resendWhatsapp, currentDoctorId, clearAppointments }}>
             {children}
         </AppointmentsContext.Provider>
     );

@@ -21,6 +21,7 @@ const ACAO_LABEL = {
     paciente_cancelou: 'Paciente cancelou',
     medico_cancelou_agendamento: 'Médico cancelou',
     medico_confirmou_atendimento: 'Médico confirmou atendimento',
+    medico_marcou_nao_comparecimento: 'Médico marcou não comparecimento',
     pagamento_confirmado: 'Pagamento confirmado',
     estorno_processado: 'Estorno processado',
     estorno_horario_indisponivel: 'Estorno automático (horário indisponível)',

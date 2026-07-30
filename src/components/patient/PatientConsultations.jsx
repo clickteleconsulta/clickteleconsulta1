@@ -177,6 +177,11 @@ const PatientConsultations = () => {
             variant = 'destructive';
             text = 'Expirada';
             icon = <XCircle className="w-3 h-3 mr-1.5" />;
+        } else if (status === 'nao_compareceu') {
+            variant = 'custom';
+            className = "bg-orange-100 text-orange-700 border-orange-200";
+            text = 'Não compareceu';
+            icon = <AlertTriangle className="w-3 h-3 mr-1.5" />;
         } else {
             variant = 'destructive';
             text = 'Cancelada';

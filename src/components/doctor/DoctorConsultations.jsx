@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ConsultationStatusBadge from '@/components/doctor/ConsultationStatusBadge';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
-import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock, Filter, SlidersHorizontal } from 'lucide-react';
+import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, UserX, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock, Filter, SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, DialogDescription } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -657,6 +657,7 @@ const DoctorConsultations = () => {
     loading,
     refetchAppointments,
     confirmAttendance,
+    markNoShow,
     cancelAppointmentByDoctor,
     markAppointmentAsPaidByDoctor,
     resendWhatsapp
@@ -796,6 +797,7 @@ const DoctorConsultations = () => {
     setIsSubmitting(prev => ({ ...prev, [id]: false }));
   };
   const handleConfirmAttendance = id => handleAction(id, () => confirmAttendance(id), { title: 'Check-in Realizado!', description: 'A consulta foi movida para o histórico.', variant: 'success' }, { title: "Falha no Check-in" });
+  const handleNoShow = id => handleAction(id, () => markNoShow(id), { title: 'Não comparecimento registrado', description: 'Registrado na auditoria e o paciente foi notificado.', variant: 'success' }, { title: 'Falha ao registrar não comparecimento' });
   const handleConfirmPayment = id => handleAction(id, () => markAppointmentAsPaidByDoctor(id), { title: 'Pagamento Confirmado!', description: 'O status foi atualizado para Confirmado.', variant: 'success' }, { title: 'Falha ao Confirmar Pagamento' });
   const handleCancel = id => handleAction(id, () => cancelAppointmentByDoctor(id), null, { title: 'Falha ao Cancelar' });
 
@@ -835,8 +837,12 @@ const DoctorConsultations = () => {
                     const appointmentDateTime = utcToZonedTime(new Date(appt.horario_inicio), 'America/Sao_Paulo');
                     const isActionLoading = isSubmitting[appt.id];
                     const canCheckIn = (appt.pagamento_status === 'pago' || appt.status === 'agendado') && !['atendido', 'concluida'].includes(appt.status);
-                    const isCheckinCompleted = ['atendido', 'concluida'].includes(appt.status);
+                    const isCheckinCompleted = ['atendido', 'concluida', 'realizado'].includes(appt.status);
                     const isCancelled = appt.status === 'cancelado' || appt.status === 'expirado';
+                    // Não comparecimento: só para consultas PAGAS cujo horário já passou e ainda não
+                    // foram realizadas/canceladas. Retém 100% (sem reembolso), conforme a política.
+                    const isPastAppt = new Date(appt.horario_inicio) < new Date();
+                    const canMarkNoShow = appt.pagamento_status === 'pago' && isPastAppt && !isCancelled && !isCheckinCompleted && appt.status !== 'nao_compareceu';
                     const dateDisplay = isToday(appointmentDateTime) ? 'Hoje' : format(appointmentDateTime, 'dd/MMM', { locale: ptBR }).toUpperCase();
                     const dateSubtext = isToday(appointmentDateTime) ? 'Today' : format(appointmentDateTime, 'EEEE', { locale: ptBR });
                     const timeDisplay = format(appointmentDateTime, 'HH:mm');
@@ -930,6 +936,28 @@ const DoctorConsultations = () => {
                                   <CalendarClock className="mr-2 h-4 w-4 text-gray-500" /> Reagendar
                                 </DropdownMenuItem>
                               )}
+                              {canMarkNoShow && <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <DropdownMenuItem onSelect={e => e.preventDefault()} className="rounded-lg text-amber-700 focus:text-amber-800 focus:bg-amber-50 cursor-pointer text-xs font-medium py-2.5 px-3">
+                                    <UserX className="mr-2 h-4 w-4" /> Marcar não comparecimento
+                                  </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="rounded-xl border-gray-100 shadow-xl">
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle className="text-lg font-bold text-gray-900">Registrar não comparecimento?</AlertDialogTitle>
+                                    <AlertDialogDescription className="text-sm">
+                                      Confirme que o paciente <b>não compareceu</b> no horário agendado. Esta ação não pode ser desfeita e o paciente será notificado.
+                                      <span className="mt-2 block rounded-lg bg-amber-50 border border-amber-200 p-2.5 text-amber-800 font-medium">
+                                        Conforme a Política de Cancelamento, em caso de não comparecimento <b>não há reembolso</b> ao paciente. O valor de repasse permanece disponível para você.
+                                      </span>
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel className="h-9 text-xs rounded-lg">Voltar</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleNoShow(appt.id)} className="bg-amber-600 hover:bg-amber-700 h-9 text-xs rounded-lg">Confirmar não comparecimento</AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>}
                               {!isCancelled && !isCheckinCompleted && <DropdownMenuSeparator className="my-1 bg-gray-100" />}
                               {!isCancelled && !isCheckinCompleted && <AlertDialog>
                                 <AlertDialogTrigger asChild>

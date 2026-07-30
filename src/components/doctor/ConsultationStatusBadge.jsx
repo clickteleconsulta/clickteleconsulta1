@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, AlertTriangle, Clock, Check, XCircle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Clock, Check, XCircle, UserX } from 'lucide-react';
 
 // Badge de status de consulta — cores semânticas consistentes em todas as telas
 // (Consultas, Painel, etc.). size="sm" para uso compacto.
@@ -10,6 +10,8 @@ const CONFIG = {
     reagendado: { label: 'Reagendado', icon: Clock, cls: 'bg-amber-50 text-amber-700 border-amber-100' },
     atendido: { label: 'Concluído', icon: Check, cls: 'bg-blue-50 text-blue-700 border-blue-100' },
     concluida: { label: 'Concluído', icon: Check, cls: 'bg-blue-50 text-blue-700 border-blue-100' },
+    realizado: { label: 'Concluído', icon: Check, cls: 'bg-blue-50 text-blue-700 border-blue-100' },
+    nao_compareceu: { label: 'Não compareceu', icon: UserX, cls: 'bg-orange-50 text-orange-700 border-orange-100' },
     cancelado: { label: 'Cancelado', icon: XCircle, cls: 'bg-red-50 text-red-700 border-red-100' },
     expirado: { label: 'Expirado', icon: XCircle, cls: 'bg-red-50 text-red-700 border-red-100' },
 };
