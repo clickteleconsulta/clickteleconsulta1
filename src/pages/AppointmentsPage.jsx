@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import DoctorSchedule from '@/components/doctor/DoctorSchedule';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import useAsync from '@/hooks/useAsync';
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
@@ -43,6 +44,26 @@ const AppointmentsPage = () => {
     date: '',
     priceSort: ''
   });
+
+  // Paginação: mostra 5 por vez e carrega mais sob demanda.
+  const [visibleCount, setVisibleCount] = useState(5);
+  // Barra de filtros retrátil (recolhe ao rolar para baixo, reaparece ao subir).
+  const [hideFilters, setHideFilters] = useState(false);
+
+  useEffect(() => { setVisibleCount(5); }, [activeFilters]);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 120) setHideFilters(false);
+      else if (y > lastY + 6) setHideFilters(true);
+      else if (y < lastY - 6) setHideFilters(false);
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const formatPrice = (value) => {
     if (value === undefined || value === null) return null;
@@ -322,16 +343,30 @@ const AppointmentsPage = () => {
             {isEditorOpen && canEdit ? (
               <DoctorSchedule onScheduleSave={handleScheduleSave} />
             ) : (
-              filteredDoctors.map(doctor => (
-                <DoctorScheduleCard
-                  key={doctor.id}
-                  initialDoctor={doctor}
-                  onScheduleUpdate={handleScheduleSave}
-                  isFallback={doctor.is_fallback}
-                  patientPrice={doctorPrices[doctor.id]}
-                  formattedPatientPrice={formatPrice(doctorPrices[doctor.id])}
-                />
-              ))
+              <>
+                {filteredDoctors.slice(0, visibleCount).map(doctor => (
+                  <DoctorScheduleCard
+                    key={doctor.id}
+                    initialDoctor={doctor}
+                    onScheduleUpdate={handleScheduleSave}
+                    isFallback={doctor.is_fallback}
+                    patientPrice={doctorPrices[doctor.id]}
+                    formattedPatientPrice={formatPrice(doctorPrices[doctor.id])}
+                  />
+                ))}
+                {filteredDoctors.length > visibleCount && (
+                  <div className="flex justify-center pt-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setVisibleCount((c) => c + 5)}
+                      className="rounded-full h-11 px-7 bg-white border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 font-semibold shadow-sm"
+                    >
+                      Carregar mais médicos
+                      <span className="ml-2 text-xs font-normal text-slate-400">+{Math.min(5, filteredDoctors.length - visibleCount)}</span>
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </motion.div>
         );
@@ -374,7 +409,10 @@ const AppointmentsPage = () => {
         </div>
 
         {/* Barra de busca / filtros — compacta no mobile (busca em cima, filtros em 3 colunas, botão embaixo) */}
-        <div className="bg-white/90 backdrop-blur-md border-y border-slate-200 py-3 shadow-sm sticky top-16 z-20">
+        <div className={cn(
+          "bg-white/90 backdrop-blur-md border-y border-slate-200 py-3 shadow-sm sticky top-16 z-20 transition-transform duration-300 ease-out",
+          hideFilters ? "-translate-y-full shadow-none" : "translate-y-0"
+        )}>
           <div className="container mx-auto px-4">
             {/* Mobile: grade 2×2 (Especialidade | Data / Preço | Buscar). Desktop: tudo numa linha. */}
             <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:justify-center">
@@ -445,7 +483,9 @@ const AppointmentsPage = () => {
           <div className="max-w-6xl mx-auto">
             {status === 'success' && filteredDoctors.length > 0 && (
               <p className="text-sm text-slate-500 mb-4">
-                {filteredDoctors.length} {filteredDoctors.length === 1 ? 'médico disponível' : 'médicos disponíveis'}
+                {filteredDoctors.length === 1
+                  ? '1 médico disponível'
+                  : `Mostrando ${Math.min(visibleCount, filteredDoctors.length)} de ${filteredDoctors.length} médicos`}
               </p>
             )}
             {renderContent()}
