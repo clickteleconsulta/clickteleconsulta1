@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart, CalendarCheck } from 'lucide-react';
+import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart, CalendarCheck, BadgeCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -278,6 +278,8 @@ export function DoctorScheduleCard({
   };
 
   const isScheduleAvailable = scheduleByDay.some(d => d.slots.length > 0);
+  // Índice do primeiro dia visível com horários, para destacar o "próximo disponível".
+  const firstDayWithSlotsIdx = scheduleByDay.findIndex(d => d.slots.length > 0);
   // Se o médico tem agenda configurada, sempre mostramos a grade + setas de navegação
   // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
   // dias com disponibilidade. O estado "Sem horários" fica só para quem não tem agenda.
@@ -291,8 +293,9 @@ export function DoctorScheduleCard({
   const crmDisplay = crmNumber ? `CRM ${crmNumber}${doctor?.uf ? `/${doctor.uf}` : ''}` : '';
   const rawSpecialty = doctor?.specialty?.trim();
   const specialtyLabel = rawSpecialty && rawSpecialty.toLowerCase() !== 'médico'
-    ? `Médico - ${rawSpecialty}`
+    ? `Médico · ${rawSpecialty}`
     : 'Médico';
+  const hasRealPrice = !!formattedPatientPrice;
 
   return (
     <motion.div 
@@ -302,16 +305,17 @@ export function DoctorScheduleCard({
       className="bg-white rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[800px] mx-auto"
     >
       <div className="flex flex-col md:flex-row">
-          <div className="p-4 md:p-5 flex flex-col gap-2.5 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
+          <div className="p-4 md:p-5 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
               <div className="flex items-start gap-3">
-                  <Avatar className="w-14 h-14 border-2 border-white shadow-lg ring-2 ring-slate-100 shrink-0 rounded-xl">
-                      <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-xl object-cover" />
-                      <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-white rounded-xl"><User size={24} /></AvatarFallback>
+                  <Avatar className="w-14 h-14 shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-2xl">
+                      <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-2xl object-cover" />
+                      <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-white rounded-2xl"><User size={24} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          <h3 className="text-lg font-bold text-slate-900 overflow-hidden text-ellipsis whitespace-nowrap" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
-                              {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
+                          <h3 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-1 min-w-0" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
+                              <span className="overflow-hidden text-ellipsis whitespace-nowrap">{formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}</span>
+                              <BadgeCheck className="w-4 h-4 text-blue-500 fill-blue-50 shrink-0" />
                           </h3>
                       </Link>
 
@@ -330,7 +334,7 @@ export function DoctorScheduleCard({
                               <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
                       )}
-                      <p className="text-sm text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap mt-0.5" title={specialtyLabel}>
+                      <p className="text-sm text-slate-500 font-medium overflow-hidden text-ellipsis whitespace-nowrap mt-0.5" title={specialtyLabel}>
                           {specialtyLabel}
                       </p>
                       {crmDisplay && (
@@ -339,27 +343,27 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              <div className="mt-2 text-[13px] text-slate-500">
+              <div className="flex flex-wrap items-center gap-2">
                   <Tooltip delayDuration={150}>
                       <TooltipTrigger asChild>
-                          <div className="flex items-center gap-1.5 w-fit cursor-help">
-                              <Award className="w-4 h-4 text-emerald-500" />
-                              <span>Certificado</span>
-                          </div>
+                          <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full py-1 px-2.5 text-[12px] font-semibold cursor-help">
+                              <Award className="w-3.5 h-3.5 text-blue-500" />
+                              Certificado
+                          </span>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="rounded-lg bg-gray-900 text-white border-0 text-xs max-w-[220px]">
                           Médico parceiro verificado pela plataforma
                       </TooltipContent>
                   </Tooltip>
-              </div>
-              <div className="flex flex-wrap gap-2 items-center mt-auto pt-4 border-t border-slate-100">
-                  <Badge variant="custom" className="bg-emerald-50 text-emerald-700 font-semibold py-1 px-2.5 rounded-full flex items-center gap-1.5 text-[12px] border border-emerald-100">
+                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full py-1 px-2.5 text-[12px] font-semibold">
                       <Video className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Teleconsulta</span>
-                  </Badge>
-                  <Badge variant="custom" className="bg-blue-50 text-blue-700 font-bold py-1 px-3 rounded-full text-[13px] border border-blue-100 ml-auto">
-                      {displayPrice}
-                  </Badge>
+                      Teleconsulta
+                  </span>
+              </div>
+
+              <div className="mt-auto flex items-baseline gap-1.5 bg-slate-50 border border-slate-100 rounded-xl px-3.5 py-2.5">
+                  <span className="text-[22px] leading-none font-extrabold text-blue-600 tracking-tight">{displayPrice}</span>
+                  {hasRealPrice && <span className="text-[11.5px] text-slate-400 font-medium">por consulta</span>}
               </div>
           </div>
           
@@ -382,7 +386,7 @@ export function DoctorScheduleCard({
                       <TooltipProvider delayDuration={100}>
                           <motion.div className="flex-1 flex flex-col">
                               <div className="grid grid-cols-3 sm:grid-cols-5 gap-x-2 gap-y-0">
-                                  {scheduleByDay.map(daySchedule => {
+                                  {scheduleByDay.map((daySchedule, dIdx) => {
               const isDayToday = isToday(daySchedule.date);
               const hasSlots = daySchedule.slots.length > 0;
               return <div key={daySchedule.dateFormatted} className="flex flex-col min-h-[150px]">
@@ -396,16 +400,18 @@ export function DoctorScheduleCard({
                                               </div>
 
                                               <div className="px-1 flex flex-col gap-1.5 flex-grow">
-                                                  {(isExpanded ? daySchedule.slots : daySchedule.slots.slice(0, 4)).map(time => {
+                                                  {(isExpanded ? daySchedule.slots : daySchedule.slots.slice(0, 4)).map((time, sIdx) => {
                     const slotDate = new Date(daySchedule.date);
                     const [hours, minutes] = time.split(':').map(Number);
                     slotDate.setHours(hours, minutes, 0, 0);
                     const slotIdentifier = `${format(utcToZonedTime(slotDate, 'America/Sao_Paulo'), 'yyyy-MM-dd')}T${format(utcToZonedTime(slotDate, 'America/Sao_Paulo'), 'HH:mm:ss')}`;
                     const isBooked = !!bookedSlots.get(slotIdentifier);
+                    // Primeiro horário do primeiro dia com vagas = "próximo disponível", em destaque.
+                    const isNext = !isBooked && dIdx === firstDayWithSlotsIdx && sIdx === 0;
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-lg border text-[13px] font-semibold transition-all duration-200 px-1", isBooked ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" : "bg-white text-blue-700 border-blue-200 shadow-sm hover:border-blue-400 hover:bg-blue-50 hover:text-blue-800 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-px active:translate-y-0 active:scale-[0.97]")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-lg border text-[13px] font-semibold transition-all duration-200 px-1", isBooked ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" : isNext ? "bg-blue-600 text-white border-transparent shadow-md shadow-blue-500/25 hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 active:scale-[0.97]" : "bg-white text-blue-700 border-blue-200 shadow-sm hover:border-blue-400 hover:bg-blue-50 hover:text-blue-800 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-px active:translate-y-0 active:scale-[0.97]")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>
