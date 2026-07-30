@@ -274,7 +274,7 @@ const DoctorProceduresPage = () => {
                                     <Lock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                                     <p className="text-[12px] text-blue-800 leading-relaxed">
                                         Este é o procedimento padrão da plataforma. O nome e a descrição são fixos —
-                                        você pode ajustar apenas o <strong>valor de repasse</strong> (entre {formatCurrency(REPASSE_MIN)} e {formatCurrency(REPASSE_MAX)}).
+                                        você pode ajustar o <strong>valor de repasse</strong> (entre {formatCurrency(REPASSE_MIN)} e {formatCurrency(REPASSE_MAX)}) e as <strong>instruções ao paciente</strong>.
                                     </p>
                                 </div>
                             )}
@@ -345,10 +345,10 @@ const DoctorProceduresPage = () => {
                                     id="instructions"
                                     value={formData.instructions}
                                     onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
-                                    placeholder="Ex: Chegue 5 minutos antes para conexão. Tenha em mãos seus exames recentes."
-                                    className="min-h-[80px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full"
+                                    placeholder={"Escreva como o paciente se conecta e se prepara para a sua teleconsulta. Sugestões do que incluir:\n• Como você conduz o atendimento e por onde envia o link (ex.: WhatsApp/e-mail até 15 min antes)\n• Quadros e casos que você atende (ex.: renovação de receita, orientações, sintomas leves)\n• Como se preparar: ter exames recentes em mãos, estar num ambiente reservado e com boa internet, entrar alguns minutos antes"}
+                                    className="min-h-[130px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full"
                                 />
-                                <p className="text-[11px] text-gray-500 font-medium">Orientações que o paciente verá antes/depois de agendar. Válidas para o seu atendimento.</p>
+                                <p className="text-[11px] text-gray-500 font-medium">Essas orientações ajudam o paciente a se conectar e se preparar para o seu atendimento.</p>
                             </div>
                         </div>
 
