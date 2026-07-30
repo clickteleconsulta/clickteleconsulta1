@@ -17,8 +17,8 @@ const PANELS = {
     },
     profissional: {
         eyebrow: 'Portal do Parceiro',
-        title: 'Atenda pacientes de onde você estiver.',
-        subtitle: 'Gerencie sua agenda, atendimentos e repasses em um só lugar.',
+        title: 'Receba agendamentos para seus atendimentos por telemedicina.',
+        subtitle: 'Seja parceiro do nosso marketplace de agendamentos: você conduz o atendimento e a plataforma cuida do agendamento e do pagamento.',
         features: [
             { icon: Clock, label: 'Defina seus horários e disponibilidade' },
             { icon: Wallet, label: 'Acompanhe repasses e solicite saques' },
