@@ -39,10 +39,15 @@ const ENTITY_LABEL = {
 };
 const OP_LABEL = { insert: 'criado(a)', update: 'alterado(a)', delete: 'removido(a)' };
 const DOC_LABEL = { terms_of_service: 'Termos de Serviço', privacy_policy: 'Política de Privacidade' };
+const AUTH_LABEL = {
+    'auth.login': 'Login', 'auth.senha_alterada': 'Senha alterada', 'auth.email_alterado': 'E-mail alterado',
+    'auth.2fa_ativado': '2FA ativado', 'auth.2fa_removido': '2FA removido',
+};
 
 const prettyAction = (action) => {
     if (!action) return '—';
     if (ACAO_LABEL[action]) return ACAO_LABEL[action];
+    if (AUTH_LABEL[action]) return AUTH_LABEL[action];
     if (action.startsWith('aceite_')) return `Aceite: ${DOC_LABEL[action.replace('aceite_', '')] || action.replace('aceite_', '')}`;
     // Casos especiais mais legíveis
     if (action === 'perfil.update') return 'Papel de acesso alterado';
@@ -60,6 +65,7 @@ const CATEGORY_META = {
     agendamento: { label: 'Agendamento', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
     plataforma: { label: 'Plataforma', cls: 'bg-purple-50 text-purple-700 border-purple-200' },
     consentimento: { label: 'Consentimento', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    acesso: { label: 'Acesso', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
 };
 const ROLE_META = {
     admin: { label: 'Admin', icon: Shield, cls: 'bg-purple-50 text-purple-700 border-purple-200' },
@@ -203,6 +209,7 @@ const AdminAuditPage = () => {
                                 <SelectItem value="all">Todas as categorias</SelectItem>
                                 <SelectItem value="agendamento">Agendamentos</SelectItem>
                                 <SelectItem value="plataforma">Plataforma (config/perfil/financeiro)</SelectItem>
+                                <SelectItem value="acesso">Acessos (login/senha/2FA)</SelectItem>
                                 <SelectItem value="consentimento">Consentimentos (LGPD)</SelectItem>
                             </SelectContent>
                         </Select>
