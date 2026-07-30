@@ -20,12 +20,13 @@ import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
 import { Skeleton } from './ui/skeleton';
 
-// Selo de verificado no estilo do Instagram: roseta azul de 12 pontas com o check branco.
+// Selo de verificado no estilo do Instagram: roseta azul simétrica de 12 pontas
+// (gerada por script, pontas e vales arredondados) com o check branco por cima.
 const VerifiedSeal = ({ className }) => (
   <svg viewBox="0 0 24 24" className={className} role="img" aria-label="Médico verificado">
     <title>Médico verificado</title>
-    <path d="M12 2l2.2 1.6 2.7-.2 1 2.5 2.3 1.4-.6 2.6.9 2.6-2 1.8.1 2.7-2.6.7-1.5 2.3-2.6-.6-2.3 1.4-2.3-1.4-2.6.6-1.5-2.3-2.6-.7.1-2.7-2-1.8.9-2.6-.6-2.6 2.3-1.4 1-2.5 2.7.2z" fill="#2563eb" />
-    <path d="M8.5 12.4l2.3 2.3 4.7-4.9" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M11.32 2.06Q12 1.4 12.68 2.06L13.58 2.94Q14.25 3.6 15.17 3.36L16.39 3.05Q17.3 2.82 17.56 3.73L17.9 4.94Q18.15 5.85 19.06 6.1L20.27 6.44Q21.18 6.7 20.95 7.61L20.64 8.83Q20.4 9.75 21.06 10.42L21.94 11.32Q22.6 12 21.94 12.68L21.06 13.58Q20.4 14.25 20.64 15.17L20.95 16.39Q21.18 17.3 20.27 17.56L19.06 17.9Q18.15 18.15 17.9 19.06L17.56 20.27Q17.3 21.18 16.39 20.95L15.17 20.64Q14.25 20.4 13.58 21.06L12.68 21.94Q12 22.6 11.32 21.94L10.42 21.06Q9.75 20.4 8.83 20.64L7.61 20.95Q6.7 21.18 6.44 20.27L6.1 19.06Q5.85 18.15 4.94 17.9L3.73 17.56Q2.82 17.3 3.05 16.39L3.36 15.17Q3.6 14.25 2.94 13.58L2.06 12.68Q1.4 12 2.06 11.32L2.94 10.42Q3.6 9.75 3.36 8.83L3.05 7.61Q2.82 6.7 3.73 6.44L4.94 6.1Q5.85 5.85 6.1 4.94L6.44 3.73Q6.7 2.82 7.61 3.05L8.83 3.36Q9.75 3.6 10.42 2.94Z" fill="#2563eb" />
+    <path d="M8.4 12.3l2.4 2.4 4.8-5" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
