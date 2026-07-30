@@ -160,7 +160,7 @@ const HomePage = () => {
           }}
         />
 
-        <div className="relative z-10 container mx-auto px-4 py-20 md:py-28 lg:py-32">
+        <div className="relative z-10 container mx-auto px-4 py-12 md:py-16 lg:py-20">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
             {/* Texto esquerda */}
             <motion.div
@@ -216,6 +216,13 @@ const HomePage = () => {
                   </Link>
                 </Button>
               </motion.div>
+
+              {/* Selos de confiança (restaurados em faixa compacta) */}
+              <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-300">
+                <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-blue-300" /> Agende a qualquer hora</span>
+                <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-400" /> Proteção LGPD</span>
+                <span className="inline-flex items-center gap-1.5"><Stethoscope className="w-4 h-4 text-sky-300" /> Atendimentos médicos</span>
+              </motion.div>
             </motion.div>
 
             {/* Visual direito — ilustração de teleconsulta (arte própria) */}
@@ -223,9 +230,9 @@ const HomePage = () => {
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-              className="flex-1 relative flex items-center justify-center mt-8 lg:mt-0 min-h-[280px] lg:min-h-[460px]"
+              className="flex-1 relative flex items-center justify-center mt-6 lg:mt-0 min-h-[240px] lg:min-h-[380px]"
             >
-              <HeroIllustration className="w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[540px] h-auto" />
+              <HeroIllustration className="w-full max-w-[300px] sm:max-w-[360px] lg:max-w-[470px] h-auto" />
             </motion.div>
           </div>
         </div>
