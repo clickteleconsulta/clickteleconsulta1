@@ -124,7 +124,6 @@ const DoctorProfile = () => {
         if (doctorData) {
             const formData = {
                 ...doctorData,
-                instructions: doctorData.instructions || '',
                 specialty: doctorData.specialty || "Generalista",
                 phone_number: doctorData.phone_number || '',
                 formacao: doctorData.formacao || ''
@@ -178,7 +177,6 @@ const DoctorProfile = () => {
                 sexo: formData.sexo || null,
                 bio: formData.bio,
                 formacao: formData.formacao || null,
-                instructions: formData.instructions,
                 updated_at: new Date().toISOString(),
             };
 
@@ -190,7 +188,6 @@ const DoctorProfile = () => {
 
             reset({
                 ...data,
-                instructions: data.instructions || '',
                 phone_number: data.phone_number || '',
                 formacao: data.formacao || ''
             });
@@ -357,11 +354,6 @@ const DoctorProfile = () => {
                                 <Label htmlFor="formacao" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Formação</Label>
                                 <Textarea id="formacao" {...register('formacao')} rows={4} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Informe a formação acadêmica, informações sobre residência e experiência clínica — tudo que mostre ao paciente o conhecimento e a experiência adquiridos ao longo da sua trajetória como profissional de saúde. Inclua o tipo de graduação, curso, instituição e ano de conclusão (opcional)." />
                                 <p className="text-[11px] text-gray-500">Aparece para os pacientes no seu perfil.</p>
-                            </div>
-
-                            <div className="space-y-1.5">
-                                <Label htmlFor="instructions" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Instruções ao Paciente</Label>
-                                <Textarea id="instructions" {...register('instructions')} rows={3} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Ex: Chegue 5 minutos antes para conexão. Tenha em mãos seus exames recentes." />
                             </div>
 
                         </div>

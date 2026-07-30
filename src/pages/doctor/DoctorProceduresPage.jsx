@@ -32,6 +32,8 @@ const DoctorProceduresPage = () => {
     const [loading, setLoading] = useState(true);
     const [medicoId, setMedicoId] = useState(null);
     const [taxPercentage, setTaxPercentage] = useState(0);
+    // Instruções ao paciente — nível do médico (medicos.instructions), editadas aqui no procedimento.
+    const [doctorInstructions, setDoctorInstructions] = useState('');
     
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -42,7 +44,8 @@ const DoctorProceduresPage = () => {
         nome: '',
         descricao: '',
         preco: '',
-        principal: false
+        principal: false,
+        instructions: ''
     });
 
     const fetchProcedures = useCallback(async () => {
@@ -51,13 +54,14 @@ const DoctorProceduresPage = () => {
         try {
             const { data: docData, error: docError } = await supabase
                 .from('medicos')
-                .select('id, payment_settings')
+                .select('id, payment_settings, instructions')
                 .eq('user_id', user.id)
                 .single();
-                
+
             if (docError) throw docError;
             setMedicoId(docData.id);
             setTaxPercentage(docData.payment_settings?.platform_fee_percent || 0);
+            setDoctorInstructions(docData.instructions || '');
 
             const { data: procData, error: procError } = await supabase
                 .from('procedimentos')
@@ -120,7 +124,8 @@ const DoctorProceduresPage = () => {
                 nome: locked ? TELECONSULTA_NOME : proc.nome,
                 descricao: locked ? TELECONSULTA_DESC : (proc.descricao || ''),
                 preco: proc.preco?.toString() ?? '',
-                principal: locked ? true : (proc.principal || false)
+                principal: locked ? true : (proc.principal || false),
+                instructions: doctorInstructions
             });
         } else {
             setFormLocked(false);
@@ -129,7 +134,8 @@ const DoctorProceduresPage = () => {
                 nome: '',
                 descricao: '',
                 preco: '',
-                principal: false
+                principal: false,
+                instructions: doctorInstructions
             });
         }
         setIsFormOpen(true);
@@ -192,6 +198,13 @@ const DoctorProceduresPage = () => {
                 const { error } = await supabase.from('procedimentos').insert([payload]);
                 if (error) throw error;
                 toast({ title: "Sucesso", description: "Procedimento adicionado." });
+            }
+
+            // Instruções ao paciente (nível do médico) — salvas junto ao procedimento.
+            if (formData.instructions !== doctorInstructions) {
+                const { error: instrErr } = await supabase.from('medicos').update({ instructions: formData.instructions }).eq('id', medicoId);
+                if (instrErr) throw instrErr;
+                setDoctorInstructions(formData.instructions);
             }
 
             setIsFormOpen(false);
@@ -325,6 +338,18 @@ const DoctorProceduresPage = () => {
                                     </Badge>
                                 </div>
                             )}
+
+                            <div className="space-y-1.5 md:col-span-2">
+                                <Label htmlFor="instructions" className="text-gray-900 font-semibold text-sm">Instruções ao Paciente</Label>
+                                <Textarea
+                                    id="instructions"
+                                    value={formData.instructions}
+                                    onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
+                                    placeholder="Ex: Chegue 5 minutos antes para conexão. Tenha em mãos seus exames recentes."
+                                    className="min-h-[80px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full"
+                                />
+                                <p className="text-[11px] text-gray-500 font-medium">Orientações que o paciente verá antes/depois de agendar. Válidas para o seu atendimento.</p>
+                            </div>
                         </div>
 
                         <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-6 mt-6 border-t border-gray-100">
@@ -392,7 +417,7 @@ const DoctorProceduresPage = () => {
 
                                     <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
                                         <Button variant="outline" size="sm" onClick={() => handleOpenForm(proc)} className="flex-1 text-xs font-semibold rounded-lg h-8">
-                                            <Edit2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> {isProtectedProc(proc) ? 'Editar repasse' : 'Editar'}
+                                            <Edit2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> Editar
                                         </Button>
                                         {isProtectedProc(proc) ? (
                                             <div className="flex-1 flex items-center justify-center gap-1.5 text-xs text-gray-400 font-semibold rounded-lg h-8 bg-gray-50 border border-gray-100 select-none">
