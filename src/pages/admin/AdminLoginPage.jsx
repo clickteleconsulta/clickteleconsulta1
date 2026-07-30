@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
+import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +18,9 @@ const AdminLoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mfaStep, setMfaStep] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
+  const turnstileRef = useRef(null);
+  const handleCaptcha = useCallback((token) => setCaptchaToken(token), []);
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -39,11 +43,15 @@ const AdminLoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (TURNSTILE_ENABLED && !captchaToken) {
+      toast({ variant: 'destructive', title: 'Confirmação necessária', description: 'Aguarde a verificação de segurança concluir e tente novamente.' });
+      return;
+    }
     setIsLoading(true);
     showLoader();
 
     try {
-      const { data: signInData, error } = await signIn(email, password);
+      const { data: signInData, error } = await signIn(email, password, captchaToken);
       if (error) throw error;
 
       // Verifica papel pelo ID do usuário (não pelo e-mail, que pode ser alterado)
@@ -78,6 +86,7 @@ const AdminLoginPage = () => {
       hideLoader();
     } finally {
       setIsLoading(false);
+      if (TURNSTILE_ENABLED) { setCaptchaToken(''); turnstileRef.current?.reset(); }
     }
   };
 
@@ -161,10 +170,11 @@ const AdminLoginPage = () => {
                   required
                 />
               </div>
+              <TurnstileWidget ref={turnstileRef} onVerify={handleCaptcha} theme="dark" />
               <Button
                 type="submit"
                 className="w-full bg-white text-slate-950 hover:bg-slate-200 font-semibold"
-                disabled={isLoading}
+                disabled={isLoading || (TURNSTILE_ENABLED && !captchaToken)}
               >
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Entrar'}
               </Button>
