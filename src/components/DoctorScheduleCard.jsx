@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart, CalendarCheck } from 'lucide-react';
+import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, Asterisk, HeartHandshake, Info, Heart, CalendarCheck, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { format, addDays, startOfToday, isToday, addMinutes } from 'date-fns';
+import { format, addDays, startOfToday, isToday, isTomorrow, addMinutes } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -29,6 +29,12 @@ const VerifiedSeal = ({ className }) => (
     <path d="M8.4 12.3l2.4 2.4 4.8-5" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+// Rótulos de data no estilo Doctoralia: "HOJE", "AMANHÃ" ou dia da semana; e "1 Ago", "31 Jul".
+const capMonth = (s) => s.replace(/\./g, '').replace(/ (\p{L})/u, (_, c) => ' ' + c.toUpperCase());
+const dayLabel = (day) => isToday(day) ? 'HOJE' : isTomorrow(day) ? 'AMANHÃ' : format(day, 'EEEE', { locale: ptBR }).split('-')[0].toUpperCase();
+const dateLabel = (day) => capMonth(format(day, 'd MMM', { locale: ptBR }));
+const titleCase = (s) => s ? s.charAt(0) + s.slice(1).toLowerCase() : s;
 
 const generateTimeSlotsFromAgenda = (agenda, day) => {
   const dayOfWeek = day.getDay();
@@ -199,8 +205,8 @@ export function DoctorScheduleCard({
   const scheduleByDay = useMemo(() => {
     if (!doctorAgenda || isFallback) return visibleDays.map(day => ({
       date: day,
-      dayName: isToday(day) ? 'HOJE' : format(day, 'EEEE', { locale: ptBR }).split('-')[0].toUpperCase(),
-      dateFormatted: format(day, 'dd/MM'),
+      dayName: dayLabel(day),
+      dateFormatted: dateLabel(day),
       slots: []
     }));
     return visibleDays.map(day => {
@@ -212,12 +218,28 @@ export function DoctorScheduleCard({
       });
       return {
         date: day,
-        dayName: isToday(day) ? 'HOJE' : format(day, 'EEEE', { locale: ptBR }).split('-')[0].toUpperCase(),
-        dateFormatted: format(day, 'dd/MM'),
+        dayName: dayLabel(day),
+        dateFormatted: dateLabel(day),
         slots: allSlots
       };
     });
   }, [doctorAgenda, visibleDays, isFallback, blocks]);
+
+  // Primeira vaga realmente livre na janela visível (ignora horários já ocupados).
+  const nextAvailable = useMemo(() => {
+    for (const d of scheduleByDay) {
+      for (const time of d.slots) {
+        const sd = new Date(d.date);
+        const [h, m] = time.split(':').map(Number);
+        sd.setHours(h, m, 0, 0);
+        const z = utcToZonedTime(sd, 'America/Sao_Paulo');
+        const id = `${format(z, 'yyyy-MM-dd')}T${format(z, 'HH:mm:ss')}`;
+        if (!bookedSlots.get(id)) return { label: dayLabel(d.date), time };
+      }
+    }
+    return null;
+  }, [scheduleByDay, bookedSlots]);
+  const day0HasSlots = (scheduleByDay[0]?.slots?.length || 0) > 0;
 
   const handleBooking = async (day, time) => {
     if (isFallback) {
@@ -371,6 +393,12 @@ export function DoctorScheduleCard({
                   <span className="sm:hidden ml-auto inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-2.5 py-1 text-[14px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
               </div>
 
+              {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
+              <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-500">
+                  <ShieldCheck className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                  <span>Pagamento online · Pix e cartão</span>
+              </div>
+
               {/* Desktop: preço no rodapé do painel, à direita */}
               <div className="mt-auto hidden sm:flex justify-end pt-1">
                   <span className="inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-3 py-1.5 text-[15px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
@@ -387,7 +415,11 @@ export function DoctorScheduleCard({
                            <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => Math.max(0, d - perPage))} disabled={dayOffset === 0} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                               <ChevronLeft className="w-5 h-5" />
                           </Button>
-                          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider hidden sm:block">Selecione um horário</span>
+                          {nextAvailable && !day0HasSlots ? (
+                              <span className="text-[11px] font-bold text-blue-600 truncate px-1">Próxima vaga: {titleCase(nextAvailable.label)} · {nextAvailable.time}</span>
+                          ) : (
+                              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider hidden sm:block">Selecione um horário</span>
+                          )}
                           <Button variant="ghost" size="icon" onClick={() => setDayOffset(d => d + perPage)} className="w-8 h-8 hover:bg-gray-100 text-gray-500">
                              <ChevronRight className="w-5 h-5" />
                           </Button>
@@ -419,7 +451,7 @@ export function DoctorScheduleCard({
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-lg border text-[13px] font-semibold transition-all duration-200 px-1", isBooked ? "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed" : "bg-white text-blue-700 border-blue-200 shadow-sm hover:border-blue-400 hover:bg-blue-50 hover:text-blue-800 hover:shadow-md hover:shadow-blue-500/10 hover:-translate-y-px active:translate-y-0 active:scale-[0.97]")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-full border-0 text-[13px] font-semibold transition-all duration-200 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 hover:-translate-y-px active:translate-y-0 active:scale-[0.97]")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>

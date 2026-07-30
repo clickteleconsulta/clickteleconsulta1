@@ -63,9 +63,10 @@ const TRUST_METRICS = [
 
 // ─── Steps ──────────────────────────────────────────────────────────────────────
 const STEPS = [
-  { icon: UserPlus, title: 'Cadastre-se', desc: 'Crie sua conta em segundos — sem burocracia.' },
-  { icon: Calendar, title: 'Escolha o médico', desc: 'Filtre por especialidade, horário e preço.' },
-  { icon: Stethoscope, title: 'Seja atendido', desc: 'Após o pagamento, o médico entra em contato e realiza o atendimento pelos meios próprios.' },
+  { icon: Search, title: 'Escolha o médico', desc: 'Filtre por especialidade, horário e preço e veja quem tem vaga.' },
+  { icon: CalendarCheck, title: 'Agende e pague', desc: 'Reserve o horário e pague com Pix ou cartão, de forma protegida.' },
+  { icon: CheckCircle, title: 'Confirmação na hora', desc: 'Você recebe a confirmação e um lembrete antes da consulta.' },
+  { icon: Stethoscope, title: 'Seja atendido', desc: 'O médico entra em contato e realiza o atendimento pelos meios próprios.' },
 ];
 
 // ─── Features (Bento) ──────────────────────────────────────────────────────────
@@ -296,12 +297,12 @@ const HomePage = () => {
               Como funciona? É simples!
             </h2>
             <p className="font-body mt-3 text-slate-500">
-              Em 3 passos você agenda sua consulta
+              Em 4 passos simples você agenda sua consulta
             </p>
           </motion.div>
 
           <motion.div
-            className="flex flex-col md:flex-row items-start md:items-center justify-center gap-8 md:gap-0 max-w-4xl mx-auto"
+            className="flex flex-col md:flex-row items-start md:items-center justify-center gap-8 md:gap-0 max-w-5xl mx-auto"
             variants={stagger}
             initial="hidden"
             whileInView="visible"
