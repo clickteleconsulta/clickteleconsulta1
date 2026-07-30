@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
@@ -92,6 +93,9 @@ const AuthPage = ({
 
   // LGPD consent (HOTFIX-05)
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const turnstileRef = useRef(null);
+  const handleCaptcha = useCallback((token) => setCaptchaToken(token), []);
 
   useEffect(() => {
     if (isDoctor) {
@@ -129,12 +133,19 @@ const AuthPage = ({
 
   const handleAuth = async e => {
     e.preventDefault();
+
+    // Anti-bot (Turnstile) — só exige o token quando o widget está ativo (chave configurada).
+    if (TURNSTILE_ENABLED && !captchaToken) {
+      toast({ variant: 'destructive', title: 'Confirmação necessária', description: 'Aguarde a verificação de segurança concluir e tente novamente.' });
+      return;
+    }
+
     setIsLoading(true);
     showLoader();
 
     try {
       if (isLogin) {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(email, password, captchaToken);
         if (error) throw error;
         
         handlePostAuthRedirect();
@@ -186,7 +197,7 @@ const AuthPage = ({
           sexo: sexo
         };
 
-        const { error } = await signUp(email, password, metadata);
+        const { error } = await signUp(email, password, metadata, captchaToken);
         
         if (error) {
              if (error.message === 'resend_successful') {
@@ -220,6 +231,11 @@ const AuthPage = ({
       hideLoader();
     } finally {
       setIsLoading(false);
+      // Token do Turnstile é de uso único: renova para a próxima tentativa.
+      if (TURNSTILE_ENABLED) {
+        setCaptchaToken('');
+        turnstileRef.current?.reset();
+      }
     }
   };
 
@@ -418,10 +434,13 @@ const AuthPage = ({
                       </div>
                     )}
 
-                    <Button 
-                        type="submit" 
+                    {/* Anti-bot (Cloudflare Turnstile) — invisível/no-op até a chave ser configurada */}
+                    <TurnstileWidget ref={turnstileRef} onVerify={handleCaptcha} />
+
+                    <Button
+                        type="submit"
                         className="w-full h-11 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
-                        disabled={isLoading || (!isLogin && !isDoctor && !acceptedTerms)}
+                        disabled={isLoading || (!isLogin && !isDoctor && !acceptedTerms) || (TURNSTILE_ENABLED && !captchaToken)}
                     >
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : (isLogin ? 'Entrar' : 'Cadastrar')} 
                     </Button>

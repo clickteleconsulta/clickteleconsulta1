@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthLayout from '@/components/auth/AuthLayout';
+import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,15 +16,24 @@ const PasswordRecoveryPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState('');
+    const turnstileRef = useRef(null);
+    const handleCaptcha = useCallback((token) => setCaptchaToken(token), []);
     const { toast } = useToast();
 
     const onSubmit = async ({ email }) => {
+        if (TURNSTILE_ENABLED && !captchaToken) {
+            toast({ variant: 'destructive', title: 'Confirmação necessária', description: 'Aguarde a verificação de segurança concluir e tente novamente.' });
+            return;
+        }
         setLoading(true);
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: `${window.location.origin}/auth/reset-password`,
+            captchaToken,
         });
 
         setLoading(false);
+        if (TURNSTILE_ENABLED) { setCaptchaToken(''); turnstileRef.current?.reset(); }
         if (error) {
             toast({
                 variant: "destructive",
@@ -78,7 +88,8 @@ const PasswordRecoveryPage = () => {
                                     />
                                     {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
                                 </div>
-                                <Button type="submit" className="w-full" disabled={loading}>
+                                <TurnstileWidget ref={turnstileRef} onVerify={handleCaptcha} />
+                                <Button type="submit" className="w-full" disabled={loading || (TURNSTILE_ENABLED && !captchaToken)}>
                                     {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar Link de Recuperação'}
                                  </Button>
                             </form>

@@ -73,10 +73,11 @@ export const AuthProvider = ({ children }) => {
     if (data) setProfile(data);
   }, [user]);
 
-  const signUp = useCallback(async (email, password, metadata) => {
+  const signUp = useCallback(async (email, password, metadata, captchaToken) => {
     try {
       // metadata (full_name, cpf, whatsapp, data_nasc, etc.) precisa ir em options.data
-      const { data, error } = await supabase.auth.signUp({ email, password, options: { data: metadata } });
+      // captchaToken: enviado quando o Turnstile está ativo (ignorado pelo Supabase se não configurado)
+      const { data, error } = await supabase.auth.signUp({ email, password, options: { data: metadata, captchaToken } });
       if (error) throw error;
       return { data, error: null };
     } catch (error) {
@@ -85,9 +86,9 @@ export const AuthProvider = ({ children }) => {
     }
   }, [toast]);
 
-  const signIn = useCallback(async (email, password) => {
+  const signIn = useCallback(async (email, password, captchaToken) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken } });
       if (error) throw error;
       return { data, error: null };
     } catch (error) {
