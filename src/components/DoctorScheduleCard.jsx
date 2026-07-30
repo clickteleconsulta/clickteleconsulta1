@@ -351,10 +351,10 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                   <Tooltip delayDuration={150}>
                       <TooltipTrigger asChild>
-                          <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full py-1 px-2.5 text-[12px] font-semibold cursor-help">
+                          <span className="inline-flex items-center gap-1 sm:gap-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full py-1 px-2 sm:px-2.5 text-[12px] font-semibold cursor-help">
                               <Award className="w-3.5 h-3.5 text-blue-500" />
                               Certificado
                           </span>
@@ -363,13 +363,16 @@ export function DoctorScheduleCard({
                           Médico parceiro verificado pela plataforma
                       </TooltipContent>
                   </Tooltip>
-                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full py-1 px-2.5 text-[12px] font-semibold">
+                  <span className="inline-flex items-center gap-1 sm:gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full py-1 px-2 sm:px-2.5 text-[12px] font-semibold">
                       <Video className="w-3.5 h-3.5 text-emerald-500" />
                       Teleconsulta
                   </span>
+                  {/* Mobile: preço na mesma linha dos selos, à direita, para compactar o card */}
+                  <span className="sm:hidden ml-auto inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-2.5 py-1 text-[14px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
               </div>
 
-              <div className="mt-auto flex justify-end pt-1">
+              {/* Desktop: preço no rodapé do painel, à direita */}
+              <div className="mt-auto hidden sm:flex justify-end pt-1">
                   <span className="inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-3 py-1.5 text-[15px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
               </div>
           </div>
