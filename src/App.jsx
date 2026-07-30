@@ -64,7 +64,6 @@ const AdminPatientsPage = lazy(() => import('@/pages/admin/AdminPatientsPage'));
 const MemedPrescriptionPage = lazy(() => import('@/integrations/memed/MemedPrescriptionPage'));
 
 // New Sprint Pages (21/03)
-const DoctorSchedulePage = lazy(() => import('@/pages/doctor/DoctorSchedulePage'));
 const ConsultaEncerradaPage = lazy(() => import('@/pages/ConsultaEncerradaPage'));
 
 // Components
@@ -242,12 +241,8 @@ function App() {
             </ProtectedRoute>
           } />}
 
-          {/* Doctor Schedule */}
-          <Route path="/medico/agenda" element={
-            <ProtectedRoute allowedRoles={['medico']}>
-              <DoctorSchedulePage />
-            </ProtectedRoute>
-          } />
+          {/* Agenda legada → redireciona para a agenda atual (dashboard) */}
+          <Route path="/medico/agenda" element={<Navigate to="/medico/dashboard/agenda" replace />} />
 
           {/* Direct Messages Route */}
           {FEATURES.MESSAGING && <Route path="/mensagens" element={
