@@ -10,6 +10,7 @@ const ConfirmationPage = lazy(() => import('@/pages/ConfirmationPage'));
 const SupportPage = lazy(() => import('@/pages/SupportPage'));
 const ComoFuncionaPage = lazy(() => import('@/pages/ComoFuncionaPage'));
 const FaqPage = lazy(() => import('@/pages/FaqPage'));
+const QuemSomosPage = lazy(() => import('@/pages/QuemSomosPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogArticlePage = lazy(() => import('@/pages/BlogArticlePage'));
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -297,6 +298,7 @@ function App() {
             <Route path="/medicos" element={<Navigate to="/agendamentos" replace />} />
             <Route path="/suporte" element={<SupportPage />} />
             <Route path="/como-funciona" element={<ComoFuncionaPage />} />
+            <Route path="/quem-somos" element={<QuemSomosPage />} />
             <Route path="/perguntas-frequentes" element={<FaqPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogArticlePage />} />

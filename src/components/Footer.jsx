@@ -40,6 +40,7 @@ const Footer = () => {
             <p className="font-semibold text-slate-900 text-sm">Acesso</p>
             <nav className="flex flex-col gap-2.5">
               <Link to="/agendamentos" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Agendar Consulta</Link>
+              <Link to="/quem-somos" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Quem somos</Link>
               <Link to="/como-funciona" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Como funciona</Link>
               <Link to="/perguntas-frequentes" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Perguntas frequentes</Link>
               <Link to="/blog" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Blog</Link>

@@ -56,6 +56,7 @@ async function main() {
   const articles = await loadArticles();
   const routes = [
     { path: '/como-funciona', title: 'Como funciona a teleconsulta · Click Teleconsulta', description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
+    { path: '/quem-somos', title: 'Quem somos · Click Teleconsulta', description: 'A Click Teleconsulta é um marketplace de agendamentos que conecta pacientes a médicos parceiros. Cuidamos do agendamento e do pagamento; o atendimento é conduzido pelo próprio médico.' },
     { path: '/perguntas-frequentes', title: 'Perguntas frequentes · Click Teleconsulta', description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.' },
     { path: '/blog', title: 'Blog · Click Teleconsulta — Saúde e teleconsulta', description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
     { path: '/agendamentos', title: 'Agendar Consulta · Click Teleconsulta', description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.' },
