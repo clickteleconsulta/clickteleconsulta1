@@ -369,9 +369,8 @@ export function DoctorScheduleCard({
                   </span>
               </div>
 
-              <div className="mt-auto flex items-baseline justify-end gap-1.5 pt-1">
-                  {hasRealPrice && <span className="text-[11px] text-slate-400 font-medium">por consulta</span>}
-                  <span className="text-lg leading-none font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
+              <div className="mt-auto flex justify-end pt-1">
+                  <span className="inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-3 py-1.5 text-[15px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
               </div>
           </div>
           
