@@ -364,12 +364,16 @@ export function DoctorScheduleCard({
 
               {/* Selo de teleconsulta + preço lado a lado. A certificação do médico
                   fica só na roseta de verificado ao lado do nome. */}
+              {/* Altura fixa (h-7) nos dois para ficarem perfeitamente alinhados;
+                  o preço se destaca pelo peso/contraste, não pelo tamanho da caixa. */}
               <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full py-1 px-2.5 text-[12px] font-semibold">
-                      <Video className="w-3.5 h-3.5 text-emerald-500" />
+                  <span className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[12px] font-semibold leading-none">
+                      <Video className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       Teleconsulta
                   </span>
-                  <span className="inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-3 py-1 text-[15px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
+                  <span className="inline-flex items-center h-7 px-3 bg-slate-100 border border-slate-200/70 rounded-full text-[13px] font-extrabold text-slate-900 tracking-tight tabular-nums leading-none">
+                      {displayPrice}
+                  </span>
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
