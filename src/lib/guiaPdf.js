@@ -22,13 +22,25 @@ export function gerarGuiaPdf({
   // Cabeçalho institucional
   doc.setFillColor(...BLUE);
   doc.rect(0, 0, W, 96, 'F');
+
+  // Logo da marca: quadrado branco arredondado + traço de pulso (ícone Activity) em azul.
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(M, 28, 40, 40, 9, 9, 'F');
+  doc.setDrawColor(...BLUE);
+  doc.setLineWidth(2.4);
+  doc.setLineCap('round');
+  doc.setLineJoin('round');
+  const pulse = [[M + 7, 50], [M + 12, 50], [M + 15, 41], [M + 20, 59], [M + 24, 44], [M + 28, 50], [M + 33, 50]];
+  for (let i = 1; i < pulse.length; i++) doc.line(pulse[i - 1][0], pulse[i - 1][1], pulse[i][0], pulse[i][1]);
+
+  const tx = M + 54;
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
-  doc.text('Click Teleconsulta', M, 46);
+  doc.text('Click Teleconsulta', tx, 46);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
-  doc.text('Guia de Agendamento de Teleconsulta', M, 68);
+  doc.text('Guia de Agendamento de Teleconsulta', tx, 68);
 
   // Protocolo
   let y = 140;
