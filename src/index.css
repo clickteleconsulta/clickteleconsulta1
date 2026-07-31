@@ -38,6 +38,8 @@ body {
   @apply bg-background text-foreground antialiased;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
+  /* Permite seções full-bleed (100vw) sem gerar barra de rolagem horizontal. */
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {

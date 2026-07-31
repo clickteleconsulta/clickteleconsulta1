@@ -142,6 +142,9 @@ const HomePage = () => {
         `}</style>
       </Helmet>
 
+      {/* Full-bleed: as seções ocupam a largura toda da tela (cancela o container/padding do main) */}
+      <div className="-my-8 mx-[calc(50%-50vw)] w-screen">
+
       {/* ═══════════════════════════════════════════════════════════════════════
           1. HERO
       ═══════════════════════════════════════════════════════════════════════ */}
@@ -434,6 +437,7 @@ const HomePage = () => {
           </motion.div>
         </div>
       </section>
+      </div>
     </>
   );
 };
