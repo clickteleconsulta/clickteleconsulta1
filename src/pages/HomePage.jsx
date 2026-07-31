@@ -29,7 +29,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import HeroIllustration from '@/components/HeroIllustration';
 import {
   Accordion,
   AccordionContent,
@@ -220,23 +219,75 @@ const HomePage = () => {
                 </Button>
               </motion.div>
 
-              {/* Selos de confiança (restaurados em faixa compacta) */}
-              <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-300">
+              {/* Selos de confiança — só onde os cards flutuantes não aparecem (abaixo de lg) */}
+              <motion.div variants={fadeUp} className="mt-7 lg:hidden flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-300">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-blue-300" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-400" /> Proteção LGPD</span>
                 <span className="inline-flex items-center gap-1.5"><Stethoscope className="w-4 h-4 text-sky-300" /> Atendimentos médicos</span>
               </motion.div>
             </motion.div>
 
-            {/* Visual direito — ilustração de teleconsulta (arte própria) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-              className="flex-1 relative flex items-center justify-center mt-6 lg:mt-0 min-h-[240px] lg:min-h-[380px]"
-            >
-              <HeroIllustration className="w-full max-w-[300px] sm:max-w-[360px] lg:max-w-[470px] h-auto" />
-            </motion.div>
+            {/* Visual direito — shapes decorativos */}
+            <div className="flex-1 relative hidden lg:flex items-center justify-center min-h-[400px]">
+              {/* Card flutuante 1 */}
+              <motion.div
+                animate={{ y: [0, -12, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                className="absolute top-8 right-12 w-52 bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="font-display text-white text-sm font-bold">Agende a qualquer hora</p>
+                    <p className="text-slate-400 text-xs font-body">Horários disponíveis todos os dias</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-slate-300 font-body">
+                  <Shield className="w-3.5 h-3.5 text-green-400" /> Médico verificado (CFM)
+                </div>
+              </motion.div>
+
+              {/* Card flutuante 2 */}
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut', delay: 0.5 }}
+                className="absolute bottom-16 right-4 w-48 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="font-display text-white text-xs font-bold">LGPD Compliant</p>
+                    <p className="text-blue-400 text-xs font-body">Dados protegidos</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card flutuante 3 */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut', delay: 1 }}
+                className="absolute top-1/2 left-0 -translate-y-1/2 w-44 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-sky-500/20 flex items-center justify-center">
+                    <Stethoscope className="w-4 h-4 text-sky-400" />
+                  </div>
+                  <div>
+                    <p className="font-display text-white text-xs font-bold">Atendimentos médicos</p>
+                    <p className="text-slate-400 text-xs font-body">por telemedicina</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Círculos decorativos */}
+              <div className="absolute top-0 right-0 w-64 h-64 rounded-full border border-white/5" />
+              <div className="absolute bottom-0 left-8 w-48 h-48 rounded-full border border-white/5" />
+              <div className="absolute top-1/3 left-1/4 w-32 h-32 rounded-full bg-blue-500/5" />
+            </div>
           </div>
         </div>
       </section>
