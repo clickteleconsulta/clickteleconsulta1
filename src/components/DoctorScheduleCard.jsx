@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, Award, CalendarCheck, ShieldCheck } from 'lucide-react';
+import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, CalendarCheck, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -315,7 +315,6 @@ export function DoctorScheduleCard({
   const specialtyLabel = rawSpecialty && rawSpecialty.toLowerCase() !== 'médico'
     ? `Médico · ${rawSpecialty}`
     : 'Médico';
-  const hasRealPrice = !!formattedPatientPrice;
 
   return (
     <motion.div 
@@ -363,35 +362,20 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  <Tooltip delayDuration={150}>
-                      <TooltipTrigger asChild>
-                          <span className="inline-flex items-center gap-1 sm:gap-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full py-1 px-2 sm:px-2.5 text-[12px] font-semibold cursor-help">
-                              <Award className="w-3.5 h-3.5 text-blue-500" />
-                              Certificado
-                          </span>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="rounded-lg bg-gray-900 text-white border-0 text-xs max-w-[220px]">
-                          Médico parceiro verificado pela plataforma
-                      </TooltipContent>
-                  </Tooltip>
-                  <span className="inline-flex items-center gap-1 sm:gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full py-1 px-2 sm:px-2.5 text-[12px] font-semibold">
+              {/* Selo de teleconsulta + preço lado a lado. A certificação do médico
+                  fica só na roseta de verificado ao lado do nome. */}
+              <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full py-1 px-2.5 text-[12px] font-semibold">
                       <Video className="w-3.5 h-3.5 text-emerald-500" />
                       Teleconsulta
                   </span>
-                  {/* Mobile: preço na mesma linha dos selos, à direita, para compactar o card */}
-                  <span className="sm:hidden ml-auto inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-2.5 py-1 text-[14px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
+                  <span className="inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-3 py-1 text-[15px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
               <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-500">
                   <ShieldCheck className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                   <span>Pagamento online · Pix e cartão</span>
-              </div>
-
-              {/* Desktop: preço no rodapé do painel, à direita */}
-              <div className="mt-auto hidden sm:flex justify-end pt-1">
-                  <span className="inline-flex items-center bg-slate-100 border border-slate-200/70 rounded-lg px-3 py-1.5 text-[15px] font-extrabold text-slate-900 tracking-tight">{displayPrice}</span>
               </div>
           </div>
           
