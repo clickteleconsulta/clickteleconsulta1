@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CalendarCheck, ShieldCheck, Wallet, UserCheck, ArrowRight, Building2 } from 'lucide-react';
 
 const VALORES = [
-  { icon: CalendarCheck, title: 'Acesso simples à saúde', text: 'Conectamos pacientes a médicos parceiros e cuidamos do agendamento e do pagamento — sem filas e sem deslocamento.' },
+  { icon: CalendarCheck, title: 'Democratizar o acesso à saúde', text: 'Para o que pode ser resolvido a distância, você agenda com agilidade — sem deslocamento e sem fila de espera.' },
   { icon: Wallet, title: 'Transparência no preço', text: 'Você vê o valor antes de agendar e paga somente quando usa. Sem mensalidade, sem assinatura e sem planos de saúde.' },
   { icon: UserCheck, title: 'Profissionais verificados', text: 'Os médicos parceiros são verificados junto ao CRM do respectivo estado antes de aparecerem na plataforma.' },
   { icon: ShieldCheck, title: 'Proteção de dados (LGPD)', text: 'Tratamos seus dados com cuidado e em conformidade com a Lei Geral de Proteção de Dados.' },
@@ -39,7 +39,7 @@ const QuemSomosPage = () => {
     <>
       <Helmet>
         <title>Quem somos · Click Teleconsulta</title>
-        <meta name="description" content="A Click Teleconsulta é um marketplace de agendamentos que conecta pacientes a médicos parceiros. Cuidamos do agendamento e do pagamento; o atendimento é conduzido pelo próprio médico." />
+        <meta name="description" content="Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A Click Teleconsulta é um marketplace de agendamentos que conecta pacientes a médicos parceiros." />
         <link rel="canonical" href="https://clickteleconsulta.online/quem-somos" />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
@@ -49,10 +49,15 @@ const QuemSomosPage = () => {
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-600">Quem somos</span>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">
-            Facilitamos o acesso à saúde, um agendamento de cada vez
+            Democratizar o acesso à saúde, um agendamento de cada vez
           </h1>
           <p className="text-slate-500 mt-4 text-lg leading-relaxed">
             A Click Teleconsulta nasceu para tornar o cuidado com a saúde mais simples e acessível.
+            Nosso propósito é <strong className="text-slate-700">democratizar o acesso à saúde</strong>:
+            para situações que podem ser conduzidas a distância, você resolve com agilidade — sem
+            deslocamento, sem fila de espera e por um preço acessível, com ótimo custo-benefício.
+          </p>
+          <p className="text-slate-500 mt-3 text-lg leading-relaxed">
             Somos um <strong className="text-slate-700">marketplace de agendamentos</strong> que conecta
             pacientes a médicos parceiros: você encontra o profissional, escolhe o horário e realiza o
             pagamento pela plataforma, tudo em poucos cliques.

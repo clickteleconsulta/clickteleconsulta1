@@ -315,7 +315,8 @@ const HomePage = () => {
               Por que Click Teleconsulta?
             </h2>
             <p className="font-body mt-3 text-slate-500 max-w-lg mx-auto">
-              Tecnologia e cuidado médico unidos para a melhor experiência em telemedicina
+              Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a
+              distância, atendimento com agilidade — sem deslocamento, sem fila e com preço acessível.
             </p>
           </motion.div>
 
