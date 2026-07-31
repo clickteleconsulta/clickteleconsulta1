@@ -70,11 +70,6 @@ const HeroIllustration = ({ className = '' }) => (
       <path d="M280 262q2.5 5-1.5 7" stroke="#d99a6c" strokeWidth="1.6" fill="none" strokeLinecap="round" />
       {/* smile */}
       <path d="M271 274q9 7 18 0" stroke="#c67d54" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      {/* stethoscope */}
-      <path d="M266 300C262 314 265 326 280 330" stroke="#1e40af" strokeWidth="4" fill="none" strokeLinecap="round" />
-      <path d="M294 300C298 313 296 325 282 330" stroke="#1e40af" strokeWidth="4" fill="none" strokeLinecap="round" />
-      <circle cx="281" cy="330" r="7" fill="#1e40af" />
-      <circle cx="281" cy="330" r="3.2" fill="#3b82f6" />
     </g>
 
     {/* Call bar */}
