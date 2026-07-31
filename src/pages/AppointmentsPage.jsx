@@ -400,8 +400,8 @@ const AppointmentsPage = () => {
         <link rel="canonical" href="https://clickteleconsulta.online/agendamentos" />
       </Helmet>
 
-      {/* Fundo de página cinza (full-bleed dentro do container) */}
-      <div className="-mx-4 -my-8 bg-slate-100 min-h-[calc(100vh-4rem)]">
+      {/* Fundo de página cinza full-bleed (ocupa a largura toda; barra de busca vai de ponta a ponta) */}
+      <div className="mx-[calc(50%-50vw)] w-screen -my-8 bg-slate-100 min-h-[calc(100vh-4rem)]">
         {/* Título da página — sempre visível no topo (inclusive no mobile) */}
         <div className="container mx-auto px-4 pt-5 pb-2">
           <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Agendar Consulta</h1>
