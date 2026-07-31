@@ -4,7 +4,7 @@ import { useLocation, useNavigate, Link, useSearchParams } from 'react-router-do
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Helmet } from 'react-helmet';
-import { Loader2, CheckCircle, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock } from 'lucide-react';
+import { Loader2, CheckCircle, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -23,7 +23,7 @@ import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedi
 import TelemedicineStatusIndicator from '@/components/telemedicine/TelemedicineStatusIndicator';
 import TelemedicineLogsTable from '@/components/telemedicine/TelemedicineLogsTable';
 
-const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
+const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
 
 const AppointmentConfirmationPage = () => {
   const location = useLocation();
@@ -109,7 +109,7 @@ const AppointmentConfirmationPage = () => {
             .from('agendamentos')
             .select(`
             *,
-            medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number),
+            medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions),
             guia:guia_id(*),
             patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)
             `)
@@ -142,7 +142,7 @@ const AppointmentConfirmationPage = () => {
       }, async (payload) => {
           const { data } = await supabase
             .from('agendamentos')
-            .select('*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)')
+            .select('*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)')
             .eq('id', appointmentId)
             .single();
           if (data) setAppointment(data);
@@ -307,6 +307,19 @@ const AppointmentConfirmationPage = () => {
                       O médico entrará em contato <strong>até 15 minutos antes</strong> do horário para conduzir o atendimento pelos meios próprios dele.
                       Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>, siga as orientações do médico e tenha uma ótima consulta.
                     </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Instruções do médico ao paciente (cadastradas no procedimento) — só após pagamento confirmado */}
+            {isPaid && !isDoctor && medico?.instructions && medico.instructions.trim() && (
+              <Card className="border-l-4 border-l-primary shadow-md bg-blue-50/30">
+                <CardContent className="py-6 flex items-start gap-3">
+                  <ClipboardList className="w-7 h-7 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-bold text-blue-900 text-lg">Instruções do médico para a sua consulta</h3>
+                    <p className="text-sm text-gray-700 mt-1.5 leading-relaxed whitespace-pre-line">{medico.instructions}</p>
                   </div>
                 </CardContent>
               </Card>
