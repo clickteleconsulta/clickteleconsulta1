@@ -20,7 +20,7 @@ import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
 import { Skeleton } from './ui/skeleton';
 
-// Selo de médico verificado — desenho próprio (escudo + check) no gradiente da marca.
+// Selo de médico verificado — desenho próprio: círculo + check no gradiente da marca.
 // Não usar roseta/estrela azul: a forma é fortemente associada ao selo do Instagram/Meta,
 // cuja política de marcas veda sinais confusamente similares.
 const VerifiedSeal = ({ className }) => (
@@ -32,8 +32,8 @@ const VerifiedSeal = ({ className }) => (
         <stop offset="100%" stopColor="#14b8a6" />
       </linearGradient>
     </defs>
-    <path d="M12 2.2 20.4 5.4 V11.2 c0 5.3-3.5 9.2-8.4 10.6 C7.1 20.4 3.6 16.5 3.6 11.2 V5.4 Z" fill="url(#ctSeloGrad)" />
-    <path d="M8.3 12.2 l2.6 2.6 4.9-5.2" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="12" cy="12" r="10" fill="url(#ctSeloGrad)" />
+    <path d="M7.8 12.4 l2.8 2.8 5.4-5.8" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
