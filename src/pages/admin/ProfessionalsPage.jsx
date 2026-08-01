@@ -11,7 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil } from 'lucide-react';
+import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil, FileDown } from 'lucide-react';
+import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
@@ -56,6 +57,23 @@ const ProfessionalsPage = () => {
   const [editTarget, setEditTarget] = useState(null);
   const [editForm, setEditForm] = useState({ name: '', public_name: '', specialty: '', crm: '', uf: '', phone_number: '' });
   const [isSavingEdit, setIsSavingEdit] = useState(false);
+
+  const handleExport = () => {
+    downloadCsv(`profissionais_${csvDateSuffix()}`, [
+      { header: 'Nome', value: (d) => d.name || '' },
+      { header: 'Nome público', value: (d) => d.public_name || '' },
+      { header: 'Especialidade', value: (d) => d.specialty || '' },
+      { header: 'CRM', value: (d) => d.crm || '' },
+      { header: 'UF', value: (d) => d.uf || '' },
+      { header: 'E-mail', value: (d) => d.email || '' },
+      { header: 'Telefone', value: (d) => d.phone_number || '' },
+      { header: 'Taxa (%)', value: (d) => (d.taxa_percent == null ? '' : brNumber(d.taxa_percent)) },
+      { header: 'Preço consulta', value: (d) => (proceduresPrices[d.id] == null ? '' : brNumber(proceduresPrices[d.id])) },
+      { header: 'Ativo', value: (d) => (d.is_active ? 'Sim' : 'Não') },
+      { header: 'Visível', value: (d) => (d.is_public ? 'Sim' : 'Não') },
+      { header: 'Cadastrado em', value: (d) => (d.created_at ? new Date(d.created_at).toLocaleDateString('pt-BR') : '') },
+    ], filteredDoctors);
+  };
 
   const openEditModal = (doc) => {
     setEditTarget(doc);
@@ -471,17 +489,21 @@ const ProfessionalsPage = () => {
         <TabsContent value="lista" className="mt-4">
       <Card>
         <CardHeader>
-          <CardTitle>Lista de Médicos</CardTitle>
-          <div className="flex w-full max-w-sm items-center space-x-2">
-            <Input 
-              placeholder="Buscar por nome ou CRM..." 
-              className="h-8 w-[250px]" 
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <CardTitle>Lista de Médicos</CardTitle>
+            <Button variant="outline" size="sm" onClick={handleExport} disabled={filteredDoctors.length === 0} className="gap-2">
+              <FileDown className="w-4 h-4" /> Exportar CSV
+            </Button>
+          </div>
+          {/* Busca é reativa (filtra ao digitar) — o antigo botão de lupa não fazia nada. */}
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <Input
+              placeholder="Buscar por nome ou CRM..."
+              className="h-9 pl-9"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button variant="secondary" size="sm">
-              <Search className="w-4 h-4" />
-            </Button>
           </div>
         </CardHeader>
         <CardContent>

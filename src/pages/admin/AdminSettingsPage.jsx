@@ -44,6 +44,8 @@ const PlatformRules = () => {
     const [saving, setSaving] = useState(false);
     const [rowId, setRowId] = useState(null);
     const [r, setR] = useState(DEFAULTS);
+    // Taxa atualmente salva, para confirmar antes de alterá-la (afeta novos cadastros).
+    const [savedFee, setSavedFee] = useState(DEFAULTS.default_fee_percent);
 
     useEffect(() => {
         (async () => {
@@ -51,7 +53,9 @@ const PlatformRules = () => {
                 const { data } = await supabase.from('configuracoes_site').select('id, settings').limit(1).maybeSingle();
                 if (data) {
                     setRowId(data.id);
-                    setR({ ...DEFAULTS, ...(data.settings?.platform_rules || {}) });
+                    const regras = { ...DEFAULTS, ...(data.settings?.platform_rules || {}) };
+                    setR(regras);
+                    setSavedFee(Number(regras.default_fee_percent));
                 }
             } catch (err) {
                 toast({ variant: 'destructive', title: 'Erro ao carregar', description: err.message });
@@ -67,6 +71,36 @@ const PlatformRules = () => {
         // Normaliza para número e valida
         const rules = {};
         Object.keys(DEFAULTS).forEach((k) => { rules[k] = Number(r[k]); });
+
+        // Sem validação, dava para salvar taxa de 150% ou negativa, e uma política de
+        // reembolso incoerente (janela parcial maior que a integral).
+        const invalido = Object.entries(rules).find(([, v]) => !Number.isFinite(v) || v < 0);
+        if (invalido) {
+            toast({ variant: 'destructive', title: 'Valor inválido', description: 'Os campos não podem ficar vazios nem negativos.' });
+            return;
+        }
+        if (rules.default_fee_percent > 100 || rules.refund_partial_pct > 100) {
+            toast({ variant: 'destructive', title: 'Percentual inválido', description: 'Taxa e percentual de reembolso não podem passar de 100%.' });
+            return;
+        }
+        if (rules.refund_partial_hours > rules.refund_full_hours) {
+            toast({
+                variant: 'destructive',
+                title: 'Política incoerente',
+                description: 'A janela de reembolso parcial não pode ser maior que a do reembolso integral.',
+            });
+            return;
+        }
+        if (rules.default_repasse <= 0) {
+            toast({ variant: 'destructive', title: 'Valor inválido', description: 'O repasse sugerido deve ser maior que zero.' });
+            return;
+        }
+        // A taxa vale para todos os novos cadastros — confirma antes de alterar.
+        if (rules.default_fee_percent !== Number(savedFee) &&
+            !window.confirm(`Alterar a taxa padrão da plataforma de ${savedFee}% para ${rules.default_fee_percent}%?\n\nIsso afeta os novos cadastros de profissionais.`)) {
+            return;
+        }
+
         setSaving(true);
         try {
             const { data: current } = await supabase.from('configuracoes_site').select('id, settings').limit(1).maybeSingle();
@@ -79,6 +113,7 @@ const PlatformRules = () => {
                 ({ error } = await supabase.from('configuracoes_site').insert({ settings: newSettings }));
             }
             if (error) throw error;
+            setSavedFee(rules.default_fee_percent);
             toast({ title: 'Configurações salvas!', description: 'As novas regras já valem para o sistema.', variant: 'success' });
         } catch (err) {
             toast({ variant: 'destructive', title: 'Erro ao salvar', description: err.message });

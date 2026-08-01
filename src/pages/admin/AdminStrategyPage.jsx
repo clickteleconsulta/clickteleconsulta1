@@ -88,7 +88,47 @@ const computeDerived = (raw, period) => {
     pagos.forEach(a => { if (a.patient_id) porPaciente[a.patient_id] = (porPaciente[a.patient_id] || 0) + 1; });
     const recorrentes = Object.values(porPaciente).filter(n => n > 1).length;
 
+    // Repasse ainda não vinculado a um saque — quanto a plataforma ainda deve aos médicos.
+    const repassePendente = pagos
+        .filter(a => !a.saque_id)
+        .reduce((s, a) => {
+            const valor = (a.price_in_cents || 0) / 100;
+            return s + (valor - valor * ((Number(a.taxa_percent_snapshot) || 0) / 100));
+        }, 0);
+
+    // No-show: percentual sobre o que era para ter sido atendido (atendidos + faltas).
+    const faltas = appts.filter(a => a.status === 'nao_compareceu').length;
+    const baseComparecimento = atendidos.length + faltas;
+    const noShowPct = pct(faltas, baseComparecimento);
+
+    // Ranking de médicos por receita paga no período.
+    const porMedico = {};
+    pagos.forEach(a => {
+        if (!a.medico_id) return;
+        const valor = (a.price_in_cents || 0) / 100;
+        const m = porMedico[a.medico_id] || (porMedico[a.medico_id] = { receita: 0, consultas: 0 });
+        m.receita += valor;
+        m.consultas += 1;
+    });
+    const topMedicos = Object.entries(porMedico)
+        .map(([id, v]) => ({ id, nome: (raw.medicoNomes || {})[id] || 'Profissional', ...v }))
+        .sort((a, b) => b.receita - a.receita)
+        .slice(0, 5);
+
+    // Receita por mês (competência), para ver evolução em vez de um número único.
+    const porMes = {};
+    pagos.forEach(a => {
+        if (!a.created_at) return;
+        const chave = String(a.created_at).slice(0, 7); // YYYY-MM
+        porMes[chave] = (porMes[chave] || 0) + (a.price_in_cents || 0) / 100;
+    });
+    const serieMensal = Object.entries(porMes)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .slice(-6)
+        .map(([mes, receita]) => ({ mes, receita }));
+
     return {
+        repassePendente, faltas, noShowPct, topMedicos, serieMensal,
         // base (cumulativa)
         pacientes: raw.pacientes, medicosPublicos: raw.medicosPublicos, comAgenda: raw.comAgenda,
         medicosTotal: raw.medicosTotal, notaMedia: raw.notaMedia, nAval: raw.nAval,
@@ -179,9 +219,9 @@ const AdminStrategyPage = () => {
         try {
             const [pacientesRes, medicos, agenda, appts, avaliacoes] = await Promise.all([
                 supabase.from('perfis_usuarios').select('id', { count: 'exact', head: true }).eq('role', 'paciente'),
-                fetchAllRows('medicos', 'id, is_public, is_active, status'),
+                fetchAllRows('medicos', 'id, is_public, is_active, status, name, public_name'),
                 fetchAllRows('agenda_medico', 'medico_id'),
-                fetchAllRows('agendamentos', 'status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id, refund_percent, valor_estornado, created_at, appointment_date, protocolo'),
+                fetchAllRows('agendamentos', 'status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, medico_id, saque_id, refund_percent, valor_estornado, created_at, appointment_date, protocolo'),
                 fetchAllRows('avaliacoes', 'rating'),
             ]);
 
@@ -196,6 +236,7 @@ const AdminStrategyPage = () => {
                 medicosPublicos, comAgenda, medicosTotal: medicos.length,
                 notaMedia, nAval: ratings.length,
                 appts,
+                medicoNomes: Object.fromEntries(medicos.map((m) => [m.id, m.public_name || m.name || 'Sem nome'])),
             });
             setUpdatedAt(new Date());
         } catch (err) {
@@ -331,7 +372,32 @@ const AdminStrategyPage = () => {
                     <Kpi icon={TrendingUp} label="Receita da plataforma" value={fmtBRL(m.receitaPlataforma)} note="taxa retida (congelada)" tone="brand" />
                     <Kpi icon={Wallet} label="Repasse aos médicos" value={fmtBRL(m.repasse)} tone="teal" />
                     <Kpi icon={Landmark} label="Ticket médio" value={fmtBRL(m.ticket)} note="por consulta paga" />
+                    <Kpi icon={Wallet} label="Repasse pendente" value={fmtBRL(m.repassePendente)} note="ainda não incluído em saque" tone="amber" />
                 </div>
+
+                {/* Evolução mensal — antes só existia um número único por recorte */}
+                {m.serieMensal.length > 1 && (
+                    <div className="mt-4 rounded-xl border bg-white p-4">
+                        <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Receita paga por mês</p>
+                        <div className="flex items-end gap-3 h-28">
+                            {m.serieMensal.map((p) => {
+                                const maxV = Math.max(...m.serieMensal.map((x) => x.receita)) || 1;
+                                const [ano, mes] = p.mes.split('-');
+                                return (
+                                    <div key={p.mes} className="flex-1 flex flex-col items-center justify-end gap-1.5 h-full">
+                                        <span className="text-[11px] font-semibold text-gray-700 tabular-nums">{fmtBRL(p.receita)}</span>
+                                        <div
+                                            className="w-full rounded-t-md bg-gradient-to-t from-blue-600 to-sky-400 min-h-[4px]"
+                                            style={{ height: `${Math.max(4, (p.receita / maxV) * 100)}%` }}
+                                            title={`${mes}/${ano}: ${fmtBRL(p.receita)}`}
+                                        />
+                                        <span className="text-[10px] text-gray-400 tabular-nums">{mes}/{ano.slice(2)}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Qualidade */}
@@ -341,9 +407,33 @@ const AdminStrategyPage = () => {
                     <Kpi icon={CalendarCheck} label="Consultas atendidas" value={m.atendidos} tone="green" />
                     <Kpi icon={XCircle} label="Cancelamentos" value={m.cancelados} note={`${pct(m.cancelados, m.total)}% do total`} tone="red" />
                     <Kpi icon={RotateCcw} label="Reembolsos" value={m.reembolsados} note={fmtBRL(m.reembolsoValor)} tone="amber" />
+                    <Kpi icon={XCircle} label="Não comparecimento" value={m.faltas} note={`${m.noShowPct}% dos que deveriam ser atendidos`} tone="amber" />
                     <Kpi icon={Landmark} label="Resultado da plataforma" value={fmtBRL(m.receitaPlataforma - m.reembolsoValor)} note="receita − reembolsos" tone="brand" />
                 </div>
             </div>
+
+            {/* Ranking de médicos por faturamento */}
+            {m.topMedicos.length > 0 && (
+                <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Profissionais que mais faturam · {periodLabel}</p>
+                    <div className="rounded-xl border bg-white divide-y">
+                        {m.topMedicos.map((d, i) => (
+                            <div key={d.id} className="flex items-center gap-3 px-4 py-3">
+                                <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center shrink-0">
+                                    {i + 1}
+                                </span>
+                                <span className="flex-1 font-medium text-slate-800 truncate">{d.nome}</span>
+                                <span className="text-xs text-slate-400 tabular-nums whitespace-nowrap">
+                                    {d.consultas} {d.consultas === 1 ? 'consulta' : 'consultas'}
+                                </span>
+                                <span className="font-bold text-slate-900 tabular-nums whitespace-nowrap w-24 text-right">
+                                    {fmtBRL(d.receita)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Aguardando analytics */}
             <Card className="bg-blue-50/50 border-blue-100">

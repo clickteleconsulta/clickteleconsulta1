@@ -93,7 +93,6 @@ const AdminPatientsPage = () => {
                     <CardTitle>Lista de Pacientes</CardTitle>
                     <div className="flex w-full max-w-sm items-center space-x-2">
                         <Input placeholder="Buscar por nome, email ou CPF..." className="h-9" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                        <Button variant="secondary" size="sm" className="h-9"><Search className="w-4 h-4" /></Button>
                     </div>
                 </CardHeader>
                 <CardContent>
