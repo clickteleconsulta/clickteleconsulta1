@@ -280,8 +280,19 @@ const AppointmentsControlPage = () => {
     }
   };
 
+  // Guias pagas/reembolsadas são registro financeiro — não podem ser apagadas (imutabilidade).
+  const isFinancialRecord = (a) => a?.pagamento_status === 'pago' || a?.pagamento_status === 'reembolsado';
+
   const handleDelete = async () => {
     if (!selectedAppointment) return;
+    if (isFinancialRecord(selectedAppointment)) {
+      toast({
+        variant: 'destructive',
+        title: 'Exclusão bloqueada',
+        description: 'Agendamentos pagos são registro financeiro e não podem ser excluídos. Use "Cancelar".',
+      });
+      return;
+    }
     setProcessing(true);
     try {
       await supabase.from('agendamentos').update({ guia_id: null }).eq('id', selectedAppointment.id);
@@ -827,10 +838,22 @@ const AppointmentsControlPage = () => {
              <DialogTitle className="text-amber-600 flex items-center gap-2">
                <Ban className="w-5 h-5"/> Cancelar Agendamento
              </DialogTitle>
-             <DialogDescription>
-               Você tem certeza que deseja cancelar este agendamento?
-               <br/><br/>
-               <span className="font-semibold text-gray-900">O paciente será notificado sobre o cancelamento.</span>
+             <DialogDescription asChild>
+               <div className="space-y-3">
+                 <p>Você tem certeza que deseja cancelar este agendamento?</p>
+                 <p className="font-semibold text-gray-900">O paciente será notificado por e-mail sobre o cancelamento.</p>
+
+                 {selectedAppointment?.pagamento_status === 'pago' && (
+                   <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                     <span>
+                       Este agendamento está <strong>pago</strong>. O cancelamento <strong>não estorna o
+                       valor automaticamente</strong> — faça o estorno em <strong>Reembolsos</strong>, onde a
+                       política de cancelamento (2h/100%) é aplicada.
+                     </span>
+                   </div>
+                 )}
+               </div>
              </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -850,20 +873,35 @@ const AppointmentsControlPage = () => {
              <DialogTitle className="text-red-600 flex items-center gap-2">
                <Trash2 className="w-5 h-5"/> Excluir Agendamento
              </DialogTitle>
-             <DialogDescription>
-               Você tem certeza que deseja excluir permanentemente este registro?
-               <br/><br/>
-               <span className="font-semibold text-gray-900">Esta ação não pode ser desfeita.</span>
-               <br/>
-               Para apenas cancelar e manter o histórico, use a opção "Cancelar".
+             <DialogDescription asChild>
+               <div className="space-y-3">
+                 {isFinancialRecord(selectedAppointment) ? (
+                   <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-900">
+                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                     <span>
+                       Este agendamento está <strong>{selectedAppointment?.pagamento_status === 'pago' ? 'pago' : 'reembolsado'}</strong> e
+                       constitui <strong>registro financeiro</strong> — não pode ser excluído, para manter a
+                       contabilidade e a auditoria íntegras. Use <strong>"Cancelar"</strong>, que preserva o histórico.
+                     </span>
+                   </div>
+                 ) : (
+                   <>
+                     <p>Você tem certeza que deseja excluir permanentemente este registro?</p>
+                     <p><span className="font-semibold text-gray-900">Esta ação não pode ser desfeita.</span></p>
+                     <p>Para apenas cancelar e manter o histórico, use a opção "Cancelar".</p>
+                   </>
+                 )}
+               </div>
              </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Voltar</Button>
-            <Button variant="destructive" onClick={handleDelete} disabled={processing}>
-               {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-               Confirmar Exclusão
-            </Button>
+            {!isFinancialRecord(selectedAppointment) && (
+              <Button variant="destructive" onClick={handleDelete} disabled={processing}>
+                 {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                 Confirmar Exclusão
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

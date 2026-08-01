@@ -18,6 +18,19 @@ import {
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const pct = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
+// O PostgREST devolve no máximo 1.000 linhas por requisição. Sem paginar, as métricas
+// passariam a truncar silenciosamente (faturamento/ticket médio errados) quando a base crescer.
+const PAGE_SIZE = 1000;
+const fetchAllRows = async (table, columns) => {
+    const rows = [];
+    for (let from = 0; ; from += PAGE_SIZE) {
+        const { data, error } = await supabase.from(table).select(columns).range(from, from + PAGE_SIZE - 1);
+        if (error) throw error;
+        rows.push(...(data || []));
+        if (!data || data.length < PAGE_SIZE) return rows;
+    }
+};
+
 const PERIODS = [
     { v: '7', label: 'Últimos 7 dias' },
     { v: '30', label: 'Últimos 30 dias' },
@@ -164,26 +177,25 @@ const AdminStrategyPage = () => {
     const fetchMetrics = useCallback(async () => {
         setLoading(true);
         try {
-            const [pacientesRes, medicosRes, agendaRes, apptRes, avalRes] = await Promise.all([
+            const [pacientesRes, medicos, agenda, appts, avaliacoes] = await Promise.all([
                 supabase.from('perfis_usuarios').select('id', { count: 'exact', head: true }).eq('role', 'paciente'),
-                supabase.from('medicos').select('id, is_public, is_active, status'),
-                supabase.from('agenda_medico').select('medico_id'),
-                supabase.from('agendamentos').select('status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id, refund_percent, valor_estornado, created_at, appointment_date, protocolo'),
-                supabase.from('avaliacoes').select('rating'),
+                fetchAllRows('medicos', 'id, is_public, is_active, status'),
+                fetchAllRows('agenda_medico', 'medico_id'),
+                fetchAllRows('agendamentos', 'status, pagamento_status, price_in_cents, taxa_percent_snapshot, patient_id, saque_id, refund_percent, valor_estornado, created_at, appointment_date, protocolo'),
+                fetchAllRows('avaliacoes', 'rating'),
             ]);
 
-            const medicos = medicosRes.data || [];
             const medicosPublicos = medicos.filter(d => d.is_public && d.is_active && d.status === 'ativo').length;
-            const comAgenda = new Set((agendaRes.data || []).map(a => a.medico_id)).size;
+            const comAgenda = new Set(agenda.map(a => a.medico_id)).size;
 
-            const ratings = (avalRes.data || []).map(r => r.rating).filter(Boolean);
+            const ratings = avaliacoes.map(r => r.rating).filter(Boolean);
             const notaMedia = ratings.length ? ratings.reduce((s, r) => s + r, 0) / ratings.length : 0;
 
             setRaw({
                 pacientes: pacientesRes.count || 0,
                 medicosPublicos, comAgenda, medicosTotal: medicos.length,
                 notaMedia, nAval: ratings.length,
-                appts: apptRes.data || [],
+                appts,
             });
             setUpdatedAt(new Date());
         } catch (err) {

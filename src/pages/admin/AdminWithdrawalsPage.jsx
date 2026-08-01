@@ -4,12 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw, FileDown } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw, FileDown, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { format, parseISO } from 'date-fns';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const AdminWithdrawalsPage = () => {
     const [withdrawals, setWithdrawals] = useState([]);
@@ -20,6 +22,9 @@ const AdminWithdrawalsPage = () => {
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [saqueGuias, setSaqueGuias] = useState([]);
     const [guiasLoading, setGuiasLoading] = useState(false);
+    // Confirmação do repasse: exige conferência do valor e registro do comprovante.
+    const [payTarget, setPayTarget] = useState(null);
+    const [comprovante, setComprovante] = useState('');
 
     const fmt = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     // Repasse e taxa de uma guia, usando a taxa CONGELADA no pagamento (imutável).
@@ -65,13 +70,22 @@ const AdminWithdrawalsPage = () => {
         }
     };
 
-    const handleUpdateStatus = async (id, newStatus) => {
+    const handleUpdateStatus = async (id, newStatus, proof = null) => {
         setProcessing(true);
         try {
             const updates = {
                 status: newStatus,
                 data_processamento: newStatus !== 'Aguardando Recebimento' ? new Date().toISOString() : null
             };
+
+            // Registra o comprovante junto ao saque (rastreabilidade da transferência).
+            if (proof) {
+                const alvo = withdrawals.find((w) => w.id === id);
+                updates.dados_saque_json = {
+                    ...(alvo?.dados_saque_json || {}),
+                    comprovante: { referencia: proof, registrado_em: new Date().toISOString() },
+                };
+            }
 
             const { error } = await supabase
                 .from('saques')
@@ -204,10 +218,10 @@ const AdminWithdrawalsPage = () => {
                                                     <FileText className="w-4 h-4 mr-1" /> Detalhes
                                                 </Button>
                                                 {w.status === 'Aguardando Recebimento' && (
-                                                    <Button 
-                                                        size="sm" 
+                                                    <Button
+                                                        size="sm"
                                                         className="bg-green-600 hover:bg-green-700 text-white"
-                                                        onClick={() => handleUpdateStatus(w.id, 'Recebido')}
+                                                        onClick={() => { setPayTarget(w); setComprovante(''); }}
                                                         disabled={processing}
                                                     >
                                                         <Banknote className="w-4 h-4 mr-1" /> Pagar
@@ -222,6 +236,70 @@ const AdminWithdrawalsPage = () => {
                     </Table>
                 </CardContent>
             </Card>
+
+            {/* Confirmação do repasse — ação de dinheiro, irreversível pela tela */}
+            <Dialog open={!!payTarget} onOpenChange={(o) => !o && setPayTarget(null)}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Confirmar repasse</DialogTitle>
+                        <DialogDescription>
+                            Confirme apenas depois de efetuar a transferência. Esta ação dá baixa nas guias
+                            e <strong>não pode ser desfeita por esta tela</strong>.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {payTarget && (
+                        <div className="py-2 space-y-4">
+                            <div className="rounded-lg border bg-gray-50 p-4 space-y-1">
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-500">Beneficiário</span>
+                                    <span className="font-medium">{payTarget.medicos?.name || '—'}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-500">Método</span>
+                                    <span className="font-medium uppercase">{payTarget.metodo_pagamento}</span>
+                                </div>
+                                <div className="flex justify-between items-baseline pt-1">
+                                    <span className="text-gray-500 text-sm">Valor</span>
+                                    <span className="text-2xl font-bold text-green-700">{fmt(payTarget.valor)}</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <Label htmlFor="comprovante">Comprovante / ID da transferência</Label>
+                                <Input
+                                    id="comprovante"
+                                    value={comprovante}
+                                    onChange={(e) => setComprovante(e.target.value)}
+                                    placeholder="Ex.: E12345678202607311230 (E2E do Pix)"
+                                    autoComplete="off"
+                                />
+                                <p className="text-xs text-gray-500">
+                                    Fica registrado no saque para conferência contábil.
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setPayTarget(null)} disabled={processing}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            disabled={processing || !comprovante.trim()}
+                            onClick={async () => {
+                                const alvo = payTarget;
+                                setPayTarget(null);
+                                await handleUpdateStatus(alvo.id, 'Recebido', comprovante.trim());
+                            }}
+                        >
+                            {processing ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Banknote className="w-4 h-4 mr-1" />}
+                            Confirmar repasse
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
                 <DialogContent>
@@ -252,21 +330,49 @@ const AdminWithdrawalsPage = () => {
                                     {selectedWithdrawal.metodo_pagamento === 'pix' ? (
                                         <>
                                             <span className="text-gray-500">Chave PIX:</span>
-                                            <span className="font-bold text-right text-blue-600">{selectedWithdrawal.dados_saque_json.pix_key}</span>
+                                            <span className="font-bold text-right text-blue-600">
+                                                {selectedWithdrawal.dados_saque_json?.pix_key || <span className="text-red-600 font-semibold">Não informada</span>}
+                                            </span>
                                         </>
                                     ) : (
                                         <>
                                             <span className="text-gray-500">Banco:</span>
-                                            <span className="font-medium text-right">{selectedWithdrawal.dados_saque_json.bank_name}</span>
-                                            
+                                            <span className="font-medium text-right">{selectedWithdrawal.dados_saque_json?.bank_name || '—'}</span>
+
                                             <span className="text-gray-500">Agência:</span>
-                                            <span className="font-medium text-right">{selectedWithdrawal.dados_saque_json.bank_agency}</span>
-                                            
+                                            <span className="font-medium text-right">{selectedWithdrawal.dados_saque_json?.bank_agency || '—'}</span>
+
                                             <span className="text-gray-500">Conta:</span>
-                                            <span className="font-medium text-right">{selectedWithdrawal.dados_saque_json.bank_account}</span>
+                                            <span className="font-medium text-right">{selectedWithdrawal.dados_saque_json?.bank_account || '—'}</span>
                                         </>
                                     )}
                                 </div>
+
+                                {/* Comprovante registrado no momento do repasse */}
+                                {selectedWithdrawal.dados_saque_json?.comprovante?.referencia && (
+                                    <div className="rounded-lg border border-green-200 bg-green-50 p-3">
+                                        <p className="text-xs font-semibold uppercase tracking-wide text-green-800">Comprovante</p>
+                                        <p className="font-mono text-sm text-green-900 break-all mt-0.5">
+                                            {selectedWithdrawal.dados_saque_json.comprovante.referencia}
+                                        </p>
+                                        {selectedWithdrawal.dados_saque_json.comprovante.registrado_em && (
+                                            <p className="text-[11px] text-green-700 mt-1">
+                                                Registrado em {format(parseISO(selectedWithdrawal.dados_saque_json.comprovante.registrado_em), 'dd/MM/yyyy HH:mm')}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Sem dados bancários não há como transferir — avisa em vez de quebrar a tela */}
+                                {!selectedWithdrawal.dados_saque_json && (
+                                    <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                                        <span>
+                                            Este saque não tem dados bancários registrados. Peça ao profissional para
+                                            preencher os dados de recebimento antes de efetuar a transferência.
+                                        </span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Guias pagas neste saque, com repasse e taxa retida */}
