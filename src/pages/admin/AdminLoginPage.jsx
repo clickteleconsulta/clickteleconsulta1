@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { BRAND } from '@/config/brand';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
@@ -130,7 +131,7 @@ const AdminLoginPage = () => {
         <CardHeader className="space-y-1 text-center">
           <Link to="/" className="inline-flex items-center justify-center gap-2 mb-4">
             <Logo className="w-7 h-7" />
-            <span className="text-base font-bold text-white tracking-tight">Click Teleconsulta</span>
+            <span className="text-base font-bold text-white tracking-tight">{BRAND.name}</span>
           </Link>
           <div className="flex justify-center mb-4">
             <div className="p-3 rounded-full bg-slate-900 border border-slate-800">

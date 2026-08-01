@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import { Stethoscope, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
@@ -44,7 +45,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
 
                 <Link to="/" className="relative inline-flex items-center gap-2.5 w-fit">
                     <Logo className="w-10 h-10" />
-                    <span className="text-lg font-bold tracking-tight">Click Teleconsulta</span>
+                    <span className="text-lg font-bold tracking-tight">{BRAND.name}</span>
                 </Link>
 
                 <div className="relative space-y-5 max-w-sm">
@@ -78,7 +79,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
             <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-10 py-10 bg-white">
                 <Link to="/" className="lg:hidden inline-flex items-center gap-2 mb-6">
                     <Logo className="w-10 h-10" />
-                    <span className="text-lg font-bold text-slate-900 tracking-tight">Click Teleconsulta</span>
+                    <span className="text-lg font-bold text-slate-900 tracking-tight">{BRAND.name}</span>
                 </Link>
                 <div className="w-full max-w-[400px]">
                     {children}

@@ -1,13 +1,14 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 
-// Marca do Click Teleconsulta — SVG inline (sem dependência de CDN externo,
+// Marca do {BRAND.name} — SVG inline (sem dependência de CDN externo,
 // que antes quebrava o logo quando o Horizons CDN saiu do ar).
 const Logo = ({ className = 'w-10 h-10' }) => (
   <svg
     viewBox="0 0 48 48"
     className={className}
     role="img"
-    aria-label="Click Teleconsulta"
+    aria-label={BRAND.name}
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>

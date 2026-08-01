@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -44,13 +45,13 @@ const buildGoogleCalendarLink = (appointment) => {
       .replace(/\.\d{3}/, '');
 
   const title = encodeURIComponent(
-    `Teleconsulta — ${appointment.medico?.public_name || 'Click Teleconsulta'}`
+    `Teleconsulta — ${appointment.medico?.public_name || BRAND.name}`
   );
   const dates = `${formatGCal(startDate)}/${formatGCal(endDate)}`;
   const details = encodeURIComponent(
-    `Sua teleconsulta com ${appointment.medico?.public_name || 'o médico'} (${appointment.medico?.specialty || ''}) está confirmada.\n\nAcesse a plataforma 15 minutos antes do horário: https://clickteleconsulta.online/paciente/dashboard/consultas`
+    `Sua teleconsulta com ${appointment.medico?.public_name || 'o médico'} (${appointment.medico?.specialty || ''}) está confirmada.\n\nAcesse a plataforma 15 minutos antes do horário: ${BRAND.url}/paciente/dashboard/consultas`
   );
-  const location = encodeURIComponent('Teleconsulta Online — Click Teleconsulta');
+  const location = encodeURIComponent(`Teleconsulta Online — ${BRAND.name}`);
 
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
 };
@@ -199,7 +200,7 @@ const AppointmentSuccessPage = () => {
   return (
     <>
       <Helmet>
-        <title>Agendamento Concluído! — Click Teleconsulta</title>
+        <title>Agendamento Concluído! — {BRAND.name}</title>
       </Helmet>
 
       <motion.div

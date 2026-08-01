@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import { BRAND, LINHA_LEGAL } from '@/config/brand';
 
 // Gera a Guia de Agendamento em PDF no próprio navegador (sem depender do backend).
 // Recebe um objeto normalizado; campos ausentes são omitidos com segurança.
@@ -37,7 +38,7 @@ export function gerarGuiaPdf({
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
-  doc.text('Click Teleconsulta', tx, 46);
+  doc.text(BRAND.name, tx, 46);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.text('Guia de Agendamento de Teleconsulta', tx, 68);
@@ -85,7 +86,7 @@ export function gerarGuiaPdf({
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9.5);
   const nota = doc.splitTextToSize(
-    'A Click Teleconsulta é um marketplace de agendamentos: intermedia o agendamento e o pagamento entre paciente e médico. A teleconsulta e o ato médico são de responsabilidade exclusiva do profissional, que entrará em contato para realizar o atendimento pelos meios próprios, conforme as normas do CFM.',
+    `A ${BRAND.name} é um marketplace de agendamentos: intermedia o agendamento e o pagamento entre paciente e médico. A teleconsulta e o ato médico são de responsabilidade exclusiva do profissional, que entrará em contato para realizar o atendimento pelos meios próprios, conforme as normas do CFM.`,
     W - M * 2 - 28
   );
   doc.text(nota, M + 14, y + 24);
@@ -96,7 +97,7 @@ export function gerarGuiaPdf({
   doc.line(M, H - 70, W - M, H - 70);
   doc.setTextColor(148, 163, 184);
   doc.setFontSize(8);
-  doc.text('CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50 · clickteleconsulta.online', M, H - 52);
+  doc.text(`${LINHA_LEGAL} · ${BRAND.domain}`, M, H - 52);
   if (geradoEm) doc.text(`Emitida em ${geradoEm}`, M, H - 38);
 
   const nome = protocolo ? `guia-${String(protocolo).replace(/[^\w-]/g, '')}.pdf` : 'guia-agendamento.pdf';

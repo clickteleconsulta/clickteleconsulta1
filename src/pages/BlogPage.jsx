@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ARTICLES } from '@/content/siteContent';
@@ -9,9 +10,9 @@ const fmt = (d) => { try { return new Date(d + 'T00:00:00').toLocaleDateString('
 const BlogPage = () => (
   <>
     <Helmet>
-      <title>Blog · Click Teleconsulta — Saúde e teleconsulta</title>
-      <meta name="description" content="Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância. Conteúdo informativo da Click Teleconsulta." />
-      <link rel="canonical" href="https://clickteleconsulta.online/blog" />
+      <title>Blog · {BRAND.name} — Saúde e teleconsulta</title>
+      <meta name="description" content={`Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância. Conteúdo informativo da ${BRAND.name}.`} />
+      <link rel="canonical" href={`${BRAND.url}/blog`} />
     </Helmet>
 
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">

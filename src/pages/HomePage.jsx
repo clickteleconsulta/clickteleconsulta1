@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -82,7 +83,7 @@ const FEATURES = [
 // ─── FAQ ────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
   { q: 'O que é teleconsulta?', a: 'É o atendimento médico à distância, regulamentado pelo CFM. Você encontra o profissional e agenda pela plataforma; o próprio médico realiza a consulta pelos meios que utiliza, sem você precisar se deslocar.' },
-  { q: 'Preciso de convênio?', a: 'Não. O Click Teleconsulta funciona de forma particular. Você paga diretamente pela consulta com preços acessíveis, sem necessidade de convênio ou plano de saúde.' },
+  { q: 'Preciso de convênio?', a: `Não. O ${BRAND.name} funciona de forma particular. Você paga diretamente pela consulta com preços acessíveis, sem necessidade de convênio ou plano de saúde.` },
   { q: 'Como acontece o atendimento?', a: 'Após agendar e confirmar o pagamento, o médico entra em contato e conduz o atendimento pelos meios próprios dele (por exemplo telefone, vídeo ou a plataforma que utilizar), conforme as normas do CFM.' },
   { q: 'A prescrição é válida?', a: 'Sim. Quando necessária, a prescrição é emitida pelo próprio médico, com assinatura e validade legal conforme a regulamentação vigente. A plataforma cuida apenas do agendamento e do pagamento.' },
   { q: 'Como pago?', a: 'Aceitamos cartão de crédito, débito e PIX. O pagamento é processado de forma segura antes da consulta.' },
@@ -125,12 +126,12 @@ const HomePage = () => {
   return (
     <>
       <Helmet>
-        <title>Click Teleconsulta — Sua saúde a um clique de distância</title>
+        <title>{BRAND.name} — Sua saúde a um clique de distância</title>
         <meta
           name="description"
           content="Agende teleconsultas com profissionais de forma rápida e segura. Sem filas, sem deslocamento."
         />
-        <link rel="canonical" href="https://clickteleconsulta.online/" />
+        <link rel="canonical" href={`${BRAND.url}/`} />
         <link
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=DM+Sans:wght@400;500&display=swap"
           rel="stylesheet"
@@ -363,7 +364,7 @@ const HomePage = () => {
             className="text-center mb-14"
           >
             <h2 className="font-display text-3xl md:text-4xl font-extrabold text-slate-900">
-              Por que Click Teleconsulta?
+              Por que {BRAND.name}?
             </h2>
             <p className="font-body mt-3 text-slate-500 max-w-lg mx-auto">
               Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a

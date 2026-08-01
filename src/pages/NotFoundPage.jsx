@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,7 +8,7 @@ import { Home, CalendarCheck, Search } from 'lucide-react';
 const NotFoundPage = () => (
   <>
     <Helmet>
-      <title>Página não encontrada · Click Teleconsulta</title>
+      <title>{`Página não encontrada · ${BRAND.name}`}</title>
       <meta name="robots" content="noindex" />
     </Helmet>
 

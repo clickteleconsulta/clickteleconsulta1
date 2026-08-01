@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -387,7 +388,7 @@ const ConsultaEncerradaPage = () => {
   return (
     <>
       <Helmet>
-        <title>Consulta Encerrada — Click Teleconsulta</title>
+        <title>Consulta Encerrada — {BRAND.name}</title>
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 flex items-center justify-center p-4">
         <div className="w-full max-w-lg">

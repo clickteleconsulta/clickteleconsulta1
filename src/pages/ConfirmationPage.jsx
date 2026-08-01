@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -111,7 +112,7 @@ const ConfirmationPage = () => {
   return (
     <>
       <Helmet>
-        <title>Agendamento Confirmado! - Click Teleconsulta</title>
+        <title>{`Agendamento Confirmado! · ${BRAND.name}`}</title>
       </Helmet>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}

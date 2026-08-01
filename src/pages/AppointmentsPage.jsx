@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -395,9 +396,9 @@ const AppointmentsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Agendar Consulta - Click Teleconsulta</title>
+        <title>{`Agendar Consulta · ${BRAND.name}`}</title>
         <meta name="description" content="Encontre profissionais, veja horários e agende sua teleconsulta de forma rápida e segura." />
-        <link rel="canonical" href="https://clickteleconsulta.online/agendamentos" />
+        <link rel="canonical" href={`${BRAND.url}/agendamentos`} />
       </Helmet>
 
       {/* Fundo de página cinza full-bleed (ocupa a largura toda; barra de busca vai de ponta a ponta) */}

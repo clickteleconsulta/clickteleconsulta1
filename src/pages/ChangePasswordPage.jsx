@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { useForm } from 'react-hook-form';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
@@ -53,8 +54,8 @@ const ChangePasswordPage = () => {
     return (
         <>
             <Helmet>
-                <title>Alterar Senha - Click Teleconsulta</title>
-                <meta name="description" content="Altere sua senha de acesso à plataforma Click Teleconsulta." />
+                <title>{`Alterar Senha · ${BRAND.name}`}</title>
+                <meta name="description" content={`Altere sua senha de acesso à plataforma ${BRAND.name}.`} />
             </Helmet>
             <div className="w-full flex justify-center items-center">
                 <Card className="w-full max-w-lg">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -229,8 +230,8 @@ const DoctorSignUpPage = () => {
   return (
     <>
       <Helmet>
-        <title>Cadastro de Médico - Click Teleconsulta</title>
-        <meta name="description" content="Cadastre-se como médico parceiro na Click Teleconsulta e comece a atender pacientes por telemedicina." />
+        <title>{`Cadastro de Médico · ${BRAND.name}`}</title>
+        <meta name="description" content={`Cadastre-se como médico parceiro na ${BRAND.name} e comece a atender pacientes por telemedicina.`} />
       </Helmet>
       <div className="w-full flex justify-center items-start py-10 px-4">
         <div className="w-full max-w-2xl space-y-6">

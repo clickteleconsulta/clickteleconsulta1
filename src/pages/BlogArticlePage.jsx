@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import { ARTICLES, getArticle } from '@/content/siteContent';
 import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
 
 const fmt = (d) => { try { return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }); } catch { return d; } };
-const BASE = 'https://clickteleconsulta.online';
+const BASE = `${BRAND.url}`;
 
 const BlogArticlePage = () => {
   const { slug } = useParams();
@@ -19,15 +20,15 @@ const BlogArticlePage = () => {
     headline: article.title, description: article.description,
     datePublished: article.date, dateModified: article.date,
     image: `${BASE}/og-image.png`,
-    author: { '@type': 'Organization', name: 'Click Teleconsulta' },
-    publisher: { '@type': 'Organization', name: 'Click Teleconsulta', logo: { '@type': 'ImageObject', url: `${BASE}/og-image.png` } },
+    author: { '@type': 'Organization', name: BRAND.name },
+    publisher: { '@type': 'Organization', name: BRAND.name, logo: { '@type': 'ImageObject', url: `${BASE}/og-image.png` } },
     mainEntityOfPage: `${BASE}/blog/${article.slug}`,
   };
 
   return (
     <>
       <Helmet>
-        <title>{article.title} · Click Teleconsulta</title>
+        <title>{article.title} · {BRAND.name}</title>
         <meta name="description" content={article.description} />
         <link rel="canonical" href={`${BASE}/blog/${article.slug}`} />
         <meta property="og:type" content="article" />

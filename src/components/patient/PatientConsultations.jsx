@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { BRAND, EMPRESA } from '@/config/brand';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -133,12 +134,12 @@ const PatientConsultations = () => {
           @media print{body{padding:0} .wrap{border:none}}
         </style></head><body>
           <div class="wrap">
-            <div class="head"><h1>Comprovante de Pagamento</h1><p>Click Teleconsulta Online LTDA — CNPJ 68.171.336/0001-50</p></div>
+            <div class="head"><h1>Comprovante de Pagamento</h1><p>${EMPRESA.razaoSocial} — CNPJ ${EMPRESA.cnpj}</p></div>
             <div class="body">
               <span class="tag ${estornado ? 'rf' : 'ok'}">${estornado ? 'Estornada' : 'Pagamento confirmado'}</span>
               <table><tbody>${rows}</tbody></table>
             </div>
-            <div class="foot">Documento gerado eletronicamente por Click Teleconsulta Online LTDA. Pagamento processado pela Asaas. Emitido em ${esc(new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }))}.</div>
+            <div class="foot">Documento gerado eletronicamente por ${EMPRESA.razaoSocial}. Pagamento processado pela Asaas. Emitido em ${esc(new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }))}.</div>
           </div>
           <script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
         </body></html>`;

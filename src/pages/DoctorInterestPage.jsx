@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -64,7 +65,7 @@ const DoctorInterestPage = () => {
   };
   return <>
       <Helmet>
-        <title>Seja um Médico Parceiro - Click Teleconsulta</title>
+        <title>{`Seja um Médico Parceiro · ${BRAND.name}`}</title>
         <meta name="description" content="Junte-se à nossa plataforma e ofereça teleconsultas para pacientes de todo o Brasil." />
       </Helmet>
       <motion.div initial={{

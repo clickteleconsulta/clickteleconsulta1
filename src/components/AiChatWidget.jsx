@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,7 @@ import { cn } from '@/lib/utils';
 
 const INITIAL_MESSAGE = {
   id: 'welcome',
-  text: 'Olá! Sou o assistente virtual da Click Teleconsulta. Como posso ajudar você hoje?',
+  text: `Olá! Sou o assistente virtual da ${BRAND.name}. Como posso ajudar você hoje?`,
   sender: 'ai',
   timestamp: new Date()
 };
@@ -258,7 +259,7 @@ const AiChatWidget = () => {
       } else if (hasAnyToken(['ajuda', 'suporte', 'problema', 'erro'])) {
         responseText = 'Você pode entrar em contato com nosso suporte técnico através da página de "Suporte" no menu superior.';
       } else if (hasAnyToken(['ola', 'oi', 'bom', 'tarde', 'noite'])) {
-         responseText = 'Olá! Tudo bem? Estou aqui para tirar suas dúvidas sobre a plataforma Click Teleconsulta. Em que posso ajudar?';
+         responseText = `Olá! Tudo bem? Estou aqui para tirar suas dúvidas sobre a plataforma ${BRAND.name}. Em que posso ajudar?`;
       } else {
         responseText = 'Desculpe, não entendi muito bem sua pergunta. Tente usar palavras-chave mais específicas ou reformular a frase. Estou aprendendo a cada dia!';
       }

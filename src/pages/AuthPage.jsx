@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { BRAND } from '@/config/brand';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
@@ -242,7 +243,7 @@ const AuthPage = ({
   return (
     <>
       <Helmet>
-        <title>{isDoctor ? 'Acesso Profissional' : (isLogin ? 'Login' : 'Cadastro')} - Click Teleconsulta</title>
+        <title>{isDoctor ? 'Acesso Profissional' : (isLogin ? 'Login' : 'Cadastro')} - {BRAND.name}</title>
       </Helmet>
       
       <AuthLayout variant={isDoctor ? 'profissional' : 'cliente'}>

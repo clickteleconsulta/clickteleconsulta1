@@ -1,11 +1,12 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Mail, Phone, MessageSquare } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 const SupportPage = () => {
   return <>
             <Helmet>
-                <title>Suporte - Click Teleconsulta</title>
+                <title>{`Suporte · ${BRAND.name}`}</title>
             </Helmet>
             <div className="max-w-3xl mx-auto">
                 <div className="text-center mb-12">
@@ -22,7 +23,7 @@ const SupportPage = () => {
                         </CardHeader>
                         <CardContent>
                             <p className="text-muted-foreground">Envie-nos um e-mail com sua dúvida ou problema. Responderemos o mais breve possível.</p>
-                            <a href="mailto:suporte@clickteleconsulta.com" className="font-semibold text-primary mt-2 block">Email</a>
+                            <a href={`mailto:${BRAND.emails.suporte}`} className="font-semibold text-primary mt-2 block">Email</a>
                         </CardContent>
                     </Card>
                      <Card>

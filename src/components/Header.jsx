@@ -4,6 +4,7 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { LogOut, CalendarDays, LayoutDashboard, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { BRAND } from '@/config/brand';
 
 const Header = () => {
   const { session, signOut, profile } = useAuth();
@@ -31,7 +32,7 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-2 group shrink-0">
             <Logo className="w-10 h-10 group-hover:scale-105 transition-transform" />
             {/* No mobile mostramos só o logo, para dar espaço ao botão do meio */}
-            <span className="hidden sm:inline text-lg font-semibold text-gray-800 tracking-tight">Click Teleconsulta</span>
+            <span className="hidden sm:inline text-lg font-semibold text-gray-800 tracking-tight">{BRAND.name}</span>
           </Link>
 
           <div className="flex items-center gap-4">

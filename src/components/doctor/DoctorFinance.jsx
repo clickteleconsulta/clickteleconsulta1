@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -681,7 +682,7 @@ const DoctorFinance = () => {
 
                          <div className="text-[11px] text-blue-900 bg-blue-50 border border-blue-100 rounded-sm p-2.5">
                              <strong className="flex items-center gap-1.5 mb-1"><FileText className="w-3.5 h-3.5" /> Notas fiscais</strong>
-                             A Click Teleconsulta emite nota fiscal <strong>apenas da taxa de processamento</strong> dos agendamentos. Você é o responsável por emitir suas próprias notas fiscais referentes ao <strong>valor de repasse</strong> que recebe. A soma das duas corresponde ao <strong>valor total pago pelo paciente</strong>.
+                             A {BRAND.name} emite nota fiscal <strong>apenas da taxa de processamento</strong> dos agendamentos. Você é o responsável por emitir suas próprias notas fiscais referentes ao <strong>valor de repasse</strong> que recebe. A soma das duas corresponde ao <strong>valor total pago pelo paciente</strong>.
                          </div>
 
                          {paidTransactions.length === 0 ? (

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { BRAND } from '@/config/brand';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -33,7 +34,7 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
             <Video className="w-8 h-8 text-blue-400" />
           </div>
           <h1 className="text-2xl font-bold text-white">Sala de Teleconsulta</h1>
-          <p className="text-slate-400 text-sm mt-1">Click Teleconsulta</p>
+          <p className="text-slate-400 text-sm mt-1">{BRAND.name}</p>
         </div>
 
         {/* Card Principal */}
@@ -578,7 +579,7 @@ const VideoCallPage = () => {
   if (phase === 'waiting') {
     return (
       <>
-        <Helmet><title>Sala de Espera — Click Teleconsulta</title></Helmet>
+        <Helmet><title>Sala de Espera — {BRAND.name}</title></Helmet>
         <WaitingRoom
           appointment={appointment}
           userRole={userRole}
@@ -592,7 +593,7 @@ const VideoCallPage = () => {
   // ── Em Chamada ──
   return (
     <>
-      <Helmet><title>Teleconsulta em Andamento — Click Teleconsulta</title></Helmet>
+      <Helmet><title>Teleconsulta em Andamento — {BRAND.name}</title></Helmet>
 
       {showFiveMinAlert && (
         <FiveMinuteAlert onDismiss={() => setShowFiveMinAlert(false)} />

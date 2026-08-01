@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -255,7 +256,7 @@ const PatientArea = () => {
   return (
     <>
       <Helmet>
-        <title>Minha conta — Click Teleconsulta</title>
+        <title>Minha conta — {BRAND.name}</title>
       </Helmet>
       <div className="grid md:grid-cols-[280px_1fr] gap-8 items-start">
         {/* Sidebar */}

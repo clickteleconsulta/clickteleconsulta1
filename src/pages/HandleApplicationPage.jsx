@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
@@ -57,7 +58,7 @@ const HandleApplicationPage = () => {
     return (
         <>
             <Helmet>
-                <title>Processando Solicitação - Click Teleconsulta</title>
+                <title>{`Processando Solicitação · ${BRAND.name}`}</title>
             </Helmet>
             <div className="flex items-center justify-center min-h-[60vh]">
                 <Card className="w-full max-w-md text-center shadow-lg">

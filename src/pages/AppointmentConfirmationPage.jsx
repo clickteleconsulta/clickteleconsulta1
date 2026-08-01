@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { BRAND, EMPRESA } from '@/config/brand';
 import { useLocation, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -261,7 +262,7 @@ const AppointmentConfirmationPage = () => {
   return (
     <>
       <Helmet>
-        <title>Agendamento Confirmado - Click Teleconsulta</title>
+        <title>{`Agendamento Confirmado · ${BRAND.name}`}</title>
       </Helmet>
       
       <div className="max-w-4xl mx-auto py-8 px-4 relative">
@@ -438,7 +439,7 @@ const AppointmentConfirmationPage = () => {
                             <Logo className="w-12 h-12" />
                         </div>
                         <div className="text-white">
-                            <p className="text-2xl font-black tracking-tight leading-none">Click Teleconsulta</p>
+                            <p className="text-2xl font-black tracking-tight leading-none">{BRAND.name}</p>
                             <p className="text-white/85 text-sm mt-1">Marketplace de agendamento de consultas</p>
                         </div>
                     </div>
@@ -512,7 +513,7 @@ const AppointmentConfirmationPage = () => {
                     <div className="rounded-xl border border-gray-200 p-5">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Política de Cancelamento e Reembolso</h2>
                         <p className="text-[11px] text-gray-600 leading-relaxed">
-                            Cancelamento pelo paciente com <b>2h ou mais</b> de antecedência: reembolso <b>integral (100%)</b>, descontada a taxa de processamento. Com <b>menos de 2h</b>: reembolso de <b>50%</b> (retida a taxa por cancelamento tardio). Em caso de <b>não comparecimento</b> comprovado pelo médico: <b>sem reembolso</b>. Política completa nos Termos de Serviço em clickteleconsulta.online.
+                            Cancelamento pelo paciente com <b>2h ou mais</b> de antecedência: reembolso <b>integral (100%)</b>, descontada a taxa de processamento. Com <b>menos de 2h</b>: reembolso de <b>50%</b> (retida a taxa por cancelamento tardio). Em caso de <b>não comparecimento</b> comprovado pelo médico: <b>sem reembolso</b>. Política completa nos Termos de Serviço em {BRAND.domain}.
                         </p>
                     </div>
                 </div>
@@ -520,7 +521,7 @@ const AppointmentConfirmationPage = () => {
                 {/* Rodapé institucional */}
                 <div className="border-t border-gray-200 px-10 py-5 text-center">
                     <p className="text-xs font-bold text-gray-600">CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50</p>
-                    <p className="text-[11px] text-gray-400 mt-1">Coroaci/MG · clickteleconsulta.online · suporte@clickteleconsulta.online</p>
+                    <p className="text-[11px] text-gray-400 mt-1">{EMPRESA.cidadeUf} · {BRAND.domain} · {BRAND.emails.suporte}</p>
                     <p className="text-[10px] text-gray-400 mt-2">Documento gerado eletronicamente em {new Date().toLocaleString('pt-BR')}.</p>
                 </div>
             </div>

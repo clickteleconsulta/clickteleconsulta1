@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const BASE = 'https://clickteleconsulta.online';
+import { BRAND } from '../src/config/brand.js';
+const BASE = BRAND.url;
 // A anon key é pública (vai no bundle do cliente); só é usada como fallback local.
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://fnzvopspcoefzybtmwlg.supabase.co';
 const ANON = process.env.VITE_SUPABASE_ANON_KEY

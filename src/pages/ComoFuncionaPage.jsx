@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -18,15 +19,15 @@ const BENEFITS = [
 const ComoFuncionaPage = () => {
   const howto = {
     '@context': 'https://schema.org', '@type': 'HowTo',
-    name: 'Como agendar uma teleconsulta na Click Teleconsulta',
+    name: `Como agendar uma teleconsulta na ${BRAND.name}`,
     step: STEPS.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title.replace(/^\d+\.\s/, ''), text: s.text })),
   };
   return (
     <>
       <Helmet>
-        <title>Como funciona a teleconsulta · Click Teleconsulta</title>
+        <title>{`Como funciona a teleconsulta · ${BRAND.name}`}</title>
         <meta name="description" content="Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão." />
-        <link rel="canonical" href="https://clickteleconsulta.online/como-funciona" />
+        <link rel="canonical" href={`${BRAND.url}/como-funciona`} />
         <script type="application/ld+json">{JSON.stringify(howto)}</script>
       </Helmet>
 
@@ -34,7 +35,7 @@ const ComoFuncionaPage = () => {
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-600">Como funciona</span>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">Sua teleconsulta em 3 passos simples</h1>
-          <p className="text-slate-500 mt-3 text-lg leading-relaxed">Escolha um médico, agende e seja atendido online — sem sair de casa, sem fila e com preço acessível. Nosso propósito é democratizar o acesso à saúde para o que pode ser resolvido a distância, com agilidade. A Click Teleconsulta é um marketplace de agendamentos: cuidamos do agendamento e do pagamento; o atendimento é conduzido pelo próprio médico.</p>
+          <p className="text-slate-500 mt-3 text-lg leading-relaxed">Escolha um médico, agende e seja atendido online — sem sair de casa, sem fila e com preço acessível. Nosso propósito é democratizar o acesso à saúde para o que pode ser resolvido a distância, com agilidade. A {BRAND.name} é um marketplace de agendamentos: cuidamos do agendamento e do pagamento; o atendimento é conduzido pelo próprio médico.</p>
           <Button asChild className="mt-6 h-12 px-7 text-base rounded-xl"><Link to="/agendamentos">Agendar consulta <ArrowRight className="w-4 h-4 ml-2" /></Link></Button>
         </div>
 

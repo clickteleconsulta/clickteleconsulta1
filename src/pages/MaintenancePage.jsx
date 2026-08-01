@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 
 const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo melhor. Voltamos em instantes.';
@@ -8,7 +9,7 @@ const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo 
 const MaintenancePage = ({ message }) => (
   <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-blue-50 via-white to-white">
     <Helmet>
-      <title>Em manutenção · Click Teleconsulta</title>
+      <title>{`Em manutenção · ${BRAND.name}`}</title>
       <meta name="robots" content="noindex" />
     </Helmet>
 
@@ -19,7 +20,7 @@ const MaintenancePage = ({ message }) => (
         </svg>
       </div>
 
-      <p className="text-sm font-bold tracking-widest text-blue-600 uppercase mb-3">Click Teleconsulta</p>
+      <p className="text-sm font-bold tracking-widest text-blue-600 uppercase mb-3">{BRAND.name}</p>
       <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-4">
         Voltamos já&nbsp;já
       </h1>

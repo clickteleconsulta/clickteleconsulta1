@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -28,7 +29,7 @@ const AuthConfirmPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-4 text-center">
-            <Helmet><title>Confirmando — Click Teleconsulta</title></Helmet>
+            <Helmet><title>Confirmando — {BRAND.name}</title></Helmet>
             {error ? (
                 <div className="max-w-sm flex flex-col items-center gap-3">
                     <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">

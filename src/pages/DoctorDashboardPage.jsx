@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -296,7 +297,7 @@ const DoctorDashboardPage = () => {
 
   return (
     <>
-      <Helmet><title>Painel do Médico - Click Teleconsulta</title></Helmet>
+      <Helmet><title>{`Painel do Médico · ${BRAND.name}`}</title></Helmet>
 
       <div className="space-y-6">
         {/* Header */}

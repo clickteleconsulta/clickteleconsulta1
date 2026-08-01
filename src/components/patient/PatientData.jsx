@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { EMPRESA } from '@/config/brand';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -60,7 +61,7 @@ const PatientData = () => {
       ]);
       const payload = {
         exportado_em: new Date().toISOString(),
-        plataforma: 'Click Teleconsulta Online LTDA — CNPJ 68.171.336/0001-50',
+        plataforma: `${EMPRESA.razaoSocial} — CNPJ ${EMPRESA.cnpj}`,
         titular: { id: user.id, email: user.email },
         perfil: perfilRes.data || null,
         consultas: agendaRes.data || [],

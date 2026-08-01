@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { useLocation, Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ const SignUpSuccessPage = () => {
   return (
     <>
       <Helmet>
-        <title>Cadastro Realizado com Sucesso - Click Teleconsulta</title>
+        <title>{`Cadastro Realizado com Sucesso · ${BRAND.name}`}</title>
         <meta name="description" content="Seu cadastro foi realizado com sucesso. Verifique seu e-mail para confirmar sua conta." />
       </Helmet>
       <AuthLayout variant="cliente">

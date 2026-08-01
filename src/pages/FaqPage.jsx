@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,9 +16,9 @@ const FaqPage = () => {
   return (
     <>
       <Helmet>
-        <title>Perguntas frequentes · Click Teleconsulta</title>
-        <meta name="description" content="Tire suas dúvidas sobre a Click Teleconsulta: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados." />
-        <link rel="canonical" href="https://clickteleconsulta.online/perguntas-frequentes" />
+        <title>{`Perguntas frequentes · ${BRAND.name}`}</title>
+        <meta name="description" content={`Tire suas dúvidas sobre a ${BRAND.name}: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.`} />
+        <link rel="canonical" href={`${BRAND.url}/perguntas-frequentes`} />
         <script type="application/ld+json">{JSON.stringify(jsonld)}</script>
       </Helmet>
 
@@ -42,7 +43,7 @@ const FaqPage = () => {
 
         <div className="text-center mt-10 p-6 bg-slate-50 border border-slate-100 rounded-2xl">
           <p className="text-slate-700 font-medium">Não encontrou sua resposta?</p>
-          <p className="text-sm text-slate-500 mt-1">Fale com a gente em <a href="mailto:suporte@clickteleconsulta.online" className="text-blue-600 hover:underline">suporte@clickteleconsulta.online</a></p>
+          <p className="text-sm text-slate-500 mt-1">Fale com a gente em <a href={`mailto:${BRAND.emails.suporte}`} className="text-blue-600 hover:underline">{BRAND.emails.suporte}</a></p>
           <Button asChild className="mt-4 rounded-xl"><Link to="/agendamentos">Agendar consulta</Link></Button>
         </div>
       </div>

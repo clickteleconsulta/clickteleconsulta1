@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRAND } from '@/config/brand';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
@@ -66,7 +67,7 @@ const AppointmentReviewPage = () => {
   return (
     <>
       <Helmet>
-        <title>Revisar Agendamento - Click Teleconsulta</title>
+        <title>{`Revisar Agendamento · ${BRAND.name}`}</title>
       </Helmet>
       
       <div className="max-w-2xl mx-auto py-8 px-4">

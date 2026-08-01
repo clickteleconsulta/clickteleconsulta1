@@ -498,7 +498,7 @@ const DoctorProfilePage = () => {
     <>
       <Helmet>
         <title>
-          {doctor.public_name || doctor.name} — Click Teleconsulta
+          {doctor.public_name || doctor.name} — {BRAND.name}
         </title>
         <meta
           name="description"

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useToast } from '@/components/ui/use-toast';
@@ -290,7 +291,7 @@ const CheckoutPage = () => {
   return (
     <>
       <Helmet>
-        <title>Confirmar Agendamento — Click Teleconsulta</title>
+        <title>Confirmar Agendamento — {BRAND.name}</title>
       </Helmet>
 
       <div className="max-w-5xl mx-auto py-6">

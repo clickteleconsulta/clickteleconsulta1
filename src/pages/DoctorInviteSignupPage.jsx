@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { BRAND } from '@/config/brand';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -102,7 +103,7 @@ const DoctorInviteSignupPage = () => {
 
     return (
         <AuthLayout variant="profissional">
-            <Helmet><title>Cadastro de Médico — Click Teleconsulta</title></Helmet>
+            <Helmet><title>Cadastro de Médico — {BRAND.name}</title></Helmet>
 
             <Card className="w-full border-0 shadow-none">
                 {checking ? (
@@ -210,7 +211,7 @@ const DoctorInviteSignupPage = () => {
                                     <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
                                         <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600 shrink-0" />
                                         <span>
-                                            Li e <strong>aceito</strong> o Termo de Adesão e as condições da plataforma Click Teleconsulta. O aceite é obrigatório para criar a conta.
+                                            Li e <strong>aceito</strong> o Termo de Adesão e as condições da plataforma {BRAND.name}. O aceite é obrigatório para criar a conta.
                                         </span>
                                     </label>
                                 </div>

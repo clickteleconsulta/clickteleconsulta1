@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -138,7 +139,7 @@ const PaymentPage = () => {
     return (
         <>
             <Helmet>
-                <title>Pagamento - Click Teleconsulta</title>
+                <title>{`Pagamento · ${BRAND.name}`}</title>
             </Helmet>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

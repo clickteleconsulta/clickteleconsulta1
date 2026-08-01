@@ -8,7 +8,10 @@ import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
-const BASE = 'https://clickteleconsulta.online';
+// Marca centralizada — ver src/config/brand.js
+const { BRAND } = await import('../src/config/brand.js');
+const BASE = BRAND.url;
+const MARCA = BRAND.name;
 
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -73,22 +76,22 @@ async function main() {
   const articles = await loadArticles();
   const doctors = await loadDoctors();
   const routes = [
-    { path: '/como-funciona', title: 'Como funciona a teleconsulta · Click Teleconsulta', description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
-    { path: '/quem-somos', title: 'Quem somos · Click Teleconsulta', description: 'Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A Click Teleconsulta é um marketplace de agendamentos que conecta pacientes a médicos parceiros.' },
-    { path: '/perguntas-frequentes', title: 'Perguntas frequentes · Click Teleconsulta', description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.' },
-    { path: '/blog', title: 'Blog · Click Teleconsulta — Saúde e teleconsulta', description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
-    { path: '/agendamentos', title: 'Agendar Consulta · Click Teleconsulta', description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.' },
-    { path: '/suporte', title: 'Suporte · Click Teleconsulta', description: 'Central de ajuda da Click Teleconsulta: dúvidas sobre agendamento, pagamento, reembolso e atendimento.' },
-    { path: '/legal', title: 'Termos e Privacidade · Click Teleconsulta', description: 'Termos de Serviço e Política de Privacidade (LGPD) da Click Teleconsulta.' },
-    ...articles.map((a) => ({ path: `/blog/${a.slug}`, title: `${a.title} · Click Teleconsulta`, description: a.description, ogType: 'article' })),
+    { path: '/como-funciona', title: `Como funciona a teleconsulta · ${MARCA}`, description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
+    { path: '/quem-somos', title: `Quem somos · ${MARCA}`, description: `Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A ${MARCA} é um marketplace de agendamentos que conecta pacientes a médicos parceiros.` },
+    { path: '/perguntas-frequentes', title: `Perguntas frequentes · ${MARCA}`, description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.' },
+    { path: '/blog', title: `Blog · ${MARCA} — Saúde e teleconsulta`, description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
+    { path: '/agendamentos', title: `Agendar Consulta · ${MARCA}`, description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.' },
+    { path: '/suporte', title: `Suporte · ${MARCA}`, description: `Central de ajuda da ${MARCA}: dúvidas sobre agendamento, pagamento, reembolso e atendimento.` },
+    { path: '/legal', title: `Termos e Privacidade · ${MARCA}`, description: `Termos de Serviço e Política de Privacidade (LGPD) da ${MARCA}.` },
+    ...articles.map((a) => ({ path: `/blog/${a.slug}`, title: `${a.title} · ${MARCA}`, description: a.description, ogType: 'article' })),
     ...doctors.map((d) => {
       const nome = d.public_name || d.name || 'Médico';
       const esp = d.specialty || '';
       const slug = `${slugify(nome)}-${slugify(esp)}`.replace(/^-|-$/g, '');
       return {
         path: slug ? `/medico/${slug}` : `/medico/${d.id}`,
-        title: `${nome}${esp ? ' — ' + esp : ''} · Click Teleconsulta`,
-        description: `Agende uma teleconsulta com ${nome}${esp ? ', ' + esp : ''}. Veja horários e valores e agende online, com Pix ou cartão, na Click Teleconsulta.`,
+        title: `${nome}${esp ? ' — ' + esp : ''} · ${MARCA}`,
+        description: `Agende uma teleconsulta com ${nome}${esp ? ', ' + esp : ''}. Veja horários e valores e agende online, com Pix ou cartão, na ${MARCA}.`,
         ogType: 'profile',
       };
     }),

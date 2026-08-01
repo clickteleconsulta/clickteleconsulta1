@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -329,7 +330,7 @@ const DoctorPublicProfilePage = () => {
                     <h1 className="text-xl md:text-2xl font-bold text-foreground">{formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}</h1>
                     {/* Verified badge */}
                     <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-[11px] flex items-center gap-1">
-                      <CheckCircle className="w-3 h-3" /> Verificado — Click Teleconsulta
+                      <CheckCircle className="w-3 h-3" /> Verificado — {BRAND.name}
                     </Badge>
                   </div>
                   <p className="text-base text-primary font-medium mt-0.5">{doctor.specialty}</p>
@@ -428,7 +429,7 @@ const DoctorPublicProfilePage = () => {
   return (
     <>
       <Helmet>
-        <title>{doctor ? `${doctor.public_name || doctor.name} — ${doctor.specialty} | Click Teleconsulta` : 'Perfil do Médico - Click Teleconsulta'}</title>
+        <title>{doctor ? `${doctor.public_name || doctor.name} — ${doctor.specialty} | ${BRAND.name}` : `Perfil do Médico · ${BRAND.name}`}</title>
         <meta name="description" content={doctor ? `Agende uma consulta online com ${doctor.public_name || doctor.name}, profissional em ${doctor.specialty}. Telemedicina segura e conveniente.` : "Veja o perfil do médico e agende sua consulta."} />
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         {doctor && <meta property="og:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />}
@@ -438,7 +439,7 @@ const DoctorPublicProfilePage = () => {
         {doctor && <meta property="og:url" content={canonicalUrl} />}
         {doctor && <meta name="twitter:card" content="summary_large_image" />}
         {doctor && <meta name="twitter:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />}
-        {doctor && <meta name="twitter:description" content={`Teleconsulta com ${doctor.specialty} · Click Teleconsulta`} />}
+        {doctor && <meta name="twitter:description" content={`Teleconsulta com ${doctor.specialty} · ${BRAND.name}`} />}
         {doctor && <meta name="twitter:image" content={ogImage} />}
       </Helmet>
       {doctor && <PhysicianSchema doctor={doctor} />}

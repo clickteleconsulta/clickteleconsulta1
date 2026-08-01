@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -88,7 +89,7 @@ const GuideViewerPage = () => {
     return (
         <>
             <Helmet>
-                <title>Guia de Agendamento: {protocolo} - Click Teleconsulta</title>
+                <title>Guia de Agendamento: {protocolo} - {BRAND.name}</title>
             </Helmet>
             <div className="max-w-4xl mx-auto">
                 <Button onClick={() => navigate(-1)} variant="outline" className="mb-4">
@@ -104,7 +105,7 @@ const GuideViewerPage = () => {
                                 <CardDescription>Protocolo: {protocolo}</CardDescription>
                             </div>
                             <div className="text-right">
-                                <p className="text-sm font-medium">Click Teleconsulta</p>
+                                <p className="text-sm font-medium">{BRAND.name}</p>
                                 <p className="text-xs text-muted-foreground">Data de Emissão: {new Date(data_emissao).toLocaleDateString('pt-BR')}</p>
                             </div>
                         </div>

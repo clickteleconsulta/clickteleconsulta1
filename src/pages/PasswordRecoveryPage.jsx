@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
+import { BRAND } from '@/config/brand';
 import { useForm } from 'react-hook-form';
 import AuthLayout from '@/components/auth/AuthLayout';
 import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
@@ -48,8 +49,8 @@ const PasswordRecoveryPage = () => {
     return (
         <>
             <Helmet>
-                <title>Recuperar Senha - Click Teleconsulta</title>
-                <meta name="description" content="Recupere o acesso à sua conta na Click Teleconsulta. Insira seu e-mail para receber um link de redefinição de senha." />
+                <title>{`Recuperar Senha · ${BRAND.name}`}</title>
+                <meta name="description" content={`Recupere o acesso à sua conta na ${BRAND.name}. Insira seu e-mail para receber um link de redefinição de senha.`} />
             </Helmet>
             <AuthLayout variant="cliente">
                 <Card className="w-full border-0 shadow-none">

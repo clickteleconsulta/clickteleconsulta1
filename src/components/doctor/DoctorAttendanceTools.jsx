@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { BRAND } from '@/config/brand';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -90,7 +91,7 @@ const DoctorAttendanceTools = () => {
                 <div className="text-sm text-amber-900">
                     <p className="font-bold">Atenção</p>
                     <p className="text-amber-800 leading-relaxed mt-0.5">
-                        A Click Teleconsulta é um marketplace de agendamento e <strong>não fornece ferramentas de atendimento remoto</strong> (videochamada, prontuário, prescrição, etc.). O acesso e o uso dessas ferramentas para realizar as consultas são de <strong>responsabilidade exclusiva do médico parceiro</strong>.
+                        A {BRAND.name} é um marketplace de agendamento e <strong>não fornece ferramentas de atendimento remoto</strong> (videochamada, prontuário, prescrição, etc.). O acesso e o uso dessas ferramentas para realizar as consultas são de <strong>responsabilidade exclusiva do médico parceiro</strong>.
                     </p>
                 </div>
             </div>

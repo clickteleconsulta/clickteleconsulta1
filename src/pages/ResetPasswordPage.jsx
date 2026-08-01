@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { BRAND } from '@/config/brand';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { useForm } from 'react-hook-form';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -66,8 +67,8 @@ const ResetPasswordPage = () => {
     return (
         <>
             <Helmet>
-                <title>Redefinir Senha - Click Teleconsulta</title>
-                <meta name="description" content="Crie uma nova senha segura para acessar sua conta na Click Teleconsulta." />
+                <title>{`Redefinir Senha · ${BRAND.name}`}</title>
+                <meta name="description" content={`Crie uma nova senha segura para acessar sua conta na ${BRAND.name}.`} />
             </Helmet>
             <AuthLayout variant="cliente">
                 <Card className="w-full border-0 shadow-none">

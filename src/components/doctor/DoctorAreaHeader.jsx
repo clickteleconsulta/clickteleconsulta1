@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BRAND } from '@/config/brand';
 import Logo from '@/components/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Loader2 } from 'lucide-react';
@@ -30,7 +31,7 @@ const DoctorAreaHeader = () => {
           <div className="flex items-center gap-3">
              <Logo className="w-9 h-9" />
             <span className="text-xl font-bold text-gray-800 tracking-tight hidden md:block">
-              Click Teleconsulta
+              {BRAND.name}
             </span>
           </div>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -258,7 +259,7 @@ const DoctorsListPage = () => {
   return (
     <>
       <Helmet>
-        <title>Encontre seu Médico — Click Teleconsulta</title>
+        <title>Encontre seu Médico — {BRAND.name}</title>
         <meta name="description" content="Encontre profissionais disponíveis e agende sua teleconsulta agora." />
       </Helmet>
 

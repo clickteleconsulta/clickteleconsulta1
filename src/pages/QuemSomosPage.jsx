@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,15 +16,15 @@ const QuemSomosPage = () => {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
-    name: 'Quem somos · Click Teleconsulta',
-    url: 'https://clickteleconsulta.online/quem-somos',
+    name: `Quem somos · ${BRAND.name}`,
+    url: `${BRAND.url}/quem-somos`,
     mainEntity: {
       '@type': 'Organization',
-      name: 'Click Teleconsulta',
+      name: BRAND.name,
       legalName: 'CLICK TELECONSULTA ONLINE LTDA',
       taxID: '68.171.336/0001-50',
-      url: 'https://clickteleconsulta.online',
-      email: 'suporte@clickteleconsulta.online',
+      url: `${BRAND.url}`,
+      email: BRAND.emails.suporte,
       address: {
         '@type': 'PostalAddress',
         streetAddress: 'R. Antônio Pereira Ramos, nº 118, Centro',
@@ -38,9 +39,9 @@ const QuemSomosPage = () => {
   return (
     <>
       <Helmet>
-        <title>Quem somos · Click Teleconsulta</title>
-        <meta name="description" content="Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A Click Teleconsulta é um marketplace de agendamentos que conecta pacientes a médicos parceiros." />
-        <link rel="canonical" href="https://clickteleconsulta.online/quem-somos" />
+        <title>{`Quem somos · ${BRAND.name}`}</title>
+        <meta name="description" content={`Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A ${BRAND.name} é um marketplace de agendamentos que conecta pacientes a médicos parceiros.`} />
+        <link rel="canonical" href={`${BRAND.url}/quem-somos`} />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
 
@@ -52,7 +53,7 @@ const QuemSomosPage = () => {
             Democratizar o acesso à saúde, um agendamento de cada vez
           </h1>
           <p className="text-slate-500 mt-4 text-lg leading-relaxed">
-            A Click Teleconsulta nasceu para tornar o cuidado com a saúde mais simples e acessível.
+            A {BRAND.name} nasceu para tornar o cuidado com a saúde mais simples e acessível.
             Nosso propósito é <strong className="text-slate-700">democratizar o acesso à saúde</strong>:
             para situações que podem ser conduzidas a distância, você resolve com agilidade — sem
             deslocamento, sem fila de espera e por um preço acessível, com ótimo custo-benefício.
@@ -117,7 +118,7 @@ const QuemSomosPage = () => {
             <p><span className="text-slate-700 font-medium">Endereço:</span> R. Antônio Pereira Ramos, nº 118, Centro, Coroaci/MG, CEP 39.710-000</p>
             <p>
               <span className="text-slate-700 font-medium">Contato:</span>{' '}
-              <a href="mailto:suporte@clickteleconsulta.online" className="text-blue-600 hover:underline break-all">suporte@clickteleconsulta.online</a>
+              <a href={`mailto:${BRAND.emails.suporte}`} className="text-blue-600 hover:underline break-all">{BRAND.emails.suporte}</a>
             </p>
           </div>
         </div>

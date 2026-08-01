@@ -1,10 +1,11 @@
+import { BRAND } from '@/config/brand';
 // Conteúdo de SEO: FAQ e artigos do blog. Textos dentro das regras do CFM
 // (sem promessa de resultado/cupom/sorteio) e no posicionamento de marketplace.
 
 export const FAQ = [
   {
-    q: 'O que é a Click Teleconsulta?',
-    a: 'A Click Teleconsulta é um marketplace de agendamento de teleconsultas: conectamos você a médicos parceiros e cuidamos do agendamento e do pagamento. O atendimento é conduzido pelo próprio profissional, que é o responsável pela consulta.',
+    q: `O que é a ${BRAND.name}?`,
+    a: `A ${BRAND.name} é um marketplace de agendamento de teleconsultas: conectamos você a médicos parceiros e cuidamos do agendamento e do pagamento. O atendimento é conduzido pelo próprio profissional, que é o responsável pela consulta.`,
   },
   {
     q: 'Como agendo uma consulta?',
@@ -54,14 +55,14 @@ export const ARTICLES = [
     body: [
       { t: 'p', c: 'A teleconsulta é o atendimento médico realizado à distância, por vídeo, sem que você precise sair de casa. É uma modalidade regulamentada pelo Conselho Federal de Medicina (Resolução CFM nº 2.314/2022) e vem tornando o acesso à saúde mais simples e rápido.' },
       { t: 'h2', c: 'Como agendar em poucos passos' },
-      { t: 'p', c: 'Na Click Teleconsulta, você escolhe um médico disponível, seleciona o horário, cria sua conta em menos de 1 minuto e conclui o pagamento. Assim que o pagamento é aprovado, a consulta fica confirmada.' },
+      { t: 'p', c: `Na ${BRAND.name}, você escolhe um médico disponível, seleciona o horário, cria sua conta em menos de 1 minuto e conclui o pagamento. Assim que o pagamento é aprovado, a consulta fica confirmada.` },
       { t: 'h2', c: 'O que acontece no dia da consulta' },
       { t: 'p', c: 'O médico entra em contato até 15 minutos antes do horário marcado para conduzir a teleconsulta pelos meios próprios dele. Por isso, mantenha seu WhatsApp e e-mail à mão.' },
       { t: 'h2', c: 'Como se preparar' },
       { t: 'ul', items: ['Esteja num ambiente reservado e com boa conexão de internet;', 'Tenha em mãos exames recentes e a lista de medicamentos que usa;', 'Entre alguns minutos antes do horário;', 'Anote suas dúvidas para não esquecer nada.'] },
       { t: 'h2', c: 'Receita e atestado' },
       { t: 'p', c: 'A emissão de receitas e atestados depende da avaliação do médico e das normas do CFM. Quando cabível, o profissional emite documentos com assinatura digital válida.' },
-      { t: 'p', c: 'A Click Teleconsulta é um marketplace de agendamentos: conectamos você ao médico e cuidamos do agendamento e do pagamento. O atendimento é responsabilidade do profissional.' },
+      { t: 'p', c: `A ${BRAND.name} é um marketplace de agendamentos: conectamos você ao médico e cuidamos do agendamento e do pagamento. O atendimento é responsabilidade do profissional.` },
     ],
   },
   {
@@ -90,7 +91,7 @@ export const ARTICLES = [
     body: [
       { t: 'p', c: 'Sim: a teleconsulta é uma prática regulamentada pelo Conselho Federal de Medicina (Resolução CFM nº 2.314/2022). O atendimento à distância segue os mesmos princípios éticos da consulta presencial.' },
       { t: 'h2', c: 'Médicos verificados' },
-      { t: 'p', c: 'Na Click Teleconsulta, os médicos parceiros são verificados pelo registro no CRM. O médico tem autonomia para indicar, quando necessário, que o caso exige avaliação presencial.' },
+      { t: 'p', c: `Na ${BRAND.name}, os médicos parceiros são verificados pelo registro no CRM. O médico tem autonomia para indicar, quando necessário, que o caso exige avaliação presencial.` },
       { t: 'h2', c: 'Proteção dos seus dados (LGPD)' },
       { t: 'p', c: 'Seus dados cadastrais e de agendamento são tratados conforme a LGPD, usados apenas para viabilizar o serviço. Você pode acessar e exportar seus dados na sua conta a qualquer momento.' },
       { t: 'h2', c: 'Quando a teleconsulta pode não ser indicada' },

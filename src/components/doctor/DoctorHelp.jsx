@@ -1,4 +1,5 @@
 import React from 'react';
+import { BRAND } from '@/config/brand';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
@@ -10,13 +11,13 @@ import { Link } from 'react-router-dom';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 
 // Manual de Boas Práticas — exclusivo do dashboard médico (medico/dashboard/ajuda).
-// Conteúdo original, simplificado e alinhado às funcionalidades da Click Teleconsulta.
+// Conteúdo original, simplificado e alinhado às funcionalidades da {BRAND.name}.
 const manual = [
     {
         icon: BookOpen,
         title: 'Como a plataforma funciona',
         points: [
-            'A Click Teleconsulta é um marketplace que conecta pacientes a médicos parceiros. Você atua com autonomia: define sua agenda, seus horários e realiza os atendimentos.',
+            `A ${BRAND.name} é um marketplace que conecta pacientes a médicos parceiros. Você atua com autonomia: define sua agenda, seus horários e realiza os atendimentos.`,
             'A plataforma cuida da parte tecnológica: agendamento, pagamento, repasse e armazenamento dos dados. A consulta só é liberada para você após o pagamento do paciente ser confirmado.',
             'A responsabilidade clínica pelo atendimento (diagnóstico, conduta, prescrição e prontuário) é sempre do médico.',
         ],
@@ -89,7 +90,7 @@ const manual = [
         icon: FileText,
         title: 'Notas fiscais',
         points: [
-            'A Click Teleconsulta emite nota fiscal apenas da taxa de processamento dos agendamentos (o valor referente à intermediação da plataforma).',
+            `A ${BRAND.name} emite nota fiscal apenas da taxa de processamento dos agendamentos (o valor referente à intermediação da plataforma).`,
             'Você, médico(a), é o responsável por emitir suas próprias notas fiscais referentes ao valor de repasse que recebe pelos atendimentos.',
             'A soma da taxa de processamento (nota emitida pela plataforma) com o valor de repasse (nota emitida por você) corresponde ao valor total pago pelo paciente.',
         ],
@@ -132,7 +133,7 @@ const DoctorHelp = () => {
                     </div>
                     <div>
                         <h2 className="dashboard-title text-lg">Manual de Boas Práticas</h2>
-                        <p className="dashboard-subtitle">Guia rápido para atender com qualidade e segurança na Click Teleconsulta.</p>
+                        <p className="dashboard-subtitle">Guia rápido para atender com qualidade e segurança na {BRAND.name}.</p>
                     </div>
                 </div>
                 <CardContent className="p-4 sm:p-5">
@@ -181,7 +182,7 @@ const DoctorHelp = () => {
                         <div>
                             <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Suporte por E-mail</h3>
                             <p className="text-xs text-gray-500 mb-1">Para questões mais detalhadas ou envio de documentos.</p>
-                            <a href="mailto:suporte@clickteleconsulta.online" className="text-xs font-medium text-primary hover:underline">suporte@clickteleconsulta.online</a>
+                            <a href={`mailto:${BRAND.emails.suporte}`} className="text-xs font-medium text-primary hover:underline">{BRAND.emails.suporte}</a>
                         </div>
                     </CardContent>
                 </Card>

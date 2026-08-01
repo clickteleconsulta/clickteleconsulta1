@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BRAND } from '@/config/brand';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
@@ -78,12 +79,12 @@ const LegalPage = () => {
             : '';
 
     const pageTitle = DOC_TITLES[docType] || 'Documento Legal';
-    const metaDescription = `Consulte os ${pageTitle} da plataforma Click Teleconsulta. Versão atualizada em ${formattedDate}.`;
+    const metaDescription = `Consulte os ${pageTitle} da plataforma ${BRAND.name}. Versão atualizada em ${formattedDate}.`;
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
             <Helmet>
-                <title>{pageTitle} | Click Teleconsulta</title>
+                <title>{pageTitle} | {BRAND.name}</title>
                 <meta name="description" content={metaDescription} />
             </Helmet>
             <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
@@ -219,7 +220,7 @@ const LegalPage = () => {
 
             <footer className="bg-white border-t border-gray-200 py-8 mt-auto">
                 <div className="container mx-auto px-4 text-center">
-                    <p className="text-sm text-gray-500 mb-2">&copy; {new Date().getFullYear()} Click Teleconsulta. Todos os direitos reservados.</p>
+                    <p className="text-sm text-gray-500 mb-2">&copy; {new Date().getFullYear()} {BRAND.name}. Todos os direitos reservados.</p>
                     <p className="text-xs text-gray-400">Este documento é parte integrante dos termos legais da plataforma.</p>
                 </div>
             </footer>
