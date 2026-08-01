@@ -30,6 +30,8 @@ const AppointmentsControlPage = () => {
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  // 'liquidados' (padrão, recorte contábil) | 'nao_pagos' (funil de checkout) | 'todos'
+  const [paymentFilter, setPaymentFilter] = useState('liquidados');
   const [doctorFilter, setDoctorFilter] = useState('all');
   
   // Date Range Filter
@@ -146,11 +148,11 @@ const AppointmentsControlPage = () => {
 
   const filteredAppointments = useMemo(() => {
     return appointments.filter(apt => {
-      // Só registrar guias que tiveram pagamento. Some com pendentes e com os cancelados
-      // por falta de pagamento; mantém pagos e cancelados pelo médico (pago/reembolsado),
-      // relevantes para controle de reembolso.
+      // Por padrão mostra só guias que tiveram pagamento (pago/reembolsado), que é o
+      // recorte contábil. Os demais recortes existem para acompanhar o funil de checkout.
       const isPaidRecord = apt.pagamento_status === 'pago' || apt.pagamento_status === 'reembolsado';
-      if (!isPaidRecord) return false;
+      if (paymentFilter === 'liquidados' && !isPaidRecord) return false;
+      if (paymentFilter === 'nao_pagos' && isPaidRecord) return false;
 
       const matchesSearch =
         (apt.patient?.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
@@ -177,7 +179,7 @@ const AppointmentsControlPage = () => {
 
       return matchesSearch && matchesStatus && matchesDoctor && matchesDate;
     });
-  }, [appointments, searchTerm, statusFilter, doctorFilter, startDate, endDate]);
+  }, [appointments, searchTerm, statusFilter, doctorFilter, startDate, endDate, paymentFilter]);
 
   // Aba "Agendamentos" = guias ainda não repassadas (a pagar); "Histórico" = já repassadas.
   const tabAppointments = useMemo(
@@ -318,9 +320,11 @@ const AppointmentsControlPage = () => {
       confirmado: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200',
       pendente: 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 border-yellow-200',
       cancelado: 'bg-red-100 text-red-700 hover:bg-red-200 border-red-200',
-      atendido: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200'
+      atendido: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200',
+      nao_compareceu: 'bg-orange-100 text-orange-700 hover:bg-orange-200 border-orange-200'
     };
-    return <Badge className={styles[status] || 'bg-gray-100 text-gray-700'} variant="outline">{status?.toUpperCase()}</Badge>;
+    const labels = { nao_compareceu: 'NÃO COMPARECEU' };
+    return <Badge className={styles[status] || 'bg-gray-100 text-gray-700'} variant="outline">{labels[status] || status?.toUpperCase()}</Badge>;
   };
 
   const getPaymentBadge = (status) => {
@@ -485,7 +489,21 @@ const AppointmentsControlPage = () => {
               <SelectItem value="confirmado">Confirmado</SelectItem>
               <SelectItem value="pendente">Pendente</SelectItem>
               <SelectItem value="atendido">Atendido</SelectItem>
+              <SelectItem value="nao_compareceu">Não compareceu</SelectItem>
               <SelectItem value="cancelado">Cancelado</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Funil de pagamento: por padrão mostra só o que teve pagamento, mas permite
+              enxergar checkout pendente/abandonado, que antes ficava invisível no painel. */}
+          <Select value={paymentFilter} onValueChange={(v) => { setPaymentFilter(v); setCurrentPage(1); }}>
+            <SelectTrigger className="w-[190px]">
+              <SelectValue placeholder="Pagamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="liquidados">Com pagamento (padrão)</SelectItem>
+              <SelectItem value="nao_pagos">Aguardando / não pagos</SelectItem>
+              <SelectItem value="todos">Todos os pagamentos</SelectItem>
             </SelectContent>
           </Select>
 
@@ -800,6 +818,7 @@ const AppointmentsControlPage = () => {
                   <SelectItem value="pendente">Pendente</SelectItem>
                   <SelectItem value="cancelado">Cancelado</SelectItem>
                   <SelectItem value="atendido">Atendido</SelectItem>
+                  <SelectItem value="nao_compareceu">Não compareceu</SelectItem>
                 </SelectContent>
               </Select>
             </div>

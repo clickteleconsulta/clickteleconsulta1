@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -25,6 +25,20 @@ const AdminWithdrawalsPage = () => {
     // Confirmação do repasse: exige conferência do valor e registro do comprovante.
     const [payTarget, setPayTarget] = useState(null);
     const [comprovante, setComprovante] = useState('');
+    // Busca e filtro da lista
+    const [search, setSearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState('aguardando');
+
+    const visibleWithdrawals = useMemo(() => {
+        const termo = search.trim().toLowerCase();
+        return withdrawals.filter((w) => {
+            const aguardando = w.status === 'Aguardando Recebimento';
+            if (statusFilter === 'aguardando' && !aguardando) return false;
+            if (statusFilter === 'recebido' && aguardando) return false;
+            if (!termo) return true;
+            return (w.medicos?.name || '').toLowerCase().includes(termo);
+        });
+    }, [withdrawals, search, statusFilter]);
 
     const fmt = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     // Repasse e taxa de uma guia, usando a taxa CONGELADA no pagamento (imutável).
@@ -165,8 +179,41 @@ const AdminWithdrawalsPage = () => {
             </AdminPageHeader>
 
             <Card>
-                <CardHeader>
-                    <CardTitle>Histórico de Solicitações</CardTitle>
+                <CardHeader className="gap-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <CardTitle>Histórico de Solicitações</CardTitle>
+                        <span className="text-sm text-muted-foreground">
+                            {visibleWithdrawals.length === withdrawals.length
+                                ? `${withdrawals.length} ${withdrawals.length === 1 ? 'saque' : 'saques'}`
+                                : `${visibleWithdrawals.length} de ${withdrawals.length} saques`}
+                        </span>
+                    </div>
+                    {/* Busca por médico + filtro de status: a tela financeira mais usada
+                        carregava tudo de uma vez, sem forma de achar um saque específico. */}
+                    <div className="flex flex-col sm:flex-row gap-2">
+                        <Input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Buscar por médico..."
+                            className="sm:max-w-xs"
+                        />
+                        <div className="inline-flex p-1 rounded-xl bg-gray-100 w-fit">
+                            {[
+                                { v: 'aguardando', l: 'Aguardando' },
+                                { v: 'recebido', l: 'Pagos' },
+                                { v: 'todos', l: 'Todos' },
+                            ].map((f) => (
+                                <button
+                                    key={f.v}
+                                    type="button"
+                                    onClick={() => setStatusFilter(f.v)}
+                                    className={`px-4 h-8 rounded-lg text-sm font-semibold transition-all ${statusFilter === f.v ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-blue-600'}`}
+                                >
+                                    {f.l}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <Table>
@@ -181,14 +228,14 @@ const AdminWithdrawalsPage = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {withdrawals.length === 0 ? (
+                            {visibleWithdrawals.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                                         Nenhuma solicitação de saque encontrada.
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                withdrawals.map((w) => (
+                                visibleWithdrawals.map((w) => (
                                     <TableRow key={w.id}>
                                         <TableCell>
                                             <div className="flex flex-col">

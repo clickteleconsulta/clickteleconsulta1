@@ -140,28 +140,28 @@ const AdminPaymentMethodsPage = () => {
                 </CardContent>
             </Card>
 
-            {/* Ambiente */}
+            {/* Ambiente — informativo. O ambiente real NÃO é controlado por esta tela:
+                quem manda é o segredo ASAAS_ENV das Edge Functions. Um seletor aqui daria
+                a falsa impressão de estar em Teste enquanto a produção já roda. */}
             <Card className="dashboard-card">
                 <CardHeader className="px-0 pt-0 pb-4">
                     <CardTitle className="dashboard-title flex items-center gap-2"><FlaskConical className="w-4 h-4 text-primary" /> Ambiente</CardTitle>
-                    <CardDescription className="dashboard-subtitle">Comece em <strong>Teste</strong>. Produção exige a conta no gateway com o CNPJ ativo.</CardDescription>
+                    <CardDescription className="dashboard-subtitle">Definido no servidor, não por esta tela.</CardDescription>
                 </CardHeader>
                 <CardContent className="px-0">
-                    <div className="inline-flex p-1 rounded-xl bg-gray-100">
-                        {[{ v: 'test', l: 'Teste' }, { v: 'live', l: 'Produção' }].map((e) => (
-                            <button
-                                key={e.v}
-                                type="button"
-                                onClick={() => setEnvironment(e.v)}
-                                className={`px-5 h-9 rounded-lg text-sm font-semibold transition-all ${environment === e.v ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-blue-600'}`}
-                            >
-                                {e.l}
-                            </button>
-                        ))}
+                    <div className="flex items-start gap-2 rounded-lg border border-blue-100 bg-blue-50 p-3 text-sm text-blue-900">
+                        <Info className="w-4 h-4 shrink-0 mt-0.5" />
+                        <div className="space-y-1">
+                            <p>
+                                O ambiente (<strong>sandbox</strong> ou <strong>produção</strong>) é definido pelo
+                                segredo <code className="font-mono text-[12px] bg-white/70 px-1 rounded">ASAAS_ENV</code> nas
+                                Edge Functions do Supabase, junto com a chave de API.
+                            </p>
+                            <p className="text-blue-800/90">
+                                Alterar aqui não mudaria o processamento real — por isso esta seção é apenas informativa.
+                            </p>
+                        </div>
                     </div>
-                    {environment === 'live' && (
-                        <p className="text-xs text-amber-700 mt-3 flex items-center gap-1.5"><Info className="w-3.5 h-3.5" /> Só ative Produção após a conta do gateway estar aprovada (CNPJ).</p>
-                    )}
                 </CardContent>
             </Card>
 

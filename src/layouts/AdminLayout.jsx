@@ -59,6 +59,7 @@ const AdminLayout = () => {
         { title: 'Operação', items: [
             { href: '/admin/dashboard/agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
             { href: '/admin/dashboard/profissionais', label: 'Profissionais', icon: Users, badge: counts.documentos },
+            { href: '/admin/dashboard/documentacao', label: 'Documentação', icon: FolderCheck },
             { href: '/admin/dashboard/pacientes', label: 'Pacientes', icon: User },
             { href: '/admin/avaliacoes', label: 'Avaliações', icon: AlertTriangle, badge: counts.denuncias, urgent: true },
             { href: '/admin/dashboard/comunicados', label: 'Comunicados', icon: Megaphone },

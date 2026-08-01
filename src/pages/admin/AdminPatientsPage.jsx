@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, User, MoreHorizontal, Trash2, Search, Users, RefreshCw, CheckCircle2, FileDown } from 'lucide-react';
+import { Loader2, User, MoreHorizontal, Trash2, Search, Users, RefreshCw, FileDown } from 'lucide-react';
 import { downloadCsv, csvDateSuffix } from '@/lib/exportCsv';
 import { format } from 'date-fns';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
@@ -106,7 +106,7 @@ const AdminPatientsPage = () => {
                                     <TableHead className="w-[60px]">Foto</TableHead>
                                     <TableHead>Nome</TableHead>
                                     <TableHead>Contato</TableHead>
-                                    <TableHead>Status</TableHead>
+                                    <TableHead>Cadastrado em</TableHead>
                                     <TableHead className="text-right">Ações</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -132,10 +132,10 @@ const AdminPatientsPage = () => {
                                                 <span>{p.whatsapp || '—'}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell>
-                                            <Badge className="bg-green-100 text-green-800 hover:bg-green-200 gap-1 border-green-200" variant="outline">
-                                                <CheckCircle2 className="w-3 h-3" /> Ativa
-                                            </Badge>
+                                        {/* Antes exibia um badge "Ativa" fixo no código — informação falsa,
+                                            já que não há coluna de estado da conta em perfis_usuarios. */}
+                                        <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
+                                            {safeDate(p.created_at)}
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>

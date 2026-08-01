@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2 } from 'lucide-react';
+import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
@@ -52,6 +52,50 @@ const ProfessionalsPage = () => {
   // Delete Doctor State
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  // Edição do cadastro do médico (antes só dava para corrigir mexendo no banco)
+  const [editTarget, setEditTarget] = useState(null);
+  const [editForm, setEditForm] = useState({ name: '', public_name: '', specialty: '', crm: '', uf: '', phone_number: '' });
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+
+  const openEditModal = (doc) => {
+    setEditTarget(doc);
+    setEditForm({
+      name: doc.name || '',
+      public_name: doc.public_name || '',
+      specialty: doc.specialty || '',
+      crm: doc.crm || '',
+      uf: doc.uf || '',
+      phone_number: doc.phone_number || '',
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editTarget) return;
+    if (!editForm.name.trim()) {
+      toast({ variant: 'destructive', title: 'Atenção', description: 'O nome é obrigatório.' });
+      return;
+    }
+    setIsSavingEdit(true);
+    try {
+      const payload = {
+        name: editForm.name.trim(),
+        public_name: editForm.public_name.trim() || editForm.name.trim(),
+        specialty: editForm.specialty.trim(),
+        crm: editForm.crm.trim(),
+        uf: editForm.uf.trim().toUpperCase(),
+        phone_number: editForm.phone_number.trim(),
+      };
+      const { error } = await supabase.from('medicos').update(payload).eq('id', editTarget.id);
+      if (error) throw error;
+      toast({ title: 'Cadastro atualizado', description: 'Os dados do profissional foram salvos.' });
+      setEditTarget(null);
+      fetchProfessionals();
+    } catch (e) {
+      toast({ variant: 'destructive', title: 'Erro ao salvar', description: e.message });
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
 
   const fetchMainProceduresPrices = async (docs) => {
     if (!docs || docs.length === 0) return;
@@ -342,6 +386,52 @@ const ProfessionalsPage = () => {
     <div className="space-y-6">
       <AdminPageHeader icon={Users} title="Profissionais" subtitle="Gerencie contas, documentação, taxas e visibilidade dos médicos." />
 
+      {/* Edição do cadastro do profissional */}
+      <Dialog open={!!editTarget} onOpenChange={(o) => !o && setEditTarget(null)}>
+        <DialogContent className="max-w-lg">
+            <DialogHeader>
+                <DialogTitle>Editar dados do profissional</DialogTitle>
+                <DialogDescription>
+                    Corrija o cadastro de {editTarget?.public_name || editTarget?.name}. As alterações
+                    aparecem no perfil público e nos cards de agendamento.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="py-2 grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5 sm:col-span-2">
+                    <Label htmlFor="ed-name">Nome completo *</Label>
+                    <Input id="ed-name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
+                </div>
+                <div className="space-y-1.5 sm:col-span-2">
+                    <Label htmlFor="ed-public">Nome público</Label>
+                    <Input id="ed-public" value={editForm.public_name} onChange={(e) => setEditForm({ ...editForm, public_name: e.target.value })} placeholder="Como aparece para o paciente" />
+                </div>
+                <div className="space-y-1.5">
+                    <Label htmlFor="ed-spec">Especialidade</Label>
+                    <Input id="ed-spec" value={editForm.specialty} onChange={(e) => setEditForm({ ...editForm, specialty: e.target.value })} placeholder="Ex.: Generalista" />
+                </div>
+                <div className="space-y-1.5">
+                    <Label htmlFor="ed-phone">Telefone</Label>
+                    <Input id="ed-phone" value={editForm.phone_number} onChange={(e) => setEditForm({ ...editForm, phone_number: e.target.value })} />
+                </div>
+                <div className="space-y-1.5">
+                    <Label htmlFor="ed-crm">CRM</Label>
+                    <Input id="ed-crm" value={editForm.crm} onChange={(e) => setEditForm({ ...editForm, crm: e.target.value })} />
+                </div>
+                <div className="space-y-1.5">
+                    <Label htmlFor="ed-uf">UF</Label>
+                    <Input id="ed-uf" maxLength={2} value={editForm.uf} onChange={(e) => setEditForm({ ...editForm, uf: e.target.value })} placeholder="RJ" />
+                </div>
+            </div>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setEditTarget(null)} disabled={isSavingEdit}>Cancelar</Button>
+                <Button onClick={handleSaveEdit} disabled={isSavingEdit}>
+                    {isSavingEdit ? <Loader2 className="animate-spin w-4 h-4 mr-2" /> : null}
+                    Salvar alterações
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={isFeeOpen} onOpenChange={setIsFeeOpen}>
         <DialogContent>
             <DialogHeader>
@@ -458,6 +548,9 @@ const ProfessionalsPage = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => openEditModal(doc)}>
+                                    <Pencil className="mr-2 h-4 w-4" /> Editar dados
+                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => openFeeModal(doc)}>
                                     <Percent className="mr-2 h-4 w-4" /> Alterar Taxa
                                 </DropdownMenuItem>
