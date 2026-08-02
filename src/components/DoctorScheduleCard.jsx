@@ -24,8 +24,8 @@ import { Skeleton } from './ui/skeleton';
 // Não usar roseta/estrela azul: a forma é fortemente associada ao selo do Instagram/Meta,
 // cuja política de marcas veda sinais confusamente similares.
 const VerifiedSeal = ({ className }) => (
-  <svg viewBox="0 0 24 24" className={className} role="img" aria-label="Médico verificado no CRM">
-    <title>Médico verificado no CRM</title>
+  <svg viewBox="0 0 24 24" className={className} role="img" aria-label="Médico verificado">
+    <title>Médico verificado</title>
     <defs>
       <linearGradient id="ctSeloGrad" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stopColor="#0ea5e9" />
