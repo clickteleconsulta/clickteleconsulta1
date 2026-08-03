@@ -23,31 +23,31 @@ function buildHtml(link: string) {
   return `<!doctype html><html lang="pt-BR"><body style="margin:0;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif;color:#334155;">
   <div style="max-width:560px;margin:0 auto;padding:28px 14px;">
     <div style="background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;">
-      <div style="background:linear-gradient(135deg,#04231a 0%,#059669 100%);padding:26px 28px;">
-        <h1 style="color:#ffffff;margin:0;font-size:20px;">avidoc</h1>
-        <p style="color:#cbd5e1;margin:6px 0 0;font-size:13px;">Convite para médico parceiro</p>
+      <div style="background:linear-gradient(135deg,#28385C 0%,#3B5BA5 100%);padding:26px 28px;">
+        <h1 style="color:#ffffff;margin:0;font-size:20px;">aviDoc</h1>
+        <p style="color:#C9D6EE;margin:6px 0 0;font-size:13px;">Convite para médico parceiro</p>
       </div>
       <div style="padding:28px;font-size:15px;line-height:1.65;">
         <p>Olá,</p>
-        <p>É com satisfação que convidamos você a fazer parte do corpo clínico da <strong>avidoc</strong>, nossa plataforma de teleconsultas que conecta pacientes a profissionais de saúde de forma simples, segura e humanizada.</p>
+        <p>É com satisfação que convidamos você a integrar o corpo clínico da <strong>aviDoc</strong>, um marketplace de agendamentos que conecta pacientes a médicos parceiros. Fazemos apenas a intermediação do agendamento e do pagamento; a teleconsulta e o ato médico são de responsabilidade exclusiva do profissional.</p>
         <p>Ao aceitar o convite e criar sua conta de <strong>médico parceiro</strong>, você poderá:</p>
         <ul style="padding-left:18px;margin:12px 0;color:#475569;">
-          <li>Realizar atendimentos por telemedicina, de onde estiver;</li>
+          <li>Receber agendamentos de pacientes de todo o Brasil e atendê-los pelos seus próprios meios;</li>
           <li>Gerenciar sua agenda e seus horários de disponibilidade;</li>
           <li>Acompanhar suas consultas e o histórico de pagamentos;</li>
           <li>Receber os repasses das consultas realizadas com transparência.</li>
         </ul>
         <p>Para criar sua conta e concluir seu cadastro profissional, clique no botão abaixo:</p>
         <div style="text-align:center;margin:26px 0;">
-          <a href="${link}" style="background:#059669;color:#ffffff;text-decoration:none;padding:13px 28px;border-radius:9px;font-weight:bold;font-size:15px;display:inline-block;">Criar minha conta de médico</a>
+          <a href="${link}" style="background:#3B5BA5;color:#ffffff;text-decoration:none;padding:13px 28px;border-radius:9px;font-weight:bold;font-size:15px;display:inline-block;">Criar minha conta de médico</a>
         </div>
         <p style="font-size:12px;color:#64748b;">Se o botão não funcionar, copie e cole este link no navegador:</p>
-        <p style="font-size:12px;color:#059669;word-break:break-all;">${link}</p>
+        <p style="font-size:12px;color:#3B5BA5;word-break:break-all;">${link}</p>
         <p style="font-size:13px;color:#64748b;">Por segurança, este convite é pessoal e válido apenas para o e-mail que o recebeu. Somente profissionais convidados pela administração conseguem abrir uma conta de médico.</p>
-        <p style="margin-top:22px;">Seja bem-vindo(a)!<br><strong>Equipe avidoc</strong></p>
+        <p style="margin-top:22px;">Seja bem-vindo(a)!<br><strong>Equipe aviDoc</strong></p>
       </div>
       <div style="padding:16px 28px;border-top:1px solid #e2e8f0;background:#f8fafc;">
-        <p style="margin:0;font-size:11px;color:#94a3b8;">Este é um e-mail automático da plataforma avidoc. Se você não reconhece esta solicitação, ignore esta mensagem.</p>
+        <p style="margin:0;font-size:11px;color:#94a3b8;">Este é um e-mail automático da plataforma aviDoc. Se você não reconhece esta solicitação, ignore esta mensagem.</p>
       </div>
     </div>
   </div></body></html>`;
@@ -110,7 +110,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: FROM,
         to: [email],
-        subject: "Convite para ser médico parceiro — avidoc",
+        subject: "Convite para ser médico parceiro — aviDoc",
         html: buildHtml(link),
       }),
     });

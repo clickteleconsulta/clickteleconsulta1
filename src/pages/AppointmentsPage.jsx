@@ -397,7 +397,7 @@ const AppointmentsPage = () => {
     <>
       <Helmet>
         <title>{`Agendar Consulta · ${BRAND.name}`}</title>
-        <meta name="description" content="Encontre profissionais, veja horários e agende sua teleconsulta de forma rápida e segura." />
+        <meta name="description" content="Encontre profissionais disponíveis, compare preços e horários e agende sua teleconsulta em minutos." />
         <link rel="canonical" href={`${BRAND.url}/agendamentos`} />
       </Helmet>
 

@@ -137,7 +137,7 @@ const EmbeddedAppointmentForm = ({ doctor }) => (
   <div className="bg-card rounded-xl border border-border shadow-sm p-6 flex flex-col gap-4">
     <h3 className="font-bold text-lg text-foreground">Agendar Consulta</h3>
     <p className="text-sm text-muted-foreground leading-relaxed">
-      Clique no botão abaixo para ver os horários disponíveis e realizar seu agendamento online de forma rápida e segura.
+      Clique no botão abaixo para ver os horários disponíveis e concluir seu agendamento online em poucos minutos.
     </p>
     <Button asChild className="w-full bg-primary hover:bg-primary/90 font-bold py-6">
       <Link to="/agendamentos">
@@ -156,7 +156,7 @@ const EmbeddedAppointmentForm = ({ doctor }) => (
     )}
     <div className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground bg-muted/30 p-2.5 rounded-lg mt-2">
       <Shield className="w-3 h-3" />
-      <span>Pagamento seguro e dados protegidos</span>
+      <span>Pagamento por Pix ou cartão · Dados protegidos (LGPD)</span>
     </div>
   </div>
 );
@@ -430,7 +430,7 @@ const DoctorPublicProfilePage = () => {
     <>
       <Helmet>
         <title>{doctor ? `${doctor.public_name || doctor.name} — ${doctor.specialty} | ${BRAND.name}` : `Perfil do Médico · ${BRAND.name}`}</title>
-        <meta name="description" content={doctor ? `Agende uma consulta online com ${doctor.public_name || doctor.name}, profissional em ${doctor.specialty}. Telemedicina segura e conveniente.` : "Veja o perfil do médico e agende sua consulta."} />
+        <meta name="description" content={doctor ? `Agende uma consulta online com ${doctor.public_name || doctor.name}, profissional em ${doctor.specialty}. Agendamento pela ${BRAND.name}, ${BRAND.tagline.toLowerCase()}.` : "Veja o perfil do médico e agende sua consulta."} />
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         {doctor && <meta property="og:title" content={`${doctor.public_name || doctor.name} — ${doctor.specialty}`} />}
         {doctor && <meta property="og:description" content={doctor.bio?.slice(0, 150) || `Profissional em ${doctor.specialty}. Agende sua teleconsulta agora.`} />}

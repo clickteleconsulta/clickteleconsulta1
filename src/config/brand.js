@@ -10,7 +10,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const BRAND = {
-  /** Nome comercial exibido ao usuário. Sempre em caixa baixa. */
+  /**
+   * Nome comercial exibido ao usuário. A grafia é **aviDoc** — minúsculo até o
+   * "i", maiúsculo no "D" — igual ao desenho do wordmark. Não escreva o nome na
+   * mão em lugar nenhum: importe daqui. Sete pontos já divergiram por copiar a
+   * grafia errada de um comentário desatualizado.
+   */
   name: 'aviDoc',
   /**
    * Domínio canônico, sem protocolo. `.com.br` é o principal; `.online` e `.net`
@@ -28,7 +33,7 @@ export const BRAND = {
   social: {
     instagram: '@avidoc.com.br',
   },
-  /** Cor única da marca — esmeralda. Espelha --primary no index.css. */
+  /** Cor única da marca — cobalto. Espelha --primary no index.css e brand-600 no Tailwind. */
   color: '#3B5BA5',
 };
 

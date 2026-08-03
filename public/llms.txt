@@ -1,33 +1,48 @@
+# aviDoc
+
+> Marketplace brasileiro de agendamento de teleconsultas médicas. O paciente escolhe
+> o profissional, vê preço e horários e agenda em minutos, pagando com Pix ou cartão,
+> sem mensalidade e sem convênio.
+
+A aviDoc **intermedia o agendamento e o pagamento** entre paciente e médico.
+Não é plano de saúde, convênio, cartão de desconto nem plataforma de telemedicina:
+a teleconsulta e o ato médico são de responsabilidade exclusiva do profissional,
+que realiza o atendimento pelos meios próprios, conforme as normas do CFM.
+
+Operada por CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50 · Coroaci/MG.
+Contato: contato@avidoc.com.br
+
 ## Pages
-- [-](/auth): No description available
-- [—](/doctorprofile): No description available
-- [— Agende sua consulta com o médico que você escolher](/home): Marketplace de agendamento: escolha o profissional, veja preço e horários e agende em minutos. Pix ou cartão, sem mensalidade.
-- [`}](/appointmentreview): No description available
-- [`}](/appointments): Encontre profissionais, veja horários e agende sua teleconsulta de forma rápida e segura.
-- [`}](/changepassword): No description available
-- [`}](/comofunciona): Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.
-- [`}](/confirmation): No description available
-- [`}](/doctordashboard): No description available
-- [`}](/doctorinterest): Junte-se à nossa plataforma e ofereça teleconsultas para pacientes de todo o Brasil.
-- [`}](/doctorsignup): No description available
-- [`}](/faq): No description available
-- [`}](/handleapplication): No description available
-- [`}](/maintenance): No description available
-- [`}](/notfound): No description available
-- [`}](/passwordrecovery): No description available
-- [`}](/payment): No description available
-- [`}](/resetpassword): No description available
-- [`}](/signupsuccess): Seu cadastro foi realizado com sucesso. Verifique seu e-mail para confirmar sua conta.
-- [`}](/support): No description available
-- [|](/legal): No description available
-- [Agendamento Concluído! —](/appointmentsuccess): No description available
-- [Blog ·  — Saúde e teleconsulta](/blog): No description available
-- [Cadastro de Médico —](/doctorinvitesignup): No description available
-- [Confirmando —](/authconfirm): No description available
-- [Confirmar Agendamento —](/checkout): No description available
-- [Consulta Encerrada —](/consultaencerrada): No description available
-- [Encontre seu Médico —](/doctorslist): Encontre profissionais disponíveis e agende sua teleconsulta agora.
-- [Google Calendar - Painel do Médico](/doctorgooglecalendar): No description available
-- [Guia de Agendamento:  -](/guideviewer): No description available
-- [Minha conta —](/patientarea): No description available
-- [Verificando Documento...](/verification): No description available
+
+- [Início](https://avidoc.com.br/): Marketplace de agendamento: escolha o profissional, veja preço e horários e agende em minutos. Pix ou cartão, sem mensalidade.
+- [Agendamentos](https://avidoc.com.br/agendamentos): Encontre profissionais disponíveis, compare preços e horários e agende sua teleconsulta em minutos.
+- [Como funciona](https://avidoc.com.br/como-funciona): Como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.
+- [Quem somos](https://avidoc.com.br/quem-somos): O propósito de democratizar o acesso à saúde e o que a aviDoc é — e o que não é — como marketplace de agendamentos.
+- [Perguntas frequentes](https://avidoc.com.br/perguntas-frequentes): Dúvidas sobre como agendar, valores, pagamento, reembolso, receita e atestado, e proteção de dados.
+- [Suporte](https://avidoc.com.br/suporte): Canais de atendimento e ajuda para pacientes e médicos parceiros.
+- [Documentos legais](https://avidoc.com.br/legal): Termos de Serviço e Política de Privacidade em vigor.
+
+## Blog
+
+- [Blog](https://avidoc.com.br/blog): Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.
+- [Como funciona a teleconsulta](https://avidoc.com.br/blog/como-funciona-a-teleconsulta): O que é uma teleconsulta, como acontece na prática e o que esperar do atendimento.
+- [Renovação de receita por teleconsulta](https://avidoc.com.br/blog/renovacao-de-receita-por-teleconsulta): Quando a receita pode ser renovada a distância e o que o médico avalia antes de prescrever.
+- [Teleconsulta é confiável? O que diz o CFM](https://avidoc.com.br/blog/teleconsulta-e-confiavel-o-que-diz-o-cfm): O que a regulamentação do Conselho Federal de Medicina estabelece sobre o atendimento a distância.
+
+## Médicos parceiros
+
+Cada profissional tem uma página pública com registro no CRM, preço, duração e
+horários disponíveis. A lista muda conforme o corpo clínico.
+
+- [Gustavo R. Ayres](https://avidoc.com.br/medico/gustavo-r-ayres-generalista)
+- [Ryan de Brito Silva Oliveira](https://avidoc.com.br/medico/ryan-de-brito-silva-oliveira-generalista)
+- [Renata de Oliveira Dias Mouli](https://avidoc.com.br/medico/renata-de-oliveira-dias-mouli-generalista)
+- [Celso Coelho de Carvalho](https://avidoc.com.br/medico/celso-coelho-de-carvalho-generalista)
+- [Maria Eduarda Senra](https://avidoc.com.br/medico/maria-eduarda-senra-generalista)
+
+## Optional
+
+- [Mapa do site](https://avidoc.com.br/sitemap.xml): Todas as URLs públicas indexáveis.
+
+As áreas de conta — painel do médico, área do paciente e administração — são
+privadas e estão fora de indexação, conforme o robots.txt.

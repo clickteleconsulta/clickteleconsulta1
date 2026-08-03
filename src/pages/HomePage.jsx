@@ -73,9 +73,9 @@ const STEPS = [
 // ─── Features (Bento) ──────────────────────────────────────────────────────────
 const FEATURES = [
   { icon: Clock, title: 'Sem filas de espera', desc: 'Consulte no horário que funciona para você, sem esperar em salas lotadas.', span: 'md:col-span-2' },
-  { icon: Shield, title: 'CFM Certificado', desc: 'Todos os profissionais são habilitados pelo Conselho Federal de Medicina.' },
+  { icon: Shield, title: 'Registro verificado', desc: 'Todo médico parceiro tem o registro conferido junto ao CRM do respectivo estado.' },
   { icon: Calendar, title: 'Agendamento Rápido', desc: 'Escolha especialidade, médico e horário e agende em poucos cliques.' },
-  { icon: Lock, title: 'Proteção LGPD', desc: 'Seus dados protegidos com criptografia de ponta a ponta.' },
+  { icon: Lock, title: 'Proteção LGPD', desc: 'Seus dados trafegam por conexão criptografada e são tratados conforme a LGPD.' },
   { icon: CheckCircle, title: 'Confirmação na Hora', desc: 'Seu agendamento é confirmado imediatamente após o pagamento.' },
   { icon: Users, title: 'Profissionais Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
 ];
@@ -83,11 +83,11 @@ const FEATURES = [
 // ─── FAQ ────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
   { q: 'O que é teleconsulta?', a: 'É o atendimento médico à distância, regulamentado pelo CFM. Você encontra o profissional e agenda pela plataforma; o próprio médico realiza a consulta pelos meios que utiliza, sem você precisar se deslocar.' },
-  { q: 'Preciso de convênio?', a: `Não. O ${BRAND.name} funciona de forma particular. Você paga diretamente pela consulta com preços acessíveis, sem necessidade de convênio ou plano de saúde.` },
+  { q: 'Preciso de convênio?', a: `Não. A ${BRAND.name} funciona de forma particular. Você paga diretamente pela consulta com preços acessíveis, sem necessidade de convênio ou plano de saúde.` },
   { q: 'Como acontece o atendimento?', a: 'Após agendar e confirmar o pagamento, o médico entra em contato e conduz o atendimento pelos meios próprios dele (por exemplo telefone, vídeo ou a plataforma que utilizar), conforme as normas do CFM.' },
   { q: 'A prescrição é válida?', a: 'Sim. Quando necessária, a prescrição é emitida pelo próprio médico, com assinatura e validade legal conforme a regulamentação vigente. A plataforma cuida apenas do agendamento e do pagamento.' },
-  { q: 'Como pago?', a: 'Aceitamos cartão de crédito, débito e PIX. O pagamento é processado de forma segura antes da consulta.' },
-  { q: 'É seguro?', a: 'Utilizamos criptografia de ponta a ponta, estamos em conformidade com a LGPD e os médicos parceiros são verificados junto ao CRM do respectivo estado.' },
+  { q: 'Como pago?', a: 'Aceitamos cartão de crédito, débito e PIX. O pagamento é feito antes da consulta, em ambiente do provedor de pagamentos — os dados do cartão vão direto para ele e não passam pela plataforma.' },
+  { q: 'Como meus dados são protegidos?', a: 'A navegação e o pagamento usam conexão criptografada, o tratamento dos dados segue a LGPD e os médicos parceiros têm o registro verificado junto ao CRM do respectivo estado.' },
 ];
 
 // ─── Animações ──────────────────────────────────────────────────────────────────

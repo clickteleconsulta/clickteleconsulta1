@@ -770,7 +770,7 @@ const DoctorProfilePage = () => {
 
                 <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground bg-muted/30 p-2 rounded-lg">
                   <Shield className="w-3 h-3" />
-                  Pagamento seguro · Dados protegidos (LGPD)
+                  Pagamento por Pix ou cartão · Dados protegidos (LGPD)
                 </div>
               </div>
             </div>

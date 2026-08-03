@@ -468,7 +468,7 @@ const AuthPage = ({
                 {/* Selo de confiança (no desktop já aparece no painel de marca) */}
                 <div className="lg:hidden flex items-center justify-center gap-1.5 text-[11px] text-gray-400 pt-4 border-t border-gray-100">
                     <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
-                    Conexão segura · Dados protegidos conforme a LGPD
+                    Conexão criptografada · Dados protegidos conforme a LGPD
                 </div>
             </div>
         </div>
