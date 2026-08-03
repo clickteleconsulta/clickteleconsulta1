@@ -1,0 +1,13 @@
+Arquivos de marca — aviDoc
+
+logo.png            wordmark completo, fundo transparente  (1400×420)
+logo-branco.png     mesma versão em branco, para fundo escuro
+simbolo.png         só a cápsula inclinada, transparente
+avatar.png          ícone quadrado 1024×1024 — app, crachá, WhatsApp Business
+avatar-redondo.png  ícone redondo 1024×1024 — Instagram, Facebook, Google
+email-header.png    cabeçalho 600×140 com fundo branco, para modelos de e-mail
+
+Cor da marca: #3B5BA5
+Todos servidos publicamente em https://avidoc.com.br/marca/<arquivo>
+
+Regras de uso: docs/TROCA-DE-MARCA.md
