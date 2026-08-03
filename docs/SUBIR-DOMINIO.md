@@ -4,13 +4,12 @@ Domínio canônico: **`avidoc.com.br`**.
 `avidoc.online` e `avidoc.net` entram só como **redirecionamento 301** — três domínios
 indexados dividem o mesmo SEO e nenhum fica forte.
 
-> **A ordem importa.** Os passos 1 a 6 são feitos nos painéis externos e precisam estar
-> prontos **antes** de publicar o código. O código já está preparado, mas se ele for ao ar
-> antes do passo 2 o site passa a declarar `canonical` e `og:url` apontando para um domínio
-> que ainda serve página de estacionamento — e o Google despriorizaria o site.
-
-Estado de partida (verificado em 03/08/2026): os três domínios estão **estacionados na
-Hostinger**; quem está na Vercel é o `clickteleconsulta.online`.
+> **CONCLUÍDO em 03/08/2026.** O site está no ar em `avidoc.com.br`, com `www`, `.online`
+> e `.net` redirecionando (308) para o apex. A API responde por `api.avidoc.com.br`
+> (Custom Domain do Supabase). O `clickteleconsulta.online` está aposentado e sem uso.
+>
+> O que ficou deste documento é o histórico da ordem seguida e as duas armadilhas
+> registradas no fim — vale reler antes de qualquer nova troca de domínio.
 
 ---
 
@@ -195,3 +194,29 @@ host api.clickteleconsulta.online                      # imagens ainda resolvend
 
 E no navegador: entrar, recuperar senha e **fazer um agendamento de teste até o retorno do
 pagamento** — é o caminho que mais depende dos passos 3 e 4.
+
+
+---
+
+## O que deu errado no caminho — para não repetir
+
+**1. O CSP e a variável `VITE_SUPABASE_URL` andam juntos.**
+A variável na Vercel aponta para o *custom domain* do Supabase, não para `*.supabase.co`.
+Ao remover o host antigo do `connect-src`, o navegador passou a bloquear toda chamada à
+API: o site carregava e nenhum dado aparecia. Antes de mexer no CSP, confira o host real
+lendo o bundle publicado — não deduza pelo código.
+
+**2. O Supabase só aceita um custom domain por projeto.**
+Ativar `api.avidoc.com.br` **desativou** `api.clickteleconsulta.online` no mesmo instante.
+Como a variável ainda apontava para o antigo, a API caiu de novo. A sequência sem
+indisponibilidade é: apontar a variável para `https://<ref>.supabase.co`, fazer o swap do
+custom domain, e só então apontar para o host novo.
+
+Por isso `*.supabase.co` continua no `connect-src`: é a rede de segurança que permite
+voltar ao host direto sem precisar de um novo deploy.
+
+**3. URLs gravadas no banco carregavam o domínio antigo.**
+As fotos dos médicos e os PDFs estavam salvos como `https://<domínio-antigo>/cdn/...`.
+Resolvido em código — `src/lib/storageUrl.js` renormaliza para a origem atual em tempo de
+leitura, então não foi preciso migrar dados. Seis pontos liam a URL crua e escaparam
+dessa normalização; todos foram corrigidos.
