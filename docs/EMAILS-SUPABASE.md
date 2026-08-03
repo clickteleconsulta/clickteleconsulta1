@@ -1,5 +1,19 @@
 # Modelos de e-mail do Supabase Auth — marca aviDoc
 
+> **APLICADO em 03/08/2026 — mas não por este documento.**
+>
+> Os modelos que estão no ar não foram substituídos por estes: os originais foram
+> mantidos e só tiveram a marca e as cores trocadas, para não mexer nos links.
+> Ver `MARCA-ANTIGA-PENDENCIAS.md`, seção 1.
+>
+> **Não cole o HTML abaixo por cima do que está em produção.** Ele usa
+> `{{ .ConfirmationURL }}`, e os modelos reais montam a URL com
+> `{{ .SiteURL }}/auth/confirmar?token_hash={{ .TokenHash }}&type=…&next=…`,
+> que é o formato que a rota `/auth/confirmar` do site espera. Trocar quebra o fluxo.
+>
+> O que segue vale como referência de layout, caso um dia os modelos sejam refeitos
+> do zero — e nesse caso o link tem de ser reescrito no formato acima.
+
 Os e-mails de **recuperação de senha, confirmação de cadastro, convite, link mágico e
 troca de e-mail** não vêm do código do site: são modelos guardados no painel do Supabase.
 Por isso continuaram com a marca antiga mesmo depois do deploy.
