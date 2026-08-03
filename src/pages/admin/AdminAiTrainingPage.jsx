@@ -203,7 +203,7 @@ const AdminAiTrainingPage = () => {
                       <TableCell className="text-right align-top pt-3">
                         <div className="flex justify-end gap-2">
                           <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(rule)}>
-                            <Pencil className="w-4 h-4 text-blue-500" />
+                            <Pencil className="w-4 h-4 text-brand-500" />
                           </Button>
                           <Button variant="ghost" size="icon" onClick={() => setDeleteId(rule.id)}>
                             <Trash2 className="w-4 h-4 text-red-500" />

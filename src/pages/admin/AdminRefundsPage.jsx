@@ -209,8 +209,8 @@ const AdminRefundsPage = () => {
 
             <Tabs value={tab} onValueChange={setTab}>
                 <TabsList className="grid w-full grid-cols-2 max-w-sm h-10 p-1 bg-gray-100/80 rounded-xl">
-                    <TabsTrigger value="pendentes" className="rounded-lg text-sm data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">Pendentes {pendentes.length > 0 && `(${pendentes.length})`}</TabsTrigger>
-                    <TabsTrigger value="historico" className="rounded-lg text-sm data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">Histórico</TabsTrigger>
+                    <TabsTrigger value="pendentes" className="rounded-lg text-sm data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Pendentes {pendentes.length > 0 && `(${pendentes.length})`}</TabsTrigger>
+                    <TabsTrigger value="historico" className="rounded-lg text-sm data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Histórico</TabsTrigger>
                 </TabsList>
             </Tabs>
 
@@ -244,8 +244,8 @@ const AdminRefundsPage = () => {
                                     <TableCell className="text-sm whitespace-nowrap">{safeDate(a.cancelado_em, 'dd/MM/yyyy HH:mm')}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className={
-                                            actor === 'Paciente' ? 'bg-sky-50 text-sky-700 border-sky-200 text-[11px]'
-                                            : actor === 'Médico' ? 'bg-indigo-50 text-indigo-700 border-indigo-200 text-[11px]'
+                                            actor === 'Paciente' ? 'bg-brand-50 text-brand-800 border-brand-200 text-[11px]'
+                                            : actor === 'Médico' ? 'bg-brand-50 text-brand-800 border-brand-200 text-[11px]'
                                             : 'bg-gray-50 text-gray-600 border-gray-200 text-[11px]'
                                         }>
                                             {actor === 'Paciente' ? <User className="w-3 h-3 mr-1" /> : actor === 'Médico' ? <Stethoscope className="w-3 h-3 mr-1" /> : null}
@@ -280,7 +280,7 @@ const AdminRefundsPage = () => {
                                         <div className="flex items-center justify-end gap-2">
                                             {!isHist ? (
                                                 <>
-                                                    <Button size="sm" className="h-8 gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs" onClick={() => estornarNoAsaas(a)} disabled={refundingId === a.id}>
+                                                    <Button size="sm" className="h-8 gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs" onClick={() => estornarNoAsaas(a)} disabled={refundingId === a.id}>
                                                         {refundingId === a.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />} Estornar no Asaas
                                                     </Button>
                                                     <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs" onClick={() => setTarget(a)} title="Marcar como reembolsado manualmente (se você já estornou por fora)" disabled={refundingId === a.id}>

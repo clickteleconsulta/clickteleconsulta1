@@ -26,12 +26,12 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
   const consultaTime = appointment?.data_hora ? new Date(appointment.data_hora) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-brand-800 to-slate-900 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Logo / Marca */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600/20 border border-blue-500/30 mb-4">
-            <Video className="w-8 h-8 text-blue-400" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-600/20 border border-brand-500/30 mb-4">
+            <Video className="w-8 h-8 text-brand-400" />
           </div>
           <h1 className="text-2xl font-bold text-white">Sala de Teleconsulta</h1>
           <p className="text-slate-400 text-sm mt-1">{BRAND.name}</p>
@@ -44,7 +44,7 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
             <>
               <div className="text-center mb-6">
                 <div className="relative inline-block mb-4">
-                  <div className="w-20 h-20 rounded-full bg-blue-600/20 border-2 border-blue-500/40 flex items-center justify-center mx-auto">
+                  <div className="w-20 h-20 rounded-full bg-brand-600/20 border-2 border-brand-500/40 flex items-center justify-center mx-auto">
                     <span className="text-3xl">👨‍⚕️</span>
                   </div>
                   <span className="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-amber-400 border-2 border-slate-800" />
@@ -71,7 +71,7 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
               <Button
                 onClick={onEnterRoom}
                 disabled={isEntering}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold h-12 rounded-xl gap-2 transition-all"
+                className="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold h-12 rounded-xl gap-2 transition-all"
               >
                 {isEntering ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /> Conectando...</>
@@ -84,7 +84,7 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
             // ── Vista do Médico ──
             <>
               <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-emerald-600/20 border-2 border-emerald-500/40 flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full bg-green-600/20 border-2 border-green-500/40 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🩺</span>
                 </div>
                 <h2 className="text-xl font-bold text-white">Pronto para atender?</h2>
@@ -98,15 +98,15 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
                 )}
               </div>
 
-              <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 mb-6">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
-                <p className="text-emerald-300 text-sm">Paciente aguardando na sala</p>
+              <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/20 rounded-xl p-4 mb-6">
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
+                <p className="text-green-300 text-sm">Paciente aguardando na sala</p>
               </div>
 
               <Button
                 onClick={onEnterRoom}
                 disabled={isEntering}
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold h-12 rounded-xl gap-2 transition-all"
+                className="w-full bg-green-600 hover:bg-green-500 text-white font-semibold h-12 rounded-xl gap-2 transition-all"
               >
                 {isEntering ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /> Abrindo sala...</>
@@ -164,7 +164,7 @@ const SideChat = ({ onClose, appointmentId, userRole, userName }) => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-700/50">
         <div className="flex items-center gap-2">
-          <MessageSquare className="w-4 h-4 text-blue-400" />
+          <MessageSquare className="w-4 h-4 text-brand-400" />
           <h3 className="text-white font-semibold text-sm">Chat da Consulta</h3>
         </div>
         <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
@@ -185,7 +185,7 @@ const SideChat = ({ onClose, appointmentId, userRole, userName }) => {
                 <span className="text-slate-500 text-xs mb-1">{msg.senderName || msg.sender}</span>
                 <div className={`rounded-2xl px-3 py-2 max-w-[85%] ${
                   msg.sender === userRole
-                    ? 'bg-blue-600 text-white rounded-br-sm'
+                    ? 'bg-brand-600 text-white rounded-br-sm'
                     : 'bg-slate-700 text-slate-100 rounded-bl-sm'
                 }`}>
                   <p className="text-sm">{msg.text}</p>
@@ -208,9 +208,9 @@ const SideChat = ({ onClose, appointmentId, userRole, userName }) => {
             value={newMsg}
             onChange={e => setNewMsg(e.target.value)}
             placeholder="Digite uma mensagem..."
-            className="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
           />
-          <Button type="submit" size="sm" className="bg-blue-600 hover:bg-blue-500 rounded-xl px-3">
+          <Button type="submit" size="sm" className="bg-brand-600 hover:bg-brand-500 rounded-xl px-3">
             <Send className="w-4 h-4" />
           </Button>
         </div>
@@ -243,7 +243,7 @@ const CallControls = ({
     : connectionQuality === 'poor' ? Wifi
     : WifiOff;
 
-  const qualityColor = connectionQuality === 'good' ? 'text-emerald-400'
+  const qualityColor = connectionQuality === 'good' ? 'text-green-400'
     : connectionQuality === 'fair' ? 'text-amber-400'
     : 'text-red-400';
 
@@ -304,7 +304,7 @@ const CallControls = ({
           onClick={onToggleChat}
           className={`w-12 h-12 rounded-full flex items-center justify-center transition-all relative ${
             isChatOpen
-              ? 'bg-blue-600/30 text-blue-400 border border-blue-500/40'
+              ? 'bg-brand-600/30 text-brand-400 border border-brand-500/40'
               : 'bg-slate-700 text-white hover:bg-slate-600'
           }`}
           title="Chat"
@@ -546,7 +546,7 @@ const VideoCallPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white">
-        <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-brand-500 animate-spin mb-4" />
         <h2 className="text-xl font-semibold">Preparando ambiente seguro...</h2>
         <p className="text-slate-400 mt-2">Verificando credenciais e conexão.</p>
       </div>
@@ -610,7 +610,7 @@ const VideoCallPage = () => {
           <p className="text-sm text-slate-600 mt-1">A chamada foi aberta em outra aba do navegador</p>
           <button
             onClick={handleEnterRoom}
-            className="mt-4 text-blue-400 hover:text-blue-300 text-sm underline flex items-center gap-1 mx-auto"
+            className="mt-4 text-brand-400 hover:text-brand-300 text-sm underline flex items-center gap-1 mx-auto"
           >
             Reabrir videochamada <ChevronRight className="w-3 h-3" />
           </button>

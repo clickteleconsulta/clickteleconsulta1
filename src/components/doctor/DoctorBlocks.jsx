@@ -120,7 +120,7 @@ const DoctorBlocks = ({ doctorId, onChange }) => {
     <div className="space-y-4">
       <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm">
         <CardHeader className="px-6 pt-6 pb-4">
-          <CardTitle className="font-[Manrope] text-lg font-bold tracking-tight text-gray-900 flex items-center gap-2">
+          <CardTitle className="font-display text-lg font-bold tracking-tight text-gray-900 flex items-center gap-2">
             <Ban className="w-5 h-5 text-red-500" /> Bloquear horários
           </CardTitle>
           <CardDescription className="text-sm">Marque datas ou horários em que você não estará disponível. Horário de Brasília.</CardDescription>

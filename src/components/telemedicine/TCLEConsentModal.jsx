@@ -160,12 +160,12 @@ const TCLEConsentModal = ({
         onInteractOutside={(e) => { e.preventDefault(); }}
       >
         {/* Header */}
-        <DialogHeader className="bg-blue-600 p-5 text-white">
+        <DialogHeader className="bg-brand-600 p-5 text-white">
           <DialogTitle className="flex items-center gap-2 text-lg font-bold text-white">
             <ShieldCheck className="w-6 h-6" />
             Termo de Consentimento — TCLE
           </DialogTitle>
-          <DialogDescription className="text-blue-100 text-sm mt-0.5">
+          <DialogDescription className="text-brand-100 text-sm mt-0.5">
             Resolução CFM 2.314/2022 — obrigatório para teleconsulta médica
           </DialogDescription>
         </DialogHeader>
@@ -247,7 +247,7 @@ const TCLEConsentModal = ({
               to="/legal?doc=terms_of_service"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 underline"
+              className="flex items-center gap-1 text-xs text-brand-600 hover:text-brand-800 underline"
             >
               <ExternalLink className="w-3 h-3" /> Termos de Serviço
             </Link>
@@ -255,19 +255,19 @@ const TCLEConsentModal = ({
               to="/legal?doc=privacy_policy"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 underline"
+              className="flex items-center gap-1 text-xs text-brand-600 hover:text-brand-800 underline"
             >
               <ExternalLink className="w-3 h-3" /> Política de Privacidade (LGPD)
             </Link>
           </div>
 
           {/* Checkbox de aceite explícito — CFM obrigatório */}
-          <div className="flex items-start space-x-3 bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-blue-300 transition-colors mb-4">
+          <div className="flex items-start space-x-3 bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-brand-300 transition-colors mb-4">
             <Checkbox
               id="tcle-accept"
               checked={checkboxChecked}
               onCheckedChange={setCheckboxChecked}
-              className="mt-0.5 data-[state=checked]:bg-blue-600 border-gray-300 h-5 w-5 rounded shadow-sm"
+              className="mt-0.5 data-[state=checked]:bg-brand-600 border-gray-300 h-5 w-5 rounded shadow-sm"
             />
             <Label
               htmlFor="tcle-accept"
@@ -285,7 +285,7 @@ const TCLEConsentModal = ({
             disabled={!checkboxChecked || isSubmitting}
             className={`w-full font-semibold h-12 rounded-xl text-sm transition-all ${
               checkboxChecked && !isSubmitting
-                ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-100 shadow-lg'
+                ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-100 shadow-lg'
                 : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
             }`}
           >

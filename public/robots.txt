@@ -12,4 +12,4 @@ Disallow: /conta/
 Disallow: /cadastro-medico/
 Disallow: /auth/
 
-Sitemap: https://clickteleconsulta.online/sitemap.xml
+Sitemap: https://avidoc.com.br/sitemap.xml

@@ -129,7 +129,7 @@ const DoctorOverview = () => {
 
     const toneCls = {
         red: 'bg-red-50 text-red-700 border-red-100', amber: 'bg-amber-50 text-amber-700 border-amber-100',
-        blue: 'bg-blue-50 text-blue-700 border-blue-100', teal: 'bg-teal-50 text-teal-700 border-teal-100',
+        blue: 'bg-brand-50 text-brand-800 border-brand-100', teal: 'bg-green-50 text-green-700 border-green-100',
     };
 
     const Kpi = ({ icon: Icon, label, value, note, tone = 'text-gray-900' }) => (
@@ -149,7 +149,7 @@ const DoctorOverview = () => {
         <div className="space-y-6 animate-in fade-in duration-500">
             <DoctorPageHeader icon={LayoutDashboard} title="Painel" subtitle="Sua visão geral do dia — consultas, saldo e pendências.">
                 {med?.id && med?.is_active && (
-                    <Button asChild variant="outline" size="sm" className="gap-2 shrink-0 border-gray-300 text-gray-700 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50">
+                    <Button asChild variant="outline" size="sm" className="gap-2 shrink-0 border-gray-300 text-gray-700 hover:text-brand-600 hover:border-brand-300 hover:bg-brand-50/50">
                         <Link to={`/medico/${med.id}`} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="w-3.5 h-3.5" /> Ver meu perfil público
                         </Link>
@@ -159,11 +159,11 @@ const DoctorOverview = () => {
 
             {/* KPIs */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <Kpi icon={CalendarDays} label="Consultas hoje" value={hoje.length} tone="text-blue-700"
+                <Kpi icon={CalendarDays} label="Consultas hoje" value={hoje.length} tone="text-brand-800"
                     note={proxima ? `Próxima ${horaDe(proxima)} · ${nomePaciente(proxima)}` : 'Nenhuma para hoje'} />
-                <Kpi icon={Wallet} label="Saldo a receber" value={fmtBRL(saldo)} tone="text-teal-700" note={`${saldoCount} guia(s) para saque`} />
+                <Kpi icon={Wallet} label="Saldo a receber" value={fmtBRL(saldo)} tone="text-green-700" note={`${saldoCount} guia(s) para saque`} />
                 <Kpi icon={Star} label="Nota média" value={notaMedia ? notaMedia.toFixed(1) : '—'} tone="text-amber-600" note={`${nAval} avaliação(ões)`} />
-                <Kpi icon={CheckCircle2} label="Ativação" value={`${feitos}/${checklist.length}`} tone={checklistCompleto ? 'text-emerald-600' : 'text-gray-900'} note={checklistCompleto ? 'Tudo pronto 🎉' : 'Passos para começar'} />
+                <Kpi icon={CheckCircle2} label="Ativação" value={`${feitos}/${checklist.length}`} tone={checklistCompleto ? 'text-green-600' : 'text-gray-900'} note={checklistCompleto ? 'Tudo pronto 🎉' : 'Passos para começar'} />
             </div>
 
             {/* Precisa da sua atenção */}
@@ -207,7 +207,7 @@ const DoctorOverview = () => {
                 </Card>
 
                 {/* Checklist de ativação */}
-                <Card className={checklistCompleto ? 'border-emerald-100 bg-emerald-50/40' : ''}>
+                <Card className={checklistCompleto ? 'border-green-100 bg-green-50/40' : ''}>
                     <CardHeader className="pb-3">
                         <CardTitle className="dashboard-title flex items-center gap-2 text-base"><CheckCircle2 className="w-4 h-4 text-primary" /> Ativação do perfil</CardTitle>
                         <div className="mt-2 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
@@ -216,10 +216,10 @@ const DoctorOverview = () => {
                     </CardHeader>
                     <CardContent className="space-y-1.5">
                         {checklistCompleto ? (
-                            <p className="text-sm text-emerald-700 py-2">Seu perfil está completo e ativo. Você já aparece na página pública de agendamentos. 🎉</p>
+                            <p className="text-sm text-green-700 py-2">Seu perfil está completo e ativo. Você já aparece na página pública de agendamentos. 🎉</p>
                         ) : checklist.map((c, i) => (
                             <Link key={i} to={c.to} className={`flex items-center gap-3 rounded-lg px-2.5 py-2 transition-colors ${c.ok ? 'opacity-60' : 'hover:bg-gray-50'}`}>
-                                {c.ok ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" /> : <Circle className="w-5 h-5 text-gray-300 shrink-0" />}
+                                {c.ok ? <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" /> : <Circle className="w-5 h-5 text-gray-300 shrink-0" />}
                                 <div className="min-w-0 flex-1">
                                     <p className={`text-sm font-medium ${c.ok ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{c.label}</p>
                                     {!c.ok && <p className="text-xs text-gray-500 truncate">{c.hint}</p>}

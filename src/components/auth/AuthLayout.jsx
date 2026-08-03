@@ -1,14 +1,13 @@
 import React from 'react';
-import { BRAND } from '@/config/brand';
 import { Link } from 'react-router-dom';
-import Logo from '@/components/Logo';
+import Wordmark from '@/components/Wordmark';
 import { Stethoscope, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
 
 // Painel de marca por público — o lado esquerdo (desktop) muda conforme cliente/profissional.
 const PANELS = {
     cliente: {
         eyebrow: null,
-        title: 'Sua saúde a um clique de distância.',
+        title: 'Sua consulta marcada em minutos.',
         subtitle: 'Marketplace de agendamento: escolha o médico e agende. O atendimento é feito pelo próprio profissional.',
         features: [
             { icon: UserCheck, label: 'Escolha entre médicos parceiros verificados (CFM)' },
@@ -38,14 +37,14 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
             {/* Painel de marca (desktop) */}
             <div
                 className="hidden lg:flex lg:w-[45%] relative overflow-hidden flex-col justify-between p-10 text-white"
-                style={{ background: 'linear-gradient(135deg,#0ea5e9 0%,#14b8a6 100%)' }}
+                style={{ background: 'linear-gradient(135deg,#3B5BA5 0%,#6B87C4 100%)' }}
             >
                 <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
                 <div className="absolute -bottom-28 -left-16 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
 
-                <Link to="/" className="relative inline-flex items-center gap-2.5 w-fit">
-                    <Logo className="w-10 h-10" />
-                    <span className="text-lg font-bold tracking-tight">{BRAND.name}</span>
+                <Link to="/" className="relative inline-flex items-center w-fit">
+                    {/* Sobre a cor da marca o logo vai todo em branco. */}
+                    <Wordmark size={26} ink="#ffffff" dark />
                 </Link>
 
                 <div className="relative space-y-5 max-w-sm">
@@ -54,7 +53,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
                             <Stethoscope className="w-3.5 h-3.5" /> {p.eyebrow}
                         </span>
                     )}
-                    <h2 className="text-3xl font-bold leading-tight tracking-tight" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                    <h2 className="text-3xl font-bold leading-tight tracking-tight">
                         {p.title}
                     </h2>
                     <p className="text-white/85 text-sm leading-relaxed">{p.subtitle}</p>
@@ -77,9 +76,8 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
 
             {/* Formulário */}
             <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-10 py-10 bg-white">
-                <Link to="/" className="lg:hidden inline-flex items-center gap-2 mb-6">
-                    <Logo className="w-10 h-10" />
-                    <span className="text-lg font-bold text-slate-900 tracking-tight">{BRAND.name}</span>
+                <Link to="/" className="lg:hidden inline-flex items-center mb-6">
+                    <Wordmark size={26} />
                 </Link>
                 <div className="w-full max-w-[400px]">
                     {children}

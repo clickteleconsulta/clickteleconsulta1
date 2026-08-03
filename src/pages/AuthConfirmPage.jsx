@@ -41,7 +41,7 @@ const AuthConfirmPage = () => {
                 </div>
             ) : (
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
                     <p className="text-sm text-slate-500">Validando seu link...</p>
                 </div>
             )}

@@ -48,7 +48,7 @@ const QuemSomosPage = () => {
       <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
         {/* Intro */}
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-600">Quem somos</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Quem somos</span>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">
             Democratizar o acesso à saúde, um agendamento de cada vez
           </h1>
@@ -93,8 +93,8 @@ const QuemSomosPage = () => {
           <h2 className="text-xl font-bold text-slate-900 text-center">No que acreditamos</h2>
           <div className="grid sm:grid-cols-2 gap-4 mt-6">
             {VALORES.map((v) => (
-              <div key={v.title} className="flex items-start gap-3 p-5 rounded-2xl bg-slate-50 border border-slate-100">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <div key={v.title} className="flex items-start gap-3 p-5 rounded-2xl bg-brand-50 border border-slate-100">
+                <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
                   <v.icon className="w-5 h-5" />
                 </div>
                 <div>
@@ -109,7 +109,7 @@ const QuemSomosPage = () => {
         {/* Dados da empresa */}
         <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-3">
-            <Building2 className="w-5 h-5 text-blue-600" />
+            <Building2 className="w-5 h-5 text-brand-600" />
             <h2 className="font-bold text-slate-900">Dados da empresa</h2>
           </div>
           <div className="text-sm text-slate-500 leading-relaxed space-y-1">
@@ -118,7 +118,7 @@ const QuemSomosPage = () => {
             <p><span className="text-slate-700 font-medium">Endereço:</span> R. Antônio Pereira Ramos, nº 118, Centro, Coroaci/MG, CEP 39.710-000</p>
             <p>
               <span className="text-slate-700 font-medium">Contato:</span>{' '}
-              <a href={`mailto:${BRAND.emails.suporte}`} className="text-blue-600 hover:underline break-all">{BRAND.emails.suporte}</a>
+              <a href={`mailto:${BRAND.emails.suporte}`} className="text-brand-600 hover:underline break-all">{BRAND.emails.suporte}</a>
             </p>
           </div>
         </div>

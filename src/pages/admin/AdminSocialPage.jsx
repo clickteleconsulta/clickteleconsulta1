@@ -96,8 +96,8 @@ const AdminSocialPage = () => {
                 </Button>
             </AdminPageHeader>
 
-            <div className="flex items-start gap-2 text-xs text-blue-900 bg-blue-50/70 border border-blue-100 rounded-lg p-3">
-                <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-600" />
+            <div className="flex items-start gap-2 text-xs text-brand-800 bg-brand-50/70 border border-brand-100 rounded-lg p-3">
+                <Info className="w-4 h-4 shrink-0 mt-0.5 text-brand-600" />
                 <span>Os posts são publicados automaticamente pelo sistema no horário agendado, <b>assim que a integração com a Meta estiver configurada</b> (token e IDs em Configurações do Supabase). Até lá, ficam como <b>Agendado</b> e nada é publicado. As imagens ficam em um endereço público (necessário para o Instagram).</span>
             </div>
 
@@ -189,7 +189,7 @@ const AdminSocialPage = () => {
                                         </div>
                                         <div className="flex items-center gap-1 shrink-0">
                                             {p.status !== 'publicado' && (
-                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-blue-600 hover:bg-blue-50" title="Publicar no próximo ciclo (até 10 min)" disabled={busyId === p.id} onClick={() => act(p.id, { status: 'agendado', scheduled_at: new Date().toISOString(), erro: null }, 'Marcado para publicar agora (até 10 min).')}>
+                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-brand-600 hover:bg-brand-50" title="Publicar no próximo ciclo (até 10 min)" disabled={busyId === p.id} onClick={() => act(p.id, { status: 'agendado', scheduled_at: new Date().toISOString(), erro: null }, 'Marcado para publicar agora (até 10 min).')}>
                                                     {busyId === p.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                                                 </Button>
                                             )}

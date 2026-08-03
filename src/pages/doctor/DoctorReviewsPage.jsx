@@ -149,7 +149,7 @@ const DoctorReviewsPage = () => {
 
         return (
             <Card className="mb-4 overflow-hidden border-gray-200 rounded-2xl shadow-sm transition-all duration-300 hover:shadow-md">
-                <div className={`h-1 w-full ${isReported ? 'bg-red-500' : 'bg-blue-500'}`} />
+                <div className={`h-1 w-full ${isReported ? 'bg-red-500' : 'bg-brand-500'}`} />
                 <CardContent className="p-5">
                     <div className="flex justify-between items-start mb-4">
                         <div>
@@ -202,17 +202,17 @@ const DoctorReviewsPage = () => {
 
             <Tabs defaultValue="pendentes" className="w-full">
                 <TabsList className="mb-4 h-10 p-1 bg-gray-100/80 rounded-xl">
-                    <TabsTrigger value="pendentes" className="gap-2 rounded-lg transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
+                    <TabsTrigger value="pendentes" className="gap-2 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">
                         <CheckCircle className="w-4 h-4" /> Recebidas ({pendingReviews.length})
                     </TabsTrigger>
-                    <TabsTrigger value="denunciadas" className="gap-2 rounded-lg transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
+                    <TabsTrigger value="denunciadas" className="gap-2 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">
                         <AlertTriangle className="w-4 h-4" /> Denunciadas ({reportedReviews.length})
                     </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="pendentes">
                     {loading ? (
-                        <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
+                        <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
                     ) : pendingReviews.length === 0 ? (
                         <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
                             <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
@@ -228,7 +228,7 @@ const DoctorReviewsPage = () => {
 
                 <TabsContent value="denunciadas">
                     {loading ? (
-                        <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
+                        <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
                     ) : reportedReviews.length === 0 ? (
                         <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
                             <ShieldAlert className="w-12 h-12 text-gray-300 mx-auto mb-3" />

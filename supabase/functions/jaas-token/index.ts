@@ -20,7 +20,9 @@ import { decode as base64Decode } from "https://deno.land/std@0.168.0/encoding/b
 
 // HOTFIX-07: Restrict CORS to known origins instead of wildcard "*"
 const ALLOWED_ORIGINS = [
-  'https://clickteleconsulta.online',
+  'https://avidoc.com.br',
+  'https://avidoc.online',
+  'https://avidoc.net',
   'http://localhost:3000',
   'http://localhost:5173',
 ];

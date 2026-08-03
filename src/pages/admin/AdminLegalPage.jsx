@@ -263,7 +263,7 @@ const AdminLegalPage = () => {
                 {activeTab === 'termo_adesao' ? <TermoAdesaoManager /> : (
                 <div className="mt-6 space-y-6">
                     {/* Section 1: Active Version */}
-                    <Card className="border-blue-100 bg-blue-50/30">
+                    <Card className="border-brand-100 bg-brand-50/30">
                         <CardHeader className="pb-3">
                             <CardTitle className="text-lg flex items-center gap-2">
                                 <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -374,7 +374,7 @@ const AdminLegalPage = () => {
                                                             {!ver.is_active && (
                                                                 <>
                                                                     <Button size="icon" variant="ghost" title="Ativar" onClick={() => setActivateDoc(ver)}>
-                                                                        <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                                                                        <CheckCircle2 className="w-4 h-4 text-brand-600" />
                                                                     </Button>
                                                                     <Button size="icon" variant="ghost" title="Excluir" onClick={() => setDeleteDoc(ver)}>
                                                                         <Trash2 className="w-4 h-4 text-red-500" />
@@ -416,8 +416,8 @@ const AdminLegalPage = () => {
                                     id="pdf-upload"
                                 />
                                 <label htmlFor="pdf-upload" className="cursor-pointer flex flex-col items-center w-full h-full">
-                                    <div className="bg-blue-100 p-3 rounded-full mb-3">
-                                        <Upload className="w-6 h-6 text-blue-600" />
+                                    <div className="bg-brand-100 p-3 rounded-full mb-3">
+                                        <Upload className="w-6 h-6 text-brand-600" />
                                     </div>
                                     <span className="text-sm font-medium text-gray-900">
                                         {selectedFile ? selectedFile.name : "Clique para selecionar o PDF"}

@@ -239,23 +239,23 @@ const DoctorProceduresPage = () => {
     const calculateFinalPrice = (price, taxPercent) => patientPriceFromRepasse(price, taxPercent);
 
     if (loading) {
-        return <div className="flex justify-center items-center h-64 w-full"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>;
+        return <div className="flex justify-center items-center h-64 w-full"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>;
     }
 
     return (
         <div className="w-full space-y-6">
             <DoctorPageHeader icon={Stethoscope} title="Meus Procedimentos" subtitle="Gerencie os serviços, descrições e valores do seu atendimento.">
                 {!isFormOpen && (
-                    <Button onClick={() => handleOpenForm()} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md shadow-blue-500/20 h-9 text-sm shrink-0 w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                    <Button onClick={() => handleOpenForm()} className="bg-brand-600 hover:bg-brand-700 text-white rounded-xl shadow-md shadow-brand-500/20 h-9 text-sm shrink-0 w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                         <Plus className="w-4 h-4 mr-2" /> Novo Procedimento
                     </Button>
                 )}
             </DoctorPageHeader>
 
             {isFormOpen && (
-                <Card className="border-blue-100 shadow-md rounded-xl overflow-hidden mb-6 w-full">
-                    <div className="bg-blue-50/50 px-5 py-3 border-b border-blue-100 flex items-center gap-3">
-                        <div className="p-1.5 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+                <Card className="border-brand-100 shadow-md rounded-xl overflow-hidden mb-6 w-full">
+                    <div className="bg-brand-50/50 px-5 py-3 border-b border-brand-100 flex items-center gap-3">
+                        <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg shrink-0">
                             <Stethoscope className="w-4 h-4" />
                         </div>
                         <h2 className="text-lg font-bold text-gray-900 truncate">
@@ -265,9 +265,9 @@ const DoctorProceduresPage = () => {
                     <CardContent className="p-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             {formLocked && (
-                                <div className="md:col-span-2 flex items-start gap-2.5 p-3 rounded-lg bg-blue-50/70 border border-blue-100">
-                                    <Lock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                                    <p className="text-[12px] text-blue-800 leading-relaxed">
+                                <div className="md:col-span-2 flex items-start gap-2.5 p-3 rounded-lg bg-brand-50/70 border border-brand-100">
+                                    <Lock className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
+                                    <p className="text-[12px] text-brand-800 leading-relaxed">
                                         Este é o procedimento padrão da plataforma. O nome e a descrição são fixos —
                                         você pode ajustar o <strong>valor de repasse</strong> e as <strong>instruções ao paciente</strong>.
                                     </p>
@@ -286,7 +286,7 @@ const DoctorProceduresPage = () => {
                                     placeholder="Ex: Consulta Psiquiátrica Online"
                                     disabled={formLocked}
                                     readOnly={formLocked}
-                                    className={`text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full ${formLocked ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
+                                    className={`text-gray-900 border-gray-300 focus:border-brand-500 focus:ring-brand-500 rounded-lg h-9 text-sm w-full ${formLocked ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
                                 />
                             </div>
 
@@ -302,7 +302,7 @@ const DoctorProceduresPage = () => {
                                     placeholder="Descreva os detalhes, duração aproximada ou o que está incluso no procedimento..."
                                     disabled={formLocked}
                                     readOnly={formLocked}
-                                    className={`min-h-[80px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full ${formLocked ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
+                                    className={`min-h-[80px] text-gray-900 border-gray-300 focus:border-brand-500 focus:ring-brand-500 rounded-lg resize-y text-sm w-full ${formLocked ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
                                 />
                             </div>
 
@@ -316,7 +316,7 @@ const DoctorProceduresPage = () => {
                                     value={formData.preco}
                                     onChange={(e) => setFormData({...formData, preco: e.target.value})}
                                     placeholder="0.00"
-                                    className="text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg h-9 text-sm w-full"
+                                    className="text-gray-900 border-gray-300 focus:border-brand-500 focus:ring-brand-500 rounded-lg h-9 text-sm w-full"
                                 />
                                 <p className="text-[11px] text-gray-500 font-medium">
                                     Este é o valor líquido que você receberá. Você define livremente o valor do seu atendimento.
@@ -325,8 +325,8 @@ const DoctorProceduresPage = () => {
 
                             {formLocked && (
                                 <div className="flex items-center gap-2 md:pt-6">
-                                    <Badge className="bg-blue-100 text-blue-800 border-none gap-1 px-2 py-0.5 text-[10px] font-bold">
-                                        <Star className="w-3 h-3 fill-blue-600" /> Procedimento principal
+                                    <Badge className="bg-brand-100 text-brand-800 border-none gap-1 px-2 py-0.5 text-[10px] font-bold">
+                                        <Star className="w-3 h-3 fill-brand-600" /> Procedimento principal
                                     </Badge>
                                 </div>
                             )}
@@ -338,7 +338,7 @@ const DoctorProceduresPage = () => {
                                     value={formData.instructions}
                                     onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
                                     placeholder={"Escreva como o paciente se conecta e se prepara para a sua teleconsulta. Sugestões do que incluir:\n• Como você conduz o atendimento e por onde envia o link (ex.: WhatsApp/e-mail até 15 min antes)\n• Quadros e casos que você atende (ex.: renovação de receita, orientações, sintomas leves)\n• Como se preparar: ter exames recentes em mãos, estar num ambiente reservado e com boa internet, entrar alguns minutos antes"}
-                                    className="min-h-[130px] text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg resize-y text-sm w-full"
+                                    className="min-h-[130px] text-gray-900 border-gray-300 focus:border-brand-500 focus:ring-brand-500 rounded-lg resize-y text-sm w-full"
                                 />
                                 <p className="text-[11px] text-gray-500 font-medium">Essas orientações ajudam o paciente a se conectar e se preparar para o seu atendimento.</p>
                             </div>
@@ -346,7 +346,7 @@ const DoctorProceduresPage = () => {
 
                         <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-6 mt-6 border-t border-gray-100">
                             <Button variant="outline" onClick={handleCancel} disabled={isSaving} className="rounded-lg font-semibold h-9 text-sm w-full sm:w-auto">Cancelar</Button>
-                            <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md shadow-blue-500/20 h-9 text-sm w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
+                            <Button onClick={handleSave} disabled={isSaving} className="bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold shadow-md shadow-brand-500/20 h-9 text-sm w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
                                 {isSaving ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin shrink-0" /> : null}
                                 Salvar Procedimento
                             </Button>
@@ -358,12 +358,12 @@ const DoctorProceduresPage = () => {
             {!isFormOpen && procedures.length === 0 && (
                 <Card className="border-dashed border-2 bg-gray-50/50 rounded-xl w-full">
                     <CardContent className="flex flex-col items-center justify-center p-8 sm:p-12 text-center">
-                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
+                        <div className="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mb-3">
                             <Stethoscope className="w-6 h-6" />
                         </div>
                         <h3 className="text-lg font-bold text-gray-900">Nenhum procedimento cadastrado</h3>
                         <p className="text-sm text-gray-500 mt-1 mb-5 max-w-md">Adicione os serviços que você oferece para que os pacientes possam visualizá-los em seu perfil público.</p>
-                        <Button onClick={() => handleOpenForm()} className="bg-blue-600 hover:bg-blue-700 shadow-sm rounded-lg font-semibold h-9 text-sm w-full sm:w-auto">
+                        <Button onClick={() => handleOpenForm()} className="bg-brand-600 hover:bg-brand-700 shadow-sm rounded-lg font-semibold h-9 text-sm w-full sm:w-auto">
                             <Plus className="w-4 h-4 mr-2" /> Adicionar Procedimento
                         </Button>
                     </CardContent>
@@ -377,13 +377,13 @@ const DoctorProceduresPage = () => {
                         const finalPrice = calculateFinalPrice(proc.preco, taxPercentage);
 
                         return (
-                            <Card key={proc.id} className={`overflow-hidden transition-all rounded-xl flex flex-col h-full w-full ${proc.principal ? 'border-blue-300 ring-1 ring-blue-100 shadow-md' : 'border-gray-200 shadow-sm hover:shadow-md'}`}>
+                            <Card key={proc.id} className={`overflow-hidden transition-all rounded-xl flex flex-col h-full w-full ${proc.principal ? 'border-brand-300 ring-1 ring-brand-100 shadow-md' : 'border-gray-200 shadow-sm hover:shadow-md'}`}>
                                 <CardContent className="p-5 flex flex-col flex-grow">
                                     <div className="flex justify-between items-start gap-3 mb-2">
                                         <h3 className="font-bold text-lg text-gray-900 leading-tight line-clamp-2 break-words">{proc.nome}</h3>
                                         {proc.principal && (
-                                            <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-none gap-1 px-2 py-0.5 text-[10px] font-bold shrink-0">
-                                                <Star className="w-3 h-3 fill-blue-600" /> Principal
+                                            <Badge className="bg-brand-100 text-brand-800 hover:bg-brand-200 border-none gap-1 px-2 py-0.5 text-[10px] font-bold shrink-0">
+                                                <Star className="w-3 h-3 fill-brand-600" /> Principal
                                             </Badge>
                                         )}
                                     </div>
@@ -394,9 +394,9 @@ const DoctorProceduresPage = () => {
                                     
                                     <div className="mt-auto pt-4 space-y-2">
                                         {/* Repasse: valor que o médico realmente recebe — destaque */}
-                                        <div className="bg-blue-50/60 border border-blue-100 rounded-lg p-3 w-full">
-                                            <p className="text-[10px] font-bold text-blue-800 uppercase tracking-wider mb-0.5 truncate">Valor de Repasse</p>
-                                            <p className="text-xl font-extrabold text-blue-700 truncate">
+                                        <div className="bg-brand-50/60 border border-brand-100 rounded-lg p-3 w-full">
+                                            <p className="text-[10px] font-bold text-brand-800 uppercase tracking-wider mb-0.5 truncate">Valor de Repasse</p>
+                                            <p className="text-xl font-extrabold text-brand-800 truncate">
                                                 {formatCurrency(repassePrice)}
                                             </p>
                                         </div>

@@ -39,7 +39,7 @@ const BlogArticlePage = () => {
       </Helmet>
 
       <div className="max-w-2xl mx-auto px-4 py-10 md:py-14">
-        <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-blue-600 mb-6"><ArrowLeft className="w-4 h-4" /> Voltar ao blog</Link>
+        <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-brand-600 mb-6"><ArrowLeft className="w-4 h-4" /> Voltar ao blog</Link>
         <div className="text-[12px] text-slate-400 font-medium flex items-center gap-2 mb-2">
           <span>{fmt(article.date)}</span><span>·</span><span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {article.readMin} min de leitura</span>
         </div>
@@ -53,7 +53,7 @@ const BlogArticlePage = () => {
           })}
         </article>
 
-        <div className="mt-10 bg-gradient-to-br from-sky-500 to-teal-500 rounded-2xl p-7 text-center text-white">
+        <div className="mt-10 bg-gradient-to-br from-brand-600 to-brand-500 rounded-2xl p-7 text-center text-white">
           <p className="text-lg font-bold">Precisa de atendimento?</p>
           <p className="opacity-90 text-sm mt-1">Agende sua teleconsulta com um médico, a partir de R$ 40.</p>
           <Button asChild variant="secondary" className="mt-4 rounded-xl bg-white text-slate-900 hover:bg-slate-100"><Link to="/agendamentos">Agendar consulta</Link></Button>
@@ -65,8 +65,8 @@ const BlogArticlePage = () => {
             <div className="grid sm:grid-cols-2 gap-4">
               {others.map((a) => (
                 <Link key={a.slug} to={`/blog/${a.slug}`} className="group border border-slate-200 rounded-xl p-4 hover:shadow-sm">
-                  <p className="font-semibold text-slate-800 text-sm group-hover:text-blue-700 leading-snug">{a.title}</p>
-                  <span className="inline-flex items-center gap-1 text-xs text-blue-600 mt-2">Ler <ArrowRight className="w-3 h-3" /></span>
+                  <p className="font-semibold text-slate-800 text-sm group-hover:text-brand-800 leading-snug">{a.title}</p>
+                  <span className="inline-flex items-center gap-1 text-xs text-brand-600 mt-2">Ler <ArrowRight className="w-3 h-3" /></span>
                 </Link>
               ))}
             </div>

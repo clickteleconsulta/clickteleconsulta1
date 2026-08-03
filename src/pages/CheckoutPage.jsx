@@ -105,7 +105,7 @@ const AppointmentSummary = ({ appointmentDetails, compact = false }) => {
   return (
     <Card
       className={cn(
-        'border-primary/20 bg-gradient-to-br from-blue-50/50 to-indigo-50/30',
+        'border-primary/20 bg-gradient-to-br from-brand-50/50 to-brand-50/30',
         compact && 'shadow-none'
       )}
     >
@@ -135,7 +135,7 @@ const AppointmentSummary = ({ appointmentDetails, compact = false }) => {
         </div>
         <div className="flex items-center justify-between pt-3 border-t font-bold">
           <span>Total</span>
-          <span className="text-xl text-blue-600">R$ {price}</span>
+          <span className="text-xl text-brand-600">R$ {price}</span>
         </div>
         <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-md p-2.5">
           <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
@@ -336,8 +336,8 @@ const CheckoutPage = () => {
             <PatientDataReview profile={profile} user={user} />
 
             {/* Aviso email */}
-            <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-sm text-blue-800">
-              <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-4 bg-brand-50 border border-brand-100 rounded-xl text-sm text-brand-800">
+              <CheckCircle2 className="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" />
               <p>
                 Após a confirmação, você receberá um{' '}
                 <strong>email de confirmação</strong> com todos os detalhes do

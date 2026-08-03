@@ -142,7 +142,7 @@ const AdminReviewsPage = () => {
                                     <div className="flex items-center gap-3 flex-wrap">
                                         <h3 className="font-semibold text-gray-900">{review.patient_name}</h3>
                                         <span className="text-gray-400 text-sm">avaliou</span>
-                                        <h3 className="font-semibold text-blue-700">{review.doctor_name}</h3>
+                                        <h3 className="font-semibold text-brand-800">{review.doctor_name}</h3>
                                         {getStatusBadge(review.status)}
                                     </div>
                                     <div className="flex items-center gap-3">
@@ -186,7 +186,7 @@ const AdminReviewsPage = () => {
                                         </>
                                     )}
                                     {review.status !== 'publicada' && (
-                                        <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                        <Button size="sm" className="w-full bg-brand-600 hover:bg-brand-700 text-white"
                                             onClick={() => handleUpdateStatus(review.id, 'publicada', true)}>
                                             <CheckCircle className="w-4 h-4 mr-1" /> Publicar
                                         </Button>
@@ -235,7 +235,7 @@ const AdminReviewsPage = () => {
             </AdminPageHeader>
 
             {loading ? (
-                <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
+                <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
             ) : (
                 <Tabs defaultValue="denuncias" className="w-full" onValueChange={() => setCurrentPage(1)}>
                     <TabsList className="mb-6 flex-wrap h-auto gap-2 p-1">

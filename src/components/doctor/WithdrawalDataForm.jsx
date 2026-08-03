@@ -110,7 +110,7 @@ const WithdrawalDataForm = ({ onSave }) => {
                 </CardHeader>
                 <CardContent className="px-4 py-4 space-y-4">
                     {/* Importante */}
-                    <div className="text-[11px] text-blue-800 bg-blue-50 border border-blue-100 rounded-md p-2.5 leading-relaxed">
+                    <div className="text-[11px] text-brand-800 bg-brand-50 border border-brand-100 rounded-md p-2.5 leading-relaxed">
                         <strong className="block mb-0.5">Importante</strong>
                         Para realizar alteração dos dados bancários ou Pix, favor enviar o comprovante de vínculo bancário com o estabelecimento através do nosso e-mail ou contato com o suporte.
                     </div>

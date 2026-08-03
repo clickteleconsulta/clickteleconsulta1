@@ -36,7 +36,7 @@ const formatSize = (bytes) => {
 const StatusPill = ({ status }) => {
     const map = {
         pendente: { label: 'Em análise', cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-        aprovado: { label: 'Aprovado', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: FileCheck2 },
+        aprovado: { label: 'Aprovado', cls: 'bg-green-50 text-green-700 border-green-200', icon: FileCheck2 },
         rejeitado: { label: 'Rejeitado', cls: 'bg-red-50 text-red-700 border-red-200', icon: X },
     };
     const s = map[status] || map.pendente;
@@ -293,7 +293,7 @@ const AdminProfessionalDocsPage = () => {
                                                     <Button type="button" variant="outline" size="sm" onClick={() => handleView(doc)} disabled={busyId === doc.id} className="h-8 gap-1.5 text-xs border-gray-300 text-gray-700">
                                                         {busyId === doc.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Eye className="w-3.5 h-3.5" />} Ver
                                                     </Button>
-                                                    <Button type="button" size="sm" onClick={() => setStatus(doc, 'aprovado')} disabled={busyId === doc.id || doc.status === 'aprovado'} className="h-8 gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
+                                                    <Button type="button" size="sm" onClick={() => setStatus(doc, 'aprovado')} disabled={busyId === doc.id || doc.status === 'aprovado'} className="h-8 gap-1.5 text-xs bg-green-600 hover:bg-green-700 text-white">
                                                         <Check className="w-3.5 h-3.5" /> Aprovar
                                                     </Button>
                                                     <Button type="button" variant="outline" size="sm" onClick={() => setStatus(doc, 'rejeitado')} disabled={busyId === doc.id || doc.status === 'rejeitado'} className="h-8 gap-1.5 text-xs border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700">
@@ -308,14 +308,14 @@ const AdminProfessionalDocsPage = () => {
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 mt-1 border-t border-gray-100">
                                     <p className="text-xs text-gray-500">
                                         {g.is_public
-                                            ? <span className="text-emerald-600 font-medium">Perfil ativo (visível ao público)</span>
+                                            ? <span className="text-green-600 font-medium">Perfil ativo (visível ao público)</span>
                                             : <span className="text-amber-600 font-medium">Perfil pausado — aprove a documentação para ativar</span>}
                                     </p>
                                     <div className="flex items-center gap-2">
                                         <Button type="button" variant="outline" size="sm" onClick={() => rejectAll(g)} disabled={busyId === g.user_id} className="h-8 gap-1.5 text-xs border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700">
                                             <X className="w-3.5 h-3.5" /> Recusar documentação
                                         </Button>
-                                        <Button type="button" size="sm" onClick={() => approveAndActivate(g)} disabled={busyId === g.user_id} className="h-8 gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
+                                        <Button type="button" size="sm" onClick={() => approveAndActivate(g)} disabled={busyId === g.user_id} className="h-8 gap-1.5 text-xs bg-green-600 hover:bg-green-700 text-white">
                                             {busyId === g.user_id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />} Aprovar e ativar perfil
                                         </Button>
                                     </div>

@@ -83,7 +83,7 @@ const GuestTokenDialog = ({ appointment, open, onOpenChange }) => {
            <DialogContent className="sm:max-w-md rounded-xl border-gray-100 shadow-xl">
                <DialogHeader>
                    <DialogTitle className="flex items-center gap-2 text-lg font-bold text-gray-900">
-                       <Key className="w-5 h-5 text-blue-600" />
+                       <Key className="w-5 h-5 text-brand-600" />
                        Acesso do Paciente
                    </DialogTitle>
                    <DialogDescription>
@@ -94,12 +94,12 @@ const GuestTokenDialog = ({ appointment, open, onOpenChange }) => {
                <div className="py-4">
                    {loading ? (
                        <div className="flex justify-center py-4">
-                           <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                           <Loader2 className="w-8 h-8 text-brand-500 animate-spin" />
                        </div>
                    ) : token ? (
                        <div className="space-y-4">
-                           <div className="bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-                               <Label className="text-xs text-blue-800 font-bold uppercase tracking-wider mb-2 block">
+                           <div className="bg-brand-50/50 p-4 rounded-lg border border-brand-100">
+                               <Label className="text-xs text-brand-800 font-bold uppercase tracking-wider mb-2 block">
                                    Link da Videochamada
                                </Label>
                                <div className="flex gap-2">
@@ -108,7 +108,7 @@ const GuestTokenDialog = ({ appointment, open, onOpenChange }) => {
                                        readOnly 
                                        className="font-mono text-xs bg-white text-gray-700 h-10 rounded-lg border-gray-200 shadow-sm"
                                    />
-                                   <Button onClick={copyToClipboard} size="sm" className="shrink-0 bg-blue-600 hover:bg-blue-700 text-white h-10 rounded-lg shadow-sm font-medium px-4">
+                                   <Button onClick={copyToClipboard} size="sm" className="shrink-0 bg-brand-600 hover:bg-brand-700 text-white h-10 rounded-lg shadow-sm font-medium px-4">
                                        <Copy className="w-4 h-4 mr-2" /> 
                                        Copiar
                                    </Button>
@@ -260,7 +260,7 @@ const RescheduleDialog = ({ appointment, open, onOpenChange }) => {
             <DialogContent className="sm:max-w-[425px] rounded-xl shadow-xl border-gray-100">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-lg font-bold text-gray-900">
-                        <CalendarClock className="w-5 h-5 text-blue-600" />
+                        <CalendarClock className="w-5 h-5 text-brand-600" />
                         Reagendar Consulta
                     </DialogTitle>
                     <DialogDescription>
@@ -310,7 +310,7 @@ const RescheduleDialog = ({ appointment, open, onOpenChange }) => {
                     </div>
                     <DialogFooter className="pt-4">
                         <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="rounded-lg hover:bg-gray-100">Cancelar</Button>
-                        <Button type="submit" disabled={isSubmitting || !timeSlot} className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                        <Button type="submit" disabled={isSubmitting || !timeSlot} className="rounded-lg bg-brand-600 text-white hover:bg-brand-700 shadow-sm">
                             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Confirmar Reagendamento
                         </Button>
@@ -470,7 +470,7 @@ const NewGuestAppointmentDialog = ({ children }) => {
       setIsOpen(open);
     }}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)} className="h-11 bg-gradient-to-r from-blue-500 to-blue-600 hover:scale-105 transition-all duration-300 text-white rounded-lg px-6 shadow-md hover:shadow-lg flex items-center gap-2">
+        <Button onClick={() => setIsOpen(true)} className="h-11 bg-gradient-to-r from-brand-500 to-brand-600 hover:scale-105 transition-all duration-300 text-white rounded-lg px-6 shadow-md hover:shadow-lg flex items-center gap-2">
           <Plus className="w-4 h-4" /> Criar Novo Agendamento
         </Button>
       </DialogTrigger>
@@ -479,7 +479,7 @@ const NewGuestAppointmentDialog = ({ children }) => {
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-xl font-bold text-gray-900">
-                <UserPlus className="w-5 h-5 text-blue-600" />
+                <UserPlus className="w-5 h-5 text-brand-600" />
                 Novo Agendamento
               </DialogTitle>
               <DialogDescription>
@@ -562,7 +562,7 @@ const NewGuestAppointmentDialog = ({ children }) => {
               </div>
               <DialogFooter className="pt-4">
                 <Button type="button" variant="ghost" onClick={handleReset} className="rounded-lg hover:bg-gray-100">Cancelar</Button>
-                <Button type="submit" disabled={isSubmitting || !formData.timeSlot} className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                <Button type="submit" disabled={isSubmitting || !formData.timeSlot} className="rounded-lg bg-brand-600 text-white hover:bg-brand-700 shadow-sm">
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Confirmar Agendamento
                 </Button>
@@ -607,7 +607,7 @@ const NewGuestAppointmentDialog = ({ children }) => {
             </div>
 
             <DialogFooter className="py-2">
-              <Button onClick={handleReset} className="w-full bg-blue-600 hover:bg-blue-700 text-white h-10 rounded-lg shadow-sm">
+              <Button onClick={handleReset} className="w-full bg-brand-600 hover:bg-brand-700 text-white h-10 rounded-lg shadow-sm">
                 Concluir
               </Button>
             </DialogFooter>
@@ -628,7 +628,7 @@ const PatientDetailsDialog = ({ patient, guest, children }) => {
     <DialogContent className="sm:max-w-md p-6 rounded-xl border-gray-100 shadow-xl">
       <DialogHeader className="p-0 pb-4">
         <DialogTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          Dados do Paciente {isGuest && <span className="text-[10px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100 font-medium uppercase tracking-wide">Convidado</span>}
+          Dados do Paciente {isGuest && <span className="text-[10px] bg-brand-50 text-brand-800 px-2 py-0.5 rounded-full border border-brand-100 font-medium uppercase tracking-wide">Convidado</span>}
         </DialogTitle>
       </DialogHeader>
       <div className="space-y-3 text-sm text-gray-600">
@@ -866,7 +866,7 @@ const DoctorConsultations = () => {
                       <TableCell className="py-4 px-4 align-middle">
                         <PatientDetailsDialog patient={appt.perfis_usuarios} guest={appt.guest_patients}>
                           <div className="flex flex-col cursor-pointer group/proto">
-                            <span className="text-sm font-medium text-gray-700 group-hover/proto:text-blue-600 transition-colors">#{appt.protocolo || '---'}</span>
+                            <span className="text-sm font-medium text-gray-700 group-hover/proto:text-brand-600 transition-colors">#{appt.protocolo || '---'}</span>
                             <div className="flex items-center gap-1.5 mt-0.5">
                               <Video className="w-3 h-3 text-gray-400" />
                               <span className="text-xs text-gray-500 font-medium">Videochamada</span>
@@ -877,7 +877,7 @@ const DoctorConsultations = () => {
                       <TableCell className="py-4 px-4 align-middle">
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2">
-                             <span onClick={() => { if (appt.patient_id) { navigate(`/dashboard/medico/pacientes/${appt.patient_id}`); } }} className={`text-sm font-semibold text-gray-900 transition-colors truncate max-w-[150px] cursor-pointer hover:text-blue-600`}>
+                             <span onClick={() => { if (appt.patient_id) { navigate(`/dashboard/medico/pacientes/${appt.patient_id}`); } }} className={`text-sm font-semibold text-gray-900 transition-colors truncate max-w-[150px] cursor-pointer hover:text-brand-600`}>
                                 {patientName}
                               </span>
                               {isGuest && (
@@ -892,7 +892,7 @@ const DoctorConsultations = () => {
                               )}
                           </div>
                           {isGuest ? (
-                            <span className="text-xs text-blue-700 mt-0.5 font-medium bg-blue-50 w-fit px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-wide">Convidado</span>
+                            <span className="text-xs text-brand-800 mt-0.5 font-medium bg-brand-50 w-fit px-2 py-0.5 rounded-full border border-brand-100 uppercase tracking-wide">Convidado</span>
                           ) : (
                             patientCpf ? <Tooltip>
                               <TooltipTrigger asChild><span className="text-xs text-gray-400 mt-0.5 font-mono cursor-help w-fit border-b border-dotted border-gray-300">ID: {displayCpf}***</span></TooltipTrigger>
@@ -906,7 +906,7 @@ const DoctorConsultations = () => {
                       </TableCell>
                       <TableCell className="py-4 px-4 text-right align-middle">
                         <div className="flex items-center justify-end gap-2">
-                          <Button size="icon" variant={isCheckinCompleted ? 'success' : 'outline'} disabled={isActionLoading || !canCheckIn || isCheckinCompleted || isCancelled} onClick={() => handleConfirmAttendance(appt.id)} className={`h-9 w-9 rounded-lg shadow-sm border ${isCheckinCompleted ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-transparent' : 'border-gray-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 text-gray-400 hover:shadow-md transition-all'}`} title="Check-in">
+                          <Button size="icon" variant={isCheckinCompleted ? 'success' : 'outline'} disabled={isActionLoading || !canCheckIn || isCheckinCompleted || isCancelled} onClick={() => handleConfirmAttendance(appt.id)} className={`h-9 w-9 rounded-lg shadow-sm border ${isCheckinCompleted ? 'bg-green-600 hover:bg-green-700 text-white border-transparent' : 'border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200 text-gray-400 hover:shadow-md transition-all'}`} title="Check-in">
                             {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                           </Button>
                           <DropdownMenu>
@@ -1005,7 +1005,7 @@ const DoctorConsultations = () => {
         <div className="relative flex-1 w-full flex items-center gap-3">
             <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input placeholder="Buscar por paciente ou protocolo..." className="pl-10 h-11 bg-white border-gray-200 shadow-sm text-gray-700 placeholder:text-gray-400 rounded-lg w-full focus:ring-2 focus:ring-blue-100 transition-all" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <Input placeholder="Buscar por paciente ou protocolo..." className="pl-10 h-11 bg-white border-gray-200 shadow-sm text-gray-700 placeholder:text-gray-400 rounded-lg w-full focus:ring-2 focus:ring-brand-100 transition-all" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
         </div>
         <div className="flex gap-4">
@@ -1031,14 +1031,14 @@ const DoctorConsultations = () => {
           {/* Status */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className={`h-10 gap-2 rounded-lg border-gray-200 bg-white text-sm ${statusFilter !== 'all' ? 'text-blue-700 border-blue-200 bg-blue-50/50' : 'text-gray-700'}`}>
+              <Button variant="outline" className={`h-10 gap-2 rounded-lg border-gray-200 bg-white text-sm ${statusFilter !== 'all' ? 'text-brand-800 border-brand-200 bg-brand-50/50' : 'text-gray-700'}`}>
                 <Filter className="w-4 h-4" /> Status: <span className="font-semibold">{STATUS_LABELS[statusFilter]}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
               </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-48 p-1 rounded-lg">
               {Object.entries(STATUS_LABELS).map(([v, l]) => (
-                <button key={v} type="button" onClick={() => setStatusFilter(v)} className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${statusFilter === v ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-gray-50 text-gray-700'}`}>
+                <button key={v} type="button" onClick={() => setStatusFilter(v)} className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${statusFilter === v ? 'bg-brand-50 text-brand-800 font-medium' : 'hover:bg-gray-50 text-gray-700'}`}>
                   {l}
                 </button>
               ))}
@@ -1048,7 +1048,7 @@ const DoctorConsultations = () => {
           {/* Período */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className={`h-10 gap-2 rounded-lg border-gray-200 bg-white text-sm ${(startDate || endDate) ? 'text-blue-700 border-blue-200 bg-blue-50/50' : 'text-gray-700'}`}>
+              <Button variant="outline" className={`h-10 gap-2 rounded-lg border-gray-200 bg-white text-sm ${(startDate || endDate) ? 'text-brand-800 border-brand-200 bg-brand-50/50' : 'text-gray-700'}`}>
                 <CalendarIcon className="w-4 h-4" /> Período: <span className="font-semibold">{periodLabel}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
               </Button>
@@ -1063,7 +1063,7 @@ const DoctorConsultations = () => {
                 <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="h-9 bg-white border-gray-200 rounded-md text-sm" />
               </div>
               <div className="flex items-center justify-between pt-1">
-                <Button variant="ghost" size="sm" onClick={setToday} className="h-8 text-xs text-blue-600 hover:text-blue-700 px-2">Hoje em diante</Button>
+                <Button variant="ghost" size="sm" onClick={setToday} className="h-8 text-xs text-brand-600 hover:text-brand-800 px-2">Hoje em diante</Button>
                 <Button variant="ghost" size="sm" onClick={() => { setStartDate(''); setEndDate(''); }} className="h-8 text-xs text-gray-500 hover:text-gray-700 px-2">
                   <XCircle className="w-3.5 h-3.5 mr-1" /> Limpar
                 </Button>
@@ -1098,7 +1098,7 @@ const DoctorConsultations = () => {
                     Utilize o botão abaixo para abrir a sala manualmente ou copie o link de acesso.
                 </p>
                 <Button 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white gap-2 h-10" 
+                    className="w-full bg-brand-600 hover:bg-brand-700 text-white gap-2 h-10" 
                     onClick={() => blockedRoom && window.open(blockedRoom.url, '_blank')}
                 >
                     <Video className="w-4 h-4" /> 

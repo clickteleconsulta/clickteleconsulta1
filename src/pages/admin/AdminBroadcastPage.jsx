@@ -18,9 +18,9 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const PUBLICO_LABEL = { todos: 'Todos', medico: 'Médicos', paciente: 'Pacientes' };
 const TIPO_META = {
-    info: { label: 'Informativo', icon: Info, cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+    info: { label: 'Informativo', icon: Info, cls: 'bg-brand-50 text-brand-800 border-brand-200' },
     alerta: { label: 'Alerta', icon: AlertTriangle, cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-    sucesso: { label: 'Sucesso', icon: CheckCircle2, cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    sucesso: { label: 'Sucesso', icon: CheckCircle2, cls: 'bg-green-50 text-green-700 border-green-200' },
 };
 const EMPTY = { titulo: '', mensagem: '', publico: 'todos', tipo: 'info', ativo: true };
 

@@ -54,9 +54,9 @@ const AdminSystemReset = () => {
                             <li><strong>Todas as contas de paciente</strong></li>
                         </ul>
                     </div>
-                    <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 p-3">
-                        <p className="font-semibold text-emerald-800 flex items-center gap-1.5 mb-1.5"><CheckCircle2 className="w-4 h-4" /> Será mantido</p>
-                        <ul className="list-disc pl-5 space-y-0.5 text-emerald-700 text-xs">
+                    <div className="rounded-lg border border-green-100 bg-green-50/60 p-3">
+                        <p className="font-semibold text-green-800 flex items-center gap-1.5 mb-1.5"><CheckCircle2 className="w-4 h-4" /> Será mantido</p>
+                        <ul className="list-disc pl-5 space-y-0.5 text-green-700 text-xs">
                             <li>Contas dos <strong>médicos cadastrados</strong></li>
                             <li>Agenda e horários dos médicos</li>
                             <li>Procedimento Teleconsulta e valores</li>

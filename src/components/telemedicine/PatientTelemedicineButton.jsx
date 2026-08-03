@@ -221,7 +221,7 @@ const PatientTelemedicineButton = ({ appointment, onConsentStatusChange }) => {
       {/* 1. Confirm Terms Button */}
       {!consentAccepted && (
           <Button 
-            className="w-full sm:w-auto gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md"
+            className="w-full sm:w-auto gap-2 bg-brand-600 hover:bg-brand-700 text-white shadow-md"
             onClick={() => setModalOpen(true)}
             disabled={!isConfirmEnabled}
             title={!isPaid ? "Aguardando pagamento" : "Necessário aceitar termos"}
@@ -235,7 +235,7 @@ const PatientTelemedicineButton = ({ appointment, onConsentStatusChange }) => {
       <Button 
         className={`w-full sm:w-auto gap-2 shadow-md transition-all ${
           isJoinEnabled 
-            ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
+            ? 'bg-green-600 hover:bg-green-700 text-white' 
             : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
         }`}
         onClick={handleJoinClick}

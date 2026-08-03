@@ -34,7 +34,7 @@ const NotificationBell = () => {
 
   const getIcon = (type) => {
     switch (type) {
-      case 'message': return <MessageCircle className="h-5 w-5 text-blue-500" />;
+      case 'message': return <MessageCircle className="h-5 w-5 text-brand-500" />;
       case 'appointment': return <Calendar className="h-5 w-5 text-green-500" />;
       default: return <Info className="h-5 w-5 text-gray-500" />;
     }
@@ -126,7 +126,7 @@ const NotificationBell = () => {
                     <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-xs h-6 px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        className="text-xs h-6 px-2 text-brand-600 hover:text-brand-800 hover:bg-brand-50"
                         onClick={markAllAsRead}
                         disabled={unreadNotifications.length === 0}
                     >

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toSiteUrl } from '@/lib/storageUrl';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, Stethoscope } from 'lucide-react';
@@ -41,7 +42,7 @@ export function DoctorCard({ doctor }) {
         <div className="h-48 bg-gray-100 relative overflow-hidden">
           {doctor.image_url ? (
             <img
-              src={doctor.image_url}
+              src={toSiteUrl(doctor.image_url)}
               alt={formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}
               loading="lazy"
               className="w-full h-full object-cover"
@@ -76,7 +77,7 @@ export function DoctorCard({ doctor }) {
                 <Loader2 className="w-4 h-4 animate-spin" /> Carregando preço...
               </span>
             ) : price !== null ? (
-              <span className="text-3xl font-bold text-blue-600">
+              <span className="text-3xl font-bold text-brand-600">
                 {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price)}
               </span>
             ) : (

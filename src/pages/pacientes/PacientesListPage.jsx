@@ -194,7 +194,7 @@ const PacientesListPage = () => {
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="h-10 w-10 border border-slate-100">
                                                     {/* Removed AvatarImage src since avatar_url doesn't exist */}
-                                                    <AvatarFallback className="bg-blue-100 text-blue-600">
+                                                    <AvatarFallback className="bg-brand-100 text-brand-600">
                                                         {patient.full_name 
                                                             ? patient.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
                                                             : 'PAC'

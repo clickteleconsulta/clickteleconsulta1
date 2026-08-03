@@ -171,7 +171,7 @@ const DoctorProcedures = () => {
                     <h1 className="text-xl font-bold tracking-tight text-gray-900">Meus Procedimentos</h1>
                     <p className="text-sm text-gray-500 mt-1">Gerencie os serviços e valores oferecidos aos seus pacientes.</p>
                 </div>
-                <Button onClick={() => openModal()} className="bg-blue-600 hover:bg-blue-700">
+                <Button onClick={() => openModal()} className="bg-brand-600 hover:bg-brand-700">
                     <Plus className="w-4 h-4 mr-2" />
                     Novo Procedimento
                 </Button>
@@ -189,11 +189,11 @@ const DoctorProcedures = () => {
             ) : (
                 <div className="grid gap-4">
                     {procedures.map(proc => (
-                        <Card key={proc.id} className={`overflow-hidden transition-all ${proc.principal ? 'border-blue-200 ring-1 ring-blue-100 shadow-md' : 'border-gray-200 shadow-sm'}`}>
+                        <Card key={proc.id} className={`overflow-hidden transition-all ${proc.principal ? 'border-brand-200 ring-1 ring-brand-100 shadow-md' : 'border-gray-200 shadow-sm'}`}>
                             {proc.principal && (
-                                <div className="bg-blue-50/80 px-4 py-2 border-b border-blue-100 flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                                    <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Procedimento Principal</span>
+                                <div className="bg-brand-50/80 px-4 py-2 border-b border-brand-100 flex items-center gap-2">
+                                    <CheckCircle2 className="w-4 h-4 text-brand-600" />
+                                    <span className="text-xs font-semibold text-brand-800 uppercase tracking-wide">Procedimento Principal</span>
                                 </div>
                             )}
                             <CardContent className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -278,7 +278,7 @@ const DoctorProcedures = () => {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={isSaving}>Cancelar</Button>
-                        <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700">
+                        <Button onClick={handleSave} disabled={isSaving} className="bg-brand-600 hover:bg-brand-700">
                             {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
                             Salvar
                         </Button>

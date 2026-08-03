@@ -34,7 +34,7 @@ const DoctorCardSkeleton = () => (
 
 // ─── Doctor List Card (compacto, branco sobre cinza) ────────────────────────────
 const DoctorListCard = ({ doctor, price }) => (
-  <div className="group bg-white border border-slate-200/70 rounded-xl p-4 flex gap-4 shadow-sm hover:shadow-md hover:border-sky-200 transition-all duration-200">
+  <div className="group bg-white border border-slate-200/70 rounded-xl p-4 flex gap-4 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200">
     {/* Foto */}
     <Avatar className="w-16 h-16 rounded-xl flex-shrink-0 self-start">
       <AvatarImage
@@ -42,7 +42,7 @@ const DoctorListCard = ({ doctor, price }) => (
         alt={doctor.public_name || doctor.name}
         className="object-cover"
       />
-      <AvatarFallback className="rounded-xl text-xl font-bold bg-sky-50 text-sky-600">
+      <AvatarFallback className="rounded-xl text-xl font-bold bg-brand-50 text-brand-600">
         {(doctor.public_name || doctor.name || 'M')[0]}
       </AvatarFallback>
     </Avatar>
@@ -54,7 +54,7 @@ const DoctorListCard = ({ doctor, price }) => (
           <h2 className="font-semibold text-base text-slate-900 leading-tight truncate">
             {doctor.public_name || doctor.name}
           </h2>
-          <p className="text-xs text-sky-600 font-medium flex items-center gap-1 mt-0.5">
+          <p className="text-xs text-brand-600 font-medium flex items-center gap-1 mt-0.5">
             <Stethoscope className="w-3 h-3" />
             {doctor.specialty}
           </p>
@@ -88,13 +88,13 @@ const DoctorListCard = ({ doctor, price }) => (
       <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-slate-100">
         <div className="flex items-center gap-3 text-[11px] text-slate-400">
           <span className="flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Verificado
+            <ShieldCheck className="w-3.5 h-3.5 text-green-500" /> Verificado
           </span>
           <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-sky-500" /> Agendamento rápido
+            <Clock className="w-3.5 h-3.5 text-brand-500" /> Agendamento rápido
           </span>
         </div>
-        <Button asChild size="sm" className="rounded-lg h-8 px-4 text-xs bg-[#0a2540] hover:bg-[#0a2540]/90 text-white font-semibold shadow-sm">
+        <Button asChild size="sm" className="rounded-lg h-8 px-4 text-xs bg-[#141A24] hover:bg-[#141A24]/90 text-white font-semibold shadow-sm">
           <Link to={`/medico/${doctor.id}`}>Ver Perfil e Agendar</Link>
         </Button>
       </div>
@@ -230,11 +230,11 @@ const DoctorsListPage = () => {
                 id={`spec-${spec}`}
                 checked={selectedSpecialties.includes(spec)}
                 onCheckedChange={() => toggleSpecialty(spec)}
-                className="border-slate-300 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500"
+                className="border-slate-300 data-[state=checked]:bg-brand-500 data-[state=checked]:border-brand-500"
               />
               <Label
                 htmlFor={`spec-${spec}`}
-                className="text-sm text-slate-600 cursor-pointer hover:text-sky-600 transition-colors"
+                className="text-sm text-slate-600 cursor-pointer hover:text-brand-600 transition-colors"
               >
                 {spec}
               </Label>
@@ -308,7 +308,7 @@ const DoctorsListPage = () => {
             >
               <SlidersHorizontal className="w-4 h-4" />
               {selectedSpecialties.length > 0 && (
-                <Badge className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-sky-500">
+                <Badge className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-brand-500">
                   {selectedSpecialties.length}
                 </Badge>
               )}
@@ -346,7 +346,7 @@ const DoctorsListPage = () => {
                   <Badge
                     key={spec}
                     variant="secondary"
-                    className="gap-1 cursor-pointer bg-sky-50 text-sky-700 border-sky-200 hover:bg-red-50 hover:text-red-600 rounded-full px-3 py-1 text-xs"
+                    className="gap-1 cursor-pointer bg-brand-50 text-brand-800 border-brand-200 hover:bg-red-50 hover:text-red-600 rounded-full px-3 py-1 text-xs"
                     onClick={() => toggleSpecialty(spec)}
                   >
                     {spec} <X className="w-3 h-3" />

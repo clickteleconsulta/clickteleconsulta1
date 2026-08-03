@@ -534,7 +534,7 @@ const ProfessionalsPage = () => {
                     </TableCell>
                     <TableCell>
                         <div className="flex flex-col">
-                            <button type="button" onClick={() => setDocsTarget(doc)} className="font-medium text-left text-blue-700 hover:underline w-fit" title="Ver documentação do profissional">
+                            <button type="button" onClick={() => setDocsTarget(doc)} className="font-medium text-left text-brand-800 hover:underline w-fit" title="Ver documentação do profissional">
                                 {doc.public_name || doc.name}
                             </button>
                             <span className="text-xs text-muted-foreground">{doc.specialty} • CRM {doc.crm}/{doc.uf}</span>

@@ -32,7 +32,7 @@ const Field = ({ label, suffix, value, onChange, step = '1', min = '0' }) => (
         <div className="relative">
             <Input type="number" step={step} min={min} value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm pr-12" />
+                className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 h-10 text-sm rounded-lg shadow-sm pr-12" />
             {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">{suffix}</span>}
         </div>
     </div>
@@ -141,8 +141,8 @@ const PlatformRules = () => {
                 <CardContent className="px-0 grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Field label="Taxa da plataforma" suffix="%" value={r.default_fee_percent} onChange={set('default_fee_percent')} />
                     <Field label="Repasse inicial (novas contas)" suffix="R$" value={r.default_repasse} onChange={set('default_repasse')} />
-                    <div className="md:col-span-2 flex items-start gap-2 text-xs text-blue-800 bg-blue-50/60 border border-blue-100 rounded-lg p-3">
-                        <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-600" />
+                    <div className="md:col-span-2 flex items-start gap-2 text-xs text-brand-800 bg-brand-50/60 border border-brand-100 rounded-lg p-3">
+                        <Info className="w-4 h-4 shrink-0 mt-0.5 text-brand-600" />
                         <span>Com repasse <strong>R$ {Number(r.default_repasse).toFixed(2)}</strong> e taxa <strong>{Number(r.default_fee_percent)}%</strong>, o paciente pagaria ~<strong>R$ {previewPaciente.toFixed(2)}</strong> (repasse ÷ (1 − taxa), arredondado).</span>
                     </div>
                 </CardContent>
@@ -171,7 +171,7 @@ const PlatformRules = () => {
             </Card>
 
             <div className="flex justify-end">
-                <Button onClick={handleSave} disabled={saving} className="min-w-[180px] bg-primary hover:bg-primary/90 text-white rounded-xl h-10 shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                <Button onClick={handleSave} disabled={saving} className="min-w-[180px] bg-primary hover:bg-primary/90 text-white rounded-xl h-10 shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                     {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando…</> : <><Save className="w-4 h-4 mr-2" /> Salvar configurações</>}
                 </Button>
             </div>
@@ -202,7 +202,7 @@ const AdminSettingsPage = () => {
                 <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-gray-100/80 rounded-xl">
                     {TABS.map((t) => (
                         <TabsTrigger key={t.v} value={t.v}
-                            className="gap-1.5 rounded-lg text-sm px-3 py-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
+                            className="gap-1.5 rounded-lg text-sm px-3 py-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">
                             <t.icon className="w-3.5 h-3.5" /> {t.label}
                         </TabsTrigger>
                     ))}

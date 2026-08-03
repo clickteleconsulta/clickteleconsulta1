@@ -157,19 +157,19 @@ const AttentionPanel = () => {
     const pending = actions.filter(a => a.n > 0);
 
     const tones = {
-        blue: 'bg-blue-50 text-blue-700 border-blue-100',
-        teal: 'bg-teal-50 text-teal-700 border-teal-100',
+        blue: 'bg-brand-50 text-brand-800 border-brand-100',
+        teal: 'bg-green-50 text-green-700 border-green-100',
         amber: 'bg-amber-50 text-amber-700 border-amber-100',
         red: 'bg-red-50 text-red-700 border-red-100',
     };
 
     return (
-        <Card className={total > 0 ? 'bg-white border-amber-200/70' : 'bg-emerald-50/50 border-emerald-100'}>
+        <Card className={total > 0 ? 'bg-white border-amber-200/70' : 'bg-green-50/50 border-green-100'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                 <CardTitle className="dashboard-title flex items-center gap-2 text-base">
                     {total > 0
                         ? <><BellRing className="w-4 h-4 text-amber-600" /> Precisa da sua atenção</>
-                        : <><CheckCircle2 className="w-4 h-4 text-emerald-600" /> Tudo em dia</>}
+                        : <><CheckCircle2 className="w-4 h-4 text-green-600" /> Tudo em dia</>}
                 </CardTitle>
                 {total > 0 && (
                     <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-amber-500 text-white text-xs font-bold">
@@ -181,7 +181,7 @@ const AttentionPanel = () => {
                 {loading ? (
                     <div className="flex items-center gap-2 text-sm text-gray-400 py-2"><Loader2 className="w-4 h-4 animate-spin" /> Verificando pendências…</div>
                 ) : pending.length === 0 ? (
-                    <p className="text-sm text-emerald-700">Nenhuma ação pendente no momento. Documentos, saques, reembolsos e denúncias estão todos resolvidos. 🎉</p>
+                    <p className="text-sm text-green-700">Nenhuma ação pendente no momento. Documentos, saques, reembolsos e denúncias estão todos resolvidos. 🎉</p>
                 ) : (
                     <div className="grid gap-2.5 sm:grid-cols-2">
                         {pending.map((a) => (
@@ -273,7 +273,7 @@ const AdminStrategyPage = () => {
 
     const Kpi = ({ icon: Icon, label, value, note, tone = 'default' }) => {
         const tones = {
-            default: 'text-gray-900', brand: 'text-blue-700', teal: 'text-teal-700',
+            default: 'text-gray-900', brand: 'text-brand-800', teal: 'text-green-700',
             green: 'text-green-700', amber: 'text-amber-700', red: 'text-red-700',
         };
         return (
@@ -291,7 +291,7 @@ const AdminStrategyPage = () => {
     };
 
     const funil = [
-        { label: 'Agendamentos criados', n: m.total, base: m.total, color: 'linear-gradient(90deg,#2563eb,#4f83f0)' },
+        { label: 'Agendamentos criados', n: m.total, base: m.total, color: 'linear-gradient(90deg,#3B5BA5,#4f83f0)' },
         { label: 'Pagos', n: m.pagos, base: m.total, color: 'linear-gradient(90deg,#1f8f86,#0d9488)' },
         { label: 'Atendidos', n: m.atendidos, base: m.total, color: 'linear-gradient(90deg,#14746c,#1f8f86)' },
     ];
@@ -387,7 +387,7 @@ const AdminStrategyPage = () => {
                                     <div key={p.mes} className="flex-1 flex flex-col items-center justify-end gap-1.5 h-full">
                                         <span className="text-[11px] font-semibold text-gray-700 tabular-nums">{fmtBRL(p.receita)}</span>
                                         <div
-                                            className="w-full rounded-t-md bg-gradient-to-t from-blue-600 to-sky-400 min-h-[4px]"
+                                            className="w-full rounded-t-md bg-gradient-to-t from-brand-600 to-brand-400 min-h-[4px]"
                                             style={{ height: `${Math.max(4, (p.receita / maxV) * 100)}%` }}
                                             title={`${mes}/${ano}: ${fmtBRL(p.receita)}`}
                                         />
@@ -436,12 +436,12 @@ const AdminStrategyPage = () => {
             )}
 
             {/* Aguardando analytics */}
-            <Card className="bg-blue-50/50 border-blue-100">
+            <Card className="bg-brand-50/50 border-brand-100">
                 <CardContent className="p-5 flex items-start gap-3">
-                    <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                    <div className="text-sm text-blue-900">
+                    <Info className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+                    <div className="text-sm text-brand-800">
                         <p className="font-semibold mb-1">Métricas de topo de funil (aguardando analytics)</p>
-                        <p className="text-blue-800/80 leading-relaxed">
+                        <p className="text-brand-800/80 leading-relaxed">
                             Visitantes, origem do tráfego, CAC e conversão visita→cadastro dependem do GA4 + Meta Pixel (Fase 0, já
                             instalados no código). Assim que os IDs forem configurados no Vercel, essas métricas passam a ser
                             acompanhadas no Google Analytics e no Gerenciador de Eventos da Meta.

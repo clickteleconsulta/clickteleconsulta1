@@ -360,7 +360,7 @@ const AppointmentsPage = () => {
                     <Button
                       variant="outline"
                       onClick={() => setVisibleCount((c) => c + 5)}
-                      className="rounded-full h-11 px-7 bg-white border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 font-semibold shadow-sm"
+                      className="rounded-full h-11 px-7 bg-white border-slate-200 text-slate-700 hover:bg-brand-50 hover:border-brand-200 hover:text-brand-800 font-semibold shadow-sm"
                     >
                       Carregar mais médicos
                       <span className="ml-2 text-xs font-normal text-slate-400">+{Math.min(5, filteredDoctors.length - visibleCount)}</span>
@@ -459,7 +459,7 @@ const AppointmentsPage = () => {
               {/* Ações: Buscar (+ limpar quando houver filtro) */}
               <div className="flex items-center gap-2 md:w-auto">
                 <Button
-                  className="h-10 px-4 md:px-6 flex-1 md:flex-grow-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md transition"
+                  className="h-10 px-4 md:px-6 flex-1 md:flex-grow-0 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md transition"
                   onClick={handleSearch}
                 >
                   <Search className="mr-2 h-4 w-4" /> Buscar

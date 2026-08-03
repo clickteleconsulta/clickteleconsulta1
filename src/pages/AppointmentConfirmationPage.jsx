@@ -315,11 +315,11 @@ const AppointmentConfirmationPage = () => {
 
             {/* Instruções do médico ao paciente (cadastradas no procedimento) — só após pagamento confirmado */}
             {isPaid && !isDoctor && medico?.instructions && medico.instructions.trim() && (
-              <Card className="border-l-4 border-l-primary shadow-md bg-blue-50/30">
+              <Card className="border-l-4 border-l-primary shadow-md bg-brand-50/30">
                 <CardContent className="py-6 flex items-start gap-3">
                   <ClipboardList className="w-7 h-7 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-blue-900 text-lg">Instruções do médico para a sua consulta</h3>
+                    <h3 className="font-bold text-brand-800 text-lg">Instruções do médico para a sua consulta</h3>
                     <p className="text-sm text-gray-700 mt-1.5 leading-relaxed whitespace-pre-line">{medico.instructions}</p>
                   </div>
                 </CardContent>
@@ -382,7 +382,7 @@ const AppointmentConfirmationPage = () => {
           {/* Sidebar Column: Payment & Contact */}
           <div className="space-y-6">
             <Card className="bg-white border shadow-md h-fit overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+              <CardHeader className="bg-gradient-to-r from-brand-50 to-brand-50 border-b">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-primary" /> Pagamento
                 </CardTitle>
@@ -400,15 +400,15 @@ const AppointmentConfirmationPage = () => {
                      </div>
                 ) : (
                     <div className="p-6 space-y-4">
-                        <div className="flex items-start gap-3 rounded-lg bg-blue-50/60 border border-blue-100 p-3">
-                            <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                            <p className="text-sm text-blue-900">
+                        <div className="flex items-start gap-3 rounded-lg bg-brand-50/60 border border-brand-100 p-3">
+                            <ShieldCheck className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+                            <p className="text-sm text-brand-800">
                                 Pague com segurança para <strong>confirmar sua consulta</strong>. Assim que o pagamento é aprovado, o agendamento é liberado para o médico.
                             </p>
                         </div>
                         <Button
                             size="lg"
-                            className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                            className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0"
                             onClick={handleAsaasPayment}
                             disabled={processingPayment}
                         >
@@ -420,7 +420,7 @@ const AppointmentConfirmationPage = () => {
                         </p>
                         <div className="rounded-lg bg-gray-50 border border-gray-100 p-3 text-[11px] text-gray-500 leading-relaxed">
                             <strong className="text-gray-600">Política de cancelamento:</strong> cancelando com <strong>2 horas ou mais</strong> de antecedência, reembolso <strong>integral (100%)</strong>; com <strong>menos de 2 horas</strong>, reembolso de <strong>50%</strong> (retida a taxa por cancelamento tardio); em caso de <strong>não comparecimento, não há reembolso</strong>. No reembolso integral, a taxa de processamento do pagamento é retida. Ao pagar, você concorda com os{' '}
-                            <a href="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">Termos de Serviço</a>.
+                            <a href="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline hover:text-brand-800">Termos de Serviço</a>.
                         </div>
                     </div>
                 )}
@@ -433,7 +433,7 @@ const AppointmentConfirmationPage = () => {
         <div className="absolute left-[-9999px] top-0 z-[-1] overflow-hidden pointer-events-none">
             <div id="pdf-content-container" className="w-[800px] bg-white text-gray-900 font-sans">
                 {/* Cabeçalho institucional */}
-                <div className="bg-gradient-to-r from-sky-500 to-teal-500 px-10 py-7 flex items-center justify-between">
+                <div className="bg-brand-600 px-10 py-7 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="bg-white/15 rounded-2xl p-2 flex items-center justify-center ring-1 ring-white/30">
                             <Logo className="w-12 h-12" />
@@ -462,7 +462,7 @@ const AppointmentConfirmationPage = () => {
                     {/* Consulta + Profissional */}
                     <div className="grid grid-cols-2 gap-6 mb-6">
                         <div className="rounded-xl border border-gray-200 p-5">
-                            <h2 className="text-xs font-bold uppercase tracking-wider text-sky-700 mb-4 pb-2 border-b border-gray-100">Informações da Consulta</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-wider text-brand-800 mb-4 pb-2 border-b border-gray-100">Informações da Consulta</h2>
                             <div className="space-y-3">
                                 <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Data e hora</p><p className="font-bold text-gray-800 text-lg">{shortDate} às {shortTime}</p></div>
                                 <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Tipo de atendimento</p><p className="font-medium text-gray-800">Teleconsulta (à distância)</p></div>
@@ -471,7 +471,7 @@ const AppointmentConfirmationPage = () => {
                         </div>
 
                         <div className="rounded-xl border border-gray-200 p-5">
-                            <h2 className="text-xs font-bold uppercase tracking-wider text-teal-700 mb-4 pb-2 border-b border-gray-100">Profissional</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-wider text-green-700 mb-4 pb-2 border-b border-gray-100">Profissional</h2>
                             <div className="space-y-3">
                                 <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Médico(a)</p><p className="font-bold text-gray-800">{medico?.public_name || medico?.name || 'Não informado'}</p></div>
                                 <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Especialidade</p><p className="font-medium text-gray-800">{medico?.specialty || 'Não informado'}</p></div>

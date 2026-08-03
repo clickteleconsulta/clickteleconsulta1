@@ -128,7 +128,7 @@ const TermoAdesaoManager = () => {
 
     return (
         <div className="mt-6 space-y-6">
-            <Card className="border-blue-100 bg-blue-50/30">
+            <Card className="border-brand-100 bg-brand-50/30">
                 <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-green-600" /> Versão Ativa</CardTitle>
                     <CardDescription>Este termo é exibido aos médicos parceiros para aceite no momento da criação da conta.</CardDescription>
@@ -149,7 +149,7 @@ const TermoAdesaoManager = () => {
                                 </div>
                             </div>
                             <div className="flex gap-2">
-                                <Button size="sm" variant="outline" asChild><a href={activeVersion.pdf_url} target="_blank" rel="noopener noreferrer"><Upload className="w-4 h-4 mr-2 rotate-180" /> Baixar</a></Button>
+                                <Button size="sm" variant="outline" asChild><a href={toSiteUrl(activeVersion.pdf_url)} target="_blank" rel="noopener noreferrer"><Upload className="w-4 h-4 mr-2 rotate-180" /> Baixar</a></Button>
                                 <Button size="sm" variant="outline" onClick={() => setPreviewDoc(activeVersion)}><Eye className="w-4 h-4 mr-2" /> Visualizar</Button>
                             </div>
                         </div>
@@ -193,7 +193,7 @@ const TermoAdesaoManager = () => {
                                                 <Button size="icon" variant="ghost" title="Visualizar" onClick={() => setPreviewDoc(ver)}><Eye className="w-4 h-4 text-gray-500" /></Button>
                                                 {!ver.is_active && (
                                                     <>
-                                                        <Button size="icon" variant="ghost" title="Ativar" onClick={() => setActivateDoc(ver)}><CheckCircle2 className="w-4 h-4 text-blue-600" /></Button>
+                                                        <Button size="icon" variant="ghost" title="Ativar" onClick={() => setActivateDoc(ver)}><CheckCircle2 className="w-4 h-4 text-brand-600" /></Button>
                                                         <Button size="icon" variant="ghost" title="Excluir" onClick={() => setDeleteDoc(ver)}><Trash2 className="w-4 h-4 text-red-500" /></Button>
                                                     </>
                                                 )}
@@ -218,7 +218,7 @@ const TermoAdesaoManager = () => {
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
                         <Input type="file" accept=".pdf" onChange={handleFileChange} className="hidden" id="termo-upload" />
                         <label htmlFor="termo-upload" className="cursor-pointer flex flex-col items-center w-full h-full">
-                            <div className="bg-blue-100 p-3 rounded-full mb-3"><Upload className="w-6 h-6 text-blue-600" /></div>
+                            <div className="bg-brand-100 p-3 rounded-full mb-3"><Upload className="w-6 h-6 text-brand-600" /></div>
                             <span className="text-sm font-medium text-gray-900">{selectedFile ? selectedFile.name : 'Clique para selecionar o PDF'}</span>
                             <span className="text-xs text-gray-500 mt-1">{selectedFile ? `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB` : 'Máximo 10MB. Apenas .pdf'}</span>
                         </label>
@@ -234,7 +234,7 @@ const TermoAdesaoManager = () => {
             <Dialog open={!!previewDoc} onOpenChange={(o) => !o && setPreviewDoc(null)}>
                 <DialogContent className="max-w-[900px] h-[85vh] flex flex-col p-0 gap-0 overflow-hidden rounded-lg">
                     <DialogHeader className="p-4 border-b bg-white"><DialogTitle>Termo de Adesão (v{previewDoc?.version})</DialogTitle></DialogHeader>
-                    <div className="flex-1 overflow-auto bg-gray-100"><iframe src={previewDoc?.pdf_url} className="w-full h-full border-none" title="PDF" /></div>
+                    <div className="flex-1 overflow-auto bg-gray-100"><iframe src={toSiteUrl(previewDoc?.pdf_url)} className="w-full h-full border-none" title="PDF" /></div>
                     <DialogFooter className="p-4 border-t bg-white"><Button variant="outline" onClick={() => setPreviewDoc(null)}>Fechar</Button></DialogFooter>
                 </DialogContent>
             </Dialog>

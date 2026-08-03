@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BRAND } from '@/config/brand';
 import { useNavigate, Link } from 'react-router-dom';
-import Logo from '@/components/Logo';
+import Wordmark from '@/components/Wordmark';
 import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
@@ -130,8 +129,7 @@ const AdminLoginPage = () => {
       <Card className="w-full max-w-md border-slate-800 bg-slate-950 text-slate-100">
         <CardHeader className="space-y-1 text-center">
           <Link to="/" className="inline-flex items-center justify-center gap-2 mb-4">
-            <Logo className="w-7 h-7" />
-            <span className="text-base font-bold text-white tracking-tight">{BRAND.name}</span>
+            <Wordmark size={20} ink="#ffffff" dark />
           </Link>
           <div className="flex justify-center mb-4">
             <div className="p-3 rounded-full bg-slate-900 border border-slate-800">

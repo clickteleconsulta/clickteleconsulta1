@@ -114,9 +114,9 @@ const ProntuarioSidebar = ({ patient, doctorId }) => {
 
       {/* Patient Profile Header */}
       <div className="px-6 flex flex-col items-center text-center">
-        <Avatar className="h-24 w-24 mb-4 border-4 border-blue-50">
+        <Avatar className="h-24 w-24 mb-4 border-4 border-brand-50">
           <AvatarImage src={patient.avatar_url} />
-          <AvatarFallback className="bg-blue-200 text-blue-700 text-xl font-medium">
+          <AvatarFallback className="bg-brand-200 text-brand-800 text-xl font-medium">
             {initials}
           </AvatarFallback>
         </Avatar>
@@ -130,16 +130,16 @@ const ProntuarioSidebar = ({ patient, doctorId }) => {
 
         {/* Quick Actions Row */}
         <div className="flex items-center justify-center gap-2 mt-6 w-full">
-          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50">
+          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50">
             <MessageSquare className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50">
+          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50">
             <Calendar className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50">
+          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50">
             <Wallet className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50">
+          <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50">
             <User className="h-4 w-4" />
           </Button>
           <Button variant="outline" size="icon" className="rounded-full h-10 w-10 border-gray-200 text-gray-500 hover:text-gray-900">
@@ -168,7 +168,7 @@ const ProntuarioSidebar = ({ patient, doctorId }) => {
       <div className="px-6">
         <button 
           onClick={handlePrescriptionClick}
-          className="flex items-center gap-3 w-full text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50 -ml-2"
+          className="flex items-center gap-3 w-full text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors p-2 rounded-lg hover:bg-brand-50 -ml-2"
         >
           <Pill className="h-4 w-4" />
           Prescrições

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toSiteUrl } from '@/lib/storageUrl';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -66,9 +67,9 @@ const NextSteps = ({ appointment }) => {
       <div className="space-y-2.5">
         {[
           {
-            icon: <Mail className="w-4 h-4 text-blue-500" />,
+            icon: <Mail className="w-4 h-4 text-brand-500" />,
             text: 'Verifique seu email — um email de confirmação foi enviado com todos os detalhes.',
-            color: 'bg-blue-50 border-blue-100',
+            color: 'bg-brand-50 border-brand-100',
           },
           {
             icon: <Calendar className="w-4 h-4 text-green-500" />,
@@ -168,7 +169,7 @@ const AppointmentSuccessPage = () => {
   const handleDownloadGuide = () => {
     // Se o backend já gerou o PDF, usa-o; senão, gera a guia no próprio navegador.
     if (appointment?.guia?.pdf_url) {
-      window.open(appointment.guia.pdf_url, '_blank');
+      window.open(toSiteUrl(appointment.guia.pdf_url), '_blank');
       return;
     }
     try {

@@ -88,7 +88,7 @@ const AudioMeter = ({ stream }) => {
             key={i}
             className={`w-2 rounded-sm transition-all duration-75 ${
               active
-                ? volume > 80 ? 'bg-red-500' : volume > 50 ? 'bg-amber-400' : 'bg-emerald-400'
+                ? volume > 80 ? 'bg-red-500' : volume > 50 ? 'bg-amber-400' : 'bg-green-400'
                 : 'bg-slate-600'
             }`}
             style={{ height: `${20 + (i / bars) * 80}%` }}
@@ -252,10 +252,10 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case STATUS.ok: return <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />;
+      case STATUS.ok: return <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />;
       case STATUS.fail: return <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />;
       case STATUS.warn: return <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />;
-      case STATUS.checking: return <Loader2 className="w-5 h-5 text-blue-400 animate-spin flex-shrink-0" />;
+      case STATUS.checking: return <Loader2 className="w-5 h-5 text-brand-400 animate-spin flex-shrink-0" />;
       default: return <div className="w-5 h-5 rounded-full border-2 border-slate-600 flex-shrink-0" />;
     }
   };
@@ -271,8 +271,8 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
       >
         <DialogHeader className="p-6 pb-4 border-b border-slate-800">
           <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4 text-blue-400" />
+            <div className="w-8 h-8 rounded-full bg-brand-600/20 border border-brand-500/30 flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4 text-brand-400" />
             </div>
             Verificação Técnica
           </DialogTitle>
@@ -293,7 +293,7 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-2 left-2">
-                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">
+                <Badge className="bg-green-500/20 text-green-300 border-green-500/30 text-xs">
                   Câmera ao vivo
                 </Badge>
               </div>
@@ -307,25 +307,25 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
               const Icon = step.icon;
               return (
                 <div key={step.id} className={`rounded-xl p-4 border transition-all ${
-                  check.status === STATUS.ok ? 'bg-emerald-500/5 border-emerald-500/20' :
+                  check.status === STATUS.ok ? 'bg-green-500/5 border-green-500/20' :
                   check.status === STATUS.fail ? 'bg-red-500/5 border-red-500/20' :
                   check.status === STATUS.warn ? 'bg-amber-500/5 border-amber-500/20' :
-                  check.status === STATUS.checking ? 'bg-blue-500/5 border-blue-500/20' :
+                  check.status === STATUS.checking ? 'bg-brand-500/5 border-brand-500/20' :
                   'bg-slate-800/50 border-slate-700/30'
                 }`}>
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                      check.status === STATUS.ok ? 'bg-emerald-500/10' :
+                      check.status === STATUS.ok ? 'bg-green-500/10' :
                       check.status === STATUS.fail ? 'bg-red-500/10' :
                       check.status === STATUS.warn ? 'bg-amber-500/10' :
-                      check.status === STATUS.checking ? 'bg-blue-500/10' :
+                      check.status === STATUS.checking ? 'bg-brand-500/10' :
                       'bg-slate-700/50'
                     }`}>
                       <Icon className={`w-4 h-4 ${
-                        check.status === STATUS.ok ? 'text-emerald-400' :
+                        check.status === STATUS.ok ? 'text-green-400' :
                         check.status === STATUS.fail ? 'text-red-400' :
                         check.status === STATUS.warn ? 'text-amber-400' :
-                        check.status === STATUS.checking ? 'text-blue-400' :
+                        check.status === STATUS.checking ? 'text-brand-400' :
                         'text-slate-500'
                       }`} />
                     </div>
@@ -382,7 +382,7 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
               disabled={!allComplete || (hasFailures && !isDoctor)}
               className={`w-full h-11 font-semibold rounded-xl gap-2 ${
                 allPassed
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/30 shadow-lg'
+                  ? 'bg-green-600 hover:bg-green-500 text-white shadow-green-900/30 shadow-lg'
                   : allComplete && hasFailures && isDoctor
                   ? 'bg-amber-600 hover:bg-amber-500 text-white'
                   : 'bg-slate-700 text-slate-400 cursor-not-allowed'

@@ -13,8 +13,8 @@ import { format } from 'date-fns';
 const StatusBadge = ({ status }) => {
     const map = {
         pendente: { label: 'Pendente', cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-        enviado: { label: 'Enviado', cls: 'bg-blue-50 text-blue-700 border-blue-200', icon: Send },
-        aceito: { label: 'Aceito', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: CheckCircle2 },
+        enviado: { label: 'Enviado', cls: 'bg-brand-50 text-brand-800 border-brand-200', icon: Send },
+        aceito: { label: 'Aceito', cls: 'bg-green-50 text-green-700 border-green-200', icon: CheckCircle2 },
         cancelado: { label: 'Cancelado', cls: 'bg-gray-100 text-gray-500 border-gray-200', icon: Ban },
     };
     const s = map[status] || map.pendente;

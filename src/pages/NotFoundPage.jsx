@@ -14,8 +14,8 @@ const NotFoundPage = () => (
 
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-16">
       <div className="text-center max-w-md">
-        <div className="mx-auto w-20 h-20 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
-          <Search className="w-9 h-9 text-blue-500" />
+        <div className="mx-auto w-20 h-20 rounded-2xl bg-brand-50 flex items-center justify-center mb-6">
+          <Search className="w-9 h-9 text-brand-500" />
         </div>
         <p className="text-5xl font-extrabold text-slate-900 tracking-tight">404</p>
         <h1 className="mt-3 text-xl font-bold text-slate-800">Página não encontrada</h1>

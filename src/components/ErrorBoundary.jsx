@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component {
             <p className="text-gray-600 mb-4">Ocorreu um erro inesperado. Por favor, recarregue a página.</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700"
             >
               Recarregar página
             </button>

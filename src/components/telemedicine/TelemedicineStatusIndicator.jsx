@@ -192,8 +192,8 @@ const TelemedicineStatusIndicator = ({
         return {
           label: 'Médico na Sala',
           description: userRole === 'paciente' ? 'Médico aguardando você' : 'Aguardando paciente',
-          color: 'bg-blue-100 text-blue-700 border-blue-200',
-          dotColor: 'bg-blue-500',
+          color: 'bg-brand-100 text-brand-800 border-brand-200',
+          dotColor: 'bg-brand-500',
           icon: <PlayCircle className="w-3 h-3 mr-1.5" />,
           pulse: userRole === 'paciente' && pulseDoctor,
           cta: userRole === 'paciente' ? 'Entrar agora' : null
@@ -202,8 +202,8 @@ const TelemedicineStatusIndicator = ({
         return {
           label: 'Aguardando Paciente',
           description: 'Médico pronto para atender',
-          color: 'bg-blue-100 text-blue-700 border-blue-200',
-          dotColor: 'bg-blue-500',
+          color: 'bg-brand-100 text-brand-800 border-brand-200',
+          dotColor: 'bg-brand-500',
           icon: <UserCheck className="w-3 h-3 mr-1.5" />,
           pulse: userRole === 'paciente' && pulseDoctor,
           cta: userRole === 'paciente' ? 'Entrar agora' : null
@@ -212,8 +212,8 @@ const TelemedicineStatusIndicator = ({
         return {
           label: 'Em Andamento',
           description: 'Consulta em progresso',
-          color: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-          dotColor: 'bg-emerald-500',
+          color: 'bg-green-100 text-green-700 border-green-200',
+          dotColor: 'bg-green-500',
           icon: <UserCheck className="w-3 h-3 mr-1.5" />,
           pulse: userRole === 'medico' && pulsePatient,
           cta: null
@@ -255,7 +255,7 @@ const TelemedicineStatusIndicator = ({
         ) : (
           <Badge
             variant="outline"
-            className={`${config.color} flex items-center px-2.5 py-1 shadow-sm ${config.pulse ? 'animate-pulse ring-2 ring-blue-400 ring-offset-1' : ''}`}
+            className={`${config.color} flex items-center px-2.5 py-1 shadow-sm ${config.pulse ? 'animate-pulse ring-2 ring-brand-400 ring-offset-1' : ''}`}
           >
             {loading ? (
               <RefreshCw className="w-3 h-3 animate-spin" />
@@ -297,7 +297,7 @@ const TelemedicineStatusIndicator = ({
           <Badge
             variant="outline"
             className={`${config.color} flex items-center gap-1 px-3 py-1 shadow-sm transition-all ${
-              config.pulse ? 'animate-pulse ring-2 ring-blue-400/50 ring-offset-1' : ''
+              config.pulse ? 'animate-pulse ring-2 ring-brand-400/50 ring-offset-1' : ''
             }`}
           >
             {loading ? (
@@ -315,24 +315,24 @@ const TelemedicineStatusIndicator = ({
 
       {/* CTA para paciente quando médico entrou */}
       {config.pulse && userRole === 'paciente' && (
-        <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 animate-in slide-in-from-top-1">
-          <Bell className="w-4 h-4 text-blue-500 animate-bounce" />
-          <p className="text-blue-700 text-sm font-medium">O médico entrou na sala! Clique em "Acessar videochamada" para entrar.</p>
+        <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-lg px-3 py-2 animate-in slide-in-from-top-1">
+          <Bell className="w-4 h-4 text-brand-500 animate-bounce" />
+          <p className="text-brand-800 text-sm font-medium">O médico entrou na sala! Clique em "Acessar videochamada" para entrar.</p>
         </div>
       )}
 
       {/* Notificação para médico quando paciente entrou */}
       {config.pulse && userRole === 'medico' && (
-        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 animate-in slide-in-from-top-1">
-          <Zap className="w-4 h-4 text-emerald-500" />
-          <p className="text-emerald-700 text-sm font-medium">Paciente entrou na sala!</p>
+        <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2 animate-in slide-in-from-top-1">
+          <Zap className="w-4 h-4 text-green-500" />
+          <p className="text-green-700 text-sm font-medium">Paciente entrou na sala!</p>
         </div>
       )}
 
       {/* Timestamp do último heartbeat */}
       {lastHeartbeat && !compact && (
         <p className="text-xs text-slate-400 flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
           Atualizado {format(lastHeartbeat, 'HH:mm:ss', { locale: ptBR })}
         </p>
       )}

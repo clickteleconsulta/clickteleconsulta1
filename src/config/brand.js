@@ -10,21 +10,26 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const BRAND = {
-  /** Nome comercial exibido ao usuário. */
-  name: 'Click Teleconsulta',
-  /** Domínio sem protocolo (usado em textos e no rodapé). */
-  domain: 'clickteleconsulta.online',
+  /** Nome comercial exibido ao usuário. Sempre em caixa baixa. */
+  name: 'aviDoc',
+  /**
+   * Domínio canônico, sem protocolo. `.com.br` é o principal; `.online` e `.net`
+   * existem como defensivos e devem apenas redirecionar (301) para cá.
+   */
+  domain: 'avidoc.com.br',
   /** URL canônica, sem barra no final (usada em SEO, PDFs e e-mails). */
-  url: 'https://clickteleconsulta.online',
+  url: 'https://avidoc.com.br',
   /** Descrição curta do posicionamento — marketplace, não plataforma de teleconsulta. */
   tagline: 'Marketplace de agendamentos médicos',
   emails: {
-    suporte: 'suporte@clickteleconsulta.online',
-    contato: 'contato@clickteleconsulta.online',
+    suporte: 'contato@avidoc.com.br',
+    contato: 'contato@avidoc.com.br',
   },
   social: {
-    instagram: '@clickteleconsulta.online',
+    instagram: '@avidoc.com.br',
   },
+  /** Cor única da marca — esmeralda. Espelha --primary no index.css. */
+  color: '#3B5BA5',
 };
 
 /** Dados legais da pessoa jurídica — permanecem mesmo se a marca mudar. */

@@ -90,7 +90,7 @@ const DoctorTelemedicineButton = ({ appointment }) => {
 
   return (
     <Button 
-      className="w-full sm:w-auto gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md transition-all"
+      className="w-full sm:w-auto gap-2 bg-brand-600 hover:bg-brand-700 text-white shadow-md transition-all"
       onClick={handleStartConsultation}
       disabled={isStarting}
     >

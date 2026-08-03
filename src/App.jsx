@@ -159,9 +159,9 @@ function App() {
     <>
       <Helmet>
         <title>{BRAND.name}</title>
-        <meta name="description" content="Sua saúde a um clique de distância. Agende teleconsultas com profissionais de forma rápida e segura." />
+        <meta name="description" content="Escolha o profissional, veja preço e horários e agende em minutos. Pix ou cartão, sem mensalidade." />
         <meta property="og:title" content={BRAND.name} />
-        <meta property="og:description" content="Sua saúde a um clique de distância." />
+        <meta property="og:description" content="Escolha o profissional, veja preço e horários e agende em minutos." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
         <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,900&display=swap" rel="stylesheet" />

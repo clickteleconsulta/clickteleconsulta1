@@ -98,7 +98,7 @@ Deno.serve(async (req: Request) => {
     // 2) Cria a cobrança (Pix + cartão via página hospedada do Asaas)
     const value = Number((appt.price_in_cents / 100).toFixed(2));
     const today = new Date().toISOString().slice(0, 10);
-    const back = String(origin || "https://clickteleconsulta.online").replace(/\/+$/, "");
+    const back = String(origin || "https://avidoc.com.br").replace(/\/+$/, "");
     const hora = String(appt.appointment_time ?? "").slice(0, 5);
     const payment = await asaas("/payments", "POST", {
       customer: customerId,

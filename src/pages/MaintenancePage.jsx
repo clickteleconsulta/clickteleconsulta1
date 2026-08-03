@@ -1,26 +1,30 @@
 import React from 'react';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
+import { BrandCapsule } from '@/components/Logo';
+import Wordmark from '@/components/Wordmark';
 
 const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo melhor. Voltamos em instantes.';
 
 // Página exibida a visitantes e pacientes enquanto o site está em manutenção.
 // Administradores não veem esta tela (o acesso ao painel continua liberado).
 const MaintenancePage = ({ message }) => (
-  <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-blue-50 via-white to-white">
+  <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-brand-50 via-white to-white">
     <Helmet>
       <title>{`Em manutenção · ${BRAND.name}`}</title>
       <meta name="robots" content="noindex" />
     </Helmet>
 
     <div className="max-w-md">
-      <div className="mx-auto mb-7 w-20 h-20 rounded-2xl bg-white shadow-lg shadow-blue-500/10 border border-blue-100 flex items-center justify-center">
-        <svg viewBox="0 0 48 48" className="w-11 h-11">
-          <path d="M6 26h7l3-11 5 20 4-13 2.5 6H42" fill="none" stroke="#2563eb" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+      <div className="mx-auto mb-7 w-20 h-20 rounded-2xl bg-white shadow-lg shadow-brand-500/10 border border-brand-100 flex items-center justify-center">
+        <svg viewBox="0 0 104 44" className="w-14" aria-hidden="true">
+          <BrandCapsule color="#3B5BA5" />
         </svg>
       </div>
 
-      <p className="text-sm font-bold tracking-widest text-blue-600 uppercase mb-3">{BRAND.name}</p>
+      <div className="flex justify-center mb-4">
+        <Wordmark size={26} />
+      </div>
       <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-4">
         Voltamos já&nbsp;já
       </h1>
@@ -29,9 +33,9 @@ const MaintenancePage = ({ message }) => (
       </p>
 
       <div className="mt-8 flex items-center justify-center gap-1.5" aria-hidden="true">
-        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:-0.3s]" />
-        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:-0.15s]" />
-        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" />
+        <span className="w-2 h-2 rounded-full bg-brand-400 animate-bounce [animation-delay:-0.3s]" />
+        <span className="w-2 h-2 rounded-full bg-brand-400 animate-bounce [animation-delay:-0.15s]" />
+        <span className="w-2 h-2 rounded-full bg-brand-400 animate-bounce" />
       </div>
     </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Logo from '@/components/Logo';
+import Wordmark from '@/components/Wordmark';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { LogOut, CalendarDays, LayoutDashboard, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,12 +28,12 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-border h-16 flex items-center">
+      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-border h-[74px] flex items-center">
         <nav className="container mx-auto px-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <Logo className="w-10 h-10 group-hover:scale-105 transition-transform" />
-            {/* No mobile mostramos só o logo, para dar espaço ao botão do meio */}
-            <span className="hidden sm:inline text-lg font-semibold text-gray-800 tracking-tight">{BRAND.name}</span>
+            {/* No mobile mostramos só o símbolo, para dar espaço ao botão do meio */}
+            <Logo className="w-11 h-11 sm:hidden group-hover:scale-105 transition-transform" />
+            <Wordmark size={30} className="hidden sm:inline-flex group-hover:scale-105 transition-transform" />
           </Link>
 
           <div className="flex items-center gap-4">

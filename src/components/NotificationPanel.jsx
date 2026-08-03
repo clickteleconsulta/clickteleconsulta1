@@ -152,12 +152,12 @@ const NotificationPanel = ({ isOpen, onClose, notifications, unreadCount, markAs
                             key={notification.id} 
                             className={cn(
                                 "p-4 hover:bg-muted/30 transition-colors relative group bg-white",
-                                !notification.is_read && "bg-blue-50/30"
+                                !notification.is_read && "bg-brand-50/30"
                             )}
                           >
                             <div className="flex gap-3">
                               {!notification.is_read && (
-                                <div className="mt-1.5 h-2 w-2 rounded-full shrink-0 bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                                <div className="mt-1.5 h-2 w-2 rounded-full shrink-0 bg-brand-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
                               )}
                               
                               <div className="space-y-2 flex-1 min-w-0">

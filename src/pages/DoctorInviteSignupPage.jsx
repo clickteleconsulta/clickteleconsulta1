@@ -108,7 +108,7 @@ const DoctorInviteSignupPage = () => {
             <Card className="w-full border-0 shadow-none">
                 {checking ? (
                     <CardContent className="py-16 flex flex-col items-center gap-3">
-                        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                        <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
                         <p className="text-sm text-slate-500">Validando convite...</p>
                     </CardContent>
                 ) : inviteError ? (
@@ -123,8 +123,8 @@ const DoctorInviteSignupPage = () => {
                     </CardContent>
                 ) : done ? (
                     <CardContent className="py-14 flex flex-col items-center gap-3 text-center">
-                        <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center">
-                            <CheckCircle2 className="w-7 h-7 text-emerald-500" />
+                        <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center">
+                            <CheckCircle2 className="w-7 h-7 text-green-500" />
                         </div>
                         <h2 className="text-lg font-bold text-slate-900">Conta criada com sucesso!</h2>
                         <p className="text-sm text-slate-500 max-w-sm">
@@ -136,7 +136,7 @@ const DoctorInviteSignupPage = () => {
                     <>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-xl">
-                                <Stethoscope className="w-5 h-5 text-blue-600" /> Criar conta de médico
+                                <Stethoscope className="w-5 h-5 text-brand-600" /> Criar conta de médico
                             </CardTitle>
                             <CardDescription>
                                 Convite para <span className="font-medium text-slate-700">{invite.email}</span>. Preencha seus dados para se tornar parceiro.
@@ -194,22 +194,22 @@ const DoctorInviteSignupPage = () => {
                                         <Input type="password" value={form.confirm} onChange={e => set('confirm', e.target.value)} placeholder="Repita a senha" autoComplete="new-password" />
                                     </div>
                                 </div>
-                                <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-3 space-y-2.5">
+                                <div className="rounded-xl border border-brand-200 bg-brand-50/50 p-3 space-y-2.5">
                                     <div className="flex items-center justify-between gap-2">
                                         <span className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                                            <FileText className="w-4 h-4 text-blue-600" /> Termo de Adesão do Médico Parceiro
+                                            <FileText className="w-4 h-4 text-brand-600" /> Termo de Adesão do Médico Parceiro
                                         </span>
                                         <a
                                             href={toSiteUrl(termoUrl) || '/legal'}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 underline shrink-0"
+                                            className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-800 underline shrink-0"
                                         >
                                             Ler o termo <ExternalLink className="w-3 h-3" />
                                         </a>
                                     </div>
                                     <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer">
-                                        <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-blue-600 shrink-0" />
+                                        <input type="checkbox" checked={termo} onChange={e => setTermo(e.target.checked)} className="mt-0.5 w-4 h-4 accent-brand-600 shrink-0" />
                                         <span>
                                             Li e <strong>aceito</strong> o Termo de Adesão e as condições da plataforma {BRAND.name}. O aceite é obrigatório para criar a conta.
                                         </span>

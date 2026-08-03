@@ -123,11 +123,11 @@ const PatientConsultations = () => {
         <style>
           *{box-sizing:border-box} body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1e293b;margin:0;padding:40px;background:#fff}
           .wrap{max-width:640px;margin:0 auto;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}
-          .head{background:#2563eb;color:#fff;padding:24px 28px}
+          .head{background:#3B5BA5;color:#fff;padding:24px 28px}
           .head h1{margin:0;font-size:20px;font-weight:700} .head p{margin:4px 0 0;font-size:13px;opacity:.9}
           .body{padding:24px 28px}
           .tag{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:16px}
-          .ok{background:#dbeafe;color:#1d4ed8} .rf{background:#ede9fe;color:#6d28d9}
+          .ok{background:#d1fae5;color:#047857} .rf{background:#ede9fe;color:#6d28d9}
           table{width:100%;border-collapse:collapse;font-size:14px} td{padding:10px 0;border-bottom:1px solid #f1f5f9;vertical-align:top}
           td.k{color:#64748b;width:42%} td.v{font-weight:600;text-align:right}
           .foot{padding:18px 28px;background:#f8fafc;font-size:11px;color:#94a3b8;line-height:1.5}
@@ -164,7 +164,7 @@ const PatientConsultations = () => {
         } else if (status === 'confirmado' || status === 'reagendado' || status === 'pendente' || status === 'agendado') {
             if (paymentStatus === 'pago') {
                 variant = 'custom';
-                className = "bg-blue-600 hover:bg-blue-700 text-white border-transparent"; // Blue for paid
+                className = "bg-brand-600 hover:bg-brand-700 text-white border-transparent"; // Blue for paid
                 text = 'Confirmada e Paga';
             } else {
                 variant = 'amber';
@@ -246,7 +246,7 @@ const PatientConsultations = () => {
                                                 {appt.medicos?.public_name || appt.medicos?.name}
                                             </p>
                                             {doctorStarted && isUpcoming && (
-                                                <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px] animate-pulse">
+                                                <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 text-[10px] animate-pulse">
                                                     Ao vivo
                                                 </Badge>
                                             )}
@@ -264,7 +264,7 @@ const PatientConsultations = () => {
                                             </span>
                                         </div>
                                         {isUpcoming && appt.pagamento_status === 'pago' && (
-                                            <p className="mt-3 text-xs text-blue-800 bg-blue-50 border border-blue-100 rounded-md p-2 leading-relaxed">
+                                            <p className="mt-3 text-xs text-brand-800 bg-brand-50 border border-brand-100 rounded-md p-2 leading-relaxed">
                                                 O médico entrará em contato <strong>até 15 minutos antes</strong> para enviar o link da consulta. Fique atento ao seu <strong>WhatsApp</strong> e <strong>e-mail</strong>.
                                             </p>
                                         )}
@@ -410,7 +410,7 @@ const PatientConsultations = () => {
                             Utilize o botão abaixo para abrir a sala manualmente ou copie os dados de acesso.
                         </p>
                         <Button 
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white gap-2 h-10" 
+                            className="w-full bg-brand-600 hover:bg-brand-700 text-white gap-2 h-10" 
                             onClick={() => blockedRoom && window.open(blockedRoom.url, '_blank')}
                         >
                             <ExternalLink className="w-4 h-4" />

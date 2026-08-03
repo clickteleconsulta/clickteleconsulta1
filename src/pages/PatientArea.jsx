@@ -64,7 +64,7 @@ const NextAppointmentCard = ({ appointment }) => {
 
   if (!appointment) {
     return (
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-6 mb-6">
+      <div className="bg-gradient-to-br from-brand-50 to-brand-50 rounded-2xl border border-brand-100 p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
@@ -101,7 +101,7 @@ const NextAppointmentCard = ({ appointment }) => {
   });
 
   return (
-    <div className="bg-gradient-to-br from-primary/5 to-blue-400/10 rounded-2xl border border-primary/20 p-6 mb-6 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-primary/5 to-brand-400/10 rounded-2xl border border-primary/20 p-6 mb-6 relative overflow-hidden">
       {/* Decoração */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-12 translate-x-12" />
 
@@ -262,7 +262,7 @@ const PatientArea = () => {
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col gap-4 sticky top-24">
           <div className="flex flex-col items-center text-center p-5 border border-border rounded-2xl bg-card shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-3 text-white text-2xl font-bold shadow-md shadow-blue-500/20">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mb-3 text-white text-2xl font-bold shadow-md shadow-brand-500/20">
               {initial}
             </div>
             <h2 className="text-base font-bold text-slate-900 truncate max-w-full">{profile?.full_name}</h2>

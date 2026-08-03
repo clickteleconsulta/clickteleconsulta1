@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Cabeçalho padrão das páginas do dashboard do paciente — tipografia da marca
-// (Manrope), ícone azul, subtítulo e ações opcionais à direita.
+// da marca, ícone na cor da marca, subtítulo e ações opcionais à direita.
 const PatientPageHeader = ({ icon: Icon, title, subtitle, children }) => (
     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-5">
         <div>

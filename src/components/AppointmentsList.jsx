@@ -8,7 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 const statusColors = {
   agendada: 'bg-green-100 text-green-700',
-  confirmada: 'bg-blue-100 text-blue-700',
+  confirmada: 'bg-brand-100 text-brand-800',
   cancelada: 'bg-red-100 text-red-700',
   concluida: 'bg-gray-100 text-gray-700'
 };
@@ -128,7 +128,7 @@ export function AppointmentsList({ appointments, onUpdateAppointment, onDeleteAp
                   <Button
                     size="sm"
                     onClick={() => handleStatusChange(appointment.id, 'confirmada')}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-brand-600 hover:bg-brand-700"
                   >
                     Confirmar
                   </Button>

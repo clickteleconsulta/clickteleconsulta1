@@ -86,7 +86,7 @@ const MaintenanceToggle = () => {
                 <div className="space-y-1.5">
                     <Label className="text-xs font-bold text-gray-700 uppercase tracking-wide">Mensagem exibida aos visitantes</Label>
                     <Input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={DEFAULT_MSG}
-                        className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm" />
+                        className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 h-10 text-sm rounded-lg shadow-sm" />
                     <p className="text-xs text-gray-400">A mensagem é salva junto ao ligar/desligar. Você também pode salvá-la com o site no ar.</p>
                 </div>
 

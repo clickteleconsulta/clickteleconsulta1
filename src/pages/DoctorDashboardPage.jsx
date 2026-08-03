@@ -21,7 +21,7 @@ import { ptBR } from 'date-fns/locale';
 // ─── KPI Card ──────────────────────────────────────────────────────────────────
 const KPICard = ({ icon: Icon, label, value, sub, color = 'blue', trend }) => {
   const colors = {
-    blue: 'bg-blue-50 text-blue-600',
+    blue: 'bg-brand-50 text-brand-600',
     green: 'bg-green-50 text-green-600',
     purple: 'bg-purple-50 text-purple-600',
     amber: 'bg-amber-50 text-amber-600',
@@ -93,7 +93,7 @@ const NextConsultationCard = ({ appt }) => {
       <CardContent className="px-5 pb-5 space-y-4">
         <div className="flex items-center gap-3">
           <Avatar className="w-12 h-12 border-2 border-white shadow">
-            <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-lg">
+            <AvatarFallback className="bg-brand-100 text-brand-800 font-bold text-lg">
               {(appt.paciente_nome || 'P')[0]}
             </AvatarFallback>
           </Avatar>
@@ -107,13 +107,13 @@ const NextConsultationCard = ({ appt }) => {
         </div>
 
         {countdown !== null && (
-          <div className={`rounded-xl p-3 text-center ${isImminent ? 'bg-green-100' : isPast ? 'bg-gray-100' : 'bg-blue-50'}`}>
+          <div className={`rounded-xl p-3 text-center ${isImminent ? 'bg-green-100' : isPast ? 'bg-gray-100' : 'bg-brand-50'}`}>
             {isImminent ? (
               <p className="text-green-700 font-bold text-sm">🟢 Consulta em breve!</p>
             ) : isPast ? (
               <p className="text-gray-500 text-sm">Horário passado</p>
             ) : (
-              <p className="text-blue-700 font-medium text-sm">
+              <p className="text-brand-800 font-medium text-sm">
                 Em <span className="font-bold">{countdown}min</span>
               </p>
             )}
@@ -145,7 +145,7 @@ const DayTimeline = ({ appointments, workStart = 8, workEnd = 18, slotDuration =
   }
 
   const statusColors = {
-    confirmado: 'bg-blue-100 border-blue-300 text-blue-700',
+    confirmado: 'bg-brand-100 border-brand-300 text-brand-800',
     pendente: 'bg-amber-50 border-amber-300 text-amber-700',
     atendido: 'bg-green-50 border-green-300 text-green-600',
     cancelado: 'bg-red-50 border-red-200 text-red-400 line-through opacity-60',
@@ -290,7 +290,7 @@ const DoctorDashboardPage = () => {
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
       </div>
     );
   }
@@ -383,15 +383,15 @@ const DoctorDashboardPage = () => {
 
             {/* Quick actions */}
             <div className="grid grid-cols-3 gap-3">
-              <Button variant="outline" className="h-16 flex-col gap-1.5 text-xs font-medium text-gray-600 hover:border-blue-300 hover:text-blue-700"
+              <Button variant="outline" className="h-16 flex-col gap-1.5 text-xs font-medium text-gray-600 hover:border-brand-300 hover:text-brand-800"
                 onClick={() => navigate('/medico/dashboard/agenda')}>
                 <Lock className="w-4 h-4" /> Bloquear Horário
               </Button>
-              <Button variant="outline" className="h-16 flex-col gap-1.5 text-xs font-medium text-gray-600 hover:border-blue-300 hover:text-blue-700"
+              <Button variant="outline" className="h-16 flex-col gap-1.5 text-xs font-medium text-gray-600 hover:border-brand-300 hover:text-brand-800"
                 onClick={() => navigate('/medico/dashboard/agenda')}>
                 <CalendarPlus className="w-4 h-4" /> Adicionar Disponibilidade
               </Button>
-              <Button variant="outline" className="h-16 flex-col gap-1.5 text-xs font-medium text-gray-600 hover:border-blue-300 hover:text-blue-700"
+              <Button variant="outline" className="h-16 flex-col gap-1.5 text-xs font-medium text-gray-600 hover:border-brand-300 hover:text-brand-800"
                 onClick={() => navigate('/medico/dashboard/pacientes')}>
                 <FileText className="w-4 h-4" /> Ver Prontuários
               </Button>
@@ -408,7 +408,7 @@ const DoctorDashboardPage = () => {
               <Card className="border border-gray-200 shadow-sm">
                 <CardHeader className="p-5 pb-2">
                   <CardTitle className="text-sm font-bold text-gray-900 flex items-center gap-2">
-                    <Bell className="w-4 h-4 text-blue-500" /> Notificações
+                    <Bell className="w-4 h-4 text-brand-500" /> Notificações
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="px-5 pb-5">
@@ -425,7 +425,7 @@ const DoctorDashboardPage = () => {
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-gray-900">Perfil completo</p>
-                    <span className="text-xs font-bold text-blue-600">
+                    <span className="text-xs font-bold text-brand-600">
                       {Math.round([
                         doctorProfile.bio, doctorProfile.image_url, doctorProfile.crm,
                         doctorProfile.specialty, doctorProfile.uf,
@@ -439,7 +439,7 @@ const DoctorDashboardPage = () => {
                     ].filter(Boolean).length / 5 * 100)}
                     className="h-2"
                   />
-                  <Button variant="ghost" size="sm" className="w-full text-xs text-blue-600 hover:bg-blue-50 mt-1"
+                  <Button variant="ghost" size="sm" className="w-full text-xs text-brand-600 hover:bg-brand-50 mt-1"
                     onClick={() => navigate('/medico/dashboard/perfil')}>
                     Completar perfil <ChevronRight className="w-3 h-3 ml-1" />
                   </Button>

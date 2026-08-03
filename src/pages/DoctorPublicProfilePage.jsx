@@ -197,7 +197,7 @@ const DoctorEditorDialog = ({ doctor, isOpen, onOpenChange, onSave }) => {
             <Label>Instruções de Atendimento</Label>
             <Textarea className="min-h-[100px]" value={formData.instructions} onChange={e => setFormData(p => ({ ...p, instructions: e.target.value }))} placeholder="Ex: Chegar 5 min antes, ter exames em mãos..." />
           </div>
-          <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3 border">
+          <div className="flex items-center justify-between bg-brand-50 rounded-lg p-3 border">
             <div>
               <p className="text-sm font-medium">Habilitar botão WhatsApp</p>
               <p className="text-xs text-gray-400">Exibe botão de contato direto no perfil público</p>
@@ -329,7 +329,7 @@ const DoctorPublicProfilePage = () => {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-xl md:text-2xl font-bold text-foreground">{formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}</h1>
                     {/* Verified badge */}
-                    <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-[11px] flex items-center gap-1">
+                    <Badge className="bg-brand-100 text-brand-800 border-brand-200 text-[11px] flex items-center gap-1">
                       <CheckCircle className="w-3 h-3" /> Verificado — {BRAND.name}
                     </Badge>
                   </div>
@@ -377,7 +377,7 @@ const DoctorPublicProfilePage = () => {
             {/* Instructions */}
             <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
               <h2 className="text-base font-semibold text-foreground">Instruções para Atendimento</h2>
-              <div className="bg-blue-50/50 dark:bg-blue-950/10 p-4 rounded-lg border border-blue-100 dark:border-blue-900/20">
+              <div className="bg-brand-50/50 dark:bg-brand-800/10 p-4 rounded-lg border border-brand-100 dark:border-brand-800/20">
                 <div className="prose prose-sm max-w-none text-foreground/80 text-sm">
                   {doctor.instructions
                     ? doctor.instructions.split('\n').map((p, i) => <p key={i}>{p}</p>)

@@ -207,7 +207,7 @@ const AdminWithdrawalsPage = () => {
                                     key={f.v}
                                     type="button"
                                     onClick={() => setStatusFilter(f.v)}
-                                    className={`px-4 h-8 rounded-lg text-sm font-semibold transition-all ${statusFilter === f.v ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-blue-600'}`}
+                                    className={`px-4 h-8 rounded-lg text-sm font-semibold transition-all ${statusFilter === f.v ? 'bg-white text-brand-800 shadow-sm' : 'text-gray-500 hover:text-brand-600'}`}
                                 >
                                     {f.l}
                                 </button>
@@ -377,7 +377,7 @@ const AdminWithdrawalsPage = () => {
                                     {selectedWithdrawal.metodo_pagamento === 'pix' ? (
                                         <>
                                             <span className="text-gray-500">Chave PIX:</span>
-                                            <span className="font-bold text-right text-blue-600">
+                                            <span className="font-bold text-right text-brand-600">
                                                 {selectedWithdrawal.dados_saque_json?.pix_key || <span className="text-red-600 font-semibold">Não informada</span>}
                                             </span>
                                         </>
@@ -447,8 +447,8 @@ const AdminWithdrawalsPage = () => {
                                                         </div>
                                                         <div className="text-right shrink-0 leading-tight">
                                                             <div className="text-gray-600">Pago: <span className="font-medium">{fmt(c.total)}</span></div>
-                                                            <div className="text-indigo-600">Taxa ({c.fee}%): {fmt(c.taxa)}</div>
-                                                            <div className="text-blue-700 font-semibold">Repasse: {fmt(c.repasse)}</div>
+                                                            <div className="text-brand-600">Taxa ({c.fee}%): {fmt(c.taxa)}</div>
+                                                            <div className="text-brand-800 font-semibold">Repasse: {fmt(c.repasse)}</div>
                                                         </div>
                                                     </div>
                                                 );
@@ -465,8 +465,8 @@ const AdminWithdrawalsPage = () => {
                                                     <span className="text-gray-700">Totais</span>
                                                     <div className="text-right leading-tight">
                                                         <div className="text-gray-600">Bruto: {fmt(tot.total)}</div>
-                                                        <div className="text-indigo-600">Taxa retida: {fmt(tot.taxa)}</div>
-                                                        <div className="text-blue-700">Repasse: {fmt(tot.repasse)}</div>
+                                                        <div className="text-brand-600">Taxa retida: {fmt(tot.taxa)}</div>
+                                                        <div className="text-brand-800">Repasse: {fmt(tot.repasse)}</div>
                                                     </div>
                                                 </div>
                                             );

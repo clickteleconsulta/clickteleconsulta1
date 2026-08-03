@@ -158,11 +158,11 @@ const DoctorLegal = () => {
                             
                             {Object.entries(DOC_TYPES).map(([key, label]) => (
                                 <TabsContent key={key} value={key} className="space-y-6 animate-in fade-in slide-in-from-top-2">
-                                    <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-lg mb-4">
-                                        <h3 className="font-semibold text-sm text-blue-900 flex items-center gap-2">
+                                    <div className="bg-brand-50/50 border border-brand-100 p-4 rounded-lg mb-4">
+                                        <h3 className="font-semibold text-sm text-brand-800 flex items-center gap-2">
                                             <FileText className="w-4 h-4"/> {label}
                                         </h3>
-                                        <p className="text-xs text-blue-700 mt-1">
+                                        <p className="text-xs text-brand-800 mt-1">
                                             Faça o upload do arquivo PDF ou insira um link direto para o documento hospedado externamente (Google Drive, Dropbox, site próprio).
                                         </p>
                                     </div>

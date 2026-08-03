@@ -4,13 +4,13 @@ import { CheckCircle2, AlertTriangle, Clock, Check, XCircle, UserX } from 'lucid
 // Badge de status de consulta — cores semânticas consistentes em todas as telas
 // (Consultas, Painel, etc.). size="sm" para uso compacto.
 const CONFIG = {
-    confirmado: { label: 'Confirmado', icon: CheckCircle2, cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
-    agendado: { label: 'Confirmado', icon: CheckCircle2, cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+    confirmado: { label: 'Confirmado', icon: CheckCircle2, cls: 'bg-green-50 text-green-700 border-green-100' },
+    agendado: { label: 'Confirmado', icon: CheckCircle2, cls: 'bg-green-50 text-green-700 border-green-100' },
     pendente: { label: 'Pendente', icon: AlertTriangle, cls: 'bg-amber-50 text-amber-700 border-amber-100' },
     reagendado: { label: 'Reagendado', icon: Clock, cls: 'bg-amber-50 text-amber-700 border-amber-100' },
-    atendido: { label: 'Concluído', icon: Check, cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    concluida: { label: 'Concluído', icon: Check, cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-    realizado: { label: 'Concluído', icon: Check, cls: 'bg-blue-50 text-blue-700 border-blue-100' },
+    atendido: { label: 'Concluído', icon: Check, cls: 'bg-brand-50 text-brand-800 border-brand-100' },
+    concluida: { label: 'Concluído', icon: Check, cls: 'bg-brand-50 text-brand-800 border-brand-100' },
+    realizado: { label: 'Concluído', icon: Check, cls: 'bg-brand-50 text-brand-800 border-brand-100' },
     nao_compareceu: { label: 'Não compareceu', icon: UserX, cls: 'bg-orange-50 text-orange-700 border-orange-100' },
     cancelado: { label: 'Cancelado', icon: XCircle, cls: 'bg-red-50 text-red-700 border-red-100' },
     expirado: { label: 'Expirado', icon: XCircle, cls: 'bg-red-50 text-red-700 border-red-100' },

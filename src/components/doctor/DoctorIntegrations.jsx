@@ -18,7 +18,7 @@ const DoctorIntegrations = () => {
                 </CardHeader>
                 <CardContent className="p-2">
                     <div className="relative w-full max-w-full mx-auto rounded-md overflow-hidden shadow-sm border border-gray-100 transition-transform hover:scale-[1.005] duration-300">
-                        <div className="w-full h-20 grid grid-cols-2 bg-gradient-to-r from-sky-500 to-teal-500">
+                        <div className="w-full h-20 grid grid-cols-2 bg-gradient-to-r from-brand-600 to-brand-500">
                             <div className="flex items-center justify-center text-white font-semibold text-sm border-r border-white/30">Doctoralia</div>
                             <div className="flex items-center justify-center text-white font-semibold text-sm">Feegow</div>
                         </div>

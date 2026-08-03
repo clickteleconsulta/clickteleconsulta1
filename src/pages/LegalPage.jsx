@@ -99,7 +99,7 @@ const LegalPage = () => {
                             <ArrowLeft className="h-5 w-5 text-gray-600" />
                         </Button>
                         <nav className="flex items-center text-sm font-medium text-gray-500">
-                            <Link to="/" className="hover:text-blue-600 transition-colors">Início</Link>
+                            <Link to="/" className="hover:text-brand-600 transition-colors">Início</Link>
                             <span className="mx-2 text-gray-300">/</span>
                             <span className="text-gray-900 font-semibold">{pageTitle}</span>
                         </nav>
@@ -111,7 +111,7 @@ const LegalPage = () => {
                 <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20 flex-1">
-                            <Loader2 className="h-10 w-10 animate-spin text-blue-600 mb-4" />
+                            <Loader2 className="h-10 w-10 animate-spin text-brand-600 mb-4" />
                             <p className="text-gray-500 font-medium">Carregando documento...</p>
                         </div>
                     ) : error ? (
@@ -125,7 +125,7 @@ const LegalPage = () => {
                                 <Button onClick={() => navigate('/')} variant="outline" className="bg-white border-gray-200 hover:bg-gray-50 text-gray-700">
                                     Voltar para o Início
                                 </Button>
-                                <Button onClick={fetchDocument} className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
+                                <Button onClick={fetchDocument} className="bg-brand-600 hover:bg-brand-700 text-white shadow-md">
                                     <RefreshCw className="h-4 w-4 mr-2" /> Tentar Novamente
                                 </Button>
                             </div>
@@ -136,13 +136,13 @@ const LegalPage = () => {
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-3">
-                                            <div className="bg-blue-100 p-2 rounded-lg">
-                                                <FileText className="h-6 w-6 text-blue-700" />
+                                            <div className="bg-brand-100 p-2 rounded-lg">
+                                                <FileText className="h-6 w-6 text-brand-800" />
                                             </div>
                                             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">{document?.title}</h1>
                                         </div>
                                         <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 pl-1">
-                                            <span className="bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full font-semibold border border-blue-100 text-xs uppercase tracking-wide">
+                                            <span className="bg-brand-50 text-brand-800 px-2.5 py-0.5 rounded-full font-semibold border border-brand-100 text-xs uppercase tracking-wide">
                                                 Versão {document?.version}
                                             </span>
                                             <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
@@ -185,7 +185,7 @@ const LegalPage = () => {
                                                     {/* Fallback for browsers that don't support embed/object */}
                                                     <p className="p-8 text-center text-gray-500">
                                                         Seu navegador não suporta a visualização direta de PDFs. 
-                                                        Você pode <a href={toSiteUrl(document.pdf_url)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">baixar o documento aqui</a>.
+                                                        Você pode <a href={toSiteUrl(document.pdf_url)} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline font-medium">baixar o documento aqui</a>.
                                                     </p>
                                                 </object>
                                             </div>
@@ -193,12 +193,12 @@ const LegalPage = () => {
                                             {/* Mobile View: Show button to open PDF externally for better experience */}
                                             <div className="md:hidden flex flex-col items-center justify-center h-full p-8 text-center space-y-6">
                                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                                                    <FileText className="w-16 h-16 text-blue-200 mx-auto mb-4" />
+                                                    <FileText className="w-16 h-16 text-brand-200 mx-auto mb-4" />
                                                     <h3 className="text-lg font-bold text-gray-900">Visualização de PDF</h3>
                                                     <p className="text-sm text-gray-500 mt-2 mb-6">
                                                         Para uma melhor experiência de leitura em dispositivos móveis, recomendamos abrir o documento externamente.
                                                     </p>
-                                                    <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-base">
+                                                    <Button asChild className="w-full bg-brand-600 hover:bg-brand-700 h-12 text-base">
                                                         <a href={toSiteUrl(document.pdf_url)} target="_blank" rel="noopener noreferrer">
                                                             Abrir PDF <ExternalLink className="w-4 h-4 ml-2" />
                                                         </a>

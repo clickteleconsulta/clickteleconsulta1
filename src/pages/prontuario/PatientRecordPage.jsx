@@ -18,8 +18,8 @@ import html2pdf from 'html2pdf.js';
 const EmptyState = ({ message, subMessage, action }) => (
     <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in zoom-in-95 duration-500">
         <div className="w-64 h-64 mb-6 relative flex items-center justify-center">
-             <div className="bg-blue-50 rounded-full p-8 animate-pulse">
-                <FileText className="w-16 h-16 text-blue-200" />
+             <div className="bg-brand-50 rounded-full p-8 animate-pulse">
+                <FileText className="w-16 h-16 text-brand-200" />
              </div>
         </div>
         <h3 className="text-lg font-bold text-gray-900 mb-2">{message}</h3>
@@ -32,7 +32,7 @@ const DocumentsTab = ({ patientId, doctorId }) => (
     <div className="p-6">
         <div className="flex justify-between items-center mb-6">
             <h3 className="font-semibold text-gray-800">Documentos do Paciente</h3>
-            <Button variant="outline" size="sm" className="text-blue-600 border-blue-200 hover:bg-blue-50"><Plus className="w-4 h-4 mr-2"/>Upload</Button>
+            <Button variant="outline" size="sm" className="text-brand-600 border-brand-200 hover:bg-brand-50"><Plus className="w-4 h-4 mr-2"/>Upload</Button>
         </div>
         <div className="border border-dashed border-gray-200 rounded-xl p-10 text-center bg-gray-50/50">
             <p className="text-gray-500 text-sm">Nenhum documento anexado ainda.</p>
@@ -58,7 +58,7 @@ const PaymentsTab = ({ patientId }) => {
         fetchPayments();
     }, [patientId]);
 
-    if (loading) return <div className="p-10 text-center"><Loader2 className="animate-spin w-6 h-6 mx-auto text-blue-400"/></div>;
+    if (loading) return <div className="p-10 text-center"><Loader2 className="animate-spin w-6 h-6 mx-auto text-brand-400"/></div>;
 
     return (
         <div className="p-6">
@@ -86,7 +86,7 @@ const PaymentsTab = ({ patientId }) => {
                                     <td className="p-3">R$ {(p.price_in_cents / 100).toFixed(2)}</td>
                                     <td className="p-3">
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                            p.pagamento_status === 'pago' ? 'bg-blue-100 text-blue-700' : 
+                                            p.pagamento_status === 'pago' ? 'bg-brand-100 text-brand-800' : 
                                             p.pagamento_status === 'pendente' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'
                                         }`}>
                                             {p.pagamento_status}
@@ -256,7 +256,7 @@ const PatientRecordPage = () => {
             
             setActiveEpisode(data);
             setActiveTab('evolution');
-            toast({ title: "Atendimento iniciado", variant: "default", className: "bg-blue-600 text-white border-none" });
+            toast({ title: "Atendimento iniciado", variant: "default", className: "bg-brand-600 text-white border-none" });
 
         } catch (error) {
             toast({ variant: "destructive", title: "Erro", description: error.message });
@@ -328,7 +328,7 @@ const PatientRecordPage = () => {
 
             setActiveEpisode(null);
             setActiveTab('consultas');
-            toast({ title: "Atendimento concluído!", variant: "default", className: "bg-blue-600 text-white border-none" });
+            toast({ title: "Atendimento concluído!", variant: "default", className: "bg-brand-600 text-white border-none" });
         } catch (error) {
             toast({ variant: "destructive", title: "Erro ao concluir", description: error.message });
         }
@@ -375,7 +375,7 @@ const PatientRecordPage = () => {
         return `
             <div style="padding: 40px; max-width: 800px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000; background: #fff;">
                 <!-- Header -->
-                <div style="border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="border-bottom: 2px solid #3B5BA5; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
                         <h1 style="margin: 0 0 5px 0; font-size: 24px; color: #1e3a8a;">${docName}</h1>
                         <p style="margin: 0 0 5px 0; font-size: 14px; color: #4b5563; font-weight: 500;">${docSpecialty}</p>
@@ -490,7 +490,7 @@ const PatientRecordPage = () => {
         }
     };
 
-    if (loading) return <div className="h-screen w-full flex items-center justify-center bg-gray-50"><Loader2 className="w-8 h-8 animate-spin text-blue-600"/></div>;
+    if (loading) return <div className="h-screen w-full flex items-center justify-center bg-gray-50"><Loader2 className="w-8 h-8 animate-spin text-brand-600"/></div>;
 
     return (
         <div className="flex h-[calc(100vh-64px)] overflow-hidden bg-white">
@@ -509,31 +509,31 @@ const PatientRecordPage = () => {
                         <TabsList className="h-12 w-full justify-start bg-transparent p-0 gap-6">
                             <TabsTrigger 
                                 value="evolution" 
-                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 hover:text-gray-700 bg-transparent shadow-none"
+                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-brand-600 data-[state=active]:text-brand-800 hover:text-gray-700 bg-transparent shadow-none"
                             >
                                 Evolução do paciente
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="consultas" 
-                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 hover:text-gray-700 bg-transparent shadow-none"
+                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-brand-600 data-[state=active]:text-brand-800 hover:text-gray-700 bg-transparent shadow-none"
                             >
                                 Consultas ({appointments.length})
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="documents" 
-                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 hover:text-gray-700 bg-transparent shadow-none"
+                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-brand-600 data-[state=active]:text-brand-800 hover:text-gray-700 bg-transparent shadow-none"
                             >
                                 Documentos
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="data" 
-                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 hover:text-gray-700 bg-transparent shadow-none"
+                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-brand-600 data-[state=active]:text-brand-800 hover:text-gray-700 bg-transparent shadow-none"
                             >
                                 Dados do paciente
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="payments" 
-                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 hover:text-gray-700 bg-transparent shadow-none"
+                                className="h-full rounded-none border-b-2 border-transparent px-2 pb-3 pt-2 font-medium text-gray-500 data-[state=active]:border-brand-600 data-[state=active]:text-brand-800 hover:text-gray-700 bg-transparent shadow-none"
                             >
                                 <CreditCard className="w-3.5 h-3.5 mr-2"/>
                                 Lista de pagamentos
@@ -564,12 +564,12 @@ const PatientRecordPage = () => {
                                             return (
                                                 <div 
                                                     key={appt.id} 
-                                                    className="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+                                                    className="bg-white p-4 rounded-lg border border-gray-200 hover:border-brand-300 hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
                                                     onClick={() => handleStartEpisode(appt)}
                                                 >
                                                     <div className="flex items-center gap-4">
-                                                        <div className={`p-2 rounded-lg transition-colors ${hasEpisode ? 'bg-blue-50' : 'bg-gray-100 group-hover:bg-blue-50'}`}>
-                                                            <Calendar className={`w-5 h-5 ${hasEpisode ? 'text-blue-600' : 'text-gray-500 group-hover:text-blue-600'}`} />
+                                                        <div className={`p-2 rounded-lg transition-colors ${hasEpisode ? 'bg-brand-50' : 'bg-gray-100 group-hover:bg-brand-50'}`}>
+                                                            <Calendar className={`w-5 h-5 ${hasEpisode ? 'text-brand-600' : 'text-gray-500 group-hover:text-brand-600'}`} />
                                                         </div>
                                                         <div>
                                                             <p className="font-semibold text-gray-900">
@@ -588,7 +588,7 @@ const PatientRecordPage = () => {
                                                             ) : (
                                                             <Button 
                                                                 size="sm" 
-                                                                className="h-7 text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 font-medium"
+                                                                className="h-7 text-xs bg-brand-600 hover:bg-brand-700 text-white px-3 font-medium"
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                     handleStartEpisode(appt);
@@ -597,7 +597,7 @@ const PatientRecordPage = () => {
                                                                 Iniciar Atendimento
                                                             </Button>
                                                             )}
-                                                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500" />
+                                                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-brand-500" />
                                                     </div>
                                                 </div>
                                             )
@@ -621,17 +621,17 @@ const PatientRecordPage = () => {
                                     const guestToken = guestTokens[appt.id];
 
                                     return (
-                                        <div key={appt.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-blue-300 hover:shadow-md transition-all">
+                                        <div key={appt.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-brand-300 hover:shadow-md transition-all">
                                             <div 
                                                 className="p-4 flex justify-between items-center cursor-pointer group"
                                                 onClick={() => setSelectedAppointment(appt)}
                                             >
                                                 <div className="flex items-center gap-4">
-                                                    <div className="bg-blue-50 p-2 rounded-full">
-                                                        <FileText className="w-5 h-5 text-blue-600" />
+                                                    <div className="bg-brand-50 p-2 rounded-full">
+                                                        <FileText className="w-5 h-5 text-brand-600" />
                                                     </div>
                                                     <div>
-                                                        <p className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                                                        <p className="font-semibold text-gray-800 group-hover:text-brand-800 transition-colors">
                                                             Consulta - {format(new Date(appt.appointment_date + 'T' + appt.appointment_time), "dd/MM/yyyy", { locale: ptBR })}
                                                         </p>
                                                         <p className="text-xs text-gray-500">
@@ -646,7 +646,7 @@ const PatientRecordPage = () => {
                                                 </div>
                                                 <div className="flex items-center gap-4">
                                                     {hasEpisode ? (
-                                                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${episode.status === 'completed' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${episode.status === 'completed' ? 'bg-brand-50 text-brand-800 border-brand-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
                                                             {episode.status === 'completed' ? 'Concluído' : 'Em andamento'}
                                                         </span>
                                                     ) : (
@@ -654,7 +654,7 @@ const PatientRecordPage = () => {
                                                             Pendente
                                                         </span>
                                                     )}
-                                                    <Button variant="ghost" size="sm" className="text-gray-500 group-hover:text-blue-600" onClick={(e) => {
+                                                    <Button variant="ghost" size="sm" className="text-gray-500 group-hover:text-brand-600" onClick={(e) => {
                                                         e.stopPropagation();
                                                         setSelectedAppointment(appt);
                                                     }}>
@@ -722,7 +722,7 @@ const PatientRecordPage = () => {
                     <DialogHeader className="p-6 border-b sticky top-0 bg-white z-10">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                                <DialogTitle className="text-xl text-blue-900">Detalhes do Prontuário</DialogTitle>
+                                <DialogTitle className="text-xl text-brand-800">Detalhes do Prontuário</DialogTitle>
                                 {selectedAppointment && (
                                     <p className="text-sm text-gray-500 mt-1">
                                         Consulta de {format(new Date(selectedAppointment.appointment_date + 'T' + selectedAppointment.appointment_time), "dd 'de' MMMM, yyyy 'às' HH:mm", { locale: ptBR })}
@@ -733,7 +733,7 @@ const PatientRecordPage = () => {
                                 <Button variant="outline" size="sm" onClick={() => handlePrintSingle(selectedAppointment)} className="border-gray-300 text-gray-700 hover:bg-gray-50">
                                     <Printer className="w-4 h-4 mr-2" /> Imprimir
                                 </Button>
-                                <Button variant="default" size="sm" onClick={() => handleGeneratePDFSingle(selectedAppointment)} disabled={isGeneratingPDF} className="bg-blue-600 hover:bg-blue-700 text-white">
+                                <Button variant="default" size="sm" onClick={() => handleGeneratePDFSingle(selectedAppointment)} disabled={isGeneratingPDF} className="bg-brand-600 hover:bg-brand-700 text-white">
                                     {isGeneratingPDF ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
                                     Salvar PDF
                                 </Button>
@@ -744,15 +744,15 @@ const PatientRecordPage = () => {
                     <div className="p-6 space-y-6">
                         {selectedAppointment && (
                             <>
-                                <div className="grid grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+                                <div className="grid grid-cols-2 gap-4 text-sm bg-brand-50/50 p-4 rounded-lg border border-brand-100">
                                     <div>
-                                        <span className="font-semibold text-blue-900">Status da Consulta:</span>
-                                        <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                        <span className="font-semibold text-brand-800">Status da Consulta:</span>
+                                        <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-brand-100 text-brand-800">
                                             {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="font-semibold text-blue-900">Tipo de Consulta:</span>
+                                        <span className="font-semibold text-brand-800">Tipo de Consulta:</span>
                                         <span className="ml-2 text-gray-700">Telemedicina</span>
                                     </div>
                                 </div>

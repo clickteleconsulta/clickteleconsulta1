@@ -6,8 +6,8 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const RESEND_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const EMAIL_TOKEN = Deno.env.get("EMAIL_TOKEN") ?? "";
-const FROM = Deno.env.get("INVITE_FROM") || "Click Teleconsulta <noreply@clickteleconsulta.online>";
-const SITE = (Deno.env.get("SITE_URL") || "https://clickteleconsulta.online").replace(/\/$/, "");
+const FROM = Deno.env.get("INVITE_FROM") || "aviDoc <noreply@avidoc.com.br>";
+const SITE = (Deno.env.get("SITE_URL") || "https://avidoc.com.br").replace(/\/$/, "");
 
 const svc = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, "Content-Type": "application/json" };
 
@@ -27,7 +27,7 @@ function shell(title: string, accent: string, bodyHtml: string) {
   <div style="max-width:560px;margin:0 auto;padding:24px 16px;">
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;">
       <div style="background:linear-gradient(90deg,#0ea5e9,#14b8a6);padding:22px 28px;">
-        <div style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;">Click Teleconsulta</div>
+        <div style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;">avidoc</div>
         <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;">Marketplace de agendamento de consultas</div>
       </div>
       <div style="padding:28px;">
@@ -36,7 +36,7 @@ function shell(title: string, accent: string, bodyHtml: string) {
       </div>
       <div style="padding:16px 28px;background:#f8fafc;border-top:1px solid #eef2f6;font-size:11px;color:#94a3b8;line-height:1.5;">
         CLICK TELECONSULTA ONLINE LTDA · CNPJ 68.171.336/0001-50<br/>
-        Somos um marketplace de agendamentos; a teleconsulta e o ato médico são de responsabilidade do profissional. Dúvidas: suporte@clickteleconsulta.online
+        Somos um marketplace de agendamentos; a teleconsulta e o ato médico são de responsabilidade do profissional. Dúvidas: contato@avidoc.com.br
       </div>
     </div>
   </div></body></html>`;
@@ -48,7 +48,7 @@ function rows(pairs: [string, string][]) {
     .join("")}</table>`;
 }
 function btn(href: string, label: string) {
-  return `<div style="margin:18px 0 4px;"><a href="${href}" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:11px 20px;border-radius:10px;">${label}</a></div>`;
+  return `<div style="margin:18px 0 4px;"><a href="${href}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:11px 20px;border-radius:10px;">${label}</a></div>`;
 }
 
 Deno.serve(async (req: Request) => {

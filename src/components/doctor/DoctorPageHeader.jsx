@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Cabeçalho padrão das telas do dashboard médico — mesma tipografia (Manrope),
+// Cabeçalho padrão das telas do dashboard médico — mesma tipografia da marca,
 // tamanho, ícone azul e espaçamento em todas. Ações à direita via children.
 const DoctorPageHeader = ({ icon: Icon, title, subtitle, children }) => (
     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">

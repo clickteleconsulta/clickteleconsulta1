@@ -311,10 +311,10 @@ const DoctorFinance = () => {
 
     const getStatusBadge = (status) => {
         const styles = {
-          confirmado: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+          confirmado: 'bg-green-50 text-green-700 border-green-100',
           pendente: 'bg-amber-50 text-amber-700 border-amber-100',
           cancelado: 'bg-red-50 text-red-700 border-red-100',
-          atendido: 'bg-blue-50 text-blue-700 border-blue-100'
+          atendido: 'bg-brand-50 text-brand-800 border-brand-100'
         };
         return <Badge className={`${styles[status] || 'bg-gray-50 text-gray-700 border-gray-100'} h-5 text-[10px] px-2 rounded-sm font-medium border`} variant="outline">{status?.toUpperCase()}</Badge>;
     };
@@ -322,7 +322,7 @@ const DoctorFinance = () => {
     const getWithdrawalStatusBadge = (status) => {
         const styles = {
             'Aguardando Recebimento': 'bg-amber-50 text-amber-800 border-amber-200',
-            'Recebido': 'bg-emerald-50 text-emerald-800 border-emerald-200',
+            'Recebido': 'bg-green-50 text-green-800 border-green-200',
             'Cancelado': 'bg-red-50 text-red-800 border-red-200'
         };
         return <Badge className={`${styles[status] || 'bg-gray-50 text-gray-700'} h-5 text-[10px] px-2 rounded-sm font-medium border`} variant="outline">{status}</Badge>;
@@ -380,7 +380,7 @@ const DoctorFinance = () => {
             <DoctorPageHeader icon={Wallet} title="Financeiro" subtitle="Gerencie seus recebimentos e fluxo de caixa.">
                 <Popover>
                     <PopoverTrigger asChild>
-                        <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-xl border-gray-300 text-gray-700 transition-all duration-200 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm">
+                        <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-xl border-gray-300 text-gray-700 transition-all duration-200 hover:border-brand-300 hover:text-brand-600 hover:shadow-sm">
                             <Wallet className="w-3.5 h-3.5" /> Dados para saque
                         </Button>
                     </PopoverTrigger>
@@ -392,7 +392,7 @@ const DoctorFinance = () => {
                     onClick={() => { setSelectedGuideIds([]); setIsWithdrawOpen(true); }}
                     disabled={!canRequestWithdraw || paidTransactions.length === 0}
                     title={!canRequestWithdraw ? `Novo saque disponível em ${nextEligibleDate ? spDate(nextEligibleDate) : ''}` : (paidTransactions.length === 0 ? 'Nenhuma guia disponível para saque' : 'Solicitar saque')}
-                    className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-blue-500/20 h-9 text-xs px-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                    className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-brand-500/20 h-9 text-xs px-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0"
                 >
                     <Wallet className="w-3.5 h-3.5" /> Solicitar Saque
                 </Button>
@@ -454,8 +454,8 @@ const DoctorFinance = () => {
 
             <Tabs defaultValue="consultas" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 max-w-[320px] h-10 p-1 bg-gray-100/80 rounded-xl">
-                    <TabsTrigger value="consultas" className="text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-700 text-gray-500">Extrato de Consultas</TabsTrigger>
-                    <TabsTrigger value="saques" className="text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-700 text-gray-500">Extrato de Saques</TabsTrigger>
+                    <TabsTrigger value="consultas" className="text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-800 text-gray-500">Extrato de Consultas</TabsTrigger>
+                    <TabsTrigger value="saques" className="text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-800 text-gray-500">Extrato de Saques</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="consultas" className="mt-4">
@@ -559,7 +559,7 @@ const DoctorFinance = () => {
                                                     <TableCell className="font-bold text-gray-900 text-xs py-2 px-4">
                                                         <div className="flex flex-col items-start">
                                                             <span>{(parseFloat(w.valor) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                                                            <button type="button" onClick={() => setDetailSaque(w)} className="text-[10px] text-blue-600 hover:underline font-medium">ver guias</button>
+                                                            <button type="button" onClick={() => setDetailSaque(w)} className="text-[10px] text-brand-600 hover:underline font-medium">ver guias</button>
                                                         </div>
                                                     </TableCell>
                                                     <TableCell className="text-xs text-gray-600 py-2 px-4">
@@ -665,7 +665,7 @@ const DoctorFinance = () => {
                         </DialogDescription>
                     </DialogHeader>
                     <div className="py-2 space-y-4">
-                         <div className="text-xs bg-blue-50 text-blue-900 p-3 rounded-sm border border-blue-100">
+                         <div className="text-xs bg-brand-50 text-brand-800 p-3 rounded-sm border border-brand-100">
                              <strong className="block mb-1">Destino: </strong>
                              {doctorData?.withdrawal_payment_method === 'pix' ? (
                                  <span className="font-mono">PIX ({doctorData.withdrawal_pix_key})</span>
@@ -680,7 +680,7 @@ const DoctorFinance = () => {
                              Após solicitar, um novo saque só poderá ser feito depois de <strong>7 dias</strong>, e o administrador processará o pagamento em <strong>até 7 dias</strong>.
                          </div>
 
-                         <div className="text-[11px] text-blue-900 bg-blue-50 border border-blue-100 rounded-sm p-2.5">
+                         <div className="text-[11px] text-brand-800 bg-brand-50 border border-brand-100 rounded-sm p-2.5">
                              <strong className="flex items-center gap-1.5 mb-1"><FileText className="w-3.5 h-3.5" /> Notas fiscais</strong>
                              A {BRAND.name} emite nota fiscal <strong>apenas da taxa de processamento</strong> dos agendamentos. Você é o responsável por emitir suas próprias notas fiscais referentes ao <strong>valor de repasse</strong> que recebe. A soma das duas corresponde ao <strong>valor total pago pelo paciente</strong>.
                          </div>
@@ -693,7 +693,7 @@ const DoctorFinance = () => {
                                      <button
                                         type="button"
                                         onClick={() => setSelectedGuideIds(selectedGuideIds.length === paidTransactions.length ? [] : paidTransactions.map(g => g.id))}
-                                        className="text-[11px] font-semibold text-blue-600 hover:underline"
+                                        className="text-[11px] font-semibold text-brand-600 hover:underline"
                                      >
                                         {selectedGuideIds.length === paidTransactions.length ? 'Desmarcar todas' : 'Selecionar todas'}
                                      </button>
@@ -705,7 +705,7 @@ const DoctorFinance = () => {
                                             type="checkbox"
                                             checked={selectedGuideIds.includes(g.id)}
                                             onChange={() => toggleGuideSelection(g.id)}
-                                            className="w-4 h-4 accent-blue-600"
+                                            className="w-4 h-4 accent-brand-600"
                                          />
                                          <div className="flex-1 min-w-0">
                                              <p className="text-xs font-medium text-gray-800 truncate">{g.patientName} · <span className="text-gray-500">{g.serviceName}</span></p>

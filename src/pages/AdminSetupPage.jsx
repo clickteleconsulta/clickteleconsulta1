@@ -86,7 +86,7 @@ const AdminSetupPage = ({ functionName }) => {
             case 'exists':
                  return (
                     <>
-                        <Info className="w-12 h-12 text-blue-500" />
+                        <Info className="w-12 h-12 text-brand-500" />
                         <p className="mt-4 font-semibold text-foreground">{message}</p>
                         <p className="text-sm text-muted-foreground">Nenhuma ação foi necessária.</p>
                         <Button asChild className="mt-6">

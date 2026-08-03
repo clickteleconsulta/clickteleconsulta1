@@ -79,7 +79,7 @@ const PatientPostConsulta = ({ appointment, onSubmitReview }) => {
       });
       if (error) throw error;
       setReviewSubmitted(true);
-      toast({ title: 'Avaliação enviada!', description: 'Obrigado pelo seu feedback.', className: 'bg-emerald-600 text-white border-none' });
+      toast({ title: 'Avaliação enviada!', description: 'Obrigado pelo seu feedback.', className: 'bg-green-600 text-white border-none' });
       onSubmitReview?.(rating);
     } catch (err) {
       console.error('Review error:', err);
@@ -95,8 +95,8 @@ const PatientPostConsulta = ({ appointment, onSubmitReview }) => {
     <div className="space-y-6">
       {/* Header de sucesso */}
       <div className="text-center py-4">
-        <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+        <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-10 h-10 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-slate-800">Consulta Concluída!</h2>
         <p className="text-slate-500 mt-1">Sua consulta com <strong>{doctorName}</strong> foi encerrada.</p>
@@ -137,12 +137,12 @@ const PatientPostConsulta = ({ appointment, onSubmitReview }) => {
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-emerald-100 bg-emerald-50/30">
+        <Card className="border-green-100 bg-green-50/30">
           <CardContent className="p-5 flex items-center gap-3">
-            <CheckCircle2 className="w-6 h-6 text-emerald-500 flex-shrink-0" />
+            <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0" />
             <div>
-              <p className="font-semibold text-emerald-700">Avaliação enviada!</p>
-              <p className="text-emerald-600 text-sm">Obrigado pelo seu feedback.</p>
+              <p className="font-semibold text-green-700">Avaliação enviada!</p>
+              <p className="text-green-600 text-sm">Obrigado pelo seu feedback.</p>
             </div>
           </CardContent>
         </Card>
@@ -151,11 +151,11 @@ const PatientPostConsulta = ({ appointment, onSubmitReview }) => {
       {/* Ações */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Prontuário */}
-        <Card className="border-slate-200 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer">
+        <Card className="border-slate-200 hover:border-brand-200 hover:bg-brand-50/30 transition-all cursor-pointer">
           <CardContent className="p-4">
             <Link to="/paciente/dashboard/historico" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                <FileText className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-lg bg-brand-100 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-brand-600" />
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-slate-800 text-sm">Prontuário</p>
@@ -168,11 +168,11 @@ const PatientPostConsulta = ({ appointment, onSubmitReview }) => {
 
         {/* Agendar retorno */}
         {doctorId && (
-          <Card className="border-slate-200 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all cursor-pointer">
+          <Card className="border-slate-200 hover:border-green-200 hover:bg-green-50/30 transition-all cursor-pointer">
             <CardContent className="p-4">
               <Link to={`/medico/${doctorId}`} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-emerald-600" />
+                <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-slate-800 text-sm">Agendar Retorno</p>
@@ -250,8 +250,8 @@ const DoctorPostConsulta = ({ appointment, nextAppointment }) => {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center py-4">
-        <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-10 h-10 text-blue-600" />
+        <div className="w-20 h-20 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-10 h-10 text-brand-600" />
         </div>
         <h2 className="text-2xl font-bold text-slate-800">Consulta Encerrada</h2>
         <p className="text-slate-500 mt-1">Consulta com <strong>{patientName}</strong> finalizada.</p>
@@ -259,10 +259,10 @@ const DoctorPostConsulta = ({ appointment, nextAppointment }) => {
 
       {/* Próxima consulta */}
       {nextAppointment && (
-        <Card className="border-blue-100 bg-blue-50/40">
+        <Card className="border-brand-100 bg-brand-50/40">
           <CardContent className="p-5">
             <div className="flex items-center gap-3 mb-3">
-              <Clock className="w-5 h-5 text-blue-500" />
+              <Clock className="w-5 h-5 text-brand-500" />
               <h3 className="font-semibold text-slate-800">Próxima Consulta</h3>
             </div>
             <div className="flex items-center justify-between">
@@ -275,7 +275,7 @@ const DoctorPostConsulta = ({ appointment, nextAppointment }) => {
                 </p>
               </div>
               <Badge className={`font-mono text-sm px-3 py-1 ${
-                countdown === 'Agora!' ? 'bg-red-100 text-red-700 border-red-200 animate-pulse' : 'bg-blue-100 text-blue-700 border-blue-200'
+                countdown === 'Agora!' ? 'bg-red-100 text-red-700 border-red-200 animate-pulse' : 'bg-brand-100 text-brand-800 border-brand-200'
               }`}>
                 {countdown}
               </Badge>
@@ -287,11 +287,11 @@ const DoctorPostConsulta = ({ appointment, nextAppointment }) => {
       {/* Ações */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Prontuário do paciente */}
-        <Card className="border-slate-200 hover:border-blue-200 transition-all cursor-pointer">
+        <Card className="border-slate-200 hover:border-brand-200 transition-all cursor-pointer">
           <CardContent className="p-4">
             <Link to={`/dashboard/medico/pacientes/${appointment?.patient_id}`} className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                <FileText className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-lg bg-brand-100 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-brand-600" />
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-slate-800 text-sm">Prontuário</p>
@@ -303,11 +303,11 @@ const DoctorPostConsulta = ({ appointment, nextAppointment }) => {
         </Card>
 
         {/* Reagendar retorno */}
-        <Card className="border-slate-200 hover:border-emerald-200 transition-all cursor-pointer">
+        <Card className="border-slate-200 hover:border-green-200 transition-all cursor-pointer">
           <CardContent className="p-4">
             <Link to="/medico/dashboard" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-emerald-600" />
+              <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-green-600" />
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-slate-800 text-sm">Reagendar</p>
@@ -380,7 +380,7 @@ const ConsultaEncerradaPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+        <Loader2 className="w-10 h-10 text-brand-500 animate-spin" />
       </div>
     );
   }
@@ -390,7 +390,7 @@ const ConsultaEncerradaPage = () => {
       <Helmet>
         <title>Consulta Encerrada — {BRAND.name}</title>
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-brand-50/30 flex items-center justify-center p-4">
         <div className="w-full max-w-lg">
           {/* Duração da consulta */}
           {appointment?.duracao_real_segundos && (

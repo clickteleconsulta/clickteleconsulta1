@@ -6,25 +6,46 @@
   "redirects": [
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "admin.clickteleconsulta.online" }],
-      "destination": "https://clickteleconsulta.online/acesso-administrador",
+      "has": [
+        {
+          "type": "host",
+          "value": "admin.avidoc.com.br"
+        }
+      ],
+      "destination": "https://avidoc.com.br/acesso-administrador",
       "permanent": false
     },
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "agendamentos.clickteleconsulta.online" }],
-      "destination": "https://clickteleconsulta.online/agendamentos",
+      "has": [
+        {
+          "type": "host",
+          "value": "agendamentos.avidoc.com.br"
+        }
+      ],
+      "destination": "https://avidoc.com.br/agendamentos",
       "permanent": false
     },
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "parceiros.clickteleconsulta.online" }],
-      "destination": "https://clickteleconsulta.online/acesso-profissional",
+      "has": [
+        {
+          "type": "host",
+          "value": "parceiros.avidoc.com.br"
+        }
+      ],
+      "destination": "https://avidoc.com.br/acesso-profissional",
       "permanent": false
     }
   ],
   "rewrites": [
-    { "source": "/cdn/:path*", "destination": "https://api.clickteleconsulta.online/storage/v1/object/public/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/cdn/:path*",
+      "destination": "https://fnzvopspcoefzybtmwlg.supabase.co/storage/v1/object/public/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

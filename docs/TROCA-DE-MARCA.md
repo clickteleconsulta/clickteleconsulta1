@@ -1,5 +1,7 @@
 # Troca de marca — checklist
 
+**Estado atual: o nome já é `avidoc` no código. O domínio ainda é o antigo.**
+
 O nome comercial está centralizado em **`src/config/brand.js`**. Trocar `name`,
 `domain` e `url` ali propaga para site, SEO (títulos, canonical, sitemap,
 pré-renderização), PDFs e rodapé.
@@ -16,14 +18,27 @@ pré-renderização), PDFs e rodapé.
 - [ ] **Depositar o pedido de marca no INPI** antes do lançamento público.
 - [ ] Validar com advogado de propriedade industrial.
 
-## 2. No código (rápido)
+## 2. No código
 
-- [ ] Editar `src/config/brand.js`: `name`, `domain`, `url`, `emails`, `social.instagram`.
-- [ ] `npm run build` e conferir `dist/*/index.html` (títulos e canonical) e `public/sitemap.xml`.
-- [ ] `index.html` (raiz) — título, OG e JSON-LD ainda têm o nome escrito à mão.
-- [ ] `public/robots.txt` — confere o host do sitemap.
-- [ ] Trocar `public/og-image.png` e o favicon pela arte nova.
-- [ ] `src/components/Logo.jsx` — se o símbolo mudar.
+**Já feito (marca avidoc):**
+
+- [x] `src/config/brand.js` — `name: 'aviDoc'` e `color: '#3B5BA5'`.
+- [x] `index.html` (raiz) — título, OG, JSON-LD e `theme-color`.
+- [x] `src/components/Logo.jsx` (ícone) e `src/components/Wordmark.jsx` (assinatura).
+- [x] `public/favicon.svg` e `public/og-image.png` refeitos com o símbolo novo.
+- [x] Interface em cobalto (escala `brand-*`); verde reservado para estados de sucesso.
+- [x] `src/lib/guiaPdf.js` — cor e símbolo do PDF da guia.
+- [x] E-mails das edge functions (`send-appointment-email`, `send-doctor-invite`).
+
+**Falta, e só na virada do domínio:**
+
+- [ ] `src/config/brand.js` — `domain`, `url`, `emails`, `social.instagram`.
+- [ ] `index.html` — as URLs absolutas de `og:url`, `og:image` e do JSON-LD.
+- [ ] `public/robots.txt` e `public/sitemap.xml` — host do sitemap.
+- [ ] `vercel.json` — os `destination` dos redirects.
+- [ ] `supabase/functions/jaas-token/index.ts` — lista de origens permitidas.
+- [ ] `index.html` — `connect-src` do CSP (`api.<domínio>`).
+- [ ] `npm run build` e conferir `dist/*/index.html` (títulos e canonical).
 
 ## 3. Backend (Supabase)
 
@@ -66,7 +81,21 @@ pré-renderização), PDFs e rodapé.
 
 ```bash
 grep -rn "Click Teleconsulta\|clickteleconsulta" src/ tools/ public/ supabase/ index.html \
-  | grep -v "src/config/brand.js"
+  | grep -v "src/config/brand.js" | grep -v "CLICK TELECONSULTA ONLINE LTDA"
 ```
 
 O que aparecer aí ainda está escrito à mão e precisa ser migrado para `BRAND`.
+Hoje o resultado é só o **domínio**, que segue no endereço antigo de propósito.
+
+### Cores da marca
+
+| Papel | Valor | Onde |
+| --- | --- | --- |
+| Marca / ação | `#3B5BA5` (brand-600) | `BRAND.color`, `--primary`, `--ring`, escala `brand` no tailwind.config |
+| Superfície | `brand-50` / `brand-100` | cards e faixas. Fundo de página é branco — fundo preto foi testado e rejeitado |
+| Azul claro | `#9FB4DE` | cápsula do logo sobre fundo escuro (prop `dark`) |
+| Tipografia | Plus Jakarta Sans + DM Sans | títulos e corpo, carregadas no index.html |
+| Sucesso / confirmado | família `green-*` | badges de estado — **não** usar a família da marca aqui |
+
+A separação entre `brand` (marca) e `green` (estado) é intencional: se as duas
+famílias voltarem a se misturar, um badge de "confirmado" fica igual a um botão.

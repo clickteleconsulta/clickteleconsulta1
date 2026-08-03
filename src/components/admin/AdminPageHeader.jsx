@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Cabeçalho padrão das páginas do dashboard admin — mesma tipografia (Manrope),
+// Cabeçalho padrão das páginas do dashboard admin — mesma tipografia da marca,
 // tamanho, ícone azul e espaçamento em todas as telas. Ações à direita via children.
 const AdminPageHeader = ({ icon: Icon, title, subtitle, children }) => (
     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">

@@ -20,6 +20,22 @@ module.exports = {
         sans: ['"Nunito Sans"', 'sans-serif'],
       },
       colors: {
+        // Escala própria da marca — cobalto suave. O 600 é a cor de ação (#3B5BA5),
+        // escolhida por ficar no único vão livre da faixa azul (222°), longe de
+        // BoaConsulta (200°), Doctolib (206°) e Alan (241°). Ver docs/TROCA-DE-MARCA.md.
+        brand: {
+          50: "#F2F5FB",
+          100: "#E3EAF6",
+          200: "#C9D6EE",
+          300: "#A3B8DF",
+          400: "#7893CB",
+          500: "#5674B4",
+          600: "#3B5BA5",
+          700: "#334D8A",
+          800: "#2C4171",
+          900: "#28385C",
+          950: "#1A253C",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

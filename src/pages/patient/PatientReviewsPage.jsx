@@ -191,11 +191,11 @@ const PatientReviewsPage = () => {
             <Card className="mb-4 overflow-hidden border-gray-200">
                 <CardContent className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center overflow-hidden shrink-0">
                             {appointment.medicos?.image_url ? (
                                 <img src={appointment.medicos.image_url} alt="Médico" className="w-full h-full object-cover" />
                             ) : (
-                                <span className="text-blue-600 font-bold">{appointment.medicos?.name?.charAt(0) || 'M'}</span>
+                                <span className="text-brand-600 font-bold">{appointment.medicos?.name?.charAt(0) || 'M'}</span>
                             )}
                         </div>
                         <div>
@@ -215,7 +215,7 @@ const PatientReviewsPage = () => {
                                     </Badge>
                                 </div>
                                 {review.comentario && <p className="text-sm text-gray-600 italic line-clamp-1 max-w-xs">"{review.comentario}"</p>}
-                                <Button variant="link" size="sm" className="h-auto p-0 text-blue-600" onClick={() => handleOpenReview(appointment)}>
+                                <Button variant="link" size="sm" className="h-auto p-0 text-brand-600" onClick={() => handleOpenReview(appointment)}>
                                     <Edit className="w-3 h-3 mr-1" /> Editar avaliação
                                 </Button>
                             </>
@@ -235,7 +235,7 @@ const PatientReviewsPage = () => {
             <PatientPageHeader icon={Star} title="Minhas Avaliações" subtitle="Avalie os profissionais e ajude a manter a qualidade dos atendimentos." />
 
             {loading ? (
-                <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
+                <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
             ) : appointments.length === 0 ? (
                 <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
                     <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
@@ -277,7 +277,7 @@ const PatientReviewsPage = () => {
                         <Button variant="outline" onClick={() => setIsReviewModalOpen(false)} disabled={isSubmitting}>
                             Cancelar
                         </Button>
-                        <Button onClick={submitReview} disabled={isSubmitting || rating === 0} className="bg-blue-600 hover:bg-blue-700 text-white">
+                        <Button onClick={submitReview} disabled={isSubmitting || rating === 0} className="bg-brand-600 hover:bg-brand-700 text-white">
                             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                             Salvar Avaliação
                         </Button>

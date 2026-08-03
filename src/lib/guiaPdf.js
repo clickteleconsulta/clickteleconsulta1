@@ -16,23 +16,23 @@ export function gerarGuiaPdf({
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const W = doc.internal.pageSize.getWidth();
   const M = 48;
-  const BLUE = [37, 99, 235];
+  const COBALTO = [59, 91, 165];
   const SLATE = [71, 85, 105];
   const DARK = [15, 23, 42];
 
   // Cabeçalho institucional
-  doc.setFillColor(...BLUE);
+  doc.setFillColor(...COBALTO);
   doc.rect(0, 0, W, 96, 'F');
 
-  // Logo da marca: quadrado branco arredondado + traço de pulso (ícone Activity) em azul.
+  // Ícone da marca invertido: quadrado branco com a cápsula inclinada em cobalto.
+  // Uma cápsula é geometricamente um traço grosso de pontas redondas — desenhá-la
+  // assim é o que permite inclinar sem precisar de matriz de transformação.
   doc.setFillColor(255, 255, 255);
   doc.roundedRect(M, 28, 40, 40, 9, 9, 'F');
-  doc.setDrawColor(...BLUE);
-  doc.setLineWidth(2.4);
+  doc.setDrawColor(...COBALTO);
+  doc.setLineWidth(13);
   doc.setLineCap('round');
-  doc.setLineJoin('round');
-  const pulse = [[M + 7, 50], [M + 12, 50], [M + 15, 41], [M + 20, 59], [M + 24, 44], [M + 28, 50], [M + 33, 50]];
-  for (let i = 1; i < pulse.length; i++) doc.line(pulse[i - 1][0], pulse[i - 1][1], pulse[i][0], pulse[i][1]);
+  doc.line(M + 7.9, 52.9, M + 32.1, 43.1);
 
   const tx = M + 54;
   doc.setTextColor(255, 255, 255);
@@ -80,7 +80,7 @@ export function gerarGuiaPdf({
 
   // Nota de marketplace
   y += 12;
-  doc.setFillColor(239, 246, 255);
+  doc.setFillColor(242, 245, 251);
   doc.roundedRect(M, y, W - M * 2, 92, 8, 8, 'F');
   doc.setTextColor(...SLATE);
   doc.setFont('helvetica', 'normal');

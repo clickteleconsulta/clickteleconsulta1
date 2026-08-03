@@ -163,7 +163,7 @@ const DoctorSubscriptionPage = () => {
                 </div>
 
                 <div className="flex justify-end pt-4 border-t border-gray-200 mt-6">
-                    <Button size="lg" onClick={handleInitiateChange} disabled={!hasChanges || saving} className={selectedPlanDetails.id === 'professional' || selectedPlanDetails.id === 'premium' ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md" : ""}>
+                    <Button size="lg" onClick={handleInitiateChange} disabled={!hasChanges || saving} className={selectedPlanDetails.id === 'professional' || selectedPlanDetails.id === 'premium' ? "bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-800 hover:to-brand-800 shadow-md" : ""}>
                         {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processando...</> : !hasChanges ? "Nenhuma Alteração" : "Confirmar Alterações"}
                     </Button>
                 </div>

@@ -11,8 +11,8 @@ const PaymentMethodSelector = ({ selectedMethod, onSelectMethod }) => {
       title: 'Cartão de Crédito',
       description: 'Cobrança mensal automática',
       icon: CreditCard,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50'
+      color: 'text-brand-600',
+      bg: 'bg-brand-50'
     },
     {
       id: 'pix',

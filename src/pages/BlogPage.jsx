@@ -17,7 +17,7 @@ const BlogPage = () => (
 
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
       <div className="text-center max-w-2xl mx-auto mb-10">
-        <span className="text-xs font-bold uppercase tracking-widest text-blue-600">Blog</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Blog</span>
         <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">Saúde e teleconsulta</h1>
         <p className="text-slate-500 mt-3 text-lg">Conteúdo para você entender e aproveitar melhor o atendimento online.</p>
       </div>
@@ -28,9 +28,9 @@ const BlogPage = () => (
             <div className="text-[11px] text-slate-400 font-medium flex items-center gap-2">
               <span>{fmt(a.date)}</span><span>·</span><span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {a.readMin} min</span>
             </div>
-            <h2 className="text-lg font-bold text-slate-900 mt-2 leading-snug group-hover:text-blue-700">{a.title}</h2>
+            <h2 className="text-lg font-bold text-slate-900 mt-2 leading-snug group-hover:text-brand-800">{a.title}</h2>
             <p className="text-sm text-slate-500 mt-2 leading-relaxed">{a.description}</p>
-            <span className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 mt-3">Ler artigo <ArrowRight className="w-4 h-4" /></span>
+            <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 mt-3">Ler artigo <ArrowRight className="w-4 h-4" /></span>
           </Link>
         ))}
       </div>

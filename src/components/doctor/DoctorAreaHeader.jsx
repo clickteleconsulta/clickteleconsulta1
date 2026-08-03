@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BRAND } from '@/config/brand';
 import Logo from '@/components/Logo';
+import Wordmark from '@/components/Wordmark';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,17 +30,15 @@ const DoctorAreaHeader = () => {
         <div className="h-full px-6 md:px-8 flex items-center justify-between">
           {/* Brand */}
           <div className="flex items-center gap-3">
-             <Logo className="w-9 h-9" />
-            <span className="text-xl font-bold text-gray-800 tracking-tight hidden md:block">
-              {BRAND.name}
-            </span>
+             <Logo className="w-9 h-9 md:hidden" />
+             <Wordmark size={24} className="hidden md:inline-flex" />
           </div>
 
           {/* Right Actions */}
           <div className="flex items-center gap-4">
              <Link
                 to="/medico/dashboard"
-                className="hidden md:flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors text-sm font-medium"
+                className="hidden md:flex items-center gap-2 text-gray-500 hover:text-brand-600 transition-colors text-sm font-medium"
              >
                 <LayoutDashboard className="w-4 h-4" />
                 Meu Painel

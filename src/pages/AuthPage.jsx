@@ -25,7 +25,7 @@ const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) 
     onAccept={(val) => onChange({ target: { name: props.name, value: val } })}
     overwrite
     className={cn(
-      "flex h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50 text-gray-900",
+      "flex h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-100 focus-visible:border-brand-500 disabled:cursor-not-allowed disabled:opacity-50 text-gray-900",
       props.className
     )}
     placeholder={props.placeholder}
@@ -47,7 +47,7 @@ const getPasswordStrength = (pw) => {
     null,
     { label: 'Fraca', bar: 'bg-red-500', text: 'text-red-600', width: '33%' },
     { label: 'Média', bar: 'bg-amber-500', text: 'text-amber-600', width: '66%' },
-    { label: 'Forte', bar: 'bg-emerald-500', text: 'text-emerald-600', width: '100%' },
+    { label: 'Forte', bar: 'bg-green-500', text: 'text-green-600', width: '100%' },
   ][level];
 };
 
@@ -249,9 +249,9 @@ const AuthPage = ({
       <AuthLayout variant={isDoctor ? 'profissional' : 'cliente'}>
 
         {!isDoctor && pendingBooking && (
-          <div className="mb-5 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-3.5 text-left animate-in fade-in slide-in-from-top-2 duration-300">
-            <CalendarCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-            <div className="text-sm text-blue-900 leading-snug">
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-brand-200 bg-brand-50 p-3.5 text-left animate-in fade-in slide-in-from-top-2 duration-300">
+            <CalendarCheck className="w-5 h-5 text-brand-600 mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-brand-800 leading-snug">
               <b>Quase lá!</b> Você está agendando com <b>{pendingBooking.doctorName}</b> em <b>{pendingBooking.whenLabel}</b>.{' '}
               {isLogin ? 'Entre na sua conta' : 'Crie sua conta grátis'} para agendar e reservar o horário.
             </div>
@@ -260,11 +260,11 @@ const AuthPage = ({
 
         <div className="text-center mb-6 space-y-2">
             {isDoctor && (
-                <span className="lg:hidden inline-flex items-center gap-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1">
+                <span className="lg:hidden inline-flex items-center gap-1.5 rounded-full bg-brand-100 text-brand-800 text-xs font-semibold px-3 py-1">
                     <Stethoscope className="w-3.5 h-3.5" /> Portal do Parceiro
                 </span>
             )}
-            <h1 className="text-2xl font-bold text-blue-950 tracking-tight">
+            <h1 className="text-2xl font-bold text-brand-800 tracking-tight">
               {isDoctor ? 'Acesso Profissional' : 'Acesse sua conta'}
             </h1>
             <p className="text-gray-500 font-medium text-sm">
@@ -288,7 +288,7 @@ const AuthPage = ({
                                 placeholder="Nome completo"
                                 aria-label="Nome completo"
                                 autoComplete="name"
-                                className="h-11 pl-4 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-100"
+                                className="h-11 pl-4 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-100"
                            />
                         </div>
 
@@ -313,7 +313,7 @@ const AuthPage = ({
                                 aria-label="Data de nascimento"
                                 autoComplete="bday"
                                 max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-                                className="h-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-100 text-gray-500"
+                                className="h-11 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-100 text-gray-500"
                             />
                         </div>
 
@@ -336,7 +336,7 @@ const AuthPage = ({
                                 onChange={e => setSexo(e.target.value)}
                                 required
                                 aria-label="Sexo"
-                                className={`h-11 px-3 rounded-lg border border-gray-300 bg-white text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none ${sexo ? 'text-gray-800' : 'text-gray-400'}`}
+                                className={`h-11 px-3 rounded-lg border border-gray-300 bg-white text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none ${sexo ? 'text-gray-800' : 'text-gray-400'}`}
                             >
                                 <option value="" disabled>Sexo</option>
                                 <option value="masculino">Masculino</option>
@@ -348,7 +348,7 @@ const AuthPage = ({
 
                     <div className="space-y-4">
                         <div className="relative group">
-                          <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                          <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-brand-500 transition-colors" />
                           <Input
                             id="email"
                             type="email"
@@ -359,12 +359,12 @@ const AuthPage = ({
                             aria-label="E-mail"
                             autoComplete="email"
                             inputMode="email"
-                            className="h-11 pl-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
+                            className="h-11 pl-11 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
                           />
                         </div>
 
                         <div className="relative group">
-                          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-brand-500 transition-colors" />
                           <Input
                             id="password"
                             type={showPassword ? "text" : "password"}
@@ -374,7 +374,7 @@ const AuthPage = ({
                             required
                             aria-label="Senha"
                             autoComplete={isLogin ? 'current-password' : 'new-password'}
-                            className="h-11 pl-11 pr-11 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
+                            className="h-11 pl-11 pr-11 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
                           />
                           <button
                             type="button"
@@ -416,11 +416,11 @@ const AuthPage = ({
                         />
                         <label htmlFor="lgpd-consent" className="text-xs text-gray-600 leading-tight">
                           Li e aceito os{' '}
-                          <a href="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                          <a href="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline hover:text-brand-800">
                             Termos de Serviço
                           </a>{' '}
                           e a{' '}
-                          <a href="/legal?doc=privacy_policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                          <a href="/legal?doc=privacy_policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline hover:text-brand-800">
                             Política de Privacidade
                           </a>{' '}
                           conforme a LGPD (Lei 13.709/2018).
@@ -433,7 +433,7 @@ const AuthPage = ({
 
                     <Button
                         type="submit"
-                        className="w-full h-11 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
+                        className="w-full h-11 text-base font-semibold bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-800 hover:to-brand-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
                         disabled={isLoading || (!isLogin && !isDoctor && !acceptedTerms) || (TURNSTILE_ENABLED && !captchaToken)}
                     >
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : (isLogin ? 'Entrar' : 'Cadastrar')} 
@@ -443,7 +443,7 @@ const AuthPage = ({
                 <div className="pt-2 text-center space-y-4">
                     {isLogin && (
                         <div>
-                            <Link to="/recuperar-senha" className="text-sm text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors"> 
+                            <Link to="/recuperar-senha" className="text-sm text-brand-600 hover:text-brand-800 font-medium hover:underline transition-colors"> 
                                 Esqueceu sua senha?
                             </Link>
                         </div>
@@ -452,7 +452,7 @@ const AuthPage = ({
                     {!isDoctor && (
                         <p className="text-sm text-gray-600">
                         {isLogin ? "Ainda não tem conta?" : "Já possui uma conta?"}{" "}
-                        <button type="button" onClick={() => setIsLogin(!isLogin)} className="font-semibold text-blue-600 hover:text-blue-800 hover:underline ml-1">
+                        <button type="button" onClick={() => setIsLogin(!isLogin)} className="font-semibold text-brand-600 hover:text-brand-800 hover:underline ml-1">
                             {isLogin ? "Cadastre-se" : "Entrar"}
                         </button>
                         </p>
@@ -467,7 +467,7 @@ const AuthPage = ({
 
                 {/* Selo de confiança (no desktop já aparece no painel de marca) */}
                 <div className="lg:hidden flex items-center justify-center gap-1.5 text-[11px] text-gray-400 pt-4 border-t border-gray-100">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
                     Conexão segura · Dados protegidos conforme a LGPD
                 </div>
             </div>

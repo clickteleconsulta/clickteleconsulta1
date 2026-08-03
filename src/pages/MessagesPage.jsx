@@ -23,7 +23,7 @@ const MessagesPageWrapper = () => {
     }, [profile, user]);
 
     if (initializing) {
-         return <div className="flex justify-center p-10 h-screen items-center"><Loader2 className="animate-spin w-8 h-8 text-blue-600" /></div>;
+         return <div className="flex justify-center p-10 h-screen items-center"><Loader2 className="animate-spin w-8 h-8 text-brand-600" /></div>;
     }
 
     return <MessagesPageInternal currentDoctorId={currentDoctorId} />;
@@ -99,13 +99,13 @@ const MessagesPageInternal = ({ currentDoctorId }) => {
                 {selectedContact ? (
                      loadingConversation ? (
                         <div className="flex flex-col items-center justify-center h-full">
-                            <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-2" />
+                            <Loader2 className="w-8 h-8 text-brand-600 animate-spin mb-2" />
                             <p className="text-gray-500 text-sm">Carregando conversa...</p>
                         </div>
                      ) : (
                          <div className="flex flex-col h-full">
                              <div className="md:hidden p-2 bg-white border-b flex items-center">
-                                 <button onClick={() => setSelectedContact(null)} className="text-sm text-blue-600 font-medium px-2">
+                                 <button onClick={() => setSelectedContact(null)} className="text-sm text-brand-600 font-medium px-2">
                                      &larr; Voltar
                                  </button>
                              </div>

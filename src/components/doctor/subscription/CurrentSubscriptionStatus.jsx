@@ -30,11 +30,11 @@ const CurrentSubscriptionStatus = ({ subscriptionData, onChangePlanClick }) => {
   };
 
   return (
-    <Card className="bg-white border-l-4 border-l-blue-500 shadow-sm overflow-hidden">
-      <div className="bg-blue-50/50 p-4 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <Card className="bg-white border-l-4 border-l-brand-500 shadow-sm overflow-hidden">
+      <div className="bg-brand-50/50 p-4 border-b border-brand-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-blue-600" />
+            <ShieldCheck className="w-5 h-5 text-brand-600" />
             Status da Assinatura
           </h2>
           <p className="text-sm text-gray-500">Gerencie os detalhes do seu plano atual.</p>
@@ -58,7 +58,7 @@ const CurrentSubscriptionStatus = ({ subscriptionData, onChangePlanClick }) => {
              <Calendar className="w-3 h-3" /> Renovação
            </span>
            <div className="font-semibold text-gray-900">{formatDate(subscription_renewal_date)}</div>
-           <div className="text-xs text-blue-600 font-medium">Renova automaticamente</div>
+           <div className="text-xs text-brand-600 font-medium">Renova automaticamente</div>
         </div>
 
         <div className="space-y-1">
@@ -70,7 +70,7 @@ const CurrentSubscriptionStatus = ({ subscriptionData, onChangePlanClick }) => {
               subscription_payment_method === 'pix' ? 'PIX' : 
               subscription_payment_method || 'Não definido'}
            </div>
-           <Button variant="link" className="h-auto p-0 text-xs text-blue-600" onClick={onChangePlanClick}>
+           <Button variant="link" className="h-auto p-0 text-xs text-brand-600" onClick={onChangePlanClick}>
              Alterar método
            </Button>
         </div>

@@ -8,9 +8,9 @@ const readDismissed = () => {
 };
 
 const STYLES = {
-    info: { wrap: 'bg-blue-50 border-blue-200 text-blue-900', icon: Info, iconCls: 'text-blue-600' },
+    info: { wrap: 'bg-brand-50 border-brand-200 text-brand-800', icon: Info, iconCls: 'text-brand-600' },
     alerta: { wrap: 'bg-amber-50 border-amber-200 text-amber-900', icon: AlertTriangle, iconCls: 'text-amber-600' },
-    sucesso: { wrap: 'bg-emerald-50 border-emerald-200 text-emerald-900', icon: CheckCircle2, iconCls: 'text-emerald-600' },
+    sucesso: { wrap: 'bg-green-50 border-green-200 text-green-900', icon: CheckCircle2, iconCls: 'text-green-600' },
 };
 
 // Exibe comunicados ativos do admin direcionados ao público do usuário.

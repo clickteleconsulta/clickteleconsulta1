@@ -21,7 +21,7 @@ const SOAPField = ({ label, field, value, onChange, placeholder, disabled, minH 
       onChange={e => onChange(field, e.target.value)}
       placeholder={placeholder}
       disabled={disabled}
-      className={`${minH} resize-y bg-white border-gray-200 focus:border-blue-300 focus:ring-1 focus:ring-blue-100 text-sm leading-relaxed p-3`}
+      className={`${minH} resize-y bg-white border-gray-200 focus:border-brand-300 focus:ring-1 focus:ring-brand-100 text-sm leading-relaxed p-3`}
     />
   </div>
 );
@@ -115,7 +115,7 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
               <CardTitle className="text-base font-bold text-gray-900 flex items-center gap-2">
                 Prontuário Eletrônico (SOAP)
                 {isCompleted && (
-                  <span className="inline-flex items-center gap-1 text-xs font-normal text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                  <span className="inline-flex items-center gap-1 text-xs font-normal text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full border border-brand-100">
                     <CheckCircle2 className="h-3 w-3" /> Concluído
                   </span>
                 )}
@@ -136,8 +136,8 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
           <div className="border-b border-gray-100 bg-white px-4 sticky top-0 z-10">
             <TabsList className="h-10 bg-transparent p-0 gap-4">
               {[
-                { value: 'subjetivo', label: 'S — Subjetivo', color: 'text-indigo-600' },
-                { value: 'objetivo', label: 'O — Objetivo', color: 'text-blue-600' },
+                { value: 'subjetivo', label: 'S — Subjetivo', color: 'text-brand-600' },
+                { value: 'objetivo', label: 'O — Objetivo', color: 'text-brand-600' },
                 { value: 'avaliacao', label: 'A — Avaliação', color: 'text-violet-600' },
                 { value: 'plano', label: 'P — Plano', color: 'text-green-600' },
                 { value: 'notas', label: 'Notas Livres', color: 'text-gray-600' },
@@ -145,7 +145,7 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  className="h-full rounded-none border-b-2 border-transparent px-1 pb-2 pt-2 text-xs font-semibold text-gray-400 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 bg-transparent shadow-none transition-colors"
+                  className="h-full rounded-none border-b-2 border-transparent px-1 pb-2 pt-2 text-xs font-semibold text-gray-400 data-[state=active]:border-brand-600 data-[state=active]:text-brand-800 bg-transparent shadow-none transition-colors"
                 >
                   {tab.label}
                 </TabsTrigger>
@@ -156,7 +156,7 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
           <div className="flex-1 overflow-y-auto">
             {/* S — Subjetivo */}
             <TabsContent value="subjetivo" className="m-0 p-5 space-y-4 animate-in fade-in duration-200">
-              <div className="bg-indigo-50/40 rounded-lg p-3 border border-indigo-100 text-xs text-indigo-700">
+              <div className="bg-brand-50/40 rounded-lg p-3 border border-brand-100 text-xs text-brand-800">
                 <strong>Subjetivo:</strong> Relato do paciente — queixa principal, história da doença atual, antecedentes, medicamentos em uso
               </div>
               <SOAPField
@@ -202,7 +202,7 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
 
             {/* O — Objetivo */}
             <TabsContent value="objetivo" className="m-0 p-5 space-y-4 animate-in fade-in duration-200">
-              <div className="bg-blue-50/40 rounded-lg p-3 border border-blue-100 text-xs text-blue-700">
+              <div className="bg-brand-50/40 rounded-lg p-3 border border-brand-100 text-xs text-brand-800">
                 <strong>Objetivo:</strong> Achados objetivos — exame físico, sinais vitais, dados mensuráveis
               </div>
               <SOAPField
@@ -280,13 +280,13 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
             variant="outline"
             onClick={handleSave}
             disabled={isSaving}
-            className="border-blue-200 text-blue-700 hover:bg-blue-50"
+            className="border-brand-200 text-brand-800 hover:bg-brand-50"
           >
             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             Salvar e Sair
           </Button>
           <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/10"
+            className="bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-600/10"
             onClick={handleConclude}
             disabled={isSaving}
           >

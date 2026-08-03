@@ -127,8 +127,8 @@ const DoctorHelp = () => {
 
             {/* Manual de Boas Práticas */}
             <Card className="dashboard-card p-0 overflow-hidden">
-                <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-blue-50/40">
-                    <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+                <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-brand-50/40">
+                    <div className="p-2 bg-brand-100 text-brand-600 rounded-lg shrink-0">
                         <BookOpen className="w-4 h-4" />
                     </div>
                     <div>
@@ -142,11 +142,11 @@ const DoctorHelp = () => {
                             <AccordionItem
                                 key={i}
                                 value={`item-${i}`}
-                                className="border border-gray-200 rounded-xl px-4 data-[state=open]:border-blue-200 data-[state=open]:bg-blue-50/30 transition-colors"
+                                className="border border-gray-200 rounded-xl px-4 data-[state=open]:border-brand-200 data-[state=open]:bg-brand-50/30 transition-colors"
                             >
                                 <AccordionTrigger className="hover:no-underline py-3.5 text-left">
                                     <span className="flex items-center gap-3">
-                                        <span className="p-1.5 bg-blue-50 text-blue-600 rounded-lg shrink-0">
+                                        <span className="p-1.5 bg-brand-50 text-brand-600 rounded-lg shrink-0">
                                             <section.icon className="w-4 h-4" />
                                         </span>
                                         <span className="text-sm font-semibold text-gray-800">{section.title}</span>
@@ -156,7 +156,7 @@ const DoctorHelp = () => {
                                     <ul className="space-y-2 pl-1">
                                         {section.points.map((p, j) => (
                                             <li key={j} className="flex gap-2.5 text-sm text-gray-600 leading-relaxed">
-                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
+                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-400 shrink-0" />
                                                 <span>{p}</span>
                                             </li>
                                         ))}
@@ -176,7 +176,7 @@ const DoctorHelp = () => {
             <div className="grid gap-3">
                 <Card className="dashboard-card hover:border-primary/30 group cursor-pointer transition-all p-0">
                     <CardContent className="flex items-start gap-3 p-4">
-                        <div className="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <div className="p-2 bg-brand-50 text-brand-600 rounded-lg group-hover:bg-brand-600 group-hover:text-white transition-colors">
                             <Mail className="w-4 h-4" />
                         </div>
                         <div>

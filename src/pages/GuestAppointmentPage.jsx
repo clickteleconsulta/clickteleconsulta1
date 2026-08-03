@@ -155,13 +155,13 @@ const GuestAppointmentPage = () => {
     const canJoin = appointment?.canJoin;
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-4">
-            <Card className="w-full max-w-lg shadow-xl border-blue-100">
+        <div className="min-h-screen bg-gradient-to-b from-brand-50 to-white flex items-center justify-center p-4">
+            <Card className="w-full max-w-lg shadow-xl border-brand-100">
                 <CardHeader className="text-center pb-2">
                     <div className="mx-auto mb-4 relative">
                         <Avatar className="w-24 h-24 border-4 border-white shadow-md mx-auto">
                             <AvatarImage src={appointment.doctorImage} />
-                            <AvatarFallback className="text-2xl bg-blue-100 text-blue-600">
+                            <AvatarFallback className="text-2xl bg-brand-100 text-brand-600">
                                 {appointment.doctorName?.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
@@ -177,14 +177,14 @@ const GuestAppointmentPage = () => {
                     {/* Appointment Details */}
                     <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-3">
                         <div className="flex items-center gap-3 text-gray-700 pb-3 border-b border-gray-50">
-                            <User className="w-5 h-5 text-blue-500" />
+                            <User className="w-5 h-5 text-brand-500" />
                             <div>
                                 <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Paciente</p>
                                 <p className="font-medium text-sm">{appointment.guestName}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 text-gray-700 pb-3 border-b border-gray-50">
-                            <Calendar className="w-5 h-5 text-blue-500" />
+                            <Calendar className="w-5 h-5 text-brand-500" />
                             <div>
                                 <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Data e Hora</p>
                                 <p className="font-medium text-sm capitalize">
@@ -220,20 +220,20 @@ const GuestAppointmentPage = () => {
                                 </Button>
                             </div>
                         ) : !canJoin ? (
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center space-y-4">
+                            <div className="bg-brand-50 border border-brand-200 rounded-lg p-6 text-center space-y-4">
                                 <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
-                                    <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 animate-ping"></div>
-                                    <div className="relative bg-blue-100 p-3 rounded-full">
-                                        <Clock className="w-8 h-8 text-blue-600" />
+                                    <div className="absolute inset-0 bg-brand-400 rounded-full opacity-20 animate-ping"></div>
+                                    <div className="relative bg-brand-100 p-3 rounded-full">
+                                        <Clock className="w-8 h-8 text-brand-600" />
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-blue-900 text-lg">Sala de Espera</h3>
-                                    <p className="text-blue-700 text-sm mt-1">
+                                    <h3 className="font-bold text-brand-800 text-lg">Sala de Espera</h3>
+                                    <p className="text-brand-800 text-sm mt-1">
                                         Aguarde, o médico iniciará a chamada em breve...
                                     </p>
                                 </div>
-                                <div className="text-xs text-blue-500 animate-pulse">
+                                <div className="text-xs text-brand-500 animate-pulse">
                                     Atualizando status automaticamente
                                 </div>
                             </div>

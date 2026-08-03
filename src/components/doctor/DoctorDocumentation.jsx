@@ -54,7 +54,7 @@ const formatSize = (bytes) => {
 const StatusPill = ({ status }) => {
     const map = {
         pendente: { label: 'Em análise', cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-        aprovado: { label: 'Aprovado', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: FileCheck2 },
+        aprovado: { label: 'Aprovado', cls: 'bg-green-50 text-green-700 border-green-200', icon: FileCheck2 },
         rejeitado: { label: 'Reenviar', cls: 'bg-red-50 text-red-700 border-red-200', icon: FileText },
     };
     const s = map[status] || map.pendente;
@@ -285,13 +285,13 @@ const DoctorDocumentation = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <div className="space-y-1.5">
                                 <Label htmlFor="doc_data_nasc" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Data de Nascimento</Label>
-                                <Input id="doc_data_nasc" type="date" value={priv.data_nasc} onChange={(e) => setPriv((p) => ({ ...p, data_nasc: e.target.value }))} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm text-gray-700" />
+                                <Input id="doc_data_nasc" type="date" value={priv.data_nasc} onChange={(e) => setPriv((p) => ({ ...p, data_nasc: e.target.value }))} className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 h-10 text-sm rounded-lg shadow-sm text-gray-700" />
                             </div>
                             <div className="space-y-1.5">
                                 <Label htmlFor="doc_cpf" className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1.5">
                                     CPF {cpfLocked && <Lock className="w-3 h-3 text-gray-400" />}
                                 </Label>
-                                <Input id="doc_cpf" placeholder="000.000.000-00" value={priv.cpf} onChange={(e) => setPriv((p) => ({ ...p, cpf: maskCPF(e.target.value) }))} inputMode="numeric" maxLength={14} disabled={cpfLocked} readOnly={cpfLocked} className={`border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm ${cpfLocked ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : 'bg-white'}`} />
+                                <Input id="doc_cpf" placeholder="000.000.000-00" value={priv.cpf} onChange={(e) => setPriv((p) => ({ ...p, cpf: maskCPF(e.target.value) }))} inputMode="numeric" maxLength={14} disabled={cpfLocked} readOnly={cpfLocked} className={`border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 h-10 text-sm rounded-lg shadow-sm ${cpfLocked ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : 'bg-white'}`} />
                                 {cpfLocked && <p className="text-[11px] text-gray-500">O CPF não pode ser alterado após o cadastro.</p>}
                             </div>
                             <div className="space-y-1.5">
@@ -300,7 +300,7 @@ const DoctorDocumentation = () => {
                             </div>
                         </div>
                         <div className="flex justify-end mt-5">
-                            <Button onClick={savePrivate} disabled={savingPriv} className="bg-primary hover:bg-primary/90 text-white rounded-xl h-9 text-sm shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                            <Button onClick={savePrivate} disabled={savingPriv} className="bg-primary hover:bg-primary/90 text-white rounded-xl h-9 text-sm shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                                 {savingPriv ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                                 Salvar dados privados
                             </Button>
@@ -320,7 +320,7 @@ const DoctorDocumentation = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent className="px-6 pb-6 pt-4 space-y-4">
-                <div className="text-xs text-gray-500 bg-blue-50/60 border border-blue-100 rounded-sm p-3 leading-relaxed">
+                <div className="text-xs text-gray-500 bg-brand-50/60 border border-brand-100 rounded-sm p-3 leading-relaxed">
                     <ul className="list-disc pl-4 space-y-1">
                         <li>Certificado de conclusão que comprove a especialização do profissional;</li>
                         <li>Carteirinha do conselho profissional (frente e verso) contendo a foto do profissional;</li>

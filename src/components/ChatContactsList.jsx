@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toSiteUrl } from '@/lib/storageUrl';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -85,7 +86,7 @@ const ChatContactsList = ({ onSelectContact, selectedContactId, userRole, curren
                   id: conv.doctor?.user_id, // User UUID for socket/auth
                   name: conv.doctor?.name,
                   email: conv.doctor?.specialty, 
-                  image: conv.doctor?.image_url,
+                  image: toSiteUrl(conv.doctor?.image_url),
                   type: 'medico',
                   roleId: conv.doctor?.id, // Doctor ID table
                   lastMessageAt: conv.last_message_at,
@@ -120,7 +121,7 @@ const ChatContactsList = ({ onSelectContact, selectedContactId, userRole, curren
                           id: appt.medico.user_id,
                           name: appt.medico.name,
                           email: appt.medico.specialty,
-                          image: appt.medico.image_url,
+                          image: toSiteUrl(appt.medico.image_url),
                           type: 'medico',
                           roleId: appt.medico.id,
                           hasConversation: false
@@ -173,7 +174,7 @@ const ChatContactsList = ({ onSelectContact, selectedContactId, userRole, curren
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+        <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
       </div>
     );
   }
@@ -206,18 +207,18 @@ const ChatContactsList = ({ onSelectContact, selectedContactId, userRole, curren
                 onClick={() => onSelectContact(contact)}
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-lg text-left transition-all hover:bg-gray-50 w-full",
-                  selectedContactId === contact.id ? "bg-blue-50 hover:bg-blue-50 border-l-4 border-blue-600 pl-2" : "border-l-4 border-transparent"
+                  selectedContactId === contact.id ? "bg-brand-50 hover:bg-brand-50 border-l-4 border-brand-600 pl-2" : "border-l-4 border-transparent"
                 )}
               >
                 <Avatar className="h-10 w-10 border border-gray-100">
                   <AvatarImage src={contact.image} />
-                  <AvatarFallback className={cn(selectedContactId === contact.id ? "bg-blue-200 text-blue-700" : "bg-gray-100")}>
+                  <AvatarFallback className={cn(selectedContactId === contact.id ? "bg-brand-200 text-brand-800" : "bg-gray-100")}>
                     {contact.name?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-baseline">
-                      <p className={cn("font-medium truncate", selectedContactId === contact.id ? "text-blue-900" : "text-gray-900")}>
+                      <p className={cn("font-medium truncate", selectedContactId === contact.id ? "text-brand-800" : "text-gray-900")}>
                         {contact.name}
                       </p>
                       {contact.lastMessageAt && (

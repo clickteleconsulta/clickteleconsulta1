@@ -105,7 +105,7 @@ const MemedPrescricaoPage = () => {
           script.id = 'memed-script';
           script.src = import.meta.env.VITE_MEMED_SCRIPT_URL || 'https://sandbox.memed.com.br/modulos/plataforma.sinapse-prescricao/build/sinapse-prescricao.min.js';
           script.setAttribute('data-token', memedToken);
-          script.setAttribute('data-color', '#2563eb');
+          script.setAttribute('data-color', '#3B5BA5');
           script.setAttribute('data-container', 'memed-prescricao-root');
           script.async = true;
           script.onerror = () => setError("Falha ao carregar o módulo de prescrição.");
@@ -217,7 +217,7 @@ const MemedPrescricaoPage = () => {
           </div>
 
           {loading && (
-            <div className="flex items-center gap-2 text-sm text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-2 text-sm text-brand-600 bg-brand-50 px-3 py-1.5 rounded-full">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="font-medium text-xs">Carregando Memed...</span>
             </div>
@@ -254,7 +254,7 @@ const MemedPrescricaoPage = () => {
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">Erro ao carregar prescrição</h2>
             <p className="text-gray-600 max-w-md mb-6">{error}</p>
-            <Button onClick={() => window.location.reload()} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button onClick={() => window.location.reload()} className="bg-brand-600 hover:bg-brand-700 text-white">
               Tentar Novamente
             </Button>
           </div>

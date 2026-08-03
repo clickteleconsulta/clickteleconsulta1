@@ -119,7 +119,7 @@ const AdminSpecialties = () => {
                                 {editId === r.id ? (
                                     <>
                                         <Input value={editNome} onChange={(e) => setEditNome(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && saveEdit(r)} className="h-8 flex-1" autoFocus />
-                                        <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-600" onClick={() => saveEdit(r)}><Check className="w-4 h-4" /></Button>
+                                        <Button size="icon" variant="ghost" className="h-8 w-8 text-green-600" onClick={() => saveEdit(r)}><Check className="w-4 h-4" /></Button>
                                         <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400" onClick={() => setEditId(null)}><X className="w-4 h-4" /></Button>
                                     </>
                                 ) : (

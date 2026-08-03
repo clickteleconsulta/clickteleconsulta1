@@ -69,7 +69,7 @@ const PatientPrescriptionsPage = () => {
     if (loading) {
         return (
             <div className="h-screen w-full flex items-center justify-center bg-gray-50">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
             </div>
         );
     }
@@ -124,7 +124,7 @@ const PatientPrescriptionsPage = () => {
                         <Bell className="h-5 w-5" />
                     </Button>
 
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6" onClick={() => navigate('/medico/dashboard/prescricoes')}>
+                    <Button className="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6" onClick={() => navigate('/medico/dashboard/prescricoes')}>
                         Gerar Prescrição
                     </Button>
                 </div>
@@ -158,7 +158,7 @@ const PatientPrescriptionsPage = () => {
                 {/* Add Button */}
                 <div className="flex justify-center mb-12">
                     <button 
-                        className="flex items-center gap-2 text-blue-500 hover:text-blue-600 font-medium text-lg transition-colors"
+                        className="flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium text-lg transition-colors"
                         onClick={() => navigate('/medico/dashboard/prescricoes')}
                     >
                         <Plus className="h-5 w-5" />
@@ -171,7 +171,7 @@ const PatientPrescriptionsPage = () => {
                     <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide">
                         ÚLTIMAS PRESCRIÇÕES DE {patient.full_name.toUpperCase()}
                     </h2>
-                    <a href="#" className="text-sm font-medium text-blue-500 hover:text-blue-600 hover:underline">
+                    <a href="#" className="text-sm font-medium text-brand-500 hover:text-brand-600 hover:underline">
                         Ver mais
                     </a>
                 </div>
@@ -191,7 +191,7 @@ const PatientPrescriptionsPage = () => {
                                         <CardTitle className="text-base font-medium text-slate-900 line-clamp-1">
                                             {patient.full_name}
                                         </CardTitle>
-                                        <CardDescription className="text-blue-500 font-medium text-xs mt-1">
+                                        <CardDescription className="text-brand-500 font-medium text-xs mt-1">
                                             Emitida em {format(new Date(doc.created_at), "dd/MM/yyyy")}
                                         </CardDescription>
                                     </CardHeader>

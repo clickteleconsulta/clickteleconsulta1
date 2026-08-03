@@ -1,10 +1,6 @@
-<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="ctLogoGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0ea5e9" />
-      <stop offset="100%" stop-color="#14b8a6" />
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#ctLogoGrad)" />
-  <path d="M9 26h6l3-9 4 15 3-8 2 4h9" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="#3B5BA5" />
+  <g transform="rotate(-22 32 32) translate(32 32) scale(0.385) translate(-52 -22)">
+    <path d="M22 0 H38 Q52 10 66 0 H82 A22 22 0 0 1 82 44 H66 Q52 34 38 44 H22 A22 22 0 0 1 22 0 Z" fill="#ffffff" />
+  </g>
 </svg>

@@ -87,12 +87,12 @@ const AdminPaymentMethodsPage = () => {
             </div>
 
             {/* Aviso de segurança */}
-            <Card className="bg-blue-50/50 border-blue-100">
+            <Card className="bg-brand-50/50 border-brand-100">
                 <CardContent className="p-4 flex items-start gap-3">
-                    <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                    <div className="text-sm text-blue-900">
+                    <ShieldCheck className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+                    <div className="text-sm text-brand-800">
                         <p className="font-semibold">As chaves de API ficam no servidor, nunca aqui.</p>
-                        <p className="text-blue-800/80 leading-relaxed mt-0.5">
+                        <p className="text-brand-800/80 leading-relaxed mt-0.5">
                             Aqui você apenas <strong>seleciona o provedor e o ambiente</strong>. As chaves secretas são
                             guardadas como <strong>Supabase Secrets</strong> (backend) e usadas pelas Edge Functions —
                             assim nenhuma credencial sensível passa pelo navegador ou fica salva no banco.
@@ -116,23 +116,23 @@ const AdminPaymentMethodsPage = () => {
                                 key={p.id}
                                 type="button"
                                 onClick={() => setProvider(p.id)}
-                                className={`w-full text-left flex items-start gap-4 p-4 rounded-xl border transition-all ${active ? 'border-blue-400 ring-2 ring-blue-100 bg-blue-50/40' : 'border-gray-200 hover:border-blue-200 hover:bg-gray-50'}`}
+                                className={`w-full text-left flex items-start gap-4 p-4 rounded-xl border transition-all ${active ? 'border-brand-400 ring-2 ring-brand-100 bg-brand-50/40' : 'border-gray-200 hover:border-brand-200 hover:bg-gray-50'}`}
                             >
-                                <div className={`p-2.5 rounded-lg shrink-0 ${active ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
+                                <div className={`p-2.5 rounded-lg shrink-0 ${active ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
                                     <Icon className="w-5 h-5" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center flex-wrap gap-2">
                                         <span className="font-bold text-gray-900">{p.name}</span>
                                         {p.ready
-                                            ? <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Integrado</span>
+                                            ? <span className="text-[10px] font-bold uppercase tracking-wide text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">Integrado</span>
                                             : <span className="text-[10px] font-bold uppercase tracking-wide text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">Requer integração</span>}
                                     </div>
                                     <p className="text-xs text-gray-500 mt-0.5">{p.tagline}</p>
                                     <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">{p.desc}</p>
                                 </div>
                                 <div className="shrink-0 mt-1">
-                                    {active ? <CheckCircle2 className="w-5 h-5 text-blue-600" /> : <Circle className="w-5 h-5 text-gray-300" />}
+                                    {active ? <CheckCircle2 className="w-5 h-5 text-brand-600" /> : <Circle className="w-5 h-5 text-gray-300" />}
                                 </div>
                             </button>
                         );
@@ -149,7 +149,7 @@ const AdminPaymentMethodsPage = () => {
                     <CardDescription className="dashboard-subtitle">Definido no servidor, não por esta tela.</CardDescription>
                 </CardHeader>
                 <CardContent className="px-0">
-                    <div className="flex items-start gap-2 rounded-lg border border-blue-100 bg-blue-50 p-3 text-sm text-blue-900">
+                    <div className="flex items-start gap-2 rounded-lg border border-brand-100 bg-brand-50 p-3 text-sm text-brand-800">
                         <Info className="w-4 h-4 shrink-0 mt-0.5" />
                         <div className="space-y-1">
                             <p>
@@ -157,7 +157,7 @@ const AdminPaymentMethodsPage = () => {
                                 segredo <code className="font-mono text-[12px] bg-white/70 px-1 rounded">ASAAS_ENV</code> nas
                                 Edge Functions do Supabase, junto com a chave de API.
                             </p>
-                            <p className="text-blue-800/90">
+                            <p className="text-brand-800/90">
                                 Alterar aqui não mudaria o processamento real — por isso esta seção é apenas informativa.
                             </p>
                         </div>
@@ -189,7 +189,7 @@ const AdminPaymentMethodsPage = () => {
             )}
 
             <div className="flex justify-end pt-2">
-                <Button onClick={handleSave} disabled={saving} className="min-w-[160px] bg-primary hover:bg-primary/90 text-white rounded-xl h-10 shadow-md shadow-blue-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                <Button onClick={handleSave} disabled={saving} className="min-w-[160px] bg-primary hover:bg-primary/90 text-white rounded-xl h-10 shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                     {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando…</> : <><Save className="w-4 h-4 mr-2" /> Salvar configuração</>}
                 </Button>
             </div>

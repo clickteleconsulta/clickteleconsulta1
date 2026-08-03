@@ -333,7 +333,7 @@ const DoctorDocuments = () => {
             <div className="flex items-center gap-3">
                 <Button 
                     variant="outline"
-                    className="h-9 text-xs rounded-sm border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100 hover:text-blue-800"
+                    className="h-9 text-xs rounded-sm border-brand-200 text-brand-800 bg-brand-50 hover:bg-brand-100 hover:text-brand-800"
                     onClick={handleMemedPrescription}
                     title="Abrir Prescrição Digital Memed"
                 >
@@ -356,7 +356,7 @@ const DoctorDocuments = () => {
                             </span>
                         )}
                         {!vidaasSession?.active && digitalSignature && isAuthenticating && (
-                             <span className="text-[10px] text-blue-600 font-medium animate-pulse">
+                             <span className="text-[10px] text-brand-600 font-medium animate-pulse">
                                 Aguardando...
                             </span>
                         )}
@@ -470,14 +470,14 @@ const DoctorDocuments = () => {
             {!isEditorOpen && (
                 <div className="flex justify-center mb-8 gap-4">
                      <button 
-                        className="flex items-center gap-2 bg-blue-50 border border-blue-200 hover:border-blue-300 hover:bg-blue-100 text-blue-700 font-medium text-sm transition-all py-3 px-6 rounded-sm w-full max-w-xs justify-center shadow-sm"
+                        className="flex items-center gap-2 bg-brand-50 border border-brand-200 hover:border-brand-300 hover:bg-brand-100 text-brand-800 font-medium text-sm transition-all py-3 px-6 rounded-sm w-full max-w-xs justify-center shadow-sm"
                         onClick={handleMemedPrescription}
                     >
                         <Pill className="h-4 w-4" />
                         Prescrever com Memed
                     </button>
                     <button 
-                        className="flex items-center gap-2 bg-white border border-dashed border-gray-300 hover:border-primary hover:bg-blue-50 text-gray-500 hover:text-primary font-medium text-sm transition-all py-3 px-6 rounded-sm w-full max-w-xs justify-center shadow-sm"
+                        className="flex items-center gap-2 bg-white border border-dashed border-gray-300 hover:border-primary hover:bg-brand-50 text-gray-500 hover:text-primary font-medium text-sm transition-all py-3 px-6 rounded-sm w-full max-w-xs justify-center shadow-sm"
                         onClick={() => {
                              if (!selectedPatient) {
                                  toast({title: "Selecione um paciente primeiro", variant: 'default'});

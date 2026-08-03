@@ -224,7 +224,7 @@ const VisualCalendar = ({ agenda, selectedDay, onSelectDay }) => {
                 isPast && 'text-muted-foreground/30 cursor-not-allowed',
                 !isPast && !isAvailable && 'text-muted-foreground/40 cursor-not-allowed',
                 !isPast && isAvailable && !isSelected &&
-                  'bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer font-semibold',
+                  'bg-brand-50 text-brand-800 hover:bg-brand-100 cursor-pointer font-semibold',
                 isSelected && 'bg-primary text-white font-bold shadow-sm',
                 isTodayDay && !isSelected && 'ring-1 ring-primary/40'
               )}
@@ -237,7 +237,7 @@ const VisualCalendar = ({ agenda, selectedDay, onSelectDay }) => {
 
       {available.length > 0 && (
         <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground border-t pt-3">
-          <div className="w-3 h-3 rounded bg-blue-100" />
+          <div className="w-3 h-3 rounded bg-brand-100" />
           <span>Dias com horários disponíveis</span>
         </div>
       )}
@@ -521,7 +521,7 @@ const DoctorProfilePage = () => {
           <div className="lg:col-span-2 space-y-5">
             {/* Header do médico */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="h-24 bg-gradient-to-r from-primary/15 to-blue-400/10" />
+              <div className="h-24 bg-gradient-to-r from-primary/15 to-brand-400/10" />
               <div className="px-6 pb-6 relative">
                 <div className="flex justify-between items-end -mt-12 mb-4">
                   <Avatar className="w-24 h-24 border-4 border-white shadow-md bg-white rounded-xl">
@@ -654,12 +654,12 @@ const DoctorProfilePage = () => {
                 </div>
 
                 {doctor.instructions && (
-                  <div className="bg-blue-50/50 rounded-2xl border border-blue-100 p-5">
-                    <h2 className="text-base font-bold flex items-center gap-2 mb-3 text-blue-800">
+                  <div className="bg-brand-50/50 rounded-2xl border border-brand-100 p-5">
+                    <h2 className="text-base font-bold flex items-center gap-2 mb-3 text-brand-800">
                       <Info className="w-4 h-4" />
                       Instruções para a consulta
                     </h2>
-                    <div className="prose prose-sm max-w-none text-blue-700">
+                    <div className="prose prose-sm max-w-none text-brand-800">
                       {doctor.instructions
                         .split('\n')
                         .map((p, i) => <p key={i}>{p}</p>)}
@@ -726,7 +726,7 @@ const DoctorProfilePage = () => {
                         </p>
                       )}
                     </div>
-                    <p className="text-2xl font-extrabold text-blue-600">
+                    <p className="text-2xl font-extrabold text-brand-600">
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',

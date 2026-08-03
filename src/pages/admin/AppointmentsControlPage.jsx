@@ -320,7 +320,7 @@ const AppointmentsControlPage = () => {
       confirmado: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200',
       pendente: 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 border-yellow-200',
       cancelado: 'bg-red-100 text-red-700 hover:bg-red-200 border-red-200',
-      atendido: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200',
+      atendido: 'bg-brand-100 text-brand-800 hover:bg-brand-200 border-brand-200',
       nao_compareceu: 'bg-orange-100 text-orange-700 hover:bg-orange-200 border-orange-200'
     };
     const labels = { nao_compareceu: 'NÃO COMPARECEU' };
@@ -381,8 +381,8 @@ const AppointmentsControlPage = () => {
       {/* Abas: guias a pagar vs. já repassadas (histórico) */}
       <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setCurrentPage(1); }}>
         <TabsList className="grid w-full grid-cols-2 max-w-md h-10 p-1 bg-gray-100/80 rounded-xl">
-          <TabsTrigger value="ativos" className="rounded-lg text-sm transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">Agendamentos</TabsTrigger>
-          <TabsTrigger value="historico" className="rounded-lg text-sm transition-all duration-200 hover:text-blue-600 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">Histórico de Agendamentos</TabsTrigger>
+          <TabsTrigger value="ativos" className="rounded-lg text-sm transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Agendamentos</TabsTrigger>
+          <TabsTrigger value="historico" className="rounded-lg text-sm transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Histórico de Agendamentos</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -415,29 +415,29 @@ const AppointmentsControlPage = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-blue-100">
+        <Card className="bg-white border-brand-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-blue-700">{activeTab === 'historico' ? 'Repasse Pago (Total)' : 'Repasse a Pagar (saldo)'}</CardTitle>
-            <User className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-brand-800">{activeTab === 'historico' ? 'Repasse Pago (Total)' : 'Repasse a Pagar (saldo)'}</CardTitle>
+            <User className="h-4 w-4 text-brand-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-2xl font-bold text-brand-800">
               {stats.totalDoctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
             </div>
-            <p className="text-xs text-blue-500 mt-1">{activeTab === 'historico' ? 'Já repassado aos médicos' : 'Saldo devido aos médicos'}</p>
+            <p className="text-xs text-brand-500 mt-1">{activeTab === 'historico' ? 'Já repassado aos médicos' : 'Saldo devido aos médicos'}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-indigo-100">
+        <Card className="bg-white border-brand-100">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-indigo-700">Receita da Plataforma</CardTitle>
-            <DollarSign className="h-4 w-4 text-indigo-600" />
+            <CardTitle className="text-sm font-medium text-brand-800">Receita da Plataforma</CardTitle>
+            <DollarSign className="h-4 w-4 text-brand-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-indigo-700">
+            <div className="text-2xl font-bold text-brand-800">
               {stats.totalSiteFees.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
             </div>
-            <p className="text-xs text-indigo-500 mt-1">Taxa retida (congelada no pagamento)</p>
+            <p className="text-xs text-brand-500 mt-1">Taxa retida (congelada no pagamento)</p>
           </CardContent>
         </Card>
 
@@ -740,7 +740,7 @@ const AppointmentsControlPage = () => {
                                 <p><span className="text-muted-foreground">Data:</span> {safeFmt(selectedAppointment.appointment_date, 'dd/MM/yyyy')}</p>
                                 <p><span className="text-muted-foreground">Horário:</span> {selectedAppointment.appointment_time}</p>
                                 <p><span className="text-muted-foreground">Status:</span> {selectedAppointment.status}</p>
-                                <p><span className="text-muted-foreground">Link da Sala:</span> {selectedAppointment.meeting_link ? <a href={selectedAppointment.meeting_link} target="_blank" rel="noreferrer" className="text-blue-600 underline">Acessar Sala</a> : 'Não gerado'}</p>
+                                <p><span className="text-muted-foreground">Link da Sala:</span> {selectedAppointment.meeting_link ? <a href={selectedAppointment.meeting_link} target="_blank" rel="noreferrer" className="text-brand-600 underline">Acessar Sala</a> : 'Não gerado'}</p>
                             </div>
                         </div>
 
@@ -750,8 +750,8 @@ const AppointmentsControlPage = () => {
                             </h4>
                             <div className="space-y-2 text-sm">
                                 <p><span className="text-muted-foreground">Valor pago pelo paciente:</span> {financialDetails.totalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                                <p><span className="text-muted-foreground">Repasse ao médico:</span> <span className="font-semibold text-blue-700">{financialDetails.doctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
-                                <p><span className="text-muted-foreground">Taxa retida pela plataforma ({financialDetails.feePercent}%):</span> <span className="font-semibold text-indigo-700">{financialDetails.siteFee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
+                                <p><span className="text-muted-foreground">Repasse ao médico:</span> <span className="font-semibold text-brand-800">{financialDetails.doctorPayout.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
+                                <p><span className="text-muted-foreground">Taxa retida pela plataforma ({financialDetails.feePercent}%):</span> <span className="font-semibold text-brand-800">{financialDetails.siteFee.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
                                 <p><span className="text-muted-foreground">Serviço:</span> {procMap[selectedAppointment.servico_id] || selectedAppointment.guias?.servico_snapshot?.nome || 'Teleconsulta'}</p>
                                 <p><span className="text-muted-foreground">Data de Criação:</span> {safeFmt(selectedAppointment.created_at, "dd/MM/yyyy 'às' HH:mm")}</p>
                                 <p><span className="text-muted-foreground">Status Pagamento:</span> {selectedAppointment.pagamento_status || 'Pendente'}</p>

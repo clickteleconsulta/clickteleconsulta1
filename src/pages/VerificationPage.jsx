@@ -53,7 +53,7 @@ const VerificationPage = () => {
                 <Helmet>
                     <title>Verificando Documento...</title>
                 </Helmet>
-                <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+                <Loader2 className="w-10 h-10 text-brand-600 animate-spin" />
             </div>
         );
     }
@@ -109,8 +109,8 @@ const VerificationPage = () => {
 
                     <div className="border-t border-slate-100 pt-4 space-y-4">
                         <div className="flex items-start gap-3">
-                            <div className="bg-blue-50 p-2 rounded-full">
-                                <FileText className="w-5 h-5 text-blue-600" />
+                            <div className="bg-brand-50 p-2 rounded-full">
+                                <FileText className="w-5 h-5 text-brand-600" />
                             </div>
                             <div>
                                 <p className="text-sm text-slate-500 font-medium">Emitido por</p>

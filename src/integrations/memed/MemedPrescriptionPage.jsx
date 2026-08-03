@@ -99,7 +99,7 @@ const MemedPrescriptionPage = () => {
     script.id = 'memed-script';
     script.src = 'https://sandbox.memed.com.br/modulos/plataforma.sinapse-prescricao/build/sinapse-prescricao.min.js';
     script.setAttribute('data-token', token);
-    script.setAttribute('data-color', '#2563eb'); // Blue-600 to match theme
+    script.setAttribute('data-color', '#3B5BA5'); // Blue-600 to match theme
     script.setAttribute('data-container', 'memed-prescricao-root');
     
     script.onload = () => {
@@ -148,7 +148,7 @@ const MemedPrescriptionPage = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100vh-100px)] w-full bg-white">
-        <Loader2 className="w-12 h-12 text-blue-600 animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-brand-600 animate-spin mb-4" />
         <h3 className="text-lg font-medium text-gray-700">Carregando prescrição...</h3>
       </div>
     );

@@ -49,13 +49,13 @@ const StepIndicator = ({ currentStep }) => (
       return (
         <div key={step.id} className="relative z-10 flex flex-col items-center gap-1.5">
           <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all ${
-            done ? 'bg-blue-600 border-blue-600 text-white' :
-            active ? 'bg-white border-blue-600 text-blue-600' :
+            done ? 'bg-brand-600 border-brand-600 text-white' :
+            active ? 'bg-white border-brand-600 text-brand-600' :
             'bg-white border-gray-300 text-gray-400'
           }`}>
             {done ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
           </div>
-          <span className={`text-[10px] font-medium hidden sm:block ${active ? 'text-blue-600' : done ? 'text-gray-600' : 'text-gray-400'}`}>
+          <span className={`text-[10px] font-medium hidden sm:block ${active ? 'text-brand-600' : done ? 'text-gray-600' : 'text-gray-400'}`}>
             {step.label}
           </span>
         </div>
@@ -67,11 +67,11 @@ const StepIndicator = ({ currentStep }) => (
 // ─── Profile Preview ───────────────────────────────────────────────────────────
 const ProfilePreview = ({ form }) => (
   <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden max-w-md mx-auto">
-    <div className="h-20 bg-gradient-to-r from-blue-500/20 to-blue-600/10" />
+    <div className="h-20 bg-gradient-to-r from-brand-500/20 to-brand-600/10" />
     <div className="px-5 pb-5 relative">
       <div className="-mt-10 mb-3">
         <Avatar className="w-20 h-20 border-4 border-white shadow-md">
-          <AvatarFallback className="text-2xl bg-blue-100 text-blue-700 font-bold">
+          <AvatarFallback className="text-2xl bg-brand-100 text-brand-800 font-bold">
             {form.full_name?.[0] || 'M'}
           </AvatarFallback>
         </Avatar>
@@ -79,11 +79,11 @@ const ProfilePreview = ({ form }) => (
       <div>
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-bold text-gray-900">{form.full_name || 'Seu Nome'}</h3>
-          <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-[10px] flex items-center gap-1">
+          <Badge className="bg-brand-100 text-brand-800 border-brand-200 text-[10px] flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3" /> Verificado
           </Badge>
         </div>
-        <p className="text-sm text-blue-600 font-medium mt-0.5">{form.specialty || 'Especialidade'}</p>
+        <p className="text-sm text-brand-600 font-medium mt-0.5">{form.specialty || 'Especialidade'}</p>
         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs text-gray-500">
           {form.crm && form.uf && (
             <span className="flex items-center gap-1"><Shield className="w-3 h-3" /> CRM: {form.crm}/{form.uf}</span>
@@ -113,10 +113,10 @@ const ProfileChecklist = ({ form }) => {
   const pct = completeness(form);
 
   return (
-    <div className="bg-blue-50/40 rounded-xl border border-blue-100 p-4 space-y-3">
+    <div className="bg-brand-50/40 rounded-xl border border-brand-100 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-blue-900">Perfil completo em {pct}%</p>
-        <span className="text-xs text-blue-600 font-bold">{pct}%</span>
+        <p className="text-sm font-semibold text-brand-800">Perfil completo em {pct}%</p>
+        <span className="text-xs text-brand-600 font-bold">{pct}%</span>
       </div>
       <Progress value={pct} className="h-2" />
       <div className="grid grid-cols-1 gap-1.5 mt-2">
@@ -245,7 +245,7 @@ const DoctorSignUpPage = () => {
           <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-xs text-gray-400 font-medium">Etapa {step} de {STEPS.length}</span>
-              <span className="text-xs text-blue-600 font-semibold">{Math.round((step / STEPS.length) * 100)}%</span>
+              <span className="text-xs text-brand-600 font-semibold">{Math.round((step / STEPS.length) * 100)}%</span>
             </div>
             <Progress value={Math.round((step / STEPS.length) * 100)} className="h-1.5 mb-6" />
             <StepIndicator currentStep={step} />
@@ -264,7 +264,7 @@ const DoctorSignUpPage = () => {
                 {/* Step 1: Dados Pessoais */}
                 {step === 1 && (
                   <div className="space-y-4">
-                    <div className="bg-blue-50/40 rounded-lg p-3 text-sm text-blue-700 border border-blue-100">
+                    <div className="bg-brand-50/40 rounded-lg p-3 text-sm text-brand-800 border border-brand-100">
                       👋 Vamos começar! Precisamos de algumas informações básicas.
                     </div>
                     <div className="space-y-1.5">
@@ -291,7 +291,7 @@ const DoctorSignUpPage = () => {
                 {/* Step 2: CRM */}
                 {step === 2 && (
                   <div className="space-y-4">
-                    <div className="bg-blue-50/40 rounded-lg p-3 text-sm text-blue-700 border border-blue-100">
+                    <div className="bg-brand-50/40 rounded-lg p-3 text-sm text-brand-800 border border-brand-100">
                       🏥 Informe seu CRM para garantir a verificação do seu perfil.
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -319,7 +319,7 @@ const DoctorSignUpPage = () => {
                           </Button>
                         )}
                         {crmStatus === 'checking' && (
-                          <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
+                          <div className="flex items-center gap-2 text-xs text-brand-600 bg-brand-50 px-3 py-2 rounded-lg border border-brand-100">
                             <Loader2 className="w-3.5 h-3.5 animate-spin" /> Consultando CFM...
                           </div>
                         )}
@@ -342,7 +342,7 @@ const DoctorSignUpPage = () => {
                 {/* Step 3: Especialidades */}
                 {step === 3 && (
                   <div className="space-y-4">
-                    <div className="bg-blue-50/40 rounded-lg p-3 text-sm text-blue-700 border border-blue-100">
+                    <div className="bg-brand-50/40 rounded-lg p-3 text-sm text-brand-800 border border-brand-100">
                       🩺 Sua especialidade aparecerá no perfil público e no resultado de buscas.
                     </div>
                     <div className="space-y-1.5">
@@ -373,7 +373,7 @@ const DoctorSignUpPage = () => {
                 {/* Step 4: Agenda */}
                 {step === 4 && (
                   <div className="space-y-4">
-                    <div className="bg-blue-50/40 rounded-lg p-3 text-sm text-blue-700 border border-blue-100">
+                    <div className="bg-brand-50/40 rounded-lg p-3 text-sm text-brand-800 border border-brand-100">
                       📅 Configure seus horários padrão. Você poderá ajustar tudo depois na área de Agenda.
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -407,7 +407,7 @@ const DoctorSignUpPage = () => {
                 {/* Step 5: Acesso */}
                 {step === 5 && (
                   <div className="space-y-4">
-                    <div className="bg-blue-50/40 rounded-lg p-3 text-sm text-blue-700 border border-blue-100">
+                    <div className="bg-brand-50/40 rounded-lg p-3 text-sm text-brand-800 border border-brand-100">
                       🔐 Quase lá! Configure seu acesso à plataforma.
                     </div>
                     <div className="space-y-1.5">
@@ -448,7 +448,7 @@ const DoctorSignUpPage = () => {
               </Button>
 
               {step < STEPS.length ? (
-                <Button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700">
+                <Button onClick={handleNext} className="bg-brand-600 hover:bg-brand-700">
                   Próximo <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               ) : (

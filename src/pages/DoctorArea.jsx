@@ -114,7 +114,7 @@ const DoctorArea = () => {
     if (loading) {
         return (
             <div className="w-full h-screen flex items-center justify-center bg-gray-100">
-                <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+                <Loader2 className="w-12 h-12 text-brand-600 animate-spin" />
             </div>
         );
     }
@@ -146,10 +146,10 @@ const DoctorArea = () => {
                     <div className={`flex items-center gap-3 min-w-0 ${expanded ? '' : 'flex-col'}`}>
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger asChild>
-                                <div className="p-0.5 rounded-full ring-2 ring-gray-100 hover:ring-blue-100 transition-all cursor-pointer flex-shrink-0">
+                                <div className="p-0.5 rounded-full ring-2 ring-gray-100 hover:ring-brand-100 transition-all cursor-pointer flex-shrink-0">
                                     <Avatar className="h-10 w-10 rounded-full">
                                         <AvatarImage src={doctorImageUrl} className="object-cover" />
-                                        <AvatarFallback className="bg-blue-50 text-blue-600 font-bold text-sm rounded-full">
+                                        <AvatarFallback className="bg-brand-50 text-brand-600 font-bold text-sm rounded-full">
                                             {profile?.full_name?.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
@@ -174,7 +174,7 @@ const DoctorArea = () => {
                             <button
                                 onClick={() => setExpanded((v) => !v)}
                                 aria-label={expanded ? 'Recolher menu' : 'Expandir menu'}
-                                className={`flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 flex-shrink-0 ${expanded ? '' : 'mt-1'}`}
+                                className={`flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 transition-all duration-200 flex-shrink-0 ${expanded ? '' : 'mt-1'}`}
                             >
                                 {expanded ? <ChevronsLeft size={18} strokeWidth={2} /> : <ChevronsRight size={18} strokeWidth={2} />}
                             </button>
@@ -206,7 +206,7 @@ const DoctorArea = () => {
                                             relative flex items-center rounded-xl transition-all duration-300 group
                                             ${expanded ? 'justify-start gap-3 px-3 h-11 w-full' : 'justify-center w-12 h-12'}
                                             ${isActive
-                                                ? 'text-blue-600 bg-blue-50 shadow-sm'
+                                                ? 'text-brand-600 bg-brand-50 shadow-sm'
                                                 : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
                                             }
                                         `}
@@ -221,14 +221,14 @@ const DoctorArea = () => {
                                         )}
                                         {/* Badge: pill no modo expandido, ponto no recolhido */}
                                         {item.badge > 0 && (expanded ? (
-                                            <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none ${item.urgent ? 'bg-red-500 text-white' : 'bg-blue-100 text-blue-700'}`}>
+                                            <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold leading-none ${item.urgent ? 'bg-red-500 text-white' : 'bg-brand-100 text-brand-800'}`}>
                                                 {item.badge > 99 ? '99+' : item.badge}
                                             </span>
                                         ) : (
-                                            <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ring-2 ring-white ${item.urgent ? 'bg-red-500' : 'bg-blue-500'}`} />
+                                            <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ring-2 ring-white ${item.urgent ? 'bg-red-500' : 'bg-brand-500'}`} />
                                         ))}
                                         {isActive && (
-                                            <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full" />
+                                            <div className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-600 rounded-r-full" />
                                         )}
                                     </Link>
                                 );

@@ -186,8 +186,8 @@ const AdminSecurityPage = () => {
               <Label htmlFor="confirmEmail" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Confirmar Novo E-mail</Label>
               <Input id="confirmEmail" type="email" value={confirmEmail} onChange={(e) => setConfirmEmail(e.target.value)} placeholder="Repita o novo e-mail" autoComplete="email" />
             </div>
-            <div className="flex items-start gap-2 text-xs text-blue-800 bg-blue-50/60 border border-blue-100 rounded-lg p-3">
-              <Mail className="w-4 h-4 shrink-0 mt-0.5 text-blue-600" />
+            <div className="flex items-start gap-2 text-xs text-brand-800 bg-brand-50/60 border border-brand-100 rounded-lg p-3">
+              <Mail className="w-4 h-4 shrink-0 mt-0.5 text-brand-600" />
               <span>Por segurança, enviaremos um <strong>link de confirmação</strong> para o novo e-mail (e, se ativado no projeto, também para o atual). A troca só é concluída após clicar no link — até lá, continue usando o e-mail atual para entrar.</span>
             </div>
             {emailSent && (

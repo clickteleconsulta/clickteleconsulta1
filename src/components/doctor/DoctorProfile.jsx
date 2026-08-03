@@ -207,7 +207,7 @@ const DoctorProfile = () => {
             <DoctorPageHeader icon={UserIcon} title="Meu Perfil"
                 subtitle={<span className="inline-flex items-center gap-2">Gerencie suas informações profissionais.{isDirty && <span className="text-xs text-amber-600 font-medium animate-pulse">• Alterações não salvas</span>}</span>}>
                 {doctorData?.id && (
-                    <Button asChild variant="outline" size="sm" className="gap-2 shadow-sm border-gray-300 font-medium text-gray-700 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50 h-9 rounded-xl transition-all duration-200">
+                    <Button asChild variant="outline" size="sm" className="gap-2 shadow-sm border-gray-300 font-medium text-gray-700 hover:text-brand-600 hover:border-brand-300 hover:bg-brand-50/50 h-9 rounded-xl transition-all duration-200">
                         <Link to={`/medico/${doctorData.id}`} target="_blank">
                             <ExternalLink className="w-3.5 h-3.5" />
                             Ver Perfil Público
@@ -218,11 +218,11 @@ const DoctorProfile = () => {
 
             <Tabs defaultValue="perfil" className="w-full">
                 <TabsList className="grid grid-cols-2 sm:grid-cols-5 h-auto gap-1 bg-gray-100/80 p-1 rounded-xl">
-                    <TabsTrigger value="perfil" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><UserIcon className="w-3.5 h-3.5" /> Perfil</TabsTrigger>
-                    <TabsTrigger value="atendimento" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><Stethoscope className="w-3.5 h-3.5" /> Atendimento</TabsTrigger>
-                    <TabsTrigger value="documentacao" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><FileText className="w-3.5 h-3.5" /> Documentação</TabsTrigger>
-                    <TabsTrigger value="seguranca" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
-                    <TabsTrigger value="conta" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-blue-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
+                    <TabsTrigger value="perfil" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm"><UserIcon className="w-3.5 h-3.5" /> Perfil</TabsTrigger>
+                    <TabsTrigger value="atendimento" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm"><Stethoscope className="w-3.5 h-3.5" /> Atendimento</TabsTrigger>
+                    <TabsTrigger value="documentacao" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm"><FileText className="w-3.5 h-3.5" /> Documentação</TabsTrigger>
+                    <TabsTrigger value="seguranca" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
+                    <TabsTrigger value="conta" className="text-xs sm:text-sm rounded-lg gap-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="perfil" className="mt-4">
@@ -236,7 +236,7 @@ const DoctorProfile = () => {
                         <div className="flex flex-col sm:flex-row gap-6 p-4 bg-gray-50/50 rounded-xl border border-gray-200 mb-6">
                             <div className="relative group shrink-0 mx-auto sm:mx-0">
                                 <Avatar className="w-24 h-24 border-4 border-white shadow-sm rounded-full">
-                                    <AvatarImage src={doctorData?.image_url} className="object-cover" />
+                                    <AvatarImage src={toSiteUrl(doctorData?.image_url)} className="object-cover" />
                                     <AvatarFallback className="bg-gray-200 text-gray-500"><UserIcon size={36}/></AvatarFallback>
                                 </Avatar>
                                 <label className={`absolute inset-0 bg-black/40 flex flex-col items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer ${uploading ? 'opacity-100' : ''}`}>
@@ -254,11 +254,11 @@ const DoctorProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="public_name" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Nome de Exibição</Label>
-                                    <Input id="public_name" placeholder="Nome Sobrenome" {...register('public_name', { required: true })} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
+                                    <Input id="public_name" placeholder="Nome Sobrenome" {...register('public_name', { required: true })} className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                     {errors.public_name && <p className="text-xs text-red-600 font-medium mt-1">Obrigatório</p>}
                                     <p className="text-[11px] text-gray-500">
                                         Informe apenas o nome. Aparece como{' '}
-                                        <span className="font-semibold text-blue-600">{formatDoctorDisplayName(watch('sexo'), watch('public_name')) || '—'}</span>.
+                                        <span className="font-semibold text-brand-600">{formatDoctorDisplayName(watch('sexo'), watch('public_name')) || '—'}</span>.
                                     </p>
                                 </div>
                                 <div className="space-y-1.5">
@@ -273,7 +273,7 @@ const DoctorProfile = () => {
                                                 defaultValue={field.value}
                                                 value={field.value}
                                             >
-                                                <SelectTrigger className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
+                                                <SelectTrigger className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
                                                     <SelectValue placeholder="Selecione a especialidade" />
                                                 </SelectTrigger>
                                                 <SelectContent className="rounded-lg border-gray-200">
@@ -297,7 +297,7 @@ const DoctorProfile = () => {
                                         control={control}
                                         render={({ field }) => (
                                             <Select onValueChange={field.onChange} value={field.value || ''}>
-                                                <SelectTrigger className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
+                                                <SelectTrigger className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
                                                     <SelectValue placeholder="Selecione" />
                                                 </SelectTrigger>
                                                 <SelectContent className="rounded-lg border-gray-200">
@@ -314,7 +314,7 @@ const DoctorProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="crm" className="text-xs font-bold text-gray-700 uppercase tracking-wide">CRM</Label>
-                                    <Input id="crm" placeholder="000000" {...register('crm', { required: true })} onChange={(e) => setValue('crm', maskCRM(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={8} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
+                                    <Input id="crm" placeholder="000000" {...register('crm', { required: true })} onChange={(e) => setValue('crm', maskCRM(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={8} className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="uf" className="text-xs font-bold text-gray-700 uppercase tracking-wide">UF</Label>
@@ -324,7 +324,7 @@ const DoctorProfile = () => {
                                         rules={{ required: true }}
                                         render={({ field }) => (
                                             <Select onValueChange={field.onChange} value={field.value || ''}>
-                                                <SelectTrigger className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
+                                                <SelectTrigger className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 transition-colors h-10 text-sm rounded-lg shadow-sm">
                                                     <SelectValue placeholder="UF" />
                                                 </SelectTrigger>
                                                 <SelectContent className="rounded-lg border-gray-200 max-h-56">
@@ -340,19 +340,19 @@ const DoctorProfile = () => {
                                     <Label htmlFor="phone_number" className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-1.5">
                                         <Phone className="w-3.5 h-3.5 text-gray-400" /> Número de Contato
                                     </Label>
-                                    <Input id="phone_number" placeholder="(00) 00000-0000" {...register('phone_number')} onChange={(e) => setValue('phone_number', maskPhone(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={15} className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
+                                    <Input id="phone_number" placeholder="(00) 00000-0000" {...register('phone_number')} onChange={(e) => setValue('phone_number', maskPhone(e.target.value), { shouldDirty: true })} inputMode="numeric" maxLength={15} className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 transition-colors h-10 text-sm rounded-lg shadow-sm" />
                                     <p className="text-[11px] text-gray-500">Compartilhado com o paciente apenas após a confirmação do pagamento. Não aparece no perfil público.</p>
                                 </div>
                             </div>
 
                             <div className="space-y-1.5">
                                 <Label htmlFor="bio" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Biografia</Label>
-                                <Textarea id="bio" {...register('bio')} rows={4} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Fale sobre sua experiência, formação e abordagem..." />
+                                <Textarea id="bio" {...register('bio')} rows={4} className="resize-none bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 text-sm rounded-lg shadow-sm p-3" placeholder="Fale sobre sua experiência, formação e abordagem..." />
                             </div>
 
                             <div className="space-y-1.5">
                                 <Label htmlFor="formacao" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Formação</Label>
-                                <Textarea id="formacao" {...register('formacao')} rows={4} className="resize-none bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 text-sm rounded-lg shadow-sm p-3" placeholder="Informe a formação acadêmica, informações sobre residência e experiência clínica — tudo que mostre ao paciente o conhecimento e a experiência adquiridos ao longo da sua trajetória como profissional de saúde. Inclua o tipo de graduação, curso, instituição e ano de conclusão (opcional)." />
+                                <Textarea id="formacao" {...register('formacao')} rows={4} className="resize-none bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 text-sm rounded-lg shadow-sm p-3" placeholder="Informe a formação acadêmica, informações sobre residência e experiência clínica — tudo que mostre ao paciente o conhecimento e a experiência adquiridos ao longo da sua trajetória como profissional de saúde. Inclua o tipo de graduação, curso, instituição e ano de conclusão (opcional)." />
                                 <p className="text-[11px] text-gray-500">Aparece para os pacientes no seu perfil.</p>
                             </div>
 
@@ -362,7 +362,7 @@ const DoctorProfile = () => {
                 
                 <div className="flex items-center justify-end pt-4 border-t border-gray-200 gap-3">
                         <Button type="button" variant="ghost" onClick={() => reset(doctorData)} disabled={!isDirty || isSaving} className="text-gray-600 hover:text-gray-900 h-9 text-sm rounded-xl">Cancelar</Button>
-                    <Button type="submit" disabled={isSaving} className="min-w-[120px] bg-primary hover:bg-primary/90 text-white font-semibold shadow-md shadow-blue-500/20 h-9 text-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
+                    <Button type="submit" disabled={isSaving} className="min-w-[120px] bg-primary hover:bg-primary/90 text-white font-semibold shadow-md shadow-brand-500/20 h-9 text-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
                         {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                         Salvar Alterações
                     </Button>
@@ -401,7 +401,7 @@ const DoctorProfile = () => {
                                         onChange={(e) => setNewPassword(e.target.value)}
                                         placeholder="Mínimo 8 caracteres"
                                         autoComplete="new-password"
-                                        className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm pr-10"
+                                        className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 h-10 text-sm rounded-lg shadow-sm pr-10"
                                     />
                                     <button
                                         type="button"
@@ -423,7 +423,7 @@ const DoctorProfile = () => {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="Repita a nova senha"
                                     autoComplete="new-password"
-                                    className="bg-white border-gray-300 focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 h-10 text-sm rounded-lg shadow-sm"
+                                    className="bg-white border-gray-300 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100 h-10 text-sm rounded-lg shadow-sm"
                                 />
                             </div>
                         </div>
@@ -431,7 +431,7 @@ const DoctorProfile = () => {
                             <Button
                                 type="submit"
                                 disabled={isChangingPassword || !newPassword || !confirmPassword}
-                                className="min-w-[140px] bg-primary hover:bg-primary/90 text-white font-semibold shadow-md shadow-blue-500/20 h-9 text-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0"
+                                className="min-w-[140px] bg-primary hover:bg-primary/90 text-white font-semibold shadow-md shadow-brand-500/20 h-9 text-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0"
                             >
                                 {isChangingPassword ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <KeyRound className="mr-2 h-4 w-4" />}
                                 Alterar Senha

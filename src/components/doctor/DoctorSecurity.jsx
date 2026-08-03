@@ -127,7 +127,7 @@ const DoctorSecurity = () => {
                             </div>
                             <Dialog open={isEmailModalOpen} onOpenChange={setIsEmailModalOpen}>
                                 <DialogTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-sm shadow-sm">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-brand-50 border border-transparent hover:border-brand-200 rounded-sm shadow-sm">
                                         <Pencil className="h-4 w-4" />
                                     </Button>
                                 </DialogTrigger>
@@ -173,7 +173,7 @@ const DoctorSecurity = () => {
                             </div>
                             <Dialog open={isPhoneModalOpen} onOpenChange={setIsPhoneModalOpen}>
                                 <DialogTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-sm shadow-sm">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-primary hover:bg-brand-50 border border-transparent hover:border-brand-200 rounded-sm shadow-sm">
                                         <Pencil className="h-4 w-4" />
                                     </Button>
                                 </DialogTrigger>

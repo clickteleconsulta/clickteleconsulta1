@@ -184,7 +184,7 @@ const ChatWindow = ({ conversationId, patientId, doctorId, otherUserName, otherU
   if (accessLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-brand-600 animate-spin" />
       </div>
     );
   }
@@ -236,7 +236,7 @@ const ChatWindow = ({ conversationId, patientId, doctorId, otherUserName, otherU
                     className={cn(
                       "px-4 py-2 rounded-2xl text-sm shadow-sm relative",
                       isMe 
-                        ? "bg-blue-600 text-white rounded-br-none" 
+                        ? "bg-brand-600 text-white rounded-br-none" 
                         : "bg-white text-gray-800 border border-gray-100 rounded-bl-none"
                     )}
                   >
@@ -248,7 +248,7 @@ const ChatWindow = ({ conversationId, patientId, doctorId, otherUserName, otherU
                       </span>
                       {isMe && !msg.id.startsWith('temp-') && (
                         msg.is_read ? 
-                          <CheckCheck className="w-3 h-3 text-blue-600" /> : 
+                          <CheckCheck className="w-3 h-3 text-brand-600" /> : 
                           <Check className="w-3 h-3 text-gray-400" />
                       )}
                   </div>
@@ -272,7 +272,7 @@ const ChatWindow = ({ conversationId, patientId, doctorId, otherUserName, otherU
           type="submit" 
           size="icon" 
           disabled={!newMessage.trim() || sending}
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-brand-600 hover:bg-brand-700"
         >
           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </Button>
