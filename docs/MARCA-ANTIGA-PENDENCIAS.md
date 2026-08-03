@@ -75,37 +75,12 @@ select * from _hits order by tabela, coluna;
 `suporte@clickteleconsulta.online`, uma caixa que não existe mais. Agora responde
 `contato@avidoc.com.br`.
 
-### Falta rodar — cosmético, nada quebrado
+Também corrigidas — eram URLs com o domínio antigo em `medicos.image_url` (5),
+`platform_legal_documents` (2), `termo_adesao` (1) e `documents.titulo` (2). Nunca
+chegaram a quebrar: `src/lib/storageUrl.js` renormaliza qualquer `/cdn/…` ou
+`/storage/v1/object/public/…` para a origem atual em tempo de leitura. Foi higiene.
 
-Estas colunas guardam URLs com o domínio antigo, mas **continuam funcionando**:
-`src/lib/storageUrl.js` renormaliza qualquer `/cdn/…` ou `/storage/v1/object/public/…`
-para a origem atual em tempo de leitura. É limpeza, não conserto.
-
-Rode no **SQL Editor** do Supabase:
-
-```sql
-update medicos
-   set image_url = replace(image_url, 'https://clickteleconsulta.online/', 'https://avidoc.com.br/')
- where image_url like '%clickteleconsulta.online/%';
-
-update platform_legal_documents
-   set pdf_url = replace(
-         replace(pdf_url, 'https://api.clickteleconsulta.online/storage/v1/object/public/', 'https://avidoc.com.br/cdn/'),
-         'https://clickteleconsulta.online/', 'https://avidoc.com.br/'),
-       pdf_file_name = regexp_replace(pdf_file_name, 'Click[ -]?Tele[ -]?Consulta', 'aviDoc', 'gi')
- where pdf_url ~* 'clickteleconsulta' or pdf_file_name ~* 'click[ -]?tele[ -]?consulta';
-
-update termo_adesao
-   set pdf_url = replace(
-         replace(pdf_url, 'https://api.clickteleconsulta.online/storage/v1/object/public/', 'https://avidoc.com.br/cdn/'),
-         'https://clickteleconsulta.online/', 'https://avidoc.com.br/'),
-       pdf_file_name = regexp_replace(pdf_file_name, 'Click[ -]?Tele[ -]?Consulta', 'aviDoc', 'gi')
- where pdf_url ~* 'clickteleconsulta' or pdf_file_name ~* 'click[ -]?tele[ -]?consulta';
-
-update documents
-   set titulo = regexp_replace(titulo, 'Click[ -]?Tele[ -]?Consulta', 'aviDoc', 'gi')
- where titulo ~* 'click[ -]?tele[ -]?consulta';
-```
+A varredura acima, repetida depois, devolve apenas as duas linhas da seção seguinte.
 
 ### Deixado de fora de propósito
 
@@ -142,9 +117,27 @@ dos arquivos, não só no nome:
 
 ---
 
-## 4. Segredos das edge functions — **conferir**
+## 4. Edge functions — **o item mais urgente**
 
-Em **Supabase → Edge Functions → Secrets**:
+O código no ar é **anterior à troca de marca**. Confirmado cruzando a data de deploy
+com o histórico do repositório:
+
+| Função | No ar desde | Do commit | O que o e-mail diz hoje |
+| --- | --- | --- | --- |
+| `send-doctor-invite` | 11/07/2026 · v17 | `7c141bd` | "Click Teleconsulta" ×6, domínio morto ×2 |
+| `send-appointment-email` | 30/07/2026 · v6 | `9e98160` | "Click Teleconsulta" ×3, domínio morto ×3 |
+
+A marca entrou em `3f4e634`, no dia 03/08 — **depois dos dois deploys**. Ou seja: não
+é só a cor e o texto corrigidos em `4027f64`; hoje o médico convidado recebe um e-mail
+com a marca antiga e um link para `clickteleconsulta.online`, que foi apagado.
+
+```bash
+supabase functions deploy send-appointment-email send-doctor-invite jaas-token create-asaas-payment \
+  --project-ref fnzvopspcoefzybtmwlg
+```
+
+Em **Supabase → Edge Functions → Secrets**, os dois segredos abaixo **existem**, mas a
+API não devolve valor de segredo — confira a olho:
 
 | Segredo | Valor esperado |
 | --- | --- |
@@ -153,13 +146,6 @@ Em **Supabase → Edge Functions → Secrets**:
 
 O `INVITE_FROM` tem o mesmo problema que o remetente do SMTP tinha: se ficar no domínio
 antigo, o Resend recusa com **550 domain is not verified**.
-
-E as funções precisam ser **redeployadas** — elas não sobem com o site:
-
-```bash
-supabase functions deploy send-appointment-email send-doctor-invite jaas-token create-asaas-payment \
-  --project-ref fnzvopspcoefzybtmwlg
-```
 
 ---
 
