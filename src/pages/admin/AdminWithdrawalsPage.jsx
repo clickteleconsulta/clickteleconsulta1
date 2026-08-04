@@ -487,11 +487,18 @@ const AdminWithdrawalsPage = () => {
                                             const tot = saqueGuias.reduce((acc, g) => {
                                                 const c = calcGuia(g);
                                                 acc.total += c.total; acc.taxa += c.taxa; acc.repasse += c.repasse;
+                                                if (c.fee > 0) acc.comTaxa += 1;
                                                 if (c.temLiquido) acc.liquido += c.liquido; else acc.semLiquido += 1;
                                                 return acc;
-                                            }, { total: 0, taxa: 0, repasse: 0, liquido: 0, semLiquido: 0 });
+                                            }, { total: 0, taxa: 0, repasse: 0, liquido: 0, semLiquido: 0, comTaxa: 0 });
                                             const completo = tot.semLiquido === 0;
                                             const margem = tot.liquido - tot.repasse;
+                                            // Margem negativa tem duas causas muito diferentes, e tratá-las igual
+                                            // faria o alerta tocar sempre para os médicos sem taxa — que é o caso
+                                            // conhecido e aceito. Vermelho fica reservado para quando a taxa
+                                            // existe e mesmo assim não cobriu o custo do Asaas, que é o que pede
+                                            // revisão de preço.
+                                            const isentoDeTaxa = tot.comTaxa === 0;
                                             return (
                                                 <div className="flex items-center justify-between gap-3 text-xs font-semibold border-t pt-2 mt-1">
                                                     <span className="text-gray-700">Totais</span>
@@ -504,9 +511,17 @@ const AdminWithdrawalsPage = () => {
                                                         )}
                                                         <div className="text-brand-800">Repasse ao médico: {fmt(tot.repasse)}</div>
                                                         {completo && (
-                                                            <div className={margem < 0 ? 'text-red-600' : 'text-gray-500'}>
-                                                                {margem < 0 ? 'Prejuízo da plataforma: ' : 'Margem da plataforma: '}{fmt(margem)}
-                                                            </div>
+                                                            margem >= 0 ? (
+                                                                <div className="text-gray-500">Margem da plataforma: {fmt(margem)}</div>
+                                                            ) : isentoDeTaxa ? (
+                                                                <div className="text-gray-500" title="Médico sem taxa de plataforma: o repasse é o valor cheio, então a taxa do Asaas fica por conta da plataforma.">
+                                                                    Custo do Asaas: {fmt(-margem)} <span className="text-gray-400">· médico sem taxa</span>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="text-red-600" title="A taxa cobrada não cobriu o custo do Asaas nesta consulta.">
+                                                                    Prejuízo: {fmt(-margem)} <span className="font-normal">· a taxa não cobriu o Asaas</span>
+                                                                </div>
+                                                            )
                                                         )}
                                                     </div>
                                                 </div>

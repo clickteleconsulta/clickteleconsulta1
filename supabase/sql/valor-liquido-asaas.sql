@@ -20,9 +20,18 @@
 --   Repasse ao médico    o que pertence ao parceiro        (pago - taxa da plataforma)
 --   Margem da plataforma recebido - repasse                (calculado na tela)
 --
--- A margem real é sempre menor que a taxa nominal, e em consulta barata pode
--- ficar NEGATIVA — a taxa fixa do Asaas come toda a comissão. A tela mostra esse
--- caso em vermelho em vez de escondê-lo, que é o ponto do ajuste.
+-- A margem real é sempre menor que a taxa nominal e pode ficar NEGATIVA. A tela
+-- separa as duas causas, porque exigem reações opostas:
+--
+--   taxa = 0%    esperado. O repasse é o valor cheio e a taxa do Asaas fica com
+--                a plataforma por decisão. Hoje é o caso do Ryan e do Celso.
+--                Aparece em cinza como "Custo do Asaas · médico sem taxa".
+--
+--   taxa > 0%    problema de preço: a comissão cobrada não cobriu o custo do
+--                Asaas. Aparece em vermelho como "Prejuízo".
+--
+-- Tratar os dois como alerta faria o vermelho tocar em todo saque dos médicos
+-- sem taxa, e alarme que sempre toca deixa de ser lido.
 --
 -- ONDE É PREENCHIDA
 -- Em supabase/functions/asaas-webhook, no evento de pagamento confirmado. A
