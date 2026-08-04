@@ -382,7 +382,7 @@ const AppointmentConfirmationPage = () => {
           {/* Sidebar Column: Payment & Contact */}
           <div className="space-y-6">
             <Card className="bg-white border shadow-md h-fit overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-brand-50 to-brand-50 border-b">
+              <CardHeader className="bg-brand-50 border-b">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-primary" /> Pagamento
                 </CardTitle>

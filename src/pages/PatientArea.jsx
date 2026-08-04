@@ -62,9 +62,12 @@ const useCountdown = (targetDate) => {
 const NextAppointmentCard = ({ appointment }) => {
   const countdown = useCountdown(appointment?.horario_inicio);
 
+  // Cartão branco como o resto do painel. Antes era um "degradê" de brand-50
+  // para brand-50 — cor chapada a 2 pontos de distância do bg-slate-100 da
+  // página, ou seja, o cartão sumia no fundo.
   if (!appointment) {
     return (
-      <div className="bg-gradient-to-br from-brand-50 to-brand-50 rounded-2xl border border-brand-100 p-6 mb-6">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
@@ -101,9 +104,13 @@ const NextAppointmentCard = ({ appointment }) => {
   });
 
   return (
-    <div className="bg-gradient-to-br from-primary/5 to-brand-400/10 rounded-2xl border border-primary/20 p-6 mb-6 relative overflow-hidden">
+    // O destaque da próxima consulta é o cartão mais importante da tela e
+    // precisa se separar do fundo. As transparências anteriores (primary/5 e
+    // brand-400/10) davam um véu quase imperceptível sobre o cinza da página;
+    // agora é uma superfície branca com borda na cor da marca.
+    <div className="bg-white rounded-2xl border border-brand-200 shadow-sm p-6 mb-6 relative overflow-hidden">
       {/* Decoração */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-12 translate-x-12" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-full -translate-y-12 translate-x-12" />
 
       <div className="flex flex-wrap items-start justify-between gap-4 relative z-10">
         <div>
@@ -118,11 +125,11 @@ const NextAppointmentCard = ({ appointment }) => {
             {appointment.medicos?.specialty}
           </p>
           <div className="flex items-center gap-3 mt-3 text-sm text-slate-700">
-            <span className="flex items-center gap-1.5 bg-white/70 rounded-full px-3 py-1 border border-white/80">
+            <span className="flex items-center gap-1.5 bg-brand-50 rounded-full px-3 py-1 border border-brand-100">
               <Calendar className="w-3.5 h-3.5 text-primary" />
               {formattedDate}
             </span>
-            <span className="flex items-center gap-1.5 bg-white/70 rounded-full px-3 py-1 border border-white/80">
+            <span className="flex items-center gap-1.5 bg-brand-50 rounded-full px-3 py-1 border border-brand-100">
               <Clock className="w-3.5 h-3.5 text-primary" />
               {formattedTime}
             </span>
@@ -132,7 +139,7 @@ const NextAppointmentCard = ({ appointment }) => {
         {/* Countdown / Botão entrar */}
         <div className="flex flex-col items-end gap-3">
           {countdown && !canEnter && (
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-3 text-center">
+            <div className="bg-slate-50 rounded-xl border border-slate-200 px-4 py-3 text-center">
               <p className="text-xs text-muted-foreground mb-1">Começa em</p>
               <div className="flex items-center gap-1.5">
                 {countdown.hours > 0 && (

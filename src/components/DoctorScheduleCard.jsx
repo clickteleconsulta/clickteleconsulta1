@@ -345,7 +345,7 @@ export function DoctorScheduleCard({
               <div className="flex items-center gap-3.5">
                   <Avatar className="w-[72px] h-[72px] shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
                       <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-full object-cover" />
-                      <AvatarFallback className="bg-gradient-to-br from-brand-400 to-brand-400 text-white rounded-full"><User size={30} /></AvatarFallback>
+                      <AvatarFallback className="bg-brand-400 text-white rounded-full"><User size={30} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
