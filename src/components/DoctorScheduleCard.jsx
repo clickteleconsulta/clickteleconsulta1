@@ -386,24 +386,22 @@ export function DoctorScheduleCard({
                               </span>
                               <span className="shrink-0 inline-flex items-center gap-1.5 translate-y-[1px]">
                                   <VerifiedSeal className="w-[15px] h-[15px]" />
-                                  {/* Disponibilidade no dia: bolinha verde dentro de um
-                                      halo claro, do mesmo diâmetro do selo — os dois lêem
-                                      como um par de indicadores, e o halo dá à bolinha um
-                                      contorno que sozinha ela não tinha sobre o branco.
-
+                                  {/* Disponibilidade no dia: só o ponto verde, sem halo.
                                       Sem piscar: o pulso competia com o preço pela atenção.
                                       Verde de sucesso da interface, não o jade da marca.
                                       Só aparece depois que a agenda carregou; enquanto
-                                      carrega, a ausência não significa indisponível. */}
+                                      carrega, a ausência não significa indisponível.
+
+                                      O alinhamento vem do flex do pai (items-center), não
+                                      de vertical-align: um ponto solto no fluxo inline
+                                      assentaria na linha de base e ficaria abaixo do selo. */}
                                   {!loadingSlots && disponivelHoje && (
                                       <span
-                                          className="inline-flex items-center justify-center w-[15px] h-[15px] rounded-full bg-green-100 ring-1 ring-inset ring-green-300"
+                                          className="w-2 h-2 rounded-full bg-green-500"
                                           role="img"
                                           aria-label="Disponível hoje"
                                           title="Disponível hoje"
-                                      >
-                                          <span className="w-[7px] h-[7px] rounded-full bg-green-500" />
-                                      </span>
+                                      />
                                   )}
                               </span>
                           </h3>
