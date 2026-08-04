@@ -46,6 +46,12 @@ DESTINO = {
     'blog.svg':        JADE,
     'quem-somos.svg':  JADE,
     'sem-dados.svg':   JADE,
+
+    # Telas de acesso: cada público entra por uma porta de cor diferente, para a
+    # pessoa saber num relance se está no lado certo. O jade aqui é ILUSTRAÇÃO,
+    # não interface — segue proibido em botão, link e estado.
+    'acesso-cliente.svg':      COBALTO,
+    'acesso-profissional.svg': JADE,
 }
 
 

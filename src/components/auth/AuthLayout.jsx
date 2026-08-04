@@ -1,13 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
-import { Stethoscope, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
-import { BRAND } from '@/config/brand';
+import { CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
 
-// Painel de marca por público — o lado esquerdo (desktop) muda conforme cliente/profissional.
+/**
+ * Telas de acesso — cliente e profissional.
+ *
+ * O painel da esquerda era um bloco chapado na cor da marca, com texto branco,
+ * ícones dentro de caixas translúcidas e dois borrões desfocados no fundo. Era
+ * muito peso visual para uma tela cujo único trabalho é sair da frente: quem
+ * chega aqui quer entrar, não ler um anúncio.
+ *
+ * Agora o peso vai para a ILUSTRAÇÃO e o resto recua. Fundo claro, texto em
+ * tinta, ícones soltos sem caixa. A cor forte sobrou só onde decide algo — o
+ * botão de enviar.
+ *
+ * Cada público tem sua arte E sua cor: cliente em cobalto, profissional em
+ * jade. É o que faz a pessoa perceber num relance se está na porta certa, sem
+ * precisar ler o cabeçalho. (A cor vive no SVG; ver tools/recolorir-ilustracoes.py.)
+ */
 const PANELS = {
     cliente: {
-        eyebrow: null,
+        arte: '/ilustra/acesso-cliente.svg',
         title: 'Sua consulta marcada em minutos.',
         subtitle: 'Marketplace de agendamento: escolha o médico e agende. O atendimento é feito pelo próprio profissional.',
         features: [
@@ -17,6 +31,7 @@ const PANELS = {
         ],
     },
     profissional: {
+        arte: '/ilustra/acesso-profissional.svg',
         eyebrow: 'Portal do Parceiro',
         title: 'Receba agendamentos para seus atendimentos por telemedicina.',
         subtitle: 'Seja parceiro do nosso marketplace de agendamentos: você conduz o atendimento e a plataforma cuida do agendamento e do pagamento.',
@@ -28,59 +43,76 @@ const PANELS = {
     },
 };
 
-// Layout compartilhado das telas de acesso: painel de marca à esquerda (desktop),
-// formulário à direita. No mobile, mostra só o formulário com o logo no topo.
 const AuthLayout = ({ variant = 'cliente', children }) => {
     const p = PANELS[variant] || PANELS.cliente;
 
     return (
-        <div className="w-full max-w-5xl mx-auto flex rounded-lg overflow-hidden shadow-xl border border-gray-100 bg-white min-h-[560px]">
-            {/* Painel de marca (desktop) */}
-            <div
-                className="hidden lg:flex lg:w-[45%] relative overflow-hidden flex-col justify-between p-10 text-white"
-                style={{ background: BRAND.color }}
-            >
-                <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
-                <div className="absolute -bottom-28 -left-16 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
+        // `items-stretch` e não `min-h` fixo: a coluna do formulário cresce com o
+        // cadastro (que tem muito mais campos que o login) e o painel acompanha,
+        // em vez de sobrar espaço vazio numa tela e faltar na outra.
+        <div className="w-full max-w-5xl mx-auto grid lg:grid-cols-2 items-stretch rounded-lg overflow-hidden border border-slate-200 bg-white shadow-sm">
 
-                <Link to="/" className="relative inline-flex items-center w-fit">
-                    {/* Sobre a cor da marca o logo vai todo em branco. */}
-                    <Wordmark size={TAMANHOS.destaque} ink="#ffffff" dark />
+            {/* Painel de marca — desktop */}
+            <div className="hidden lg:flex flex-col justify-between gap-8 p-10 bg-slate-50/70 border-r border-slate-200">
+                <Link to="/" className="inline-flex w-fit">
+                    <Wordmark size={TAMANHOS.destaque} />
                 </Link>
 
-                <div className="relative space-y-5 max-w-sm">
+                <div>
+                    {/* A arte é decorativa: tudo que ela diz está escrito ao lado. */}
+                    <img
+                        src={p.arte}
+                        alt=""
+                        aria-hidden="true"
+                        className="w-full max-w-[260px] mx-auto mb-9 select-none pointer-events-none"
+                    />
+
                     {p.eyebrow && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-semibold">
-                            <Stethoscope className="w-3.5 h-3.5" /> {p.eyebrow}
+                        <span className="block text-[11px] font-bold uppercase tracking-[0.14em] text-brand-600 mb-2">
+                            {p.eyebrow}
                         </span>
                     )}
-                    <h2 className="text-3xl font-bold leading-tight tracking-tight">
+                    <h2 className="text-[26px] leading-[1.2] font-extrabold text-slate-900 tracking-tight">
                         {p.title}
                     </h2>
-                    <p className="text-white/85 text-sm leading-relaxed">{p.subtitle}</p>
-                    <ul className="space-y-3 pt-1">
-                        {p.features.map((f, i) => (
-                            <li key={i} className="flex items-center gap-3">
-                                <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/15 shrink-0">
-                                    <f.icon className="w-5 h-5" />
-                                </span>
-                                <span className="text-sm text-white/90">{f.label}</span>
+                    <p className="text-sm text-slate-500 leading-relaxed mt-3">{p.subtitle}</p>
+
+                    {/* Ícones soltos, sem caixa: a caixa translúcida do desenho
+                        antigo criava três blocos que competiam com o texto. */}
+                    <ul className="space-y-3 mt-7">
+                        {p.features.map((f) => (
+                            <li key={f.label} className="flex items-start gap-3">
+                                <f.icon className="w-[18px] h-[18px] text-brand-600 shrink-0 mt-0.5" />
+                                <span className="text-sm text-slate-600 leading-snug">{f.label}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                <div className="relative flex items-center gap-2 text-xs text-white/70">
-                    <ShieldCheck className="w-4 h-4" /> Conexão segura · Dados protegidos (LGPD)
-                </div>
+                <p className="text-xs text-slate-400">Proteção LGPD</p>
             </div>
 
             {/* Formulário */}
-            <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-10 py-10 bg-white">
-                <Link to="/" className="lg:hidden inline-flex items-center mb-6">
-                    <Wordmark size={TAMANHOS.destaque} />
-                </Link>
-                <div className="w-full max-w-[400px]">
+            <div className="flex flex-col justify-center px-5 sm:px-10 py-10">
+                {/* No celular o painel da esquerda não existe, e sem isto a tela
+                    ficava sendo dois campos num fundo branco. A arte volta em
+                    tamanho pequeno — o suficiente para a tela ter identidade sem
+                    empurrar o formulário de cadastro, que é longo, para baixo. */}
+                <div className="lg:hidden flex flex-col items-center mb-8">
+                    <Link to="/" className="inline-flex">
+                        <Wordmark size={TAMANHOS.destaque} />
+                    </Link>
+                    <img
+                        src={p.arte}
+                        alt=""
+                        aria-hidden="true"
+                        className="w-full max-w-[150px] mt-6 select-none pointer-events-none"
+                    />
+                </div>
+                {/* 360 e não 400: campo largo demais faz o olho percorrer uma
+                    linha longa para escrever um e-mail curto, e a coluna fica
+                    parecendo um formulário de cadastro completo mesmo no login. */}
+                <div className="w-full max-w-[360px] mx-auto">
                     {children}
                 </div>
             </div>

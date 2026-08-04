@@ -25,7 +25,7 @@ const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) 
     onAccept={(val) => onChange({ target: { name: props.name, value: val } })}
     overwrite
     className={cn(
-      "flex h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-100 focus-visible:border-brand-500 disabled:cursor-not-allowed disabled:opacity-50 text-gray-900",
+      "flex h-11 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-100 focus-visible:border-brand-500 disabled:cursor-not-allowed disabled:opacity-50 text-gray-900",
       props.className
     )}
     placeholder={props.placeholder}
@@ -288,7 +288,7 @@ const AuthPage = ({
                                 placeholder="Nome completo"
                                 aria-label="Nome completo"
                                 autoComplete="name"
-                                className="h-11 pl-4 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-100"
+                                className="h-11 pl-4 rounded-md border-gray-300 focus:border-brand-500 focus:ring-brand-100"
                            />
                         </div>
 
@@ -313,7 +313,7 @@ const AuthPage = ({
                                 aria-label="Data de nascimento"
                                 autoComplete="bday"
                                 max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-                                className="h-11 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-100 text-gray-500"
+                                className="h-11 rounded-md border-gray-300 focus:border-brand-500 focus:ring-brand-100 text-gray-500"
                             />
                         </div>
 
@@ -336,7 +336,7 @@ const AuthPage = ({
                                 onChange={e => setSexo(e.target.value)}
                                 required
                                 aria-label="Sexo"
-                                className={`h-11 px-3 rounded-lg border border-gray-300 bg-white text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none ${sexo ? 'text-gray-800' : 'text-gray-400'}`}
+                                className={`h-11 px-3 rounded-md border border-gray-300 bg-white text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none ${sexo ? 'text-gray-800' : 'text-gray-400'}`}
                             >
                                 <option value="" disabled>Sexo</option>
                                 <option value="masculino">Masculino</option>
@@ -359,7 +359,7 @@ const AuthPage = ({
                             aria-label="E-mail"
                             autoComplete="email"
                             inputMode="email"
-                            className="h-11 pl-11 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
+                            className="h-11 pl-11 rounded-md border-gray-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
                           />
                         </div>
 
@@ -374,7 +374,7 @@ const AuthPage = ({
                             required
                             aria-label="Senha"
                             autoComplete={isLogin ? 'current-password' : 'new-password'}
-                            className="h-11 pl-11 pr-11 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
+                            className="h-11 pl-11 pr-11 rounded-md border-gray-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 text-gray-900 transition-all"
                           />
                           <button
                             type="button"
@@ -433,7 +433,7 @@ const AuthPage = ({
 
                     <Button
                         type="submit"
-                        className="w-full h-11 text-base font-semibold bg-brand-600 hover:from-brand-800 hover:to-brand-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
+                        className="w-full h-11 text-base font-semibold bg-brand-600 hover:bg-brand-700 text-white mt-2"
                         disabled={isLoading || (!isLogin && !isDoctor && !acceptedTerms) || (TURNSTILE_ENABLED && !captchaToken)}
                     >
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : (isLogin ? 'Entrar' : 'Cadastrar')} 
