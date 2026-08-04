@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Wordmark from '@/components/Wordmark';
+import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { Stethoscope, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
 
 // Painel de marca por público — o lado esquerdo (desktop) muda conforme cliente/profissional.
@@ -44,7 +44,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
 
                 <Link to="/" className="relative inline-flex items-center w-fit">
                     {/* Sobre a cor da marca o logo vai todo em branco. */}
-                    <Wordmark size={26} ink="#ffffff" dark />
+                    <Wordmark size={TAMANHOS.destaque} ink="#ffffff" dark />
                 </Link>
 
                 <div className="relative space-y-5 max-w-sm">
@@ -77,7 +77,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
             {/* Formulário */}
             <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-10 py-10 bg-white">
                 <Link to="/" className="lg:hidden inline-flex items-center mb-6">
-                    <Wordmark size={26} />
+                    <Wordmark size={TAMANHOS.destaque} />
                 </Link>
                 <div className="w-full max-w-[400px]">
                     {children}

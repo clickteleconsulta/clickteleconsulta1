@@ -17,6 +17,10 @@ export function gerarGuiaPdf({
   const W = doc.internal.pageSize.getWidth();
   const M = 48;
   const COBALTO = [59, 91, 165];
+  // Sobre a faixa cobalto o jade escurece e some, como em qualquer fundo escuro:
+  // valem as mesmas cores da variante `dark` do <Wordmark />.
+  const JADE_CLARO = [61, 220, 151];
+  const COBALTO_CLARO = [159, 180, 222];
   const SLATE = [71, 85, 105];
   const DARK = [15, 23, 42];
 
@@ -24,23 +28,40 @@ export function gerarGuiaPdf({
   doc.setFillColor(...COBALTO);
   doc.rect(0, 0, W, 96, 'F');
 
-  // Ícone da marca invertido: quadrado branco com a cápsula inclinada em cobalto.
-  // Uma cápsula é geometricamente um traço grosso de pontas redondas — desenhá-la
-  // assim é o que permite inclinar sem precisar de matriz de transformação.
+  // Ícone da marca invertido: quadrado branco com a cruz em cobalto. É o mesmo
+  // desenho do <Logo /> e do favicon — só a cruz irradiada, nas proporções do
+  // glifo de 24 unidades reescaladas para os 40 pt do quadrado.
+  const cruz = (x, y, lado, cor) => {
+    const u = lado / 24; // uma unidade do glifo
+    doc.setFillColor(...cor);
+    doc.roundedRect(x + 9.5 * u, y + 4 * u, 5 * u, 16 * u, 2.5 * u, 2.5 * u, 'F');
+    doc.roundedRect(x + 4 * u, y + 9.5 * u, 16 * u, 5 * u, 2.5 * u, 2.5 * u, 'F');
+    // Os quatro pontos das diagonais, nas posições que o SVG produz após girar.
+    const d = 5.6 * u;
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => {
+      doc.circle(x + 12 * u + sx * d, y + 12 * u + sy * d, 1.5 * u, 'F');
+    });
+  };
+
   doc.setFillColor(255, 255, 255);
   doc.roundedRect(M, 28, 40, 40, 9, 9, 'F');
-  doc.setDrawColor(...COBALTO);
-  doc.setLineWidth(13);
-  doc.setLineCap('round');
-  doc.line(M + 7.9, 52.9, M + 32.1, 43.1);
+  cruz(M + 5, 33, 30, COBALTO);
 
+  // Wordmark: avi em branco, cruz em jade, Doc em cobalto claro. As mesmas três
+  // partes do <Wordmark />, para o PDF assinar igual ao site.
   const tx = M + 54;
-  doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
-  doc.text(BRAND.name, tx, 46);
+  doc.setTextColor(255, 255, 255);
+  doc.text('avi', tx, 46);
+  const larguraAvi = doc.getTextWidth('avi');
+  cruz(tx + larguraAvi + 3, 30, 15, JADE_CLARO);
+  doc.setTextColor(...COBALTO_CLARO);
+  doc.text('Doc', tx + larguraAvi + 21, 46);
+
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
+  doc.setTextColor(255, 255, 255);
   doc.text('Guia de Agendamento de Teleconsulta', tx, 68);
 
   // Protocolo

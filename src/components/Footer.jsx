@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Stethoscope, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Wordmark from '@/components/Wordmark';
+import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { BRAND, EMPRESA } from '@/config/brand';
 
 const Footer = () => {
@@ -10,19 +10,17 @@ const Footer = () => {
 
   return (
     <footer className="bg-brand-50 border-t border-slate-200 mt-auto">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Marca */}
           <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <Link to="/" className="flex items-center gap-2">
-              {/* Rodapé usa a versão sem acento no texto: o nome inteiro em
-                  tinta sobrevive a impressão de uma cor e a corpo pequeno. */}
-              <Wordmark size={25} accent={false} />
+              <Wordmark size={TAMANHOS.padrao} />
             </Link>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
+            <p className="text-[15px] text-slate-500 leading-relaxed max-w-xs">
               Democratizar o acesso à saúde: agende sua consulta sem deslocamento, sem fila e com preço acessível.
             </p>
-            <Link to="/acesso-profissional" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors group">
+            <Link to="/acesso-profissional" className="inline-flex items-center gap-1.5 text-[15px] font-medium text-slate-600 hover:text-brand-600 transition-colors group">
               <Stethoscope className="w-4 h-4 text-brand-500" /> Acesso Sistema Profissionais
               <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </Link>
@@ -30,30 +28,30 @@ const Footer = () => {
 
           {/* Legal */}
           <div className="space-y-4">
-            <p className="font-semibold text-slate-900 text-sm">Legal</p>
+            <p className="font-semibold text-slate-900 text-[15px]">Legal</p>
             <nav className="flex flex-col gap-2.5">
-              <Link to="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Termos de Serviço</Link>
-              <Link to="/legal?doc=privacy_policy" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Política de Privacidade (LGPD)</Link>
+              <Link to="/legal?doc=terms_of_service" target="_blank" rel="noopener noreferrer" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Termos de Serviço</Link>
+              <Link to="/legal?doc=privacy_policy" target="_blank" rel="noopener noreferrer" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Política de Privacidade (LGPD)</Link>
             </nav>
           </div>
 
           {/* Acesso */}
           <div className="space-y-4">
-            <p className="font-semibold text-slate-900 text-sm">Acesso</p>
+            <p className="font-semibold text-slate-900 text-[15px]">Acesso</p>
             <nav className="flex flex-col gap-2.5">
-              <Link to="/agendamentos" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Agendar Consulta</Link>
-              <Link to="/quem-somos" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Quem somos</Link>
-              <Link to="/como-funciona" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Como funciona</Link>
-              <Link to="/perguntas-frequentes" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Perguntas frequentes</Link>
-              <Link to="/blog" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Blog</Link>
-              <Link to="/acesso-cliente" className="text-sm text-slate-500 hover:text-brand-600 transition-colors">Entrar</Link>
+              <Link to="/agendamentos" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Agendar Consulta</Link>
+              <Link to="/quem-somos" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Quem somos</Link>
+              <Link to="/como-funciona" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Como funciona</Link>
+              <Link to="/perguntas-frequentes" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Perguntas frequentes</Link>
+              <Link to="/blog" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Blog</Link>
+              <Link to="/acesso-cliente" className="text-[15px] text-slate-500 hover:text-brand-600 transition-colors">Entrar</Link>
             </nav>
           </div>
 
           {/* Contato */}
           <div className="space-y-4">
-            <p className="font-semibold text-slate-900 text-sm">Contato e Suporte</p>
-            <div className="flex flex-col gap-1.5 text-sm text-slate-500">
+            <p className="font-semibold text-slate-900 text-[15px]">Contato e Suporte</p>
+            <div className="flex flex-col gap-1.5 text-[15px] text-slate-500">
               <a href={`mailto:${BRAND.emails.suporte}`} className="hover:text-brand-600 transition-colors break-all">{BRAND.emails.suporte}</a>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -64,7 +62,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-slate-200 space-y-2 text-xs text-slate-400">
+        <div className="mt-10 pt-6 border-t border-slate-200 space-y-2.5 text-[13px] text-slate-400">
           <p className="leading-relaxed">
             A {BRAND.name} é um <strong className="text-slate-500">marketplace de agendamentos</strong>: fazemos apenas a intermediação do agendamento e do pagamento entre pacientes e médicos. <strong className="text-slate-500">Não somos uma plataforma de teleconsulta</strong> — a teleconsulta e o ato médico são de responsabilidade exclusiva do profissional que realiza o atendimento. Pague somente quando usar, sem assinaturas ou mensalidades; não trabalhamos com planos de saúde, apenas atendimentos particulares avulsos.
           </p>

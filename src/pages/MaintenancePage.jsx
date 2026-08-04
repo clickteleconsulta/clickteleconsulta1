@@ -2,7 +2,7 @@ import React from 'react';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { BrandCross } from '@/components/Logo';
-import Wordmark from '@/components/Wordmark';
+import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 
 const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo melhor. Voltamos em instantes.';
 
@@ -21,7 +21,7 @@ const MaintenancePage = ({ message }) => (
       </div>
 
       <div className="flex justify-center mb-4">
-        <Wordmark size={26} />
+        <Wordmark size={TAMANHOS.destaque} />
       </div>
       <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-4">
         Voltamos já&nbsp;já

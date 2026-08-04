@@ -22,20 +22,33 @@ const STACK =
  * consciente, pelo raciocínio de que, sendo o único verde da marca e cercado
  * pelo cobalto, o contexto separa as duas.
  *
+ * **A marca é uma só.** Não há versão monocromática nem variante por contexto:
+ * as três cores aparecem sempre, do cabeçalho ao rodapé, do PDF ao avatar. A
+ * única troca permitida é a de fundo escuro, e ela existe porque o jade some
+ * sobre preto — não é uma segunda marca, é a mesma com a luz corrigida.
+ *
  * - `size` é o corpo da fonte em px; todo o resto é proporcional, inclusive qual
- *   dos dois desenhos da cruz entra (ver Logo.jsx).
- * - `dark` inverte para fundo escuro: o verde escurece demais e clareia, o
- *   cobalto também.
- * - `accent={false}` escreve tudo em tinta, cruz inclusive. É a versão de rodapé
- *   e de documento: nada depende de cor para ser lido, então sobrevive a
- *   impressão de uma cor, carimbo e fotocópia.
+ *   dos dois desenhos da cruz entra (ver Logo.jsx). Use as constantes de
+ *   `TAMANHOS` em vez de números soltos.
+ * - `dark` inverte para fundo escuro.
  *
  * Tamanho mínimo: 14 px. Abaixo disso use o <Logo />.
  */
-const Wordmark = ({ size = 22, ink = '#151a20', dark = false, accent = true, className = '' }) => {
+
+/**
+ * A escala da marca. Existir aqui é o que impede cada tela escolher um número
+ * diferente e a marca aparecer com sete tamanhos pelo site.
+ */
+export const TAMANHOS = {
+  compacto: 24, // barras de painel, onde o espaço vertical é curto
+  padrao: 34,   // cabeçalho e rodapé do site
+  destaque: 40, // telas de entrada, manutenção, páginas de assinatura
+};
+
+const Wordmark = ({ size = TAMANHOS.padrao, ink = '#151a20', dark = false, className = '' }) => {
   const corNome = dark ? '#ffffff' : ink;
-  const corDoc = accent ? (dark ? '#9FB4DE' : BRAND.color) : corNome;
-  const corCruz = accent ? (dark ? BRAND.acentoClaro : BRAND.acento) : corNome;
+  const corDoc = dark ? '#9FB4DE' : BRAND.color;
+  const corCruz = dark ? BRAND.acentoClaro : BRAND.acento;
 
   return (
     // `inline-flex` vai na classe, não no style, para o chamador conseguir

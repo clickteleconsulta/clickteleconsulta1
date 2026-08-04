@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BRAND } from '@/config/brand';
 import Logo from '@/components/Logo';
-import Wordmark from '@/components/Wordmark';
+import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -31,7 +31,7 @@ const DoctorAreaHeader = () => {
           {/* Brand */}
           <div className="flex items-center gap-3">
              <Logo className="w-9 h-9 md:hidden" />
-             <Wordmark size={24} className="hidden md:inline-flex" />
+             <Wordmark size={TAMANHOS.compacto} className="hidden md:inline-flex" />
           </div>
 
           {/* Right Actions */}
