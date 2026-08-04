@@ -20,6 +20,7 @@ import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
 import { TeleconsultaBadge } from '@/components/TeleconsultaBadge';
 import Estrelas from '@/components/Estrelas';
+import { doctorPath } from '@/lib/doctorSlug';
 import { BRAND } from '@/config/brand';
 import { Skeleton } from './ui/skeleton';
 
@@ -506,7 +507,7 @@ export function DoctorScheduleCard({
                       <AvatarFallback className="bg-brand-400 text-white rounded-full"><User size={30} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                      <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
+                      <Link to={!isFallback ? doctorPath(doctor) : '#'} className={cn("block", !isFallback && "hover:underline")}>
                           <NomeComSelos
                               nome={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
                               mostrarPonto={!loadingSlots && disponivelHoje}
@@ -515,7 +516,7 @@ export function DoctorScheduleCard({
 
                       {doctor?.reviewCount > 0 && (
                           <Link
-                              to={!isFallback ? `/medico/${doctor.id}#avaliacoes` : '#'}
+                              to={!isFallback ? `${doctorPath(doctor)}#avaliacoes` : '#'}
                               className="flex items-center gap-1 mt-1 w-fit group"
                               title="Ver avaliações"
                               aria-label={`Nota ${doctor.rating.toFixed(1)} de 5, ${doctor.reviewCount} avaliações`}

@@ -7,6 +7,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { patientPriceFromRepasse } from '@/lib/price';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { nextAvailableSlotMs, temHorarioLivreNoDia } from '@/lib/doctorAvailability';
+import { doctorPath } from '@/lib/doctorSlug';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { Loader2, Frown, Edit, Search, Filter, X } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -123,7 +124,13 @@ const AppointmentsPage = () => {
   const fetchPublicDoctors = useCallback(async () => {
     const { data: publicDoctors, error: fetchError } = await supabase
       .from('medicos')
-      .select(`${PUBLIC_DOCTOR_COLUMNS}, agenda_medico(*), procedimentos(*)`)
+      // Colunas nomeadas em vez de `(*)`: a agenda e os procedimentos carregam
+      // campos que esta tela não usa, e vinham em toda listagem.
+      .select(
+        `${PUBLIC_DOCTOR_COLUMNS},`
+        + ' agenda_medico(dia_semana, status, hora_inicio, hora_fim, intervalo_em_minutos),'
+        + ' procedimentos(principal, preco)'
+      )
       .eq('is_public', true)
       .eq('is_active', true)
       .order('created_at', { ascending: true });
@@ -201,7 +208,14 @@ const AppointmentsPage = () => {
     const processedDoctors = (publicDoctors || []).map((doc, indice) => {
       const taxaPercentual = doc.payment_settings?.platform_fee_percent || 0;
       const mainProc = doc.procedimentos?.find(p => p.principal);
-      const precoRepasse = mainProc ? Number(mainProc.preco) : (Number(doc.price_in_cents) / 100 || 0);
+      // Sem cair em medicos.price_in_cents. Essa coluna é legado: ninguém no
+      // código escreve nela, hoje está NULA em quatro dos cinco médicos e
+      // desatualizada no quinto. Como fallback ela era uma armadilha — um médico
+      // que perdesse o procedimento principal passaria a ser exibido por
+      // R$ 129,00 (valor velho) ou por R$ 0,00 (nulo), e no segundo caso daria
+      // para agendar de graça. Sem preço, o médico não é vendável: ver o filtro
+      // logo abaixo.
+      const precoRepasse = mainProc ? Number(mainProc.preco) : 0;
       // Preço paciente: aplica a taxa e arredonda para cima ao próximo R$ 0,50 (sem valor quebrado).
       const precoFinal = patientPriceFromRepasse(precoRepasse, taxaPercentual);
       newDoctorPrices[doc.id] = precoFinal;
@@ -228,8 +242,20 @@ const AppointmentsPage = () => {
       d.nextSlotMs = nextAvailableSlotMs(d.agenda_medico, bookedByDoctor[d.id], blocksByDoctor[d.id]);
     });
 
+    // Médico sem preço não entra na vitrine. Não é filtro estético: sem preço o
+    // card mostraria R$ 0,00 e o checkout abriria uma cobrança de zero. Fica no
+    // console para quem for investigar, porque é falha de cadastro e não do
+    // paciente.
+    const semPreco = processedDoctors.filter((d) => !(d.price_in_cents > 0));
+    if (semPreco.length) {
+      console.warn(
+        '[agendamentos] Médicos ocultos por não terem procedimento principal com preço:',
+        semPreco.map((d) => d.public_name || d.name || d.id),
+      );
+    }
+
     setDoctorPrices(newDoctorPrices);
-    return processedDoctors;
+    return processedDoctors.filter((d) => d.price_in_cents > 0);
   }, []);
 
   const { execute: loadData, status, value: doctors, error: loadError } = useAsync(fetchPublicDoctors, true);
@@ -285,21 +311,15 @@ const AppointmentsPage = () => {
     }
   };
 
+  // Sem toast: a lista muda à vista e a contagem logo acima dela já diz quantos
+  // sobraram — e agora é anunciada por aria-live a quem usa leitor de tela. Um
+  // aviso flutuante por cima disso era ruído, e ainda tapava o primeiro card no
+  // celular.
   const handleSearch = () => {
     setActiveFilters({
       specialty: selectedSpecialty,
       date: selectedDate,
       priceSort: priceSort
-    });
-
-    let description = "Resultados atualizados.";
-    if (selectedDate) description = "Mostrando médicos que atendem nesta data.";
-    if (selectedSpecialty) description = `Filtrando por ${selectedSpecialty}.`;
-
-    toast({
-      title: "Filtros aplicados",
-      description: description,
-      variant: "default"
     });
   };
 
@@ -313,7 +333,6 @@ const AppointmentsPage = () => {
       date: '',
       priceSort: ''
     });
-    toast({ title: "Filtros limpos", description: "Mostrando todos os médicos.", variant: "outline" });
   };
 
   const filteredDoctors = useMemo(() => {
@@ -372,6 +391,46 @@ const AppointmentsPage = () => {
 
     return result;
   }, [doctors, activeFilters, doctorPrices, searchName]);
+
+  /**
+   * A listagem descrita para o buscador: quem está na lista, em que ordem e
+   * apontando para o perfil de cada um. Sem isto o Google via só um bloco de
+   * texto e precisava adivinhar que ali há médicos agendáveis.
+   *
+   * Usa a lista JÁ FILTRADA e na ordem exibida — declarar algo diferente do que
+   * a página mostra é justamente o que as diretrizes de dados estruturados
+   * proíbem. O preço fica no `offers` porque é o que o paciente paga, o mesmo
+   * valor impresso no card.
+   */
+  const itemList = useMemo(() => {
+    if (status !== 'success' || filteredDoctors.length === 0) return null;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: `Médicos disponíveis na ${BRAND.name}`,
+      numberOfItems: filteredDoctors.length,
+      itemListElement: filteredDoctors.slice(0, visibleCount).map((d, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Physician',
+          name: d.public_name || d.name,
+          medicalSpecialty: d.specialty || undefined,
+          url: `${BRAND.url}${doctorPath(d)}`,
+          ...(doctorPrices[d.id] > 0 && {
+            offers: {
+              '@type': 'Offer',
+              price: doctorPrices[d.id].toFixed(2),
+              priceCurrency: 'BRL',
+              availability: d.nextSlotMs != null
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+            },
+          }),
+        },
+      })),
+    };
+  }, [status, filteredDoctors, visibleCount, doctorPrices]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -477,6 +536,16 @@ const AppointmentsPage = () => {
         <meta name="description" content="Encontre profissionais disponíveis, compare preços e horários e agende sua teleconsulta em minutos." />
         <link rel="canonical" href={`${BRAND.url}/agendamentos`} />
       </Helmet>
+
+      {/* Helmet à parte, e não um `{cond && <script/>}` dentro do de cima: o
+          react-helmet descarta a lista de filhos inteira quando um deles é
+          `false`. Com a condição aqui fora, ou o bloco existe com o script
+          dentro, ou não existe. */}
+      {itemList && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(itemList)}</script>
+        </Helmet>
+      )}
 
       {/* Fundo de página cinza full-bleed (ocupa a largura toda; barra de busca vai de ponta a ponta) */}
       <div className="mx-[calc(50%-50vw)] w-screen -my-8 bg-slate-100 min-h-[calc(100vh-4rem)]">

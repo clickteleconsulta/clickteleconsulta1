@@ -19,15 +19,12 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import Estrelas from '@/components/Estrelas';
+import { slugify } from '@/lib/doctorSlug';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-// ─── SEO slug helpers ──────────────────────────────────────────────────────────
-const slugify = (str = '') =>
-  str.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+// A regra do slug vive em @/lib/doctorSlug (importado acima): o canonical desta
+// página, o link do card da listagem e o sitemap precisam gerar o MESMO endereço.
 
 // ─── JSON-LD Schema.org Physician ─────────────────────────────────────────────
 const PhysicianSchema = ({ doctor }) => {
