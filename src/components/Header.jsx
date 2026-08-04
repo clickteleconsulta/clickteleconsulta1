@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Logo from '@/components/Logo';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
-import { LogOut, CalendarDays, LayoutDashboard, User } from 'lucide-react';
+import { LogOut, CalendarDays, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { BRAND } from '@/config/brand';
@@ -37,9 +37,15 @@ const Header = () => {
           </Link>
 
           <div className="flex items-center gap-4">
-              <NavLink to="/agendamentos" className={navLinkClasses}>
+              {/* No celular fica só o ícone. Com o botão "Cadastre-se" no lugar
+                  do antigo "Entrar", o trio logo + link + ações passou a
+                  estourar a barra abaixo de ~430 px. Esconder o link inteiro
+                  deixaria o celular sem caminho para a listagem, então o que sai
+                  é o texto — o ícone segue clicável e nomeado para leitor de
+                  tela. */}
+              <NavLink to="/agendamentos" className={navLinkClasses} aria-label="Agendar Consulta" title="Agendar Consulta">
                   <CalendarDays className="w-[18px] h-[18px] shrink-0" />
-                  <span className="whitespace-nowrap">Agendar Consulta</span>
+                  <span className="whitespace-nowrap hidden sm:inline">Agendar Consulta</span>
               </NavLink>
           </div>
 
@@ -55,10 +61,24 @@ const Header = () => {
                 </Button>
               </>
             ) : (
-               <div className="flex items-center gap-2">
-                  <Button onClick={() => navigate('/acesso-cliente')} className="text-[15px] font-normal bg-primary hover:bg-primary/90 rounded-full px-5 sm:px-7 h-11 shrink-0">
-                      <User className="w-[18px] h-[18px] mr-2" />
+               // Hierarquia: quem ainda não tem conta é a maioria de quem chega,
+               // então "Cadastre-se" fica preenchido e "Entrar" vira só texto.
+               // Dois botões com a mesma força competiriam entre si e nenhum
+               // apontaria o caminho.
+               <div className="flex items-center gap-1 sm:gap-2">
+                  {/* Só texto: sem caixa, sem borda e sem fundo no hover. */}
+                  <Button
+                      variant="ghost"
+                      onClick={() => navigate('/acesso-cliente', { state: { authMode: 'login' } })}
+                      className="text-[15px] font-normal text-slate-600 hover:text-brand-700 hover:bg-transparent px-2 sm:px-3 h-11 shrink-0"
+                  >
                       Entrar
+                  </Button>
+                  <Button
+                      onClick={() => navigate('/acesso-cliente', { state: { authMode: 'signup' } })}
+                      className="text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-full px-4 sm:px-7 h-11 shrink-0"
+                  >
+                      Cadastre-se
                   </Button>
               </div>
             )}
