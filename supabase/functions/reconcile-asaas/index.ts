@@ -1,6 +1,10 @@
 // Reconciliação com o Asaas. verify_jwt = false; protegida por header x-reconcile-token.
 // Chamada pelo pg_cron (net.http_post) a cada 15 min. Pega pagamentos que o webhook
 // possa ter perdido: confirma pagos e reflete estornos. Só fetch nativo (sem imports).
+//
+// Também preenche valor_liquido_centavos (o que o Asaas creditou de fato) nas cobranças
+// pagas que estão sem ele — as anteriores à criação da coluna e as que o webhook perdeu.
+// Sem isso o painel de saques mostra "não informado" e a conciliação não fecha.
 
 const ASAAS_ENV = Deno.env.get("ASAAS_ENV") ?? "sandbox";
 const ASAAS_BASE = ASAAS_ENV === "production" ? "https://api.asaas.com/v3" : "https://api-sandbox.asaas.com/v3";
@@ -46,7 +50,14 @@ Deno.serve(async (req: Request) => {
   const token = req.headers.get("x-reconcile-token") ?? "";
   if (!RECONCILE_TOKEN || token !== RECONCILE_TOKEN) return json({ error: "unauthorized" }, 401);
 
-  const summary = { checked: 0, confirmed: 0, refunded: 0, errors: 0 };
+  const summary = { checked: 0, confirmed: 0, refunded: 0, liquidos: 0, errors: 0 };
+
+  // netValue = valor creditado, já descontada a taxa do Asaas. Vem da mesma resposta
+  // da cobrança, sem chamada extra.
+  const liquidoDe = (p: { netValue?: unknown }) => {
+    const n = Number(p?.netValue);
+    return Number.isFinite(n) && n > 0 ? Math.round(n * 100) : null;
+  };
 
   // Candidatos: têm cobrança no Asaas e ainda não estão pagos/estornados. Últimos 5 dias.
   const since = new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString();
@@ -91,6 +102,7 @@ Deno.serve(async (req: Request) => {
           pagamento_status: "pago",
           status: "confirmado",
           pagamento_confirmado_em: new Date().toISOString(),
+          valor_liquido_centavos: liquidoDe(p),
         });
         await logAppt(a.id, "pagamento_confirmado", { asaas_payment_id: a.checkout_session_id, status: p.status, via: "reconcile" });
         summary.confirmed++;
@@ -101,6 +113,27 @@ Deno.serve(async (req: Request) => {
       }
     } catch (_e) {
       summary.errors++;
+    }
+  }
+
+  // Preenche o líquido que falta em cobranças já pagas. Sem recorte de data: as antigas
+  // são justamente as que precisam. O lote é pequeno porque a fila só encolhe — cada
+  // passagem do cron resolve até 50 e nada volta para ela.
+  const semLiquido = await restGet(
+    `agendamentos?pagamento_status=eq.pago&valor_liquido_centavos=is.null&checkout_session_id=not.is.null` +
+    `&select=id,checkout_session_id&limit=50`,
+  );
+  if (Array.isArray(semLiquido)) {
+    for (const a of semLiquido) {
+      try {
+        const p = await asaasGet(`/payments/${a.checkout_session_id}`);
+        const liquido = p ? liquidoDe(p) : null;
+        if (liquido === null) continue;
+        await patchAppt(`id=eq.${a.id}`, { valor_liquido_centavos: liquido });
+        summary.liquidos++;
+      } catch (_e) {
+        summary.errors++;
+      }
     }
   }
 
