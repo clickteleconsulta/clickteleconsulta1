@@ -77,7 +77,7 @@ const NextAppointmentCard = ({ appointment }) => {
             <p className="text-xs text-muted-foreground">Nenhuma consulta agendada</p>
           </div>
         </div>
-        <Button asChild className="rounded-full">
+        <Button asChild>
           <Link to="/paciente/dashboard/agendar">
             <PlusCircle className="w-4 h-4 mr-2" />
             Agendar Primeira Consulta
@@ -165,7 +165,7 @@ const NextAppointmentCard = ({ appointment }) => {
             <Button
               asChild
               size="lg"
-              className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6 animate-pulse shadow-lg shadow-green-500/30"
+              className="bg-green-600 hover:bg-green-700 text-white px-6"
             >
               <Link
                 to={`/call/${appointment.id}`}
@@ -179,7 +179,6 @@ const NextAppointmentCard = ({ appointment }) => {
             <Button
               asChild
               variant="outline"
-              className="rounded-full"
             >
               <Link to="/paciente/dashboard/consultas">
                 Ver detalhes

@@ -291,9 +291,9 @@ const AdminStrategyPage = () => {
     };
 
     const funil = [
-        { label: 'Agendamentos criados', n: m.total, base: m.total, color: 'linear-gradient(90deg,#3B5BA5,#4f83f0)' },
-        { label: 'Pagos', n: m.pagos, base: m.total, color: 'linear-gradient(90deg,#1f8f86,#0d9488)' },
-        { label: 'Atendidos', n: m.atendidos, base: m.total, color: 'linear-gradient(90deg,#14746c,#1f8f86)' },
+        { label: 'Agendamentos criados', n: m.total, base: m.total, color: '#3B5BA5' },
+        { label: 'Pagos', n: m.pagos, base: m.total, color: '#0d9488' },
+        { label: 'Atendidos', n: m.atendidos, base: m.total, color: '#14746c' },
     ];
 
     return (

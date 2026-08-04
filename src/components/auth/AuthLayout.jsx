@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { Stethoscope, CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
+import { BRAND } from '@/config/brand';
 
 // Painel de marca por público — o lado esquerdo (desktop) muda conforme cliente/profissional.
 const PANELS = {
@@ -37,7 +38,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
             {/* Painel de marca (desktop) */}
             <div
                 className="hidden lg:flex lg:w-[45%] relative overflow-hidden flex-col justify-between p-10 text-white"
-                style={{ background: 'linear-gradient(135deg,#3B5BA5 0%,#6B87C4 100%)' }}
+                style={{ background: BRAND.color }}
             >
                 <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
                 <div className="absolute -bottom-28 -left-16 w-80 h-80 rounded-full bg-white/10 blur-3xl" />

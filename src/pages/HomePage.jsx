@@ -276,10 +276,14 @@ const HomePage = () => {
                 aria-hidden="true"
                 className="hidden lg:block w-full h-auto max-h-[220px] object-contain select-none pointer-events-none"
               />
+              {/* Sem `rounded-full` e sem sombra colorida: o botão herda o
+                  `rounded-md` da base (4 px), que é o traço do resto do site.
+                  A sombra em cobalto translúcido era o que sobrava do visual
+                  antigo — vinha junto com a pílula e brigava com o traço fino. */}
               <Button
                 asChild
                 size="lg"
-                className="w-full lg:w-auto rounded-full bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-lg shadow-brand-600/25"
+                className="w-full lg:w-auto bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
               >
                 <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
                   Agendar Consulta <ArrowRight className="w-4 h-4" />
@@ -403,12 +407,12 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════════════════════
           7. CTA FINAL
       ═══════════════════════════════════════════════════════════════════════ */}
-      <section
-        className="relative py-20 overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #141A24 0%, #3B5BA5 100%)',
-        }}
-      >
+      {/* Fundo PRETO CHAPADO. Era um degradê de #141A24 para o cobalto, e ele
+          era o último degradê de fundo do site fora do banner do topo — o único
+          que ficou permitido. O preto usado é o #141A24, que já era a ponta
+          escura desse degradê: o fundo não ganhou cor nova, o degradê é que
+          desabou na cor que ele já tinha de um lado. */}
+      <section className="relative py-20 overflow-hidden" style={{ background: '#141A24' }}>
         {/* Dot grid pattern */}
         <div
           className="absolute inset-0 opacity-[0.06]"
@@ -433,7 +437,7 @@ const HomePage = () => {
             <Button
               asChild
               size="lg"
-              className="rounded-full bg-white text-slate-900 hover:bg-brand-50 px-10 font-display font-bold shadow-xl shadow-black/20 text-base"
+              className="bg-white text-slate-900 hover:bg-brand-50 px-10 font-display font-bold text-base"
             >
               <Link to="/agendamentos" className="flex items-center gap-2">
                 Agendar Consulta <ArrowRight className="w-4 h-4" />

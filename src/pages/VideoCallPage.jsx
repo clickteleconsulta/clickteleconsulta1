@@ -26,7 +26,7 @@ const WaitingRoom = ({ appointment, userRole, onEnterRoom, isEntering }) => {
   const consultaTime = appointment?.data_hora ? new Date(appointment.data_hora) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-brand-800 to-slate-900 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-[#141A24] flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Logo / Marca */}
         <div className="text-center mb-8">
