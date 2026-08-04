@@ -186,7 +186,7 @@ const AttentionPanel = () => {
                     <div className="grid gap-2.5 sm:grid-cols-2">
                         {pending.map((a) => (
                             <Link key={a.key} to={a.to}
-                                className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5">
+                                className="group flex items-center gap-3 rounded-md border border-gray-200 bg-white p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5">
                                 <span className={`flex items-center justify-center w-10 h-10 rounded-lg border shrink-0 ${tones[a.tone]}`}>
                                     <a.icon className="w-5 h-5" />
                                 </span>
@@ -377,7 +377,7 @@ const AdminStrategyPage = () => {
 
                 {/* Evolução mensal — antes só existia um número único por recorte */}
                 {m.serieMensal.length > 1 && (
-                    <div className="mt-4 rounded-xl border bg-white p-4">
+                    <div className="mt-4 rounded-md border bg-white p-4">
                         <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Receita paga por mês</p>
                         <div className="flex items-end gap-3 h-28">
                             {m.serieMensal.map((p) => {
@@ -387,7 +387,7 @@ const AdminStrategyPage = () => {
                                     <div key={p.mes} className="flex-1 flex flex-col items-center justify-end gap-1.5 h-full">
                                         <span className="text-[11px] font-semibold text-gray-700 tabular-nums">{fmtBRL(p.receita)}</span>
                                         <div
-                                            className="w-full rounded-t-md bg-gradient-to-t from-brand-600 to-brand-400 min-h-[4px]"
+                                            className="w-full rounded-t-md bg-brand-600 min-h-[4px]"
                                             style={{ height: `${Math.max(4, (p.receita / maxV) * 100)}%` }}
                                             title={`${mes}/${ano}: ${fmtBRL(p.receita)}`}
                                         />
@@ -416,7 +416,7 @@ const AdminStrategyPage = () => {
             {m.topMedicos.length > 0 && (
                 <div>
                     <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Profissionais que mais faturam · {periodLabel}</p>
-                    <div className="rounded-xl border bg-white divide-y">
+                    <div className="rounded-md border bg-white divide-y">
                         {m.topMedicos.map((d, i) => (
                             <div key={d.id} className="flex items-center gap-3 px-4 py-3">
                                 <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center shrink-0">

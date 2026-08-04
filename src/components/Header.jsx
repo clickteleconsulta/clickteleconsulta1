@@ -20,7 +20,7 @@ const Header = () => {
   };
 
   const navLinkClasses = ({ isActive }) =>
-    `flex items-center gap-2 px-4 py-2 rounded-full text-[15px] font-normal transition-all duration-200 ${
+    `flex items-center gap-2 px-4 py-2 rounded-md text-[15px] font-normal transition-all duration-200 ${
       isActive
         ? 'bg-primary/10 text-primary font-medium'
         : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -76,7 +76,7 @@ const Header = () => {
                   </Button>
                   <Button
                       onClick={() => navigate('/acesso-cliente', { state: { authMode: 'signup' } })}
-                      className="text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-full px-4 sm:px-7 h-11 shrink-0"
+                      className="text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-md px-4 sm:px-7 h-11 shrink-0"
                   >
                       Cadastre-se
                   </Button>

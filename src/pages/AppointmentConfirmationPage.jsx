@@ -408,7 +408,7 @@ const AppointmentConfirmationPage = () => {
                         </div>
                         <Button
                             size="lg"
-                            className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                            className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-md shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0"
                             onClick={handleAsaasPayment}
                             disabled={processingPayment}
                         >
@@ -435,7 +435,7 @@ const AppointmentConfirmationPage = () => {
                 {/* Cabeçalho institucional */}
                 <div className="bg-brand-600 px-10 py-7 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="bg-white/15 rounded-2xl p-2 flex items-center justify-center ring-1 ring-white/30">
+                        <div className="bg-white/15 rounded-lg p-2 flex items-center justify-center ring-1 ring-white/30">
                             <Logo className="w-12 h-12" />
                         </div>
                         <div className="text-white">
@@ -461,7 +461,7 @@ const AppointmentConfirmationPage = () => {
 
                     {/* Consulta + Profissional */}
                     <div className="grid grid-cols-2 gap-6 mb-6">
-                        <div className="rounded-xl border border-gray-200 p-5">
+                        <div className="rounded-md border border-gray-200 p-5">
                             <h2 className="text-xs font-bold uppercase tracking-wider text-brand-800 mb-4 pb-2 border-b border-gray-100">Informações da Consulta</h2>
                             <div className="space-y-3">
                                 <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Data e hora</p><p className="font-bold text-gray-800 text-lg">{shortDate} às {shortTime}</p></div>
@@ -470,7 +470,7 @@ const AppointmentConfirmationPage = () => {
                             </div>
                         </div>
 
-                        <div className="rounded-xl border border-gray-200 p-5">
+                        <div className="rounded-md border border-gray-200 p-5">
                             <h2 className="text-xs font-bold uppercase tracking-wider text-green-700 mb-4 pb-2 border-b border-gray-100">Profissional</h2>
                             <div className="space-y-3">
                                 <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Médico(a)</p><p className="font-bold text-gray-800">{medico?.public_name || medico?.name || 'Não informado'}</p></div>
@@ -486,7 +486,7 @@ const AppointmentConfirmationPage = () => {
                     {/* Paciente */}
                     <div className="mb-6">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Dados do Paciente</h2>
-                        <div className="rounded-xl border border-gray-200 p-5 grid grid-cols-2 gap-4">
+                        <div className="rounded-md border border-gray-200 p-5 grid grid-cols-2 gap-4">
                             <div><p className="text-[11px] text-gray-400 font-semibold uppercase">Nome completo</p><p className="font-medium text-gray-800">{patient?.full_name || 'Não informado'}</p></div>
                             <div><p className="text-[11px] text-gray-400 font-semibold uppercase">CPF</p><p className="font-medium text-gray-800">{patient?.cpf || 'Não informado'}</p></div>
                             <div><p className="text-[11px] text-gray-400 font-semibold uppercase">E-mail</p><p className="font-medium text-gray-800">{patient?.email || 'Não informado'}</p></div>
@@ -497,7 +497,7 @@ const AppointmentConfirmationPage = () => {
                     {/* Pagamento */}
                     <div className="mb-6">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Pagamento</h2>
-                        <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-5">
+                        <div className="flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 p-5">
                             <div>
                                 <p className="text-[11px] text-gray-400 font-semibold uppercase">Valor da consulta</p>
                                 <p className="text-2xl font-black text-gray-800">R$ {((price_in_cents || 0) / 100).toFixed(2).replace('.', ',')}</p>
@@ -510,7 +510,7 @@ const AppointmentConfirmationPage = () => {
                     </div>
 
                     {/* Política de cancelamento */}
-                    <div className="rounded-xl border border-gray-200 p-5">
+                    <div className="rounded-md border border-gray-200 p-5">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Política de Cancelamento e Reembolso</h2>
                         <p className="text-[11px] text-gray-600 leading-relaxed">
                             Cancelamento pelo paciente com <b>2h ou mais</b> de antecedência: reembolso <b>integral (100%)</b>, descontada a taxa de processamento. Com <b>menos de 2h</b>: reembolso de <b>50%</b> (retida a taxa por cancelamento tardio). Em caso de <b>não comparecimento</b> comprovado pelo médico: <b>sem reembolso</b>. Política completa nos Termos de Serviço em {BRAND.domain}.

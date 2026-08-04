@@ -132,7 +132,7 @@ function ProductDetailPage() {
           <ArrowLeft size={16} />
           Go back
         </Link>
-        <div className="text-center text-red-400 p-8 glass-card rounded-2xl">
+        <div className="text-center text-red-400 p-8 glass-card rounded-lg">
           <XCircle className="mx-auto h-16 w-16 mb-4" />
           <p className="mb-6">Error loading product: {error}</p>
         </div>
@@ -160,7 +160,7 @@ function ProductDetailPage() {
           <ArrowLeft size={16} />
           Back to Store
         </Link>
-        <div className="grid md:grid-cols-2 gap-8 glass-card p-8 rounded-2xl">
+        <div className="grid md:grid-cols-2 gap-8 glass-card p-8 rounded-lg">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="relative">
             <div className="relative overflow-hidden rounded-lg shadow-2xl h-96 md:h-[500px]">
               <img
@@ -284,7 +284,7 @@ function ProductDetailPage() {
             </div>
 
             <div className="mt-auto">
-              <Button onClick={handleAddToCart} size="lg" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled={!canAddToCart || !product.purchasable}>
+              <Button onClick={handleAddToCart} size="lg" className="w-full bg-purple-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled={!canAddToCart || !product.purchasable}>
                 <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
               </Button>
 

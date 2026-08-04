@@ -29,7 +29,7 @@ const KPICard = ({ icon: Icon, label, value, sub, color = 'blue', trend }) => {
   return (
     <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
       <CardContent className="p-5 flex items-start gap-4">
-        <div className={`p-3 rounded-xl ${colors[color]}`}>
+        <div className={`p-3 rounded-md ${colors[color]}`}>
           <Icon className="w-5 h-5" />
         </div>
         <div className="flex-1 min-w-0">
@@ -107,7 +107,7 @@ const NextConsultationCard = ({ appt }) => {
         </div>
 
         {countdown !== null && (
-          <div className={`rounded-xl p-3 text-center ${isImminent ? 'bg-green-100' : isPast ? 'bg-gray-100' : 'bg-brand-50'}`}>
+          <div className={`rounded-md p-3 text-center ${isImminent ? 'bg-green-100' : isPast ? 'bg-gray-100' : 'bg-brand-50'}`}>
             {isImminent ? (
               <p className="text-green-700 font-bold text-sm">🟢 Consulta em breve!</p>
             ) : isPast ? (

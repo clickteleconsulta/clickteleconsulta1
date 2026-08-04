@@ -74,7 +74,7 @@ const ProductCard = ({ product, index }) => {
           <div className="p-4">
             <h3 className="text-lg font-bold truncate">{product.title}</h3>
             <p className="text-sm text-gray-300 h-10 overflow-hidden">{product.subtitle || 'Check out this amazing product!'}</p>
-            <Button onClick={handleAddToCart} className="w-full mt-4 bg-gradient-to-r from-brand-500 to-purple-500 hover:from-brand-600 hover:to-purple-600 text-white font-semibold">
+            <Button onClick={handleAddToCart} className="w-full mt-4 bg-brand-500 hover:from-brand-600 hover:to-purple-600 text-white font-semibold">
               <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
             </Button>
           </div>

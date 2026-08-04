@@ -234,7 +234,7 @@ const ChatWindow = ({ conversationId, patientId, doctorId, otherUserName, otherU
                 >
                   <div 
                     className={cn(
-                      "px-4 py-2 rounded-2xl text-sm shadow-sm relative",
+                      "px-4 py-2 rounded-lg text-sm shadow-sm relative",
                       isMe 
                         ? "bg-brand-600 text-white rounded-br-none" 
                         : "bg-white text-gray-800 border border-gray-100 rounded-bl-none"

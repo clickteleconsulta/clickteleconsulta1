@@ -194,7 +194,7 @@ const DoctorInviteSignupPage = () => {
                                         <Input type="password" value={form.confirm} onChange={e => set('confirm', e.target.value)} placeholder="Repita a senha" autoComplete="new-password" />
                                     </div>
                                 </div>
-                                <div className="rounded-xl border border-brand-200 bg-brand-50/50 p-3 space-y-2.5">
+                                <div className="rounded-md border border-brand-200 bg-brand-50/50 p-3 space-y-2.5">
                                     <div className="flex items-center justify-between gap-2">
                                         <span className="flex items-center gap-2 text-xs font-semibold text-slate-700">
                                             <FileText className="w-4 h-4 text-brand-600" /> Termo de Adesão do Médico Parceiro

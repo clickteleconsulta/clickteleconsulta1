@@ -208,7 +208,7 @@ const AdminRefundsPage = () => {
             </div>
 
             <Tabs value={tab} onValueChange={setTab}>
-                <TabsList className="grid w-full grid-cols-2 max-w-sm h-10 p-1 bg-gray-100/80 rounded-xl">
+                <TabsList className="grid w-full grid-cols-2 max-w-sm h-10 p-1 bg-gray-100/80 rounded-md">
                     <TabsTrigger value="pendentes" className="rounded-lg text-sm data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Pendentes {pendentes.length > 0 && `(${pendentes.length})`}</TabsTrigger>
                     <TabsTrigger value="historico" className="rounded-lg text-sm data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Histórico</TabsTrigger>
                 </TabsList>

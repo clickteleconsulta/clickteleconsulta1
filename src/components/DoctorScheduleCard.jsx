@@ -493,7 +493,7 @@ export function DoctorScheduleCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-white rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[800px] mx-auto"
+      className="bg-white rounded-lg border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[800px] mx-auto"
     >
       <div className="flex flex-col md:flex-row">
           <div className="p-4 md:p-5 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
@@ -600,7 +600,7 @@ export function DoctorScheduleCard({
                       aria-controls={`agenda-${doctor?.id}`}
                       aria-label={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
                       title={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
-                      className="md:hidden mt-1 flex items-center justify-center gap-1.5 w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 text-[13.5px] font-semibold active:bg-slate-100 transition-colors"
+                      className="md:hidden mt-1 flex items-center justify-center gap-1.5 w-full h-10 rounded-md border border-slate-200 bg-slate-50 text-slate-600 text-[13.5px] font-semibold active:bg-slate-100 transition-colors"
                   >
                       Horários
                       <ChevronDown className={cn('w-[18px] h-[18px] transition-transform duration-200', agendaAberta && 'rotate-180')} />
@@ -679,7 +679,7 @@ export function DoctorScheduleCard({
                               </div>
                               
                               {scheduleByDay.some(d => d.slots.length > 4) && <div className="mt-3 flex justify-center">
-                                      <button onClick={() => setIsExpanded(!isExpanded)} className="text-[12px] font-semibold text-slate-500 hover:text-slate-700 flex items-center gap-1 transition-colors px-4 py-1.5 rounded-full hover:bg-brand-50 border border-slate-200 group">
+                                      <button onClick={() => setIsExpanded(!isExpanded)} className="text-[12px] font-semibold text-slate-500 hover:text-slate-700 flex items-center gap-1 transition-colors px-4 py-1.5 rounded-md hover:bg-brand-50 border border-slate-200 group">
                                           {isExpanded ? "Ver menos horários" : "Mostrar mais horários"}
                                           <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", isExpanded && "rotate-180")} />
                                       </button>
@@ -697,10 +697,10 @@ export function DoctorScheduleCard({
           aria-modal="true"
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-lg shadow-2xl max-w-sm w-full p-6 text-center animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-brand-50 flex items-center justify-center mb-4">
+            <div className="w-14 h-14 mx-auto rounded-lg bg-brand-50 flex items-center justify-center mb-4">
               <CalendarCheck className="w-7 h-7 text-brand-600" />
             </div>
             <h3 className="text-lg font-bold text-slate-900">Falta pouco para agendar!</h3>

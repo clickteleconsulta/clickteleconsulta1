@@ -99,7 +99,7 @@ const NextSteps = ({ appointment }) => {
         ].map((step, i) => (
           <div
             key={i}
-            className={`flex gap-3 p-3 rounded-xl border text-sm ${step.color}`}
+            className={`flex gap-3 p-3 rounded-md border text-sm ${step.color}`}
           >
             <div className="flex-shrink-0 mt-0.5">{step.icon}</div>
             <div>

@@ -221,7 +221,7 @@ const AdminWithdrawalsPage = () => {
                             placeholder="Buscar por médico..."
                             className="sm:max-w-xs"
                         />
-                        <div className="inline-flex p-1 rounded-xl bg-gray-100 w-fit">
+                        <div className="inline-flex p-1 rounded-md bg-gray-100 w-fit">
                             {[
                                 { v: 'aguardando', l: 'Aguardando' },
                                 { v: 'recebido', l: 'Pagos' },

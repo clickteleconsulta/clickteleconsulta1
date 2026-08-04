@@ -86,7 +86,7 @@ const MessagesPageInternal = ({ currentDoctorId }) => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-140px)] md:h-[calc(100vh-100px)] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="flex h-[calc(100vh-140px)] md:h-[calc(100vh-100px)] bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
             <div className={`w-full md:w-80 border-r border-gray-200 h-full ${selectedContact ? 'hidden md:block' : 'block'}`}>
                 <ChatContactsList 
                     onSelectContact={handleSelectContact}

@@ -147,7 +147,7 @@ const DoctorSubscriptionPage = () => {
             </section>
 
             {/* Payment Method Section - Only show if changes or specific condition */}
-            <section className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+            <section className="bg-gray-50 rounded-lg p-6 sm:p-8 border border-gray-100 space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="bg-primary/10 p-2 rounded-lg text-primary">
                         <AlertTriangle className="w-5 h-5" />

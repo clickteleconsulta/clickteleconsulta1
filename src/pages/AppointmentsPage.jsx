@@ -451,7 +451,7 @@ const AppointmentsPage = () => {
 
     if (status === 'error') {
       return (
-        <div className="text-center py-16 text-muted-foreground bg-white border border-destructive/20 rounded-2xl shadow-sm">
+        <div className="text-center py-16 text-muted-foreground bg-white border border-destructive/20 rounded-lg shadow-sm">
           <Frown className="mx-auto h-12 w-12 text-destructive" />
           <h3 className="mt-4 text-lg font-semibold text-foreground">Erro ao Carregar Médicos</h3>
           <p className="mt-2 text-sm">{loadError.message}</p>
@@ -509,7 +509,7 @@ const AppointmentsPage = () => {
         );
       } else {
         return (
-          <div className="text-center py-16 text-muted-foreground bg-white border border-slate-200 rounded-2xl shadow-sm">
+          <div className="text-center py-16 text-muted-foreground bg-white border border-slate-200 rounded-lg shadow-sm">
             {/* Estado vazio é onde a ilustração mais rende: a tela sem resultado
                 é a mais fria da jornada. */}
             <img src="/ilustra/sem-dados.svg" alt="" aria-hidden="true" className="h-32 w-auto mx-auto mb-2 select-none pointer-events-none" />

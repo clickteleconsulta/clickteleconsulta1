@@ -172,7 +172,7 @@ const DoctorOverview = () => {
                     <CardHeader className="pb-3"><CardTitle className="dashboard-title flex items-center gap-2 text-base"><BellRing className="w-4 h-4 text-amber-600" /> Precisa da sua atenção</CardTitle></CardHeader>
                     <CardContent className="pt-0 grid gap-2.5 sm:grid-cols-2">
                         {pend.map((p) => (
-                            <Link key={p.key} to={p.to} className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5">
+                            <Link key={p.key} to={p.to} className="group flex items-center gap-3 rounded-md border border-gray-200 bg-white p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5">
                                 <span className={`flex items-center justify-center w-10 h-10 rounded-lg border shrink-0 ${toneCls[p.tone]}`}><p.icon className="w-5 h-5" /></span>
                                 <div className="min-w-0 flex-1">
                                     <p className="text-sm font-semibold text-gray-900">{p.label}</p>

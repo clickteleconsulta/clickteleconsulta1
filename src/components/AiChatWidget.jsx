@@ -348,7 +348,7 @@ const AiChatWidget = () => {
                       )}
                     >
                       <div className={cn(
-                        "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm shadow-sm whitespace-pre-wrap break-words",
+                        "max-w-[80%] rounded-lg px-4 py-2.5 text-sm shadow-sm whitespace-pre-wrap break-words",
                         msg.sender === 'user' 
                           ? "bg-primary text-primary-foreground rounded-br-none" 
                           : "bg-white border border-slate-100 text-slate-800 rounded-bl-none"
@@ -370,7 +370,7 @@ const AiChatWidget = () => {
                       animate={{ opacity: 1 }}
                       className="flex justify-start w-full"
                     >
-                      <div className="bg-white border border-slate-100 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex items-center gap-1">
+                      <div className="bg-white border border-slate-100 rounded-lg rounded-bl-none px-4 py-3 shadow-sm flex items-center gap-1">
                         <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                         <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />

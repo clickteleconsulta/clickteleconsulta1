@@ -72,7 +72,7 @@ export function DatePicker({ selectedDate, onDateSelect }) {
                   onClick={() => onDateSelect(dateStr)}
                   variant={isSelected ? "default" : "outline"}
                   className={`
-                    w-full h-24 flex flex-col items-center justify-center p-2 transition-all duration-300 rounded-xl
+                    w-full h-24 flex flex-col items-center justify-center p-2 transition-all duration-300 rounded-md
                     ${isSelected 
                       ? 'bg-primary hover:bg-primary/90 text-white shadow-lg transform scale-105' 
                       : isWeekendDate

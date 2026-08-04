@@ -156,7 +156,7 @@ const TCLEConsentModal = ({
   return (
     <Dialog open={open} onOpenChange={(val) => { if (!isSubmitting) onOpenChange(val); }}>
       <DialogContent
-        className="sm:max-w-[540px] flex flex-col p-0 rounded-2xl overflow-hidden"
+        className="sm:max-w-[540px] flex flex-col p-0 rounded-lg overflow-hidden"
         onInteractOutside={(e) => { e.preventDefault(); }}
       >
         {/* Header */}
@@ -262,7 +262,7 @@ const TCLEConsentModal = ({
           </div>
 
           {/* Checkbox de aceite explícito — CFM obrigatório */}
-          <div className="flex items-start space-x-3 bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-brand-300 transition-colors mb-4">
+          <div className="flex items-start space-x-3 bg-white p-4 rounded-md border-2 border-slate-200 hover:border-brand-300 transition-colors mb-4">
             <Checkbox
               id="tcle-accept"
               checked={checkboxChecked}
@@ -283,7 +283,7 @@ const TCLEConsentModal = ({
           <Button
             onClick={handleAccept}
             disabled={!checkboxChecked || isSubmitting}
-            className={`w-full font-semibold h-12 rounded-xl text-sm transition-all ${
+            className={`w-full font-semibold h-12 rounded-md text-sm transition-all ${
               checkboxChecked && !isSubmitting
                 ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-100 shadow-lg'
                 : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'

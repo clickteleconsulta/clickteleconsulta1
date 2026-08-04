@@ -380,7 +380,7 @@ const AppointmentsControlPage = () => {
 
       {/* Abas: guias a pagar vs. já repassadas (histórico) */}
       <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setCurrentPage(1); }}>
-        <TabsList className="grid w-full grid-cols-2 max-w-md h-10 p-1 bg-gray-100/80 rounded-xl">
+        <TabsList className="grid w-full grid-cols-2 max-w-md h-10 p-1 bg-gray-100/80 rounded-md">
           <TabsTrigger value="ativos" className="rounded-lg text-sm transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Agendamentos</TabsTrigger>
           <TabsTrigger value="historico" className="rounded-lg text-sm transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">Histórico de Agendamentos</TabsTrigger>
         </TabsList>

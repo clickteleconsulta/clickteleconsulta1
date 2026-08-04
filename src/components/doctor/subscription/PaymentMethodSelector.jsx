@@ -44,7 +44,7 @@ const PaymentMethodSelector = ({ selectedMethod, onSelectMethod }) => {
                     <Label
                         htmlFor={method.id}
                         className={cn(
-                            "flex flex-col items-center justify-between rounded-xl border-2 p-4 hover:bg-gray-50 hover:border-gray-300 cursor-pointer transition-all",
+                            "flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-gray-50 hover:border-gray-300 cursor-pointer transition-all",
                             isSelected ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-gray-200 bg-white"
                         )}
                     >

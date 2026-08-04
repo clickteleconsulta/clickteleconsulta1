@@ -167,13 +167,13 @@ const AdminSocialPage = () => {
                     {loading ? (
                         <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
                     ) : posts.length === 0 ? (
-                        <div className="text-center py-10 text-sm text-gray-400 border border-dashed rounded-xl">Nenhum post agendado ainda.</div>
+                        <div className="text-center py-10 text-sm text-gray-400 border border-dashed rounded-md">Nenhum post agendado ainda.</div>
                     ) : (
                         <ul className="space-y-2">
                             {posts.map((p) => {
                                 const st = STATUS[p.status] || STATUS.agendado;
                                 return (
-                                    <li key={p.id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/50">
+                                    <li key={p.id} className="flex items-center gap-3 p-3 rounded-md border border-gray-200 bg-gray-50/50">
                                         {p.image_url ? <img src={p.image_url} alt="" className="h-12 w-12 rounded-lg object-cover border shrink-0" /> : <div className="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center shrink-0"><ImageIcon className="w-5 h-5 text-gray-400" /></div>}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2 flex-wrap">

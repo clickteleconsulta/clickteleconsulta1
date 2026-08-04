@@ -86,7 +86,7 @@ const DoctorAttendanceTools = () => {
     return (
         <div className="space-y-5">
             {/* Aviso */}
-            <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <div className="flex items-start gap-3 rounded-md border border-amber-200 bg-amber-50 p-4">
                 <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div className="text-sm text-amber-900">
                     <p className="font-bold">Atenção</p>
@@ -135,7 +135,7 @@ const DoctorAttendanceTools = () => {
             </Card>
 
             {/* Declaração */}
-            <label className="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50/60 p-4 cursor-pointer">
+            <label className="flex items-start gap-3 rounded-md border border-gray-200 bg-gray-50/60 p-4 cursor-pointer">
                 <Checkbox checked={declaracao} onCheckedChange={(v) => setDeclaracao(!!v)} className="mt-0.5" />
                 <span className="text-xs text-gray-600 leading-relaxed">{DECLARACAO}</span>
             </label>

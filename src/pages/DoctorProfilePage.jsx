@@ -117,7 +117,7 @@ const StarRating = ({ rating, size = 4 }) => (
 );
 
 const ReviewCard = ({ review }) => (
-  <div className="bg-muted/30 p-4 rounded-xl border border-border/50">
+  <div className="bg-muted/30 p-4 rounded-md border border-border/50">
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2">
         <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
@@ -160,7 +160,7 @@ const VisualCalendar = ({ agenda, selectedDay, onSelectDay }) => {
   const today = startOfToday();
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <Button
@@ -300,7 +300,7 @@ const TimeSlots = ({ slots, selectedSlot, onSelect, bookedTimes }) => {
 
   if (slots.length === 0) {
     return (
-      <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed">
+      <div className="text-center py-8 bg-gray-50 rounded-md border border-dashed">
         <CalendarDays className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
         <p className="text-sm text-muted-foreground">
           Nenhum horário disponível neste dia.
@@ -520,17 +520,17 @@ const DoctorProfilePage = () => {
           {/* ── Coluna Principal ─────────────────────────────────────── */}
           <div className="lg:col-span-2 space-y-5">
             {/* Header do médico */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="h-24 bg-gradient-to-r from-primary/15 to-brand-400/10" />
+            <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
+              <div className="h-24 bg-primary" />
               <div className="px-6 pb-6 relative">
                 <div className="flex justify-between items-end -mt-12 mb-4">
-                  <Avatar className="w-24 h-24 border-4 border-white shadow-md bg-white rounded-xl">
+                  <Avatar className="w-24 h-24 border-4 border-white shadow-md bg-white rounded-md">
                     <AvatarImage
                       src={doctor.image_url}
                       alt={doctor.public_name || doctor.name}
-                      className="object-cover rounded-xl"
+                      className="object-cover rounded-md"
                     />
-                    <AvatarFallback className="rounded-xl text-3xl bg-primary/10 text-primary">
+                    <AvatarFallback className="rounded-md text-3xl bg-primary/10 text-primary">
                       {(doctor.public_name || doctor.name || 'M')[0]}
                     </AvatarFallback>
                   </Avatar>
@@ -580,7 +580,7 @@ const DoctorProfilePage = () => {
 
             {/* Tabs */}
             <Tabs defaultValue="agendar" className="w-full">
-              <TabsList className="grid grid-cols-3 w-full rounded-xl bg-gray-100">
+              <TabsList className="grid grid-cols-3 w-full rounded-md bg-gray-100">
                 <TabsTrigger value="agendar" className="rounded-lg">
                   Agendar
                 </TabsTrigger>
@@ -594,13 +594,13 @@ const DoctorProfilePage = () => {
 
               {/* Tab: Agendar */}
               <TabsContent value="agendar" className="mt-4 space-y-4">
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
                   <h2 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
                     <CalendarDays className="w-4 h-4 text-primary" />
                     Selecione a Data
                   </h2>
                   {agenda.length === 0 ? (
-                    <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed">
+                    <div className="text-center py-8 bg-gray-50 rounded-md border border-dashed">
                       <p className="text-sm text-muted-foreground">
                         Este médico ainda não configurou sua agenda.
                       </p>
@@ -615,7 +615,7 @@ const DoctorProfilePage = () => {
                 </div>
 
                 {selectedDay && (
-                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                  <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
                     <h2 className="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
                       <Clock className="w-4 h-4 text-primary" />
                       Horários disponíveis
@@ -635,7 +635,7 @@ const DoctorProfilePage = () => {
 
               {/* Tab: Sobre */}
               <TabsContent value="sobre" className="mt-4 space-y-4">
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
                   <h2 className="text-base font-bold flex items-center gap-2 mb-3">
                     <GraduationCap className="w-4 h-4 text-primary" />
                     Sobre o profissional
@@ -654,7 +654,7 @@ const DoctorProfilePage = () => {
                 </div>
 
                 {doctor.instructions && (
-                  <div className="bg-brand-50/50 rounded-2xl border border-brand-100 p-5">
+                  <div className="bg-brand-50/50 rounded-lg border border-brand-100 p-5">
                     <h2 className="text-base font-bold flex items-center gap-2 mb-3 text-brand-800">
                       <Info className="w-4 h-4" />
                       Instruções para a consulta
@@ -670,7 +670,7 @@ const DoctorProfilePage = () => {
 
               {/* Tab: Avaliações */}
               <TabsContent value="avaliacoes" className="mt-4">
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
                   {averageRating && (
                     <div className="flex items-center gap-4 mb-5 pb-4 border-b">
                       <div className="text-center">
@@ -687,7 +687,7 @@ const DoctorProfilePage = () => {
                   )}
 
                   {reviews.length === 0 ? (
-                    <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed">
+                    <div className="text-center py-8 bg-gray-50 rounded-md border border-dashed">
                       <p className="text-sm text-muted-foreground">
                         Este médico ainda não possui avaliações.
                       </p>
@@ -707,7 +707,7 @@ const DoctorProfilePage = () => {
           {/* ── Sidebar de agendamento ───────────────────────────────── */}
           <div className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+              <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 space-y-4">
                 <h3 className="font-bold text-lg text-slate-900">
                   Resumo da Consulta
                 </h3>
@@ -737,7 +737,7 @@ const DoctorProfilePage = () => {
 
                 {/* Seleção resumida */}
                 {selectedDay && (
-                  <div className="bg-gray-50 rounded-xl p-3 text-sm space-y-1">
+                  <div className="bg-gray-50 rounded-md p-3 text-sm space-y-1">
                     <p className="flex items-center gap-2 text-slate-700">
                       <CalendarDays className="w-4 h-4 text-primary" />
                       {format(selectedDay, "d 'de' MMMM", { locale: ptBR })}
@@ -752,7 +752,7 @@ const DoctorProfilePage = () => {
                 )}
 
                 <Button
-                  className="w-full py-6 text-base font-bold rounded-xl"
+                  className="w-full py-6 text-base font-bold rounded-md"
                   disabled={!selectedSlot || isBooking}
                   onClick={handleBook}
                 >

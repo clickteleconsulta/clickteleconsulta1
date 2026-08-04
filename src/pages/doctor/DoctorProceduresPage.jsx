@@ -246,14 +246,14 @@ const DoctorProceduresPage = () => {
         <div className="w-full space-y-6">
             <DoctorPageHeader icon={Stethoscope} title="Meus Procedimentos" subtitle="Gerencie os serviços, descrições e valores do seu atendimento.">
                 {!isFormOpen && (
-                    <Button onClick={() => handleOpenForm()} className="bg-brand-600 hover:bg-brand-700 text-white rounded-xl shadow-md shadow-brand-500/20 h-9 text-sm shrink-0 w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                    <Button onClick={() => handleOpenForm()} className="bg-brand-600 hover:bg-brand-700 text-white rounded-md shadow-md shadow-brand-500/20 h-9 text-sm shrink-0 w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                         <Plus className="w-4 h-4 mr-2" /> Novo Procedimento
                     </Button>
                 )}
             </DoctorPageHeader>
 
             {isFormOpen && (
-                <Card className="border-brand-100 shadow-md rounded-xl overflow-hidden mb-6 w-full">
+                <Card className="border-brand-100 shadow-md rounded-md overflow-hidden mb-6 w-full">
                     <div className="bg-brand-50/50 px-5 py-3 border-b border-brand-100 flex items-center gap-3">
                         <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg shrink-0">
                             <Stethoscope className="w-4 h-4" />
@@ -346,7 +346,7 @@ const DoctorProceduresPage = () => {
 
                         <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-6 mt-6 border-t border-gray-100">
                             <Button variant="outline" onClick={handleCancel} disabled={isSaving} className="rounded-lg font-semibold h-9 text-sm w-full sm:w-auto">Cancelar</Button>
-                            <Button onClick={handleSave} disabled={isSaving} className="bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold shadow-md shadow-brand-500/20 h-9 text-sm w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
+                            <Button onClick={handleSave} disabled={isSaving} className="bg-brand-600 hover:bg-brand-700 text-white rounded-md font-semibold shadow-md shadow-brand-500/20 h-9 text-sm w-full sm:w-auto transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-80 disabled:hover:translate-y-0">
                                 {isSaving ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin shrink-0" /> : null}
                                 Salvar Procedimento
                             </Button>
@@ -356,7 +356,7 @@ const DoctorProceduresPage = () => {
             )}
 
             {!isFormOpen && procedures.length === 0 && (
-                <Card className="border-dashed border-2 bg-gray-50/50 rounded-xl w-full">
+                <Card className="border-dashed border-2 bg-gray-50/50 rounded-md w-full">
                     <CardContent className="flex flex-col items-center justify-center p-8 sm:p-12 text-center">
                         <div className="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mb-3">
                             <Stethoscope className="w-6 h-6" />
@@ -377,7 +377,7 @@ const DoctorProceduresPage = () => {
                         const finalPrice = calculateFinalPrice(proc.preco, taxPercentage);
 
                         return (
-                            <Card key={proc.id} className={`overflow-hidden transition-all rounded-xl flex flex-col h-full w-full ${proc.principal ? 'border-brand-300 ring-1 ring-brand-100 shadow-md' : 'border-gray-200 shadow-sm hover:shadow-md'}`}>
+                            <Card key={proc.id} className={`overflow-hidden transition-all rounded-md flex flex-col h-full w-full ${proc.principal ? 'border-brand-300 ring-1 ring-brand-100 shadow-md' : 'border-gray-200 shadow-sm hover:shadow-md'}`}>
                                 <CardContent className="p-5 flex flex-col flex-grow">
                                     <div className="flex justify-between items-start gap-3 mb-2">
                                         <h3 className="font-bold text-lg text-gray-900 leading-tight line-clamp-2 break-words">{proc.nome}</h3>

@@ -129,7 +129,7 @@ const TwoFactorCard = () => {
           <div className="space-y-5">
             <p className="text-sm text-gray-600"><strong>1.</strong> Escaneie o QR Code no seu app autenticador (ou insira o código manual).</p>
             <div className="flex flex-col sm:flex-row gap-6 items-start">
-              <div className="p-3 bg-white border border-gray-200 rounded-xl shadow-sm">
+              <div className="p-3 bg-white border border-gray-200 rounded-md shadow-sm">
                 {String(enrollData.qrCode).trim().startsWith('<svg')
                   ? <div className="w-40 h-40" dangerouslySetInnerHTML={{ __html: enrollData.qrCode }} />
                   : <img src={enrollData.qrCode} alt="QR Code 2FA" className="w-40 h-40" />}

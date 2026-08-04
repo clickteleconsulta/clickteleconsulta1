@@ -57,9 +57,9 @@ const DocumentosPage = () => {
         </div>
 
         {/* Validade legal e alcance nacional */}
-        <section className="mt-12 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <section className="mt-12 bg-white border border-slate-200 rounded-lg p-6 md:p-8 shadow-sm">
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-md bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
@@ -81,8 +81,8 @@ const DocumentosPage = () => {
             {emissao.itens.map((item, i) => {
               const Icone = ICONES_EMISSAO[i];
               return (
-                <div key={item.titulo} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                  <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-4">
+                <div key={item.titulo} className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                  <div className="w-11 h-11 rounded-md bg-brand-50 text-brand-600 flex items-center justify-center mb-4">
                     <Icone className="w-5 h-5" />
                   </div>
                   <h3 className="font-bold text-slate-900">{item.titulo}</h3>
@@ -94,7 +94,7 @@ const DocumentosPage = () => {
         </section>
 
         {/* Como conferir — o miolo da página */}
-        <section className="mt-8 bg-brand-50 border border-brand-100 rounded-2xl p-6 md:p-8">
+        <section className="mt-8 bg-brand-50 border border-brand-100 rounded-lg p-6 md:p-8">
           <h2 className="text-xl font-bold text-slate-900">{conferencia.titulo}</h2>
           <p className="text-slate-600 mt-2 leading-relaxed">{conferencia.intro}</p>
 
@@ -110,7 +110,7 @@ const DocumentosPage = () => {
             ))}
           </ol>
 
-          <Button asChild className="mt-6 h-11 px-6 rounded-xl">
+          <Button asChild className="mt-6 h-11 px-6 rounded-md">
             <a href={conferencia.url} target="_blank" rel="noopener noreferrer">
               Abrir o validador oficial <ExternalLink className="w-4 h-4 ml-2" />
             </a>
@@ -126,9 +126,9 @@ const DocumentosPage = () => {
         </section>
 
         {/* Ética e sigilo */}
-        <section className="mt-8 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <section className="mt-8 bg-white border border-slate-200 rounded-lg p-6 md:p-8 shadow-sm">
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-md bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -145,7 +145,7 @@ const DocumentosPage = () => {
         {/* As normas citadas, para quem quiser conferir na fonte */}
         <section className="mt-8">
           <h2 className="text-base font-bold text-slate-900">Normas citadas nesta página</h2>
-          <dl className="mt-3 divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">
+          <dl className="mt-3 divide-y divide-slate-100 border border-slate-200 rounded-lg overflow-hidden bg-white">
             {normas.map((norma) => (
               <div key={norma.n} className="p-4 sm:flex sm:gap-4">
                 <dt className="font-semibold text-slate-800 text-sm sm:w-64 sm:shrink-0">{norma.n}</dt>
@@ -155,10 +155,10 @@ const DocumentosPage = () => {
           </dl>
         </section>
 
-        <div className="mt-12 bg-gradient-to-br from-brand-600 to-brand-500 rounded-2xl p-8 text-center text-white">
+        <div className="mt-12 bg-brand-600 rounded-lg p-8 text-center text-white">
           <h2 className="text-2xl font-bold">Agende com um médico parceiro</h2>
           <p className="opacity-90 mt-2">Escolha o profissional, veja o preço e marque em minutos.</p>
-          <Button asChild variant="secondary" className="mt-5 h-11 px-6 rounded-xl bg-white text-slate-900 hover:bg-slate-100">
+          <Button asChild variant="secondary" className="mt-5 h-11 px-6 rounded-md bg-white text-slate-900 hover:bg-slate-100">
             <Link to="/agendamentos">Ver médicos disponíveis <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>

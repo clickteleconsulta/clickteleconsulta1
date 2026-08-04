@@ -325,7 +325,7 @@ const HomePage = () => {
                     className="flex flex-col items-center text-center flex-1 px-4"
                   >
                     <div className="relative mb-5">
-                      <div className="w-20 h-20 rounded-2xl bg-brand-50 flex items-center justify-center group-hover:bg-brand-50 transition-colors">
+                      <div className="w-20 h-20 rounded-lg bg-brand-50 flex items-center justify-center group-hover:bg-brand-50 transition-colors">
                         <Icon className="w-8 h-8 text-brand-500" />
                       </div>
                       <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-brand-500 text-white text-sm font-display font-bold flex items-center justify-center shadow-lg shadow-brand-500/30">
@@ -382,9 +382,9 @@ const HomePage = () => {
                 <motion.div
                   key={i}
                   variants={fadeUp}
-                  className={`bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ${feature.span || ''}`}
+                  className={`bg-white rounded-lg p-8 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ${feature.span || ''}`}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 rounded-md bg-brand-50 flex items-center justify-center mb-4">
                     <Icon className="w-6 h-6 text-brand-500" />
                   </div>
                   <h3 className="font-display text-lg font-bold text-slate-900 mb-2">
@@ -473,7 +473,7 @@ const HomePage = () => {
                 <AccordionItem
                   key={i}
                   value={`faq-${i}`}
-                  className="bg-brand-50 rounded-2xl border-0 px-6 overflow-hidden"
+                  className="bg-brand-50 rounded-lg border-0 px-6 overflow-hidden"
                 >
                   <AccordionTrigger className="font-display text-left font-bold text-slate-900 hover:no-underline py-5 text-base">
                     {item.q}

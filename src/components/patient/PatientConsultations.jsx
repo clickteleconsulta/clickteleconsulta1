@@ -395,7 +395,7 @@ const PatientConsultations = () => {
             
             {/* Popup Fallback Dialog */}
             <Dialog open={!!blockedRoom} onOpenChange={(open) => !open && setBlockedRoom(null)}>
-                <DialogContent className="sm:max-w-md rounded-xl shadow-xl">
+                <DialogContent className="sm:max-w-md rounded-md shadow-xl">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-amber-600">
                             <AlertTriangle className="w-5 h-5" />
@@ -432,7 +432,7 @@ const PatientConsultations = () => {
 
             {/* Confirmação de cancelamento */}
             <Dialog open={!!cancelTarget} onOpenChange={(open) => !open && setCancelTarget(null)}>
-                <DialogContent className="sm:max-w-md rounded-xl">
+                <DialogContent className="sm:max-w-md rounded-md">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-red-600">
                             <XCircle className="w-5 h-5" /> Cancelar consulta

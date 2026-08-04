@@ -284,7 +284,7 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
         <div className="p-6 space-y-4">
           {/* Preview de câmera */}
           {checks.camera.status === STATUS.ok && cameraStream && (
-            <div className="relative rounded-xl overflow-hidden bg-slate-800 aspect-video border border-slate-700/50">
+            <div className="relative rounded-md overflow-hidden bg-slate-800 aspect-video border border-slate-700/50">
               <video
                 ref={videoPreviewRef}
                 autoPlay
@@ -306,7 +306,7 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
               const check = checks[step.id];
               const Icon = step.icon;
               return (
-                <div key={step.id} className={`rounded-xl p-4 border transition-all ${
+                <div key={step.id} className={`rounded-md p-4 border transition-all ${
                   check.status === STATUS.ok ? 'bg-green-500/5 border-green-500/20' :
                   check.status === STATUS.fail ? 'bg-red-500/5 border-red-500/20' :
                   check.status === STATUS.warn ? 'bg-amber-500/5 border-amber-500/20' :
@@ -380,7 +380,7 @@ const PreConsultaCheck = ({ open, onOpenChange, onReady, isDoctor = false }) => 
                 onOpenChange(false);
               }}
               disabled={!allComplete || (hasFailures && !isDoctor)}
-              className={`w-full h-11 font-semibold rounded-xl gap-2 ${
+              className={`w-full h-11 font-semibold rounded-md gap-2 ${
                 allPassed
                   ? 'bg-green-600 hover:bg-green-500 text-white shadow-green-900/30 shadow-lg'
                   : allComplete && hasFailures && isDoctor

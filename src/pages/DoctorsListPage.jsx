@@ -22,8 +22,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // ─── Skeleton Card ────────────────────────────────────────────────────────────
 const DoctorCardSkeleton = () => (
-  <div className="bg-white border border-slate-200/70 rounded-xl p-4 flex gap-4 shadow-sm">
-    <Skeleton className="w-16 h-16 rounded-xl flex-shrink-0" />
+  <div className="bg-white border border-slate-200/70 rounded-md p-4 flex gap-4 shadow-sm">
+    <Skeleton className="w-16 h-16 rounded-md flex-shrink-0" />
     <div className="flex-1 space-y-2">
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-3 w-1/2" />
@@ -34,15 +34,15 @@ const DoctorCardSkeleton = () => (
 
 // ─── Doctor List Card (compacto, branco sobre cinza) ────────────────────────────
 const DoctorListCard = ({ doctor, price }) => (
-  <div className="group bg-white border border-slate-200/70 rounded-xl p-4 flex gap-4 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200">
+  <div className="group bg-white border border-slate-200/70 rounded-md p-4 flex gap-4 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200">
     {/* Foto */}
-    <Avatar className="w-16 h-16 rounded-xl flex-shrink-0 self-start">
+    <Avatar className="w-16 h-16 rounded-md flex-shrink-0 self-start">
       <AvatarImage
         src={doctor.image_url}
         alt={doctor.public_name || doctor.name}
         className="object-cover"
       />
-      <AvatarFallback className="rounded-xl text-xl font-bold bg-brand-50 text-brand-600">
+      <AvatarFallback className="rounded-md text-xl font-bold bg-brand-50 text-brand-600">
         {(doctor.public_name || doctor.name || 'M')[0]}
       </AvatarFallback>
     </Avatar>
@@ -279,7 +279,7 @@ const DoctorsListPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar por nome ou especialidade..."
-              className="pl-9 h-11 rounded-xl bg-white border-slate-200 shadow-sm text-sm"
+              className="pl-9 h-11 rounded-md bg-white border-slate-200 shadow-sm text-sm"
             />
             {searchQuery && (
               <button
@@ -292,7 +292,7 @@ const DoctorsListPage = () => {
           </div>
           <div className="flex items-center gap-2">
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full sm:w-44 h-11 rounded-xl bg-white border-slate-200 shadow-sm">
+              <SelectTrigger className="w-full sm:w-44 h-11 rounded-md bg-white border-slate-200 shadow-sm">
                 <SelectValue placeholder="Ordenar por" />
               </SelectTrigger>
               <SelectContent>
@@ -303,7 +303,7 @@ const DoctorsListPage = () => {
             </Select>
             <Button
               variant="outline"
-              className="sm:hidden h-11 rounded-xl gap-2 border-slate-200 bg-white shadow-sm"
+              className="sm:hidden h-11 rounded-md gap-2 border-slate-200 bg-white shadow-sm"
               onClick={() => setMobileFiltersOpen((v) => !v)}
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -317,14 +317,14 @@ const DoctorsListPage = () => {
         </div>
 
         {mobileFiltersOpen && (
-          <div className="sm:hidden bg-white border border-slate-200/70 rounded-xl p-4 mb-5 shadow-sm">
+          <div className="sm:hidden bg-white border border-slate-200/70 rounded-md p-4 mb-5 shadow-sm">
             <FiltersPanel />
           </div>
         )}
 
         <div className="grid md:grid-cols-[220px_1fr] gap-6 items-start">
           {/* Filtros desktop */}
-          <aside className="hidden md:block sticky top-24 bg-white border border-slate-200/70 rounded-xl p-4 shadow-sm">
+          <aside className="hidden md:block sticky top-24 bg-white border border-slate-200/70 rounded-md p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-bold text-slate-900 flex items-center gap-2 text-sm">
                 <SlidersHorizontal className="w-4 h-4" /> Filtros
@@ -367,7 +367,7 @@ const DoctorsListPage = () => {
                 {Array.from({ length: 4 }).map((_, i) => <DoctorCardSkeleton key={i} />)}
               </div>
             ) : filteredDoctors.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-xl border border-dashed border-slate-200 shadow-sm">
+              <div className="text-center py-16 bg-white rounded-md border border-dashed border-slate-200 shadow-sm">
                 <Stethoscope className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 <p className="text-slate-500 text-base font-medium">Nenhum profissional encontrado</p>
                 <p className="text-sm text-slate-400 mt-1">Tente ajustar os filtros ou limpar a busca.</p>

@@ -118,7 +118,7 @@ const DoctorBlocks = ({ doctorId, onChange }) => {
 
   return (
     <div className="space-y-4">
-      <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+      <Card className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <CardHeader className="px-6 pt-6 pb-4">
           <CardTitle className="font-display text-lg font-bold tracking-tight text-gray-900 flex items-center gap-2">
             <Ban className="w-5 h-5 text-red-500" /> Bloquear horários
@@ -163,13 +163,13 @@ const DoctorBlocks = ({ doctorId, onChange }) => {
             <Input value={motivo} onChange={(e) => setMotivo(e.target.value)} maxLength={120} placeholder="Ex.: férias, compromisso pessoal" className="h-9 text-sm rounded-lg border-gray-300" />
           </div>
 
-          <Button onClick={addBlock} disabled={saving} className="w-full h-10 rounded-xl bg-primary hover:bg-primary/90 text-white text-sm font-semibold">
+          <Button onClick={addBlock} disabled={saving} className="w-full h-10 rounded-md bg-primary hover:bg-primary/90 text-white text-sm font-semibold">
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Plus className="w-4 h-4 mr-2" />} Adicionar bloqueio
           </Button>
         </CardContent>
       </Card>
 
-      <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+      <Card className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <CardHeader className="px-6 pt-6 pb-3">
           <CardTitle className="text-base font-bold text-gray-900">Bloqueios ativos</CardTitle>
           <CardDescription className="text-xs text-gray-400">Períodos e horários indisponíveis para agendamento.</CardDescription>
@@ -178,7 +178,7 @@ const DoctorBlocks = ({ doctorId, onChange }) => {
           {loading ? (
             <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
           ) : blocks.length === 0 ? (
-            <div className="text-center py-10 border border-dashed border-gray-200 rounded-2xl bg-gray-50/60">
+            <div className="text-center py-10 border border-dashed border-gray-200 rounded-lg bg-gray-50/60">
               <CalendarOff className="mx-auto h-8 w-8 text-gray-300 mb-2" />
               <p className="text-sm font-semibold text-gray-600">Nenhum bloqueio ativo</p>
               <p className="text-xs text-gray-400 mt-1">Todos os seus horários da agenda estão disponíveis.</p>
@@ -186,7 +186,7 @@ const DoctorBlocks = ({ doctorId, onChange }) => {
           ) : (
             <ul className="space-y-2">
               {blocks.map((b) => (
-                <li key={b.id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/60">
+                <li key={b.id} className="flex items-center gap-3 p-3 rounded-md border border-gray-200 bg-gray-50/60">
                   <span className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
                     <Ban className="w-4 h-4 text-red-500" />
                   </span>

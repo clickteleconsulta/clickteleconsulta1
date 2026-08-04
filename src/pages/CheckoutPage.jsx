@@ -105,7 +105,7 @@ const AppointmentSummary = ({ appointmentDetails, compact = false }) => {
   return (
     <Card
       className={cn(
-        'border-primary/20 bg-gradient-to-br from-brand-50/50 to-brand-50/30',
+        'border-primary/20 bg-brand-50',
         compact && 'shadow-none'
       )}
     >
@@ -345,7 +345,7 @@ const CheckoutPage = () => {
             <PatientDataReview profile={profile} user={user} />
 
             {/* Aviso email */}
-            <div className="flex items-start gap-3 p-4 bg-brand-50 border border-brand-100 rounded-xl text-sm text-brand-800">
+            <div className="flex items-start gap-3 p-4 bg-brand-50 border border-brand-100 rounded-md text-sm text-brand-800">
               <CheckCircle2 className="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" />
               <p>
                 Após a confirmação, você receberá um{' '}
@@ -355,7 +355,7 @@ const CheckoutPage = () => {
             </div>
 
             {/* Aviso prazo de pagamento */}
-            <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+            <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-800">
               <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <p>
                 <strong>Prazo de pagamento:</strong> a consulta só é confirmada

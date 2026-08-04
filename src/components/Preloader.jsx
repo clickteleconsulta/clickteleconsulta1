@@ -40,7 +40,7 @@ const Preloader = () => {
         
         <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-brand-400 to-brand-600 transition-all duration-300 ease-out rounded-full"
+            className="h-full bg-brand-400 transition-all duration-300 ease-out rounded-full"
             style={{ width: `${progress}%` }}
           />
         </div>

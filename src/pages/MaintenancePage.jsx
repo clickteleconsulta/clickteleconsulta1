@@ -9,14 +9,14 @@ const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo 
 // Página exibida a visitantes e pacientes enquanto o site está em manutenção.
 // Administradores não veem esta tela (o acesso ao painel continua liberado).
 const MaintenancePage = ({ message }) => (
-  <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-brand-50 via-white to-white">
+  <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-brand-50">
     <Helmet>
       <title>{`Em manutenção · ${BRAND.name}`}</title>
       <meta name="robots" content="noindex" />
     </Helmet>
 
     <div className="max-w-md">
-      <div className="mx-auto mb-7 w-20 h-20 rounded-2xl bg-white shadow-lg shadow-brand-500/10 border border-brand-100 flex items-center justify-center">
+      <div className="mx-auto mb-7 w-20 h-20 rounded-lg bg-white shadow-lg shadow-brand-500/10 border border-brand-100 flex items-center justify-center">
         <BrandCross size={48} color="#3B5BA5" />
       </div>
 

@@ -131,7 +131,7 @@ const ReviewsSection = ({ reviews }) => {
 
 // ─── Embedded Appointment Form ─────────────────────────────────────────────────
 const EmbeddedAppointmentForm = ({ doctor }) => (
-  <div className="bg-card rounded-xl border border-border shadow-sm p-6 flex flex-col gap-4">
+  <div className="bg-card rounded-md border border-border shadow-sm p-6 flex flex-col gap-4">
     <h3 className="font-bold text-lg text-foreground">Agendar Consulta</h3>
     <p className="text-sm text-muted-foreground leading-relaxed">
       Clique no botão abaixo para ver os horários disponíveis e concluir seu agendamento online em poucos minutos.
@@ -308,8 +308,8 @@ const DoctorPublicProfilePage = () => {
           <div className="lg:col-span-2 space-y-6">
 
             {/* Profile card */}
-            <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-              <div className="h-24 bg-gradient-to-r from-primary/10 to-primary/5 w-full" />
+            <div className="bg-card rounded-md border border-border shadow-sm overflow-hidden">
+              <div className="h-24 bg-primary w-full" />
               <div className="px-5 pb-5 relative">
                 <div className="flex justify-between items-end -mt-12 mb-3">
                   <Avatar className="w-24 h-24 border-4 border-background shadow-md bg-white">
@@ -354,7 +354,7 @@ const DoctorPublicProfilePage = () => {
             </div>
 
             {/* Bio */}
-            <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
+            <div className="bg-card rounded-md border border-border shadow-sm p-5 space-y-3">
               <h2 className="text-base font-semibold text-foreground">Sobre o Profissional</h2>
               <div className="prose prose-sm max-w-none text-muted-foreground text-sm">
                 {doctor.bio ? doctor.bio.split('\n').map((p, i) => <p key={i}>{p}</p>) : <p className="italic">O médico ainda não adicionou uma descrição profissional.</p>}
@@ -363,7 +363,7 @@ const DoctorPublicProfilePage = () => {
 
             {/* Formação */}
             {doctor.formacao && (
-              <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
+              <div className="bg-card rounded-md border border-border shadow-sm p-5 space-y-3">
                 <h2 className="text-base font-semibold text-foreground">Formação</h2>
                 <div className="prose prose-sm max-w-none text-muted-foreground text-sm">
                   {doctor.formacao.split('\n').map((p, i) => <p key={i}>{p}</p>)}
@@ -372,7 +372,7 @@ const DoctorPublicProfilePage = () => {
             )}
 
             {/* Instructions */}
-            <div className="bg-card rounded-xl border border-border shadow-sm p-5 space-y-3">
+            <div className="bg-card rounded-md border border-border shadow-sm p-5 space-y-3">
               <h2 className="text-base font-semibold text-foreground">Instruções para Atendimento</h2>
               <div className="bg-brand-50/50 dark:bg-brand-800/10 p-4 rounded-lg border border-brand-100 dark:border-brand-800/20">
                 <div className="prose prose-sm max-w-none text-foreground/80 text-sm">
@@ -397,7 +397,7 @@ const DoctorPublicProfilePage = () => {
           <div className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
               <EmbeddedAppointmentForm doctor={doctor} />
-              <div className="bg-muted/10 rounded-xl border border-dashed border-border p-5">
+              <div className="bg-muted/10 rounded-md border border-dashed border-border p-5">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
                   <Info className="w-3 h-3" /> Suporte
                 </h4>

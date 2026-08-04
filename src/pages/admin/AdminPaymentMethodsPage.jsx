@@ -116,7 +116,7 @@ const AdminPaymentMethodsPage = () => {
                                 key={p.id}
                                 type="button"
                                 onClick={() => setProvider(p.id)}
-                                className={`w-full text-left flex items-start gap-4 p-4 rounded-xl border transition-all ${active ? 'border-brand-400 ring-2 ring-brand-100 bg-brand-50/40' : 'border-gray-200 hover:border-brand-200 hover:bg-gray-50'}`}
+                                className={`w-full text-left flex items-start gap-4 p-4 rounded-md border transition-all ${active ? 'border-brand-400 ring-2 ring-brand-100 bg-brand-50/40' : 'border-gray-200 hover:border-brand-200 hover:bg-gray-50'}`}
                             >
                                 <div className={`p-2.5 rounded-lg shrink-0 ${active ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
                                     <Icon className="w-5 h-5" />
@@ -189,7 +189,7 @@ const AdminPaymentMethodsPage = () => {
             )}
 
             <div className="flex justify-end pt-2">
-                <Button onClick={handleSave} disabled={saving} className="min-w-[160px] bg-primary hover:bg-primary/90 text-white rounded-xl h-10 shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                <Button onClick={handleSave} disabled={saving} className="min-w-[160px] bg-primary hover:bg-primary/90 text-white rounded-md h-10 shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                     {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando…</> : <><Save className="w-4 h-4 mr-2" /> Salvar configuração</>}
                 </Button>
             </div>

@@ -67,7 +67,7 @@ const QuemSomosPage = () => {
               pacientes a médicos parceiros: você encontra o profissional, escolhe o horário e realiza o
               pagamento pela plataforma, tudo em poucos cliques.
             </p>
-            <Button asChild className="mt-6 h-12 px-7 text-base rounded-xl">
+            <Button asChild className="mt-6 h-12 px-7 text-base rounded-md">
               <Link to="/agendamentos">Agendar consulta <ArrowRight className="w-4 h-4 ml-2" /></Link>
             </Button>
           </div>
@@ -83,7 +83,7 @@ const QuemSomosPage = () => {
 
         {/* O que somos / o que não somos */}
         <div className="grid sm:grid-cols-2 gap-4 mt-12">
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
             <h2 className="font-bold text-slate-900 text-lg">O que fazemos</h2>
             <p className="text-sm text-slate-500 mt-2 leading-relaxed">
               Fazemos a intermediação do <strong className="text-slate-700">agendamento</strong> e do
@@ -91,7 +91,7 @@ const QuemSomosPage = () => {
               a nota fiscal referente à nossa taxa de intermediação.
             </p>
           </div>
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
             <h2 className="font-bold text-slate-900 text-lg">O que não somos</h2>
             <p className="text-sm text-slate-500 mt-2 leading-relaxed">
               <strong className="text-slate-700">Não somos uma plataforma de teleconsulta.</strong> A
@@ -106,8 +106,8 @@ const QuemSomosPage = () => {
           <h2 className="text-xl font-bold text-slate-900 text-center">No que acreditamos</h2>
           <div className="grid sm:grid-cols-2 gap-4 mt-6">
             {VALORES.map((v) => (
-              <div key={v.title} className="flex items-start gap-3 p-5 rounded-2xl bg-brand-50 border border-slate-100">
-                <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+              <div key={v.title} className="flex items-start gap-3 p-5 rounded-lg bg-brand-50 border border-slate-100">
+                <div className="w-10 h-10 rounded-md bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
                   <v.icon className="w-5 h-5" />
                 </div>
                 <div>
@@ -120,7 +120,7 @@ const QuemSomosPage = () => {
         </div>
 
         {/* Dados da empresa */}
-        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mt-14 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <Building2 className="w-5 h-5 text-brand-600" />
             <h2 className="font-bold text-slate-900">Dados da empresa</h2>
@@ -139,7 +139,7 @@ const QuemSomosPage = () => {
         {/* CTA final */}
         <div className="mt-12 text-center">
           <p className="text-slate-600">Pronto para cuidar da sua saúde sem sair de casa?</p>
-          <Button asChild className="mt-4 h-12 px-8 text-base rounded-xl">
+          <Button asChild className="mt-4 h-12 px-8 text-base rounded-md">
             <Link to="/agendamentos">Ver médicos e horários <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
         </div>

@@ -78,7 +78,7 @@ const MaintenanceToggle = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
-                <div className={`flex items-center gap-3 rounded-xl border p-3.5 text-sm font-medium ${enabled ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-green-50 border-green-200 text-green-800'}`}>
+                <div className={`flex items-center gap-3 rounded-md border p-3.5 text-sm font-medium ${enabled ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-green-50 border-green-200 text-green-800'}`}>
                     <span className={`w-2.5 h-2.5 rounded-full ${enabled ? 'bg-amber-500' : 'bg-green-500'}`} />
                     {enabled ? 'O site está EM MANUTENÇÃO no momento.' : 'O site está NO AR normalmente.'}
                 </div>
@@ -93,16 +93,16 @@ const MaintenanceToggle = () => {
                 <div className="flex flex-wrap gap-3 pt-1">
                     {enabled ? (
                         <Button onClick={() => persist(false)} disabled={saving}
-                            className="min-w-[190px] bg-green-600 hover:bg-green-700 text-white rounded-xl h-10 shadow-md">
+                            className="min-w-[190px] bg-green-600 hover:bg-green-700 text-white rounded-md h-10 shadow-md">
                             {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Aplicando…</> : <><Power className="w-4 h-4 mr-2" /> Colocar o site no ar</>}
                         </Button>
                     ) : (
                         <Button onClick={() => persist(true)} disabled={saving}
-                            className="min-w-[190px] bg-amber-600 hover:bg-amber-700 text-white rounded-xl h-10 shadow-md">
+                            className="min-w-[190px] bg-amber-600 hover:bg-amber-700 text-white rounded-md h-10 shadow-md">
                             {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Aplicando…</> : <><PowerOff className="w-4 h-4 mr-2" /> Colocar em manutenção</>}
                         </Button>
                     )}
-                    <Button variant="outline" onClick={() => persist(enabled)} disabled={saving} className="rounded-xl h-10">
+                    <Button variant="outline" onClick={() => persist(enabled)} disabled={saving} className="rounded-md h-10">
                         Salvar mensagem
                     </Button>
                 </div>

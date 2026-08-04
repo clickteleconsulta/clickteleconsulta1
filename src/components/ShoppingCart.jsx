@@ -105,7 +105,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
                   <span className="text-lg font-medium">Total</span>
                   <span className="text-2xl font-bold">${(getCartTotal() / 100).toFixed(2)}</span>
                 </div>
-                <Button onClick={handleCheckout} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 text-base">
+                <Button onClick={handleCheckout} className="w-full bg-purple-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 text-base">
                   Proceed to Checkout
                 </Button>
               </div>

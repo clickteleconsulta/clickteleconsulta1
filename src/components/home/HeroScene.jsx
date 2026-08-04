@@ -140,7 +140,7 @@ const HeroScene = () => (
     <motion.div
       animate={{ y: [0, -8, 0] }}
       transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
-      className="absolute -left-2 bottom-12 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 shadow-xl shadow-black/25"
+      className="absolute -left-2 bottom-12 flex items-center gap-2.5 rounded-lg bg-white px-4 py-3 shadow-xl shadow-black/25"
     >
       <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-700">
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
@@ -157,7 +157,7 @@ const HeroScene = () => (
     <motion.div
       animate={{ y: [0, 9, 0] }}
       transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut', delay: 0.7 }}
-      className="absolute right-0 top-8 rounded-2xl bg-white px-4 py-3 shadow-xl shadow-black/25"
+      className="absolute right-0 top-8 rounded-lg bg-white px-4 py-3 shadow-xl shadow-black/25"
     >
       <span className="font-display block text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">
         A partir de

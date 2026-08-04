@@ -171,7 +171,7 @@ const PlatformRules = () => {
             </Card>
 
             <div className="flex justify-end">
-                <Button onClick={handleSave} disabled={saving} className="min-w-[180px] bg-primary hover:bg-primary/90 text-white rounded-xl h-10 shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                <Button onClick={handleSave} disabled={saving} className="min-w-[180px] bg-primary hover:bg-primary/90 text-white rounded-md h-10 shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                     {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Salvando…</> : <><Save className="w-4 h-4 mr-2" /> Salvar configurações</>}
                 </Button>
             </div>
@@ -199,7 +199,7 @@ const AdminSettingsPage = () => {
                 subtitle="Regras de negócio, recebimento, documentos legais, segurança e assistente de IA." />
 
             <Tabs value={active} onValueChange={(v) => setParams({ tab: v }, { replace: true })} className="w-full">
-                <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-gray-100/80 rounded-xl">
+                <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-gray-100/80 rounded-md">
                     {TABS.map((t) => (
                         <TabsTrigger key={t.v} value={t.v}
                             className="gap-1.5 rounded-lg text-sm px-3 py-1.5 transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">

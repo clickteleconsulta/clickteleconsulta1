@@ -28,11 +28,11 @@ const HeroBooking = () => (
     <motion.div
       animate={{ y: [0, -10, 0] }}
       transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-      className="relative w-[330px] rounded-2xl bg-white p-5 shadow-2xl shadow-black/30"
+      className="relative w-[330px] rounded-lg bg-white p-5 shadow-2xl shadow-black/30"
     >
       {/* médico */}
       <div className="flex items-start gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-100">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand-100">
           <User className="h-6 w-6 text-brand-600" />
         </div>
         <div className="min-w-0">
@@ -87,7 +87,7 @@ const HeroBooking = () => (
     <motion.div
       animate={{ y: [0, 8, 0] }}
       transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut', delay: 0.6 }}
-      className="absolute -bottom-7 -left-7 flex items-center gap-2.5 rounded-xl bg-white px-3.5 py-2.5 shadow-xl shadow-black/25"
+      className="absolute -bottom-7 -left-7 flex items-center gap-2.5 rounded-md bg-white px-3.5 py-2.5 shadow-xl shadow-black/25"
     >
       <span className="flex h-7 w-7 items-center justify-center rounded-full bg-green-100">
         <Check className="h-4 w-4 text-green-700" strokeWidth={3} />

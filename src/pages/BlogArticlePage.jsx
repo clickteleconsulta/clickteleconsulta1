@@ -56,10 +56,10 @@ const BlogArticlePage = () => {
           })}
         </article>
 
-        <div className="mt-10 bg-gradient-to-br from-brand-600 to-brand-500 rounded-2xl p-7 text-center text-white">
+        <div className="mt-10 bg-brand-600 rounded-lg p-7 text-center text-white">
           <p className="text-lg font-bold">Precisa de atendimento?</p>
           <p className="opacity-90 text-sm mt-1">Agende sua teleconsulta com um médico, a partir de R$ 40.</p>
-          <Button asChild variant="secondary" className="mt-4 rounded-xl bg-white text-slate-900 hover:bg-slate-100"><Link to="/agendamentos">Agendar consulta</Link></Button>
+          <Button asChild variant="secondary" className="mt-4 rounded-md bg-white text-slate-900 hover:bg-slate-100"><Link to="/agendamentos">Agendar consulta</Link></Button>
         </div>
 
         {others.length > 0 && (
@@ -67,7 +67,7 @@ const BlogArticlePage = () => {
             <h2 className="text-lg font-bold text-slate-900 mb-4">Continue lendo</h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {others.map((a) => (
-                <Link key={a.slug} to={`/blog/${a.slug}`} className="group border border-slate-200 rounded-xl p-4 hover:shadow-sm">
+                <Link key={a.slug} to={`/blog/${a.slug}`} className="group border border-slate-200 rounded-md p-4 hover:shadow-sm">
                   <p className="font-semibold text-slate-800 text-sm group-hover:text-brand-800 leading-snug">{a.title}</p>
                   <span className="inline-flex items-center gap-1 text-xs text-brand-600 mt-2">Ler <ArrowRight className="w-3 h-3" /></span>
                 </Link>

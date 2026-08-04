@@ -300,7 +300,7 @@ const DoctorDocumentation = () => {
                             </div>
                         </div>
                         <div className="flex justify-end mt-5">
-                            <Button onClick={savePrivate} disabled={savingPriv} className="bg-primary hover:bg-primary/90 text-white rounded-xl h-9 text-sm shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                            <Button onClick={savePrivate} disabled={savingPriv} className="bg-primary hover:bg-primary/90 text-white rounded-md h-9 text-sm shadow-md shadow-brand-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0">
                                 {savingPriv ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                                 Salvar dados privados
                             </Button>

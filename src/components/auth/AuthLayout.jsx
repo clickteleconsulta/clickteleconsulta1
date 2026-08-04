@@ -33,7 +33,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
     const p = PANELS[variant] || PANELS.cliente;
 
     return (
-        <div className="w-full max-w-5xl mx-auto flex rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-white min-h-[560px]">
+        <div className="w-full max-w-5xl mx-auto flex rounded-lg overflow-hidden shadow-xl border border-gray-100 bg-white min-h-[560px]">
             {/* Painel de marca (desktop) */}
             <div
                 className="hidden lg:flex lg:w-[45%] relative overflow-hidden flex-col justify-between p-10 text-white"

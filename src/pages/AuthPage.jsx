@@ -249,7 +249,7 @@ const AuthPage = ({
       <AuthLayout variant={isDoctor ? 'profissional' : 'cliente'}>
 
         {!isDoctor && pendingBooking && (
-          <div className="mb-5 flex items-start gap-3 rounded-xl border border-brand-200 bg-brand-50 p-3.5 text-left animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="mb-5 flex items-start gap-3 rounded-md border border-brand-200 bg-brand-50 p-3.5 text-left animate-in fade-in slide-in-from-top-2 duration-300">
             <CalendarCheck className="w-5 h-5 text-brand-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-brand-800 leading-snug">
               <b>Quase lá!</b> Você está agendando com <b>{pendingBooking.doctorName}</b> em <b>{pendingBooking.whenLabel}</b>.{' '}
@@ -433,7 +433,7 @@ const AuthPage = ({
 
                     <Button
                         type="submit"
-                        className="w-full h-11 text-base font-semibold bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-800 hover:to-brand-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
+                        className="w-full h-11 text-base font-semibold bg-brand-600 hover:from-brand-800 hover:to-brand-800 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-200 mt-2"
                         disabled={isLoading || (!isLogin && !isDoctor && !acceptedTerms) || (TURNSTILE_ENABLED && !captchaToken)}
                     >
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : (isLogin ? 'Entrar' : 'Cadastrar')} 

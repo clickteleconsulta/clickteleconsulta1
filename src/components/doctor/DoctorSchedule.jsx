@@ -178,21 +178,21 @@ const DoctorSchedule = ({ onScheduleSave }) => {
              <DoctorPageHeader icon={Clock} title="Agenda" subtitle="Configure seus horários de atendimento e os bloqueios de indisponibilidade." />
 
             <Tabs defaultValue="agenda" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 max-w-md bg-gray-100/80 p-1 rounded-xl h-auto">
+                <TabsList className="grid w-full grid-cols-2 max-w-md bg-gray-100/80 p-1 rounded-md h-auto">
                     <TabsTrigger value="agenda" className="rounded-lg text-sm font-semibold py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-800 text-gray-500">Configuração da Agenda</TabsTrigger>
                     <TabsTrigger value="bloqueios" className="rounded-lg text-sm font-semibold py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-800 text-gray-500">Bloqueios</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="agenda" className="mt-4">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/5">
+            <Card className="bg-white rounded-lg border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/5">
                 <CardHeader className="px-6 pt-6 pb-4">
                     <CardTitle className="font-display text-lg font-bold tracking-tight text-gray-900">Horários de Atendimento</CardTitle>
                     <CardDescription className="dashboard-subtitle text-sm">Defina quando você está disponível. Horário de Brasília.</CardDescription>
                 </CardHeader>
                 <CardContent className="px-6 pb-6 pt-0">
                     <Tabs defaultValue="1" className="w-full">
-                        <TabsList className="grid w-full grid-cols-7 bg-gray-100/80 p-1.5 rounded-xl h-auto mb-6">
+                        <TabsList className="grid w-full grid-cols-7 bg-gray-100/80 p-1.5 rounded-md h-auto mb-6">
                             {weekDays.map((day) => (<TabsTrigger key={day.id} value={String(day.id)} className="rounded-lg font-semibold text-xs py-2 transition-all duration-300 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:shadow-brand-500/10 data-[state=active]:text-brand-800 data-[state=active]:scale-[1.03] text-gray-500">{day.name.slice(0, 3)}</TabsTrigger>))}
                         </TabsList>
                         {weekDays.map(day => {
@@ -204,7 +204,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                                         {blocksForDay.map((item) => {
                                              const fieldIndex = fields.findIndex(f => f.id === item.id);
                                              return (
-                                                 <div key={item.id} className="flex flex-wrap items-end gap-3 sm:gap-4 p-4 bg-gray-50/70 rounded-xl border border-gray-200 transition-all duration-300 hover:border-brand-200 hover:bg-white hover:shadow-md hover:shadow-brand-500/5 hover:ring-1 hover:ring-brand-100 animate-in fade-in slide-in-from-top-1">
+                                                 <div key={item.id} className="flex flex-wrap items-end gap-3 sm:gap-4 p-4 bg-gray-50/70 rounded-md border border-gray-200 transition-all duration-300 hover:border-brand-200 hover:bg-white hover:shadow-md hover:shadow-brand-500/5 hover:ring-1 hover:ring-brand-100 animate-in fade-in slide-in-from-top-1">
                                                     <div className="w-[calc(50%-0.5rem)] sm:w-[120px]">
                                                         <Label className="text-xs font-bold text-gray-600 mb-1.5 block uppercase tracking-wide">Início</Label>
                                                         <Input type="time" className="bg-white border-gray-300 h-9 text-sm rounded-lg transition-all duration-200 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100" {...register(`schedule.${fieldIndex}.hora_inicio`)} />
@@ -223,20 +223,20 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                                                         )}/>
                                                     </div>
                                                     <div className="ml-auto sm:ml-1">
-                                                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(fieldIndex)} className="text-gray-400 hover:text-red-600 hover:bg-red-50 h-9 w-9 rounded-xl border border-transparent hover:border-red-200 transition-all duration-200 hover:scale-110 hover:rotate-6 active:scale-95"><Trash2 className="h-4 w-4" /></Button>
+                                                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(fieldIndex)} className="text-gray-400 hover:text-red-600 hover:bg-red-50 h-9 w-9 rounded-md border border-transparent hover:border-red-200 transition-all duration-200 hover:scale-110 hover:rotate-6 active:scale-95"><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
                                                      {errors?.schedule?.[fieldIndex] && <p className="text-xs text-red-600 font-medium mt-1 w-full">{errors.schedule[fieldIndex]?.hora_inicio?.message || errors.schedule[fieldIndex]?.hora_fim?.message}</p>}
                                                 </div>
                                              )
                                         })}
-                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="group w-full border-dashed border-gray-300 text-gray-600 hover:border-brand-400 hover:text-brand-600 hover:bg-brand-50/60 h-10 text-xs rounded-xl mt-2 font-semibold transition-all duration-300 hover:shadow-md hover:shadow-brand-500/10"><PlusCircle className="mr-2 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-90" /> Adicionar Horário</Button>
+                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="group w-full border-dashed border-gray-300 text-gray-600 hover:border-brand-400 hover:text-brand-600 hover:bg-brand-50/60 h-10 text-xs rounded-md mt-2 font-semibold transition-all duration-300 hover:shadow-md hover:shadow-brand-500/10"><PlusCircle className="mr-2 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-90" /> Adicionar Horário</Button>
                                     </div>
                                 ) : (
-                                    <div className="group/empty text-center py-12 border border-dashed border-gray-200 rounded-2xl bg-gray-50/60 transition-all duration-300 hover:border-brand-200 hover:bg-brand-50/30">
+                                    <div className="group/empty text-center py-12 border border-dashed border-gray-200 rounded-lg bg-gray-50/60 transition-all duration-300 hover:border-brand-200 hover:bg-brand-50/30">
                                         <CalendarOff className="mx-auto h-9 w-9 text-gray-300 mb-3 transition-all duration-300 group-hover/empty:scale-110 group-hover/empty:text-brand-400" />
                                         <h3 className="font-display text-sm font-bold tracking-tight text-gray-700">Dia sem atendimento</h3>
                                         <p className="text-xs text-gray-500 mt-1 mb-4">Você não tem horários configurados para {day.name}.</p>
-                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="group border-gray-300 text-gray-700 hover:bg-white hover:border-brand-400 hover:text-brand-600 h-9 text-xs rounded-xl font-semibold bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-brand-500/10 hover:-translate-y-0.5"><PlusCircle className="mr-2 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-90" /> Ativar {day.name}</Button>
+                                        <Button type="button" variant="outline" size="sm" onClick={() => addNewBlock(day.id)} className="group border-gray-300 text-gray-700 hover:bg-white hover:border-brand-400 hover:text-brand-600 h-9 text-xs rounded-md font-semibold bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-brand-500/10 hover:-translate-y-0.5"><PlusCircle className="mr-2 h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-90" /> Ativar {day.name}</Button>
                                     </div>
                                 )}
                                 </TabsContent>
@@ -245,7 +245,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                     </Tabs>
                 </CardContent>
                 <CardFooter className="px-6 pt-4 flex justify-end border-t border-gray-200 pb-6 bg-gray-50/30 rounded-b-2xl">
-                    <Button type="submit" disabled={isSaving} className="min-w-[150px] bg-primary hover:bg-primary/90 text-white h-11 text-sm font-semibold rounded-xl shadow-lg shadow-brand-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-80 disabled:hover:translate-y-0">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
+                    <Button type="submit" disabled={isSaving} className="min-w-[150px] bg-primary hover:bg-primary/90 text-white h-11 text-sm font-semibold rounded-md shadow-lg shadow-brand-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-80 disabled:hover:translate-y-0">{isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : 'Salvar Agenda'}</Button>
                 </CardFooter>
             </Card>
                 </form>

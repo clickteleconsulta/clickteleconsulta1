@@ -30,7 +30,7 @@ const BlogPage = () => (
 
       <div className="grid sm:grid-cols-2 gap-5">
         {ARTICLES.map((a) => (
-          <Link key={a.slug} to={`/blog/${a.slug}`} className="group bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+          <Link key={a.slug} to={`/blog/${a.slug}`} className="group bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div className="text-[11px] text-slate-400 font-medium flex items-center gap-2">
               <span>{fmt(a.date)}</span><span>·</span><span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {a.readMin} min</span>
             </div>

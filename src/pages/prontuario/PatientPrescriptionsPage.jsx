@@ -217,7 +217,7 @@ const PatientPrescriptionsPage = () => {
                         })}
                     </div>
                 ) : (
-                    <div className="border-2 border-dashed border-slate-200 rounded-xl p-12 flex flex-col items-center justify-center text-slate-400 bg-white">
+                    <div className="border-2 border-dashed border-slate-200 rounded-md p-12 flex flex-col items-center justify-center text-slate-400 bg-white">
                         <p>Nenhuma prescrição encontrada para este paciente.</p>
                         <Button variant="link" onClick={() => navigate('/medico/dashboard/prescricoes')}>
                             Criar primeira prescrição

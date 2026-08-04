@@ -31,7 +31,7 @@ const ConsentBanner = () => {
 
     return (
         <div className="fixed bottom-0 inset-x-0 z-[100] p-3 sm:p-4 animate-in slide-in-from-bottom-4 duration-300">
-            <div className="max-w-3xl mx-auto bg-white border border-gray-200 shadow-xl rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="max-w-3xl mx-auto bg-white border border-gray-200 shadow-xl rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                     <div className="p-2 bg-brand-50 text-brand-600 rounded-lg shrink-0">
                         <Cookie className="w-5 h-5" />
@@ -44,10 +44,10 @@ const ConsentBanner = () => {
                     </p>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                    <Button variant="outline" onClick={reject} className="h-9 text-sm rounded-xl border-gray-300 text-gray-700">
+                    <Button variant="outline" onClick={reject} className="h-9 text-sm rounded-md border-gray-300 text-gray-700">
                         Recusar
                     </Button>
-                    <Button onClick={accept} className="h-9 text-sm rounded-xl bg-primary hover:bg-primary/90 text-white shadow-md shadow-brand-500/20">
+                    <Button onClick={accept} className="h-9 text-sm rounded-md bg-primary hover:bg-primary/90 text-white shadow-md shadow-brand-500/20">
                         Aceitar
                     </Button>
                 </div>

@@ -31,7 +31,7 @@ const SubscriptionPlansDisplay = ({ currentPlanId, selectedPlanId, onSelectPlan,
             )}
           >
             {isHighlight && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-brand-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                 <Star className="w-3 h-3 fill-current" /> MAIS POPULAR
               </div>
             )}
@@ -68,7 +68,7 @@ const SubscriptionPlansDisplay = ({ currentPlanId, selectedPlanId, onSelectPlan,
                 className={cn(
                   "w-full font-bold transition-all", 
                   isCurrent ? "bg-gray-100 text-gray-500 hover:bg-gray-200 cursor-default" : 
-                  isHighlight ? "bg-gradient-to-r from-purple-600 to-brand-600 hover:from-purple-700 hover:to-brand-800 text-white shadow-lg shadow-purple-200" :
+                  isHighlight ? "bg-purple-600 hover:from-purple-700 hover:to-brand-800 text-white shadow-lg shadow-purple-200" :
                   "bg-white border-2 border-gray-200 text-gray-700 hover:border-gray-400 hover:bg-gray-50"
                 )}
                 onClick={() => !isCurrent && onSelectPlan(plan.id)}

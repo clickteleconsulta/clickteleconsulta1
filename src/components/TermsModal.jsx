@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const TermsModal = ({ isOpen, onClose, content, title }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[700px] max-h-[85vh] flex flex-col p-0 overflow-hidden rounded-xl shadow-2xl">
+            <DialogContent className="sm:max-w-[700px] max-h-[85vh] flex flex-col p-0 overflow-hidden rounded-md shadow-2xl">
                 <DialogHeader className="p-6 pb-2 bg-white border-b border-gray-100">
                     <DialogTitle className="text-xl font-bold text-gray-900">{title || "Termos e Condições"}</DialogTitle>
                 </DialogHeader>

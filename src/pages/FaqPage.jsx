@@ -35,7 +35,7 @@ const FaqPage = () => {
 
         <div className="space-y-3">
           {FAQ.map((f) => (
-            <details key={f.q} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <details key={f.q} className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
               <summary className="cursor-pointer list-none flex items-center justify-between gap-3 p-5 font-semibold text-slate-800 hover:bg-brand-50">
                 {f.q}
                 <span className="text-brand-500 text-xl leading-none transition-transform group-open:rotate-45">+</span>
@@ -48,7 +48,7 @@ const FaqPage = () => {
         {/* Arte AO LADO do texto, e pequena: aqui ela ilustra uma situação
             concreta — a pergunta que ficou sem resposta — em vez de decorar a
             página inteira. */}
-        <div className="mt-10 p-6 bg-brand-50 border border-slate-100 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="mt-10 p-6 bg-brand-50 border border-slate-100 rounded-lg flex flex-col sm:flex-row sm:items-center gap-6">
           <img
             src="/ilustra/faq.svg"
             alt=""
@@ -58,7 +58,7 @@ const FaqPage = () => {
           <div className="text-center sm:text-left">
             <p className="text-slate-700 font-medium">Não encontrou sua resposta?</p>
             <p className="text-sm text-slate-500 mt-1">Fale com a gente em <a href={`mailto:${BRAND.emails.suporte}`} className="text-brand-600 hover:underline">{BRAND.emails.suporte}</a></p>
-            <Button asChild className="mt-4 rounded-xl"><Link to="/agendamentos">Agendar consulta</Link></Button>
+            <Button asChild className="mt-4 rounded-md"><Link to="/agendamentos">Agendar consulta</Link></Button>
           </div>
         </div>
       </div>

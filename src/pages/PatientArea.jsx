@@ -67,9 +67,9 @@ const NextAppointmentCard = ({ appointment }) => {
   // página, ou seja, o cartão sumia no fundo.
   if (!appointment) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
           </div>
           <div>
@@ -108,7 +108,7 @@ const NextAppointmentCard = ({ appointment }) => {
     // precisa se separar do fundo. As transparências anteriores (primary/5 e
     // brand-400/10) davam um véu quase imperceptível sobre o cinza da página;
     // agora é uma superfície branca com borda na cor da marca.
-    <div className="bg-white rounded-2xl border border-brand-200 shadow-sm p-6 mb-6 relative overflow-hidden">
+    <div className="bg-white rounded-lg border border-brand-200 shadow-sm p-6 mb-6 relative overflow-hidden">
       {/* Decoração */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-full -translate-y-12 translate-x-12" />
 
@@ -139,7 +139,7 @@ const NextAppointmentCard = ({ appointment }) => {
         {/* Countdown / Botão entrar */}
         <div className="flex flex-col items-end gap-3">
           {countdown && !canEnter && (
-            <div className="bg-slate-50 rounded-xl border border-slate-200 px-4 py-3 text-center">
+            <div className="bg-slate-50 rounded-md border border-slate-200 px-4 py-3 text-center">
               <p className="text-xs text-muted-foreground mb-1">Começa em</p>
               <div className="flex items-center gap-1.5">
                 {countdown.hours > 0 && (
@@ -190,7 +190,7 @@ const NextAppointmentCard = ({ appointment }) => {
       </div>
 
       {canEnter && FEATURES.VIDEO_CALL && (
-        <div className="mt-4 flex items-center gap-2 bg-green-50 border border-green-100 rounded-xl p-3 text-sm text-green-700">
+        <div className="mt-4 flex items-center gap-2 bg-green-50 border border-green-100 rounded-md p-3 text-sm text-green-700">
           <Bell className="w-4 h-4 flex-shrink-0" />
           <span>
             Sua consulta está prestes a começar! Clique em{' '}
@@ -268,8 +268,8 @@ const PatientArea = () => {
       <div className="grid md:grid-cols-[280px_1fr] gap-8 items-start">
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col gap-4 sticky top-24">
-          <div className="flex flex-col items-center text-center p-5 border border-border rounded-2xl bg-card shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mb-3 text-white text-2xl font-bold shadow-md shadow-brand-500/20">
+          <div className="flex flex-col items-center text-center p-5 border border-border rounded-lg bg-card shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-brand-500 flex items-center justify-center mb-3 text-white text-2xl font-bold shadow-md shadow-brand-500/20">
               {initial}
             </div>
             <h2 className="text-base font-bold text-slate-900 truncate max-w-full">{profile?.full_name}</h2>
@@ -281,7 +281,7 @@ const PatientArea = () => {
             )}
           </div>
 
-          <Card className="p-4 rounded-2xl shadow-sm space-y-4">
+          <Card className="p-4 rounded-lg shadow-sm space-y-4">
             {navSections.map((section) => (
               <div key={section.title}>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-3 mb-1.5">

@@ -66,8 +66,8 @@ const StepIndicator = ({ currentStep }) => (
 
 // ─── Profile Preview ───────────────────────────────────────────────────────────
 const ProfilePreview = ({ form }) => (
-  <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden max-w-md mx-auto">
-    <div className="h-20 bg-gradient-to-r from-brand-500/20 to-brand-600/10" />
+  <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden max-w-md mx-auto">
+    <div className="h-20 bg-brand-50" />
     <div className="px-5 pb-5 relative">
       <div className="-mt-10 mb-3">
         <Avatar className="w-20 h-20 border-4 border-white shadow-md">
@@ -113,7 +113,7 @@ const ProfileChecklist = ({ form }) => {
   const pct = completeness(form);
 
   return (
-    <div className="bg-brand-50/40 rounded-xl border border-brand-100 p-4 space-y-3">
+    <div className="bg-brand-50/40 rounded-md border border-brand-100 p-4 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-brand-800">Perfil completo em {pct}%</p>
         <span className="text-xs text-brand-600 font-bold">{pct}%</span>
@@ -242,7 +242,7 @@ const DoctorSignUpPage = () => {
           </div>
 
           {/* Progress */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+          <div className="bg-white rounded-md border border-gray-200 p-6 shadow-sm">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-xs text-gray-400 font-medium">Etapa {step} de {STEPS.length}</span>
               <span className="text-xs text-brand-600 font-semibold">{Math.round((step / STEPS.length) * 100)}%</span>

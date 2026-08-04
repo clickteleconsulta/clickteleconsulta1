@@ -80,7 +80,7 @@ const GuestTokenDialog = ({ appointment, open, onOpenChange }) => {
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-           <DialogContent className="sm:max-w-md rounded-xl border-gray-100 shadow-xl">
+           <DialogContent className="sm:max-w-md rounded-md border-gray-100 shadow-xl">
                <DialogHeader>
                    <DialogTitle className="flex items-center gap-2 text-lg font-bold text-gray-900">
                        <Key className="w-5 h-5 text-brand-600" />
@@ -257,7 +257,7 @@ const RescheduleDialog = ({ appointment, open, onOpenChange }) => {
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px] rounded-xl shadow-xl border-gray-100">
+            <DialogContent className="sm:max-w-[425px] rounded-md shadow-xl border-gray-100">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-lg font-bold text-gray-900">
                         <CalendarClock className="w-5 h-5 text-brand-600" />
@@ -470,11 +470,11 @@ const NewGuestAppointmentDialog = ({ children }) => {
       setIsOpen(open);
     }}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)} className="h-11 bg-gradient-to-r from-brand-500 to-brand-600 hover:scale-105 transition-all duration-300 text-white rounded-lg px-6 shadow-md hover:shadow-lg flex items-center gap-2">
+        <Button onClick={() => setIsOpen(true)} className="h-11 bg-brand-500 hover:scale-105 transition-all duration-300 text-white rounded-lg px-6 shadow-md hover:shadow-lg flex items-center gap-2">
           <Plus className="w-4 h-4" /> Criar Novo Agendamento
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95%] sm:max-w-[400px] p-6 overflow-hidden rounded-xl border-gray-100 shadow-xl">
+      <DialogContent className="w-[95%] sm:max-w-[400px] p-6 overflow-hidden rounded-md border-gray-100 shadow-xl">
         {step === 'form' ? (
           <>
             <DialogHeader>
@@ -582,7 +582,7 @@ const NewGuestAppointmentDialog = ({ children }) => {
             </DialogHeader>
 
             <div className="flex flex-col gap-4 py-2 w-full">
-              <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex flex-col gap-2 w-full">
+              <div className="bg-gray-50 border border-gray-100 rounded-md p-4 flex flex-col gap-2 w-full">
                 <span className="text-[10px] uppercase tracking-wider font-bold text-gray-500">Link de Acesso</span>
                 <div className="flex items-center bg-white border border-gray-200 rounded-lg p-3 w-full max-w-full">
                   <code className="text-xs text-gray-800 font-mono break-all whitespace-normal">
@@ -625,7 +625,7 @@ const PatientDetailsDialog = ({ patient, guest, children }) => {
   
   return <Dialog>
     <DialogTrigger asChild>{children}</DialogTrigger>
-    <DialogContent className="sm:max-w-md p-6 rounded-xl border-gray-100 shadow-xl">
+    <DialogContent className="sm:max-w-md p-6 rounded-md border-gray-100 shadow-xl">
       <DialogHeader className="p-0 pb-4">
         <DialogTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
           Dados do Paciente {isGuest && <span className="text-[10px] bg-brand-50 text-brand-800 px-2 py-0.5 rounded-full border border-brand-100 font-medium uppercase tracking-wide">Convidado</span>}
@@ -818,7 +818,7 @@ const DoctorConsultations = () => {
     const totalPages = Math.ceil(appointmentsList.length / ITEMS_PER_PAGE);
     const paginatedList = appointmentsList.slice((currentPage[tabKey] - 1) * ITEMS_PER_PAGE, currentPage[tabKey] * ITEMS_PER_PAGE);
     return <>
-      <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-white mt-8">
+      <Card className="border-0 shadow-lg rounded-md overflow-hidden bg-white mt-8">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -915,7 +915,7 @@ const DoctorConsultations = () => {
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="rounded-xl shadow-xl border-gray-100 min-w-[180px] p-1.5">
+                            <DropdownMenuContent align="end" className="rounded-md shadow-xl border-gray-100 min-w-[180px] p-1.5">
                               {FEATURES.PRONTUARIO && (
                               <DropdownMenuItem onSelect={() => navigate(`/dashboard/medico/pacientes/${appt.patient_id}`)} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
                                 <User className="mr-2 h-4 w-4 text-gray-500" /> Ir para Prontuário
@@ -942,7 +942,7 @@ const DoctorConsultations = () => {
                                     <UserX className="mr-2 h-4 w-4" /> Marcar não comparecimento
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent className="rounded-xl border-gray-100 shadow-xl">
+                                <AlertDialogContent className="rounded-md border-gray-100 shadow-xl">
                                   <AlertDialogHeader>
                                     <AlertDialogTitle className="text-lg font-bold text-gray-900">Registrar não comparecimento?</AlertDialogTitle>
                                     <AlertDialogDescription className="text-sm">
@@ -965,7 +965,7 @@ const DoctorConsultations = () => {
                                     <Trash2 className="mr-2 h-4 w-4" />Cancelar Consulta
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent className="rounded-xl border-gray-100 shadow-xl">
+                                <AlertDialogContent className="rounded-md border-gray-100 shadow-xl">
                                   <AlertDialogHeader>
                                     <AlertDialogTitle className="text-lg font-bold text-gray-900">Cancelar Agendamento?</AlertDialogTitle>
                                     <AlertDialogDescription className="text-sm">
@@ -1083,7 +1083,7 @@ const DoctorConsultations = () => {
     
     {/* Popup Fallback Dialog */}
     <Dialog open={!!blockedRoom} onOpenChange={(open) => !open && setBlockedRoom(null)}>
-        <DialogContent className="sm:max-w-md rounded-xl shadow-xl">
+        <DialogContent className="sm:max-w-md rounded-md shadow-xl">
             <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-amber-600">
                     <AlertTriangle className="w-5 h-5" />

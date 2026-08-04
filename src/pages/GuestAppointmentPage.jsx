@@ -155,7 +155,7 @@ const GuestAppointmentPage = () => {
     const canJoin = appointment?.canJoin;
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-brand-50 to-white flex items-center justify-center p-4">
+        <div className="min-h-screen bg-brand-50 flex items-center justify-center p-4">
             <Card className="w-full max-w-lg shadow-xl border-brand-100">
                 <CardHeader className="text-center pb-2">
                     <div className="mx-auto mb-4 relative">
@@ -175,7 +175,7 @@ const GuestAppointmentPage = () => {
                 
                 <CardContent className="space-y-6 pt-4">
                     {/* Appointment Details */}
-                    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-3">
+                    <div className="bg-white p-4 rounded-md border border-gray-100 shadow-sm space-y-3">
                         <div className="flex items-center gap-3 text-gray-700 pb-3 border-b border-gray-50">
                             <User className="w-5 h-5 text-brand-500" />
                             <div>

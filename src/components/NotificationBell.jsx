@@ -99,7 +99,7 @@ const NotificationBell = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="relative text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full w-10 h-10"
+        className="relative text-gray-500 hover:text-primary hover:bg-gray-100 rounded-md w-10 h-10"
         onClick={() => setIsOpen(!isOpen)}
       >
         <Bell className="h-5 w-5" />
@@ -111,7 +111,7 @@ const NotificationBell = () => {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5">
+        <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-md shadow-2xl border border-gray-100 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5">
           <Tabs defaultValue="unread" className="w-full">
             <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
               <h3 className="font-semibold text-sm text-gray-900">Notificações</h3>

@@ -131,7 +131,7 @@ const PacientesListPage = () => {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-3 items-center bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+            <div className="flex flex-col sm:flex-row gap-3 items-center bg-white p-4 rounded-md border border-slate-100 shadow-sm">
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                     <Input 
@@ -151,7 +151,7 @@ const PacientesListPage = () => {
             </div>
 
             {/* List */}
-            <Card className="border-0 shadow-sm rounded-2xl overflow-hidden bg-white ring-1 ring-slate-100">
+            <Card className="border-0 shadow-sm rounded-lg overflow-hidden bg-white ring-1 ring-slate-100">
                 <CardContent className="p-0">
                     <Table>
                         <TableHeader className="bg-slate-50/50">

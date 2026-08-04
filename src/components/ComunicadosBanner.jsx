@@ -52,7 +52,7 @@ const ComunicadosBanner = ({ audience }) => {
                 const s = STYLES[c.tipo] || STYLES.info;
                 const Icon = s.icon;
                 return (
-                    <div key={c.id} className={`flex items-start gap-3 p-4 rounded-xl border ${s.wrap}`}>
+                    <div key={c.id} className={`flex items-start gap-3 p-4 rounded-md border ${s.wrap}`}>
                         <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${s.iconCls}`} />
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold">{c.titulo}</p>

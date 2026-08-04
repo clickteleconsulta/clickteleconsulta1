@@ -203,7 +203,7 @@ const DoctorArea = () => {
                                     <Link
                                         to={item.href}
                                         className={`
-                                            relative flex items-center rounded-xl transition-all duration-300 group
+                                            relative flex items-center rounded-md transition-all duration-300 group
                                             ${expanded ? 'justify-start gap-3 px-3 h-11 w-full' : 'justify-center w-12 h-12'}
                                             ${isActive
                                                 ? 'text-brand-600 bg-brand-50 shadow-sm'
@@ -254,7 +254,7 @@ const DoctorArea = () => {
                     {expanded ? (
                         <button
                             onClick={handleSignOut}
-                            className="flex items-center justify-start gap-3 px-3 h-11 w-full rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
+                            className="flex items-center justify-start gap-3 px-3 h-11 w-full rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
                         >
                             <LogOut size={20} strokeWidth={1.5} className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" />
                             <span className="text-sm font-medium">Sair da conta</span>
@@ -264,7 +264,7 @@ const DoctorArea = () => {
                             <TooltipTrigger asChild>
                                 <button
                                     onClick={handleSignOut}
-                                    className="flex items-center justify-center w-10 h-10 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
+                                    className="flex items-center justify-center w-10 h-10 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 group"
                                 >
                                     <LogOut size={20} strokeWidth={1.5} className="transition-transform group-hover:translate-x-0.5" />
                                 </button>

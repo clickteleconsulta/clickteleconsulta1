@@ -115,7 +115,7 @@ const LegalPage = () => {
                             <p className="text-gray-500 font-medium">Carregando documento...</p>
                         </div>
                     ) : error ? (
-                        <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center mt-8 shadow-sm">
+                        <div className="bg-red-50 border border-red-200 rounded-md p-8 text-center mt-8 shadow-sm">
                             <div className="bg-white p-3 rounded-full w-fit mx-auto mb-4 border border-red-100 shadow-sm">
                                 <AlertCircle className="h-8 w-8 text-red-600" />
                             </div>
@@ -131,7 +131,7 @@ const LegalPage = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col flex-1 animate-in fade-in duration-500">
+                        <div className="bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden flex flex-col flex-1 animate-in fade-in duration-500">
                             <div className="p-6 md:p-8 border-b border-gray-100 bg-gray-50/50">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                                     <div className="space-y-2">
@@ -192,7 +192,7 @@ const LegalPage = () => {
 
                                             {/* Mobile View: Show button to open PDF externally for better experience */}
                                             <div className="md:hidden flex flex-col items-center justify-center h-full p-8 text-center space-y-6">
-                                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                                                     <FileText className="w-16 h-16 text-brand-200 mx-auto mb-4" />
                                                     <h3 className="text-lg font-bold text-gray-900">Visualização de PDF</h3>
                                                     <p className="text-sm text-gray-500 mt-2 mb-6">

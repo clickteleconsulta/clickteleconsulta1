@@ -34,7 +34,7 @@ const DocumentsTab = ({ patientId, doctorId }) => (
             <h3 className="font-semibold text-gray-800">Documentos do Paciente</h3>
             <Button variant="outline" size="sm" className="text-brand-600 border-brand-200 hover:bg-brand-50"><Plus className="w-4 h-4 mr-2"/>Upload</Button>
         </div>
-        <div className="border border-dashed border-gray-200 rounded-xl p-10 text-center bg-gray-50/50">
+        <div className="border border-dashed border-gray-200 rounded-md p-10 text-center bg-gray-50/50">
             <p className="text-gray-500 text-sm">Nenhum documento anexado ainda.</p>
         </div>
     </div>
@@ -64,7 +64,7 @@ const PaymentsTab = ({ patientId }) => {
         <div className="p-6">
             <h3 className="font-semibold text-gray-800 mb-4">Histórico de Pagamentos</h3>
             {payments.length === 0 ? (
-                <div className="border border-dashed border-gray-200 rounded-xl p-10 text-center bg-gray-50/50">
+                <div className="border border-dashed border-gray-200 rounded-md p-10 text-center bg-gray-50/50">
                     <p className="text-gray-500 text-sm">Nenhum pagamento registrado.</p>
                 </div>
             ) : (
@@ -701,15 +701,15 @@ const PatientRecordPage = () => {
                              </div>
                         </TabsContent>
 
-                        <TabsContent value="documents" className="mt-0 bg-white rounded-xl shadow-sm border border-gray-200 min-h-[400px]">
+                        <TabsContent value="documents" className="mt-0 bg-white rounded-md shadow-sm border border-gray-200 min-h-[400px]">
                             <DocumentsTab patientId={patientId} doctorId={doctor?.id} />
                         </TabsContent>
 
-                        <TabsContent value="data" className="mt-0 bg-white rounded-xl shadow-sm border border-gray-200 min-h-[400px]">
+                        <TabsContent value="data" className="mt-0 bg-white rounded-md shadow-sm border border-gray-200 min-h-[400px]">
                             <PatientDataTab patient={patient} />
                         </TabsContent>
 
-                        <TabsContent value="payments" className="mt-0 bg-white rounded-xl shadow-sm border border-gray-200 min-h-[400px]">
+                        <TabsContent value="payments" className="mt-0 bg-white rounded-md shadow-sm border border-gray-200 min-h-[400px]">
                             <PaymentsTab patientId={patientId} />
                         </TabsContent>
                     </div>
@@ -718,7 +718,7 @@ const PatientRecordPage = () => {
 
             {/* Appointment Detail Modal (PDF/Print functionality moved here) */}
             <Dialog open={!!selectedAppointment} onOpenChange={(open) => !open && setSelectedAppointment(null)}>
-                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-0 rounded-xl">
+                <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-0 rounded-md">
                     <DialogHeader className="p-6 border-b sticky top-0 bg-white z-10">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>

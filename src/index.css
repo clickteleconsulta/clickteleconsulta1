@@ -59,7 +59,10 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 222 47.1% 44.3%;
  
-  --radius: 0.75rem;
+  /* Raio da interface. Medi a Doctoralia em 04/08/2026: botões em pílula
+     (999px) e cards em 16px — exatamente o que tínhamos. Descer para 8px
+     afasta a nossa cara da deles e deixa o traço mais seco. */
+  --radius: 0.5rem;
 }
  
 body {
@@ -113,9 +116,9 @@ p, span, div, li {
   .font-body { font-family: 'Geist', system-ui, sans-serif; }
 
   .dashboard-card {
-    @apply bg-white rounded-2xl border border-gray-200 shadow-sm p-6 transition-all duration-300 hover:shadow-lg;
-    /* brilho cobalto sutil da marca no hover */
-    --tw-shadow-color: rgb(59 91 165 / 0.10);
+    /* Sem brilho colorido no hover: sombra tingida é efeito, e efeito demais é
+       o que tira a cara profissional. Fica a sombra neutra e discreta. */
+    @apply bg-white rounded-lg border border-gray-200 shadow-sm p-6 transition-shadow duration-200 hover:shadow-md;
   }
 
   .dashboard-title {

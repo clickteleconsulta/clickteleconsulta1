@@ -380,7 +380,7 @@ const DoctorFinance = () => {
             <DoctorPageHeader icon={Wallet} title="Financeiro" subtitle="Gerencie seus recebimentos e fluxo de caixa.">
                 <Popover>
                     <PopoverTrigger asChild>
-                        <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-xl border-gray-300 text-gray-700 transition-all duration-200 hover:border-brand-300 hover:text-brand-600 hover:shadow-sm">
+                        <Button variant="outline" className="gap-2 h-9 text-xs px-3 rounded-md border-gray-300 text-gray-700 transition-all duration-200 hover:border-brand-300 hover:text-brand-600 hover:shadow-sm">
                             <Wallet className="w-3.5 h-3.5" /> Dados para saque
                         </Button>
                     </PopoverTrigger>
@@ -392,14 +392,14 @@ const DoctorFinance = () => {
                     onClick={() => { setSelectedGuideIds([]); setIsWithdrawOpen(true); }}
                     disabled={!canRequestWithdraw || paidTransactions.length === 0}
                     title={!canRequestWithdraw ? `Novo saque disponível em ${nextEligibleDate ? spDate(nextEligibleDate) : ''}` : (paidTransactions.length === 0 ? 'Nenhuma guia disponível para saque' : 'Solicitar saque')}
-                    className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-brand-500/20 h-9 text-xs px-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                    className="gap-2 bg-primary hover:bg-primary/90 text-white shadow-md shadow-brand-500/20 h-9 text-xs px-3 rounded-md transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/30 hover:-translate-y-0.5 active:translate-y-0"
                 >
                     <Wallet className="w-3.5 h-3.5" /> Solicitar Saque
                 </Button>
             </DoctorPageHeader>
 
             <div className="max-w-sm">
-                <Card className="bg-white border-l-4 border-l-green-500 border-gray-200 shadow-sm p-4 rounded-2xl transition-all duration-300 hover:shadow-md">
+                <Card className="bg-white border-l-4 border-l-green-500 border-gray-200 shadow-sm p-4 rounded-lg transition-all duration-300 hover:shadow-md">
                     <CardHeader className="p-0 pb-2">
                         <CardTitle className="text-xs font-bold text-gray-500 uppercase tracking-wide">Saldo Disponível (Líquido)</CardTitle>
                     </CardHeader>
@@ -420,7 +420,7 @@ const DoctorFinance = () => {
             </div>
 
             {/* Relatório por período */}
-            <Card className="border border-gray-200 shadow-sm rounded-2xl">
+            <Card className="border border-gray-200 shadow-sm rounded-lg">
                 <CardHeader className="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                         <CardTitle className="text-sm font-semibold text-gray-900 flex items-center gap-2"><CalendarDays className="w-4 h-4 text-primary" /> Relatório por período</CardTitle>
@@ -453,13 +453,13 @@ const DoctorFinance = () => {
             </Card>
 
             <Tabs defaultValue="consultas" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 max-w-[320px] h-10 p-1 bg-gray-100/80 rounded-xl">
+                <TabsList className="grid w-full grid-cols-2 max-w-[320px] h-10 p-1 bg-gray-100/80 rounded-md">
                     <TabsTrigger value="consultas" className="text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-800 text-gray-500">Extrato de Consultas</TabsTrigger>
                     <TabsTrigger value="saques" className="text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-brand-800 text-gray-500">Extrato de Saques</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="consultas" className="mt-4">
-                    <Card className="border border-gray-200 shadow-sm rounded-2xl">
+                    <Card className="border border-gray-200 shadow-sm rounded-lg">
                         <CardHeader className="p-4 border-b border-gray-100">
                             <CardTitle className="text-sm font-semibold text-gray-900">Guias de Pagamento</CardTitle>
                             <CardDescription className="text-xs text-gray-500">Histórico detalhado dos pagamentos das consultas.</CardDescription>
@@ -530,7 +530,7 @@ const DoctorFinance = () => {
                 </TabsContent>
 
                 <TabsContent value="saques" className="mt-4">
-                     <Card className="border border-gray-200 shadow-sm rounded-2xl">
+                     <Card className="border border-gray-200 shadow-sm rounded-lg">
                         <CardHeader className="p-4 border-b border-gray-100">
                             <CardTitle className="text-sm font-semibold text-gray-900">Extrato de Saques</CardTitle>
                             <CardDescription className="text-xs text-gray-500">Histórico de retiradas.</CardDescription>

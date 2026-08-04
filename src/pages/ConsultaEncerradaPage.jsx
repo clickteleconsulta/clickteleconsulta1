@@ -390,7 +390,7 @@ const ConsultaEncerradaPage = () => {
       <Helmet>
         <title>Consulta Encerrada — {BRAND.name}</title>
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-brand-50/30 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50/30 flex items-center justify-center p-4">
         <div className="w-full max-w-lg">
           {/* Duração da consulta */}
           {appointment?.duracao_real_segundos && (

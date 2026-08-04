@@ -110,7 +110,7 @@ const DoctorHelp = () => {
         <div className="space-y-6 max-w-4xl mx-auto pb-8">
             <DoctorPageHeader icon={LifeBuoy} title="Central de Ajuda" subtitle="Manual de boas práticas e canais de suporte para médicos parceiros." />
 
-            <Card className="dashboard-card bg-gradient-to-br from-primary/5 to-transparent border-primary/10 p-0">
+            <Card className="dashboard-card bg-primary border-primary/10 p-0">
                 <CardContent className="text-center py-6 px-4">
                     <div className="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
                         <LifeBuoy className="w-5 h-5 text-primary" />
@@ -119,7 +119,7 @@ const DoctorHelp = () => {
                     <p className="text-gray-500 max-w-md mx-auto mb-4 text-sm">
                         Consulte o manual de boas práticas abaixo ou fale com nossa equipe para dúvidas sobre agendamentos, financeiro ou uso da plataforma.
                     </p>
-                    <Button asChild className="bg-primary hover:bg-primary/90 rounded-xl px-6 h-9 text-sm">
+                    <Button asChild className="bg-primary hover:bg-primary/90 rounded-md px-6 h-9 text-sm">
                         <Link to="/suporte">Acessar FAQ e Tutoriais <ArrowRight className="ml-1.5 w-3.5 h-3.5" /></Link>
                     </Button>
                 </CardContent>
@@ -142,7 +142,7 @@ const DoctorHelp = () => {
                             <AccordionItem
                                 key={i}
                                 value={`item-${i}`}
-                                className="border border-gray-200 rounded-xl px-4 data-[state=open]:border-brand-200 data-[state=open]:bg-brand-50/30 transition-colors"
+                                className="border border-gray-200 rounded-md px-4 data-[state=open]:border-brand-200 data-[state=open]:bg-brand-50/30 transition-colors"
                             >
                                 <AccordionTrigger className="hover:no-underline py-3.5 text-left">
                                     <span className="flex items-center gap-3">
