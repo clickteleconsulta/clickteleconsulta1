@@ -428,8 +428,12 @@ export function DoctorScheduleCard({
                   <div className="md:hidden flex items-start gap-8">
                       <div className="min-w-0">
                           <TeleconsultaBadge />
+                          {/* Mesmo corpo e mesmo leading que o valor da agenda ao
+                              lado, para as duas linhas assentarem na mesma base.
+                              O preço continua liderando pela cor e pelo peso, não
+                              pelo tamanho. */}
                           <p
-                              className="mt-1.5 text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
+                              className="mt-1.5 text-[18px] font-extrabold tracking-tight tabular-nums leading-none"
                               style={{ color: BRAND.acento }}
                           >
                               {displayPrice}
@@ -438,7 +442,7 @@ export function DoctorScheduleCard({
                       {diasAbertos && (
                           <div className="min-w-0">
                               <p className="h-6 flex items-center text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</p>
-                              <p className="mt-1.5 text-[17px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
+                              <p className="mt-1.5 text-[18px] font-bold tracking-tight text-slate-900 leading-none whitespace-nowrap">
                                   {diasAbertos}
                               </p>
                           </div>
@@ -447,8 +451,11 @@ export function DoctorScheduleCard({
 
                   <div className="hidden md:flex items-center justify-between gap-3">
                       <TeleconsultaBadge size="md" />
+                      {/* 19px encosta na altura do selo (h-7) sem ultrapassá-la,
+                          então o `items-center` do flex centraliza os dois de
+                          verdade em vez de compensar uma caixa maior. */}
                       <span
-                          className="text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
+                          className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
                           style={{ color: BRAND.acento }}
                       >
                           {displayPrice}
