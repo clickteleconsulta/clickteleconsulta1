@@ -369,40 +369,43 @@ export function DoctorScheduleCard({
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          {/* NUNCA truncar. Antes havia `line-clamp-2` aqui e o selo
-                              vivia dentro do <h3>: num nome de três linhas — a Dra.
-                              Renata de Oliveira Dias Mouli — o clamp cortava a última
-                              linha e levava o selo junto, sumindo com a verificação
-                              justamente de quem tem o nome mais longo. O nome agora
-                              ocupa quantas linhas precisar e o selo é inline no fim,
-                              então acompanha o texto sem nunca ser cortado. */}
-                          <h3 className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight">
-                              {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
-                              <VerifiedSeal className="inline w-[15px] h-[15px] ml-1 align-[-1px]" />
-                              {/* Disponibilidade no dia: bolinha verde dentro de um halo
-                                  claro, ao lado do selo. O halo tem o mesmo diâmetro do
-                                  selo, então os dois lêem como um par de indicadores em
-                                  vez de sujeira ao lado do nome — e dá à bolinha um
-                                  contorno próprio, que sozinha ela não tinha sobre o
-                                  branco do card.
+                          {/* O nome trunca em 2 linhas; os selos NUNCA vão junto.
+                              Eles são irmãos do texto, não filhos dele: antes viviam
+                              dentro do bloco com line-clamp e, num nome de três linhas
+                              — a Dra. Renata de Oliveira Dias Mouli —, o clamp cortava
+                              a última linha e apagava a verificação de quem tem o nome
+                              mais longo. Como irmão `shrink-0`, o par de selos fica
+                              fora do que o clamp corta, em qualquer tamanho de nome.
 
-                                  Sem piscar: o pulso competia com o preço pela atenção.
-                                  Verde de sucesso da interface, não o jade da marca.
-                                  Só aparece depois que a agenda carregou; enquanto
-                                  carrega, a ausência não significa indisponível. */}
-                              {!loadingSlots && disponivelHoje && (
-                                  <span
-                                      /* align-[3px] e não o -1px do selo: um inline-flex
-                                         não assenta na mesma linha de base de um <svg>
-                                         inline — medido, o badge caía 4 px abaixo. */
-                                      className="inline-flex items-center justify-center w-[15px] h-[15px] ml-1.5 rounded-full bg-green-100 ring-1 ring-inset ring-green-300 align-[3px]"
-                                      role="img"
-                                      aria-label="Disponível hoje"
-                                      title="Disponível hoje"
-                                  >
-                                      <span className="w-[7px] h-[7px] rounded-full bg-green-500" />
-                                  </span>
-                              )}
+                              `items-baseline` põe os selos na linha de base da PRIMEIRA
+                              linha do nome — é onde o olho os procura, e não muda de
+                              lugar quando o nome passa de uma para duas linhas. */}
+                          <h3 className="flex items-baseline gap-1 text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight">
+                              <span className="line-clamp-2 min-w-0">
+                                  {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
+                              </span>
+                              <span className="shrink-0 inline-flex items-center gap-1.5 translate-y-[1px]">
+                                  <VerifiedSeal className="w-[15px] h-[15px]" />
+                                  {/* Disponibilidade no dia: bolinha verde dentro de um
+                                      halo claro, do mesmo diâmetro do selo — os dois lêem
+                                      como um par de indicadores, e o halo dá à bolinha um
+                                      contorno que sozinha ela não tinha sobre o branco.
+
+                                      Sem piscar: o pulso competia com o preço pela atenção.
+                                      Verde de sucesso da interface, não o jade da marca.
+                                      Só aparece depois que a agenda carregou; enquanto
+                                      carrega, a ausência não significa indisponível. */}
+                                  {!loadingSlots && disponivelHoje && (
+                                      <span
+                                          className="inline-flex items-center justify-center w-[15px] h-[15px] rounded-full bg-green-100 ring-1 ring-inset ring-green-300"
+                                          role="img"
+                                          aria-label="Disponível hoje"
+                                          title="Disponível hoje"
+                                      >
+                                          <span className="w-[7px] h-[7px] rounded-full bg-green-500" />
+                                      </span>
+                                  )}
+                              </span>
                           </h3>
                       </Link>
 

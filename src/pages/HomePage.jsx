@@ -41,6 +41,10 @@ import { supabase } from '@/lib/customSupabaseClient';
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
 const CYCLING_WORDS = ['sem sair de casa', 'sem fila', 'sem convênio'];
 
+// Reserva o espaço do herói. Derivada da lista, e não escrita à mão: acrescentar
+// uma palavra maior sem lembrar de atualizar aqui traria o pulo de volta.
+const PALAVRA_MAIS_LONGA = CYCLING_WORDS.reduce((a, b) => (b.length > a.length ? b : a));
+
 // ─── Especialidades ─────────────────────────────────────────────────────────────
 const SPECIALTIES = [
   { name: 'Generalista', icon: Stethoscope, color: 'bg-brand-50 text-brand-600' },
@@ -168,26 +172,53 @@ const HomePage = () => {
                 className="font-display text-5xl md:text-6xl lg:text-[4.25rem] font-extrabold text-slate-900 leading-[1.04] tracking-[-0.035em]"
               >
                 Consulta marcada em{' '}
-                <span className="relative inline-block">
-                  minutos
-                  <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
-                    <path d="M2 6C50 2 150 2 198 6" stroke="#A3B8DF" strokeWidth="4" strokeLinecap="round" />
-                  </svg>
-                </span>
-                ,{' '}
+                {/* A vírgula fica presa a "minutos" pelo whitespace-nowrap. Sem ele,
+                    "minutos" é um inline-block e a vírgula um nó de texto solto: o
+                    navegador podia quebrar a linha entre os dois e, no celular, a
+                    troca da palavra animada refluía o texto e jogava a vírgula
+                    sozinha para a linha de baixo. O nowrap envolve só os dois — o
+                    espaço seguinte fica de fora, então a linha ainda pode quebrar
+                    DEPOIS da vírgula, que é onde deve quebrar. */}
+                <span className="whitespace-nowrap">
+                  <span className="relative inline-block">
+                    minutos
+                    <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
+                      <path d="M2 6C50 2 150 2 198 6" stroke="#A3B8DF" strokeWidth="4" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                  ,
+                </span>{' '}
                 <br className="hidden sm:block" />
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={wordIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4 }}
-                    className="inline-block text-brand-600"
-                  >
-                    {CYCLING_WORDS[wordIndex]}
-                  </motion.span>
-                </AnimatePresence>
+                {/* O espaço da palavra que gira é RESERVADO por um fantasma invisível
+                    com a maior das opções; as palavras animadas ficam sobrepostas a
+                    ele, em posição absoluta.
+
+                    Sem isso o herói pulava de duas formas: no vão entre a palavra que
+                    sai e a que entra o texto ficava uma linha mais curto, e palavras
+                    de larguras diferentes mudavam a quebra de linha. Medido no celular:
+                    o botão "Agendar Consulta" subia 50 px a cada 3 segundos.
+
+                    Tentei antes resolver trocando o modo do AnimatePresence para
+                    popLayout — não resolveu, porque o problema é de fluxo do texto e
+                    não de qual elemento está montado. Reservar o espaço não depende do
+                    comportamento interno da biblioteca de animação. */}
+                <span className="relative inline-block align-top">
+                  <span className="invisible" aria-hidden="true">{PALAVRA_MAIS_LONGA}</span>
+                  <span className="absolute inset-0">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={wordIndex}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.4 }}
+                        className="inline-block text-brand-600"
+                      >
+                        {CYCLING_WORDS[wordIndex]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                </span>
               </motion.h1>
 
               <motion.p
