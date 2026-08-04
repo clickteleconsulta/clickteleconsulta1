@@ -26,6 +26,45 @@ import {
 } from "@/components/ui/select";
 import { parseISO, getDay } from 'date-fns';
 
+/**
+ * Pré-visualização das estrelas de avaliação — SÓ EM DESENVOLVIMENTO.
+ *
+ * Nenhum médico tem avaliação ainda, então o bloco de estrelas do card nunca
+ * aparece e não dá para julgar o desenho. Isto injeta notas de mentira para a
+ * revisão visual, e nada mais: não escreve no banco, não altera nenhuma
+ * consulta e não muda o que o paciente vê.
+ *
+ * DUAS TRAVAS, porque um dado de avaliação falso num site de saúde seria grave:
+ *
+ *   1. `import.meta.env.DEV` é substituído por `false` no build do Vite, então
+ *      esta função inteira sai do bundle publicado por eliminação de código
+ *      morto — não é uma checagem em tempo de execução que alguém possa burlar.
+ *   2. Mesmo em desenvolvimento, só responde com `?avaliacoes=teste` na URL.
+ *
+ * Uso: http://localhost:3000/agendamentos?avaliacoes=teste
+ *
+ * As amostras são distribuídas pela POSIÇÃO na lista, não por um hash do id:
+ * hash de UUID colidia e os cards saíam todos com a mesma nota, que era
+ * justamente o que a pré-visualização precisa evitar. Por posição, aparecem as
+ * cinco variações de uma vez — nota cheia e quebrada, e contagem de um, dois e
+ * três dígitos, para conferir o alinhamento em todas.
+ */
+const AMOSTRAS = [
+  { rating: 5.0, reviewCount: 3 },
+  { rating: 4.8, reviewCount: 47 },
+  { rating: 4.2, reviewCount: 128 },
+  { rating: 3.6, reviewCount: 9 },
+  { rating: 2.9, reviewCount: 214 },
+];
+
+const avaliacoesDeTeste = () =>
+  import.meta.env.DEV
+  && typeof window !== 'undefined'
+  && new URLSearchParams(window.location.search).get('avaliacoes') === 'teste';
+
+const amostraDeAvaliacao = (indice) =>
+  (avaliacoesDeTeste() ? AMOSTRAS[indice % AMOSTRAS.length] : null);
+
 const AppointmentsPage = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
@@ -107,7 +146,7 @@ const AppointmentsPage = () => {
 
     const newDoctorPrices = {};
 
-    const processedDoctors = (publicDoctors || []).map(doc => {
+    const processedDoctors = (publicDoctors || []).map((doc, indice) => {
       const taxaPercentual = doc.payment_settings?.platform_fee_percent || 0;
       const mainProc = doc.procedimentos?.find(p => p.principal);
       const precoRepasse = mainProc ? Number(mainProc.preco) : (Number(doc.price_in_cents) / 100 || 0);
@@ -115,11 +154,12 @@ const AppointmentsPage = () => {
       const precoFinal = patientPriceFromRepasse(precoRepasse, taxaPercentual);
       newDoctorPrices[doc.id] = precoFinal;
       const r = ratingsByUser[doc.user_id];
+      const notas = r || amostraDeAvaliacao(indice);
       return {
         ...doc,
         price_in_cents: Math.round(precoFinal * 100),
-        rating: r ? r.rating : 0,
-        reviewCount: r ? r.reviewCount : 0,
+        rating: notas ? notas.rating : 0,
+        reviewCount: notas ? notas.reviewCount : 0,
       };
     });
 
