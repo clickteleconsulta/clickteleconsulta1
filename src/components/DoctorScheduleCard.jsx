@@ -369,11 +369,29 @@ export function DoctorScheduleCard({
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          {/* Sem truncar: o nome quebra em até duas linhas, como no
-                              modelo. O selo acompanha o fim do texto. */}
-                          <h3 className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight line-clamp-2" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
+                          {/* NUNCA truncar. Antes havia `line-clamp-2` aqui e o selo
+                              vivia dentro do <h3>: num nome de três linhas — a Dra.
+                              Renata de Oliveira Dias Mouli — o clamp cortava a última
+                              linha e levava o selo junto, sumindo com a verificação
+                              justamente de quem tem o nome mais longo. O nome agora
+                              ocupa quantas linhas precisar e o selo é inline no fim,
+                              então acompanha o texto sem nunca ser cortado. */}
+                          <h3 className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight">
                               {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
-                              <VerifiedSeal className="inline w-[17px] h-[17px] ml-1 align-[-2px]" />
+                              <VerifiedSeal className="inline w-[15px] h-[15px] ml-1 align-[-1px]" />
+                              {/* Disponibilidade no dia: só a bolinha, ao lado do selo.
+                                  Sem piscar — o pulso chamava mais atenção que o preço.
+                                  Verde de sucesso da interface, não o jade da marca.
+                                  Só aparece depois que a agenda carregou; enquanto
+                                  carrega, a ausência não significa indisponível. */}
+                              {!loadingSlots && disponivelHoje && (
+                                  <span
+                                      className="inline-block w-2 h-2 ml-1.5 rounded-full bg-green-500 align-[2px]"
+                                      role="img"
+                                      aria-label="Disponível hoje"
+                                      title="Disponível hoje"
+                                  />
+                              )}
                           </h3>
                       </Link>
 
@@ -451,22 +469,9 @@ export function DoctorScheduleCard({
                   <span>Pagamento online · Pix e cartão</span>
               </div>
 
-              {/* Selo de disponibilidade no dia. Verde aqui é estado, não marca —
-                  é o mesmo verde de sucesso da interface, e por isso não se
-                  confunde com o jade do logo. A bolinha pulsa devagar: dá o
-                  sinal de "agora" sem virar alerta.
-
-                  Só aparece depois que a agenda carregou; enquanto carrega, a
-                  ausência do selo não significa indisponível. */}
-              {!loadingSlots && disponivelHoje && (
-                  <span className="inline-flex items-center gap-1.5 self-start h-6 px-2.5 rounded-full bg-green-50 border border-green-200 text-green-700 text-[11.5px] font-semibold leading-none">
-                      <span className="relative flex w-2 h-2 shrink-0">
-                          <span className="absolute inline-flex w-full h-full rounded-full bg-green-500 opacity-70 motion-safe:animate-ping" />
-                          <span className="relative inline-flex w-2 h-2 rounded-full bg-green-500" />
-                      </span>
-                      Disponível hoje
-                  </span>
-              )}
+              {/* A disponibilidade do dia agora é só a bolinha ao lado do selo,
+                  lá em cima no nome. O badge que ficava aqui saiu: repetia a
+                  informação e competia com o preço pela atenção. */}
 
               {/* Abre a agenda no celular. Some a partir de md, onde a grade já
                   está ao lado. A palavra "Horários" ao lado da seta diz o que há
