@@ -75,35 +75,6 @@ const generateTimeSlotsFromAgenda = (agenda, day) => {
   return [...new Set(slots)].sort();
 };
 
-const DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-
-/**
- * Resume em uma linha os dias da semana em que o médico abriu agenda.
- *
- * Prefere a forma contínua ("Seg a sáb"). Só lista dia a dia quando há buraco no
- * meio, e mesmo assim até três — a partir daí a tira não cabe na coluna do
- * celular e sai cortada, então a contagem informa o mesmo em menos espaço.
- * Domingo conta como começo da semana, então sábado e domingo aparecem como dois
- * dias soltos, que é o que o paciente precisa ler.
- */
-const resumoDosDias = (agenda) => {
-  const dias = [...new Set(
-    (agenda || [])
-      .filter((b) => b.status === 'disponivel' && Number.isInteger(b.dia_semana))
-      .map((b) => b.dia_semana)
-  )].sort((a, b) => a - b);
-
-  if (!dias.length) return null;
-  if (dias.length === 7) return 'Todo dia';
-
-  const continuo = dias.every((d, i) => i === 0 || d === dias[i - 1] + 1);
-  if (continuo && dias.length >= 3) {
-    return `${DIAS[dias[0]]} a ${DIAS[dias[dias.length - 1]].toLowerCase()}`;
-  }
-  if (dias.length >= 4) return `${dias.length} dias/sem`;
-  return dias.map((d) => DIAS[d]).join(', ');
-};
-
 const ScheduleSkeleton = () => (
   <div className="flex-grow flex flex-col">
     <div className="flex items-center justify-between mb-3 border-b border-border/30 pb-2">
@@ -346,7 +317,6 @@ export function DoctorScheduleCard({
   // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
   // dias com disponibilidade. O estado "Sem horários" fica só para quem não tem agenda.
   const hasConfiguredAgenda = !isFallback && Array.isArray(doctorAgenda) && doctorAgenda.length > 0;
-  const diasAbertos = useMemo(() => resumoDosDias(doctorAgenda), [doctorAgenda]);
 
   // Directly use the formatted price passed from the parent which already includes the tax
   const displayPrice = formattedPatientPrice ? formattedPatientPrice : 'Consultar';
@@ -418,13 +388,14 @@ export function DoctorScheduleCard({
                   não de uma classe do Tailwind, para seguir sendo uma exceção
                   rastreável em vez de virar cor de interface. */}
               <div className="pt-3 border-t border-slate-100">
-                  {/* Celular: as três colunas do cartão de referência, cada rótulo
-                      acima do seu dado. A modalidade entra sem pílula para não
-                      pesar mais que os vizinhos. Os corpos são menores que os do
-                      modelo porque ali o cartão tem 1080 px e aqui, 343. */}
-                  <div className="md:hidden flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                          <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Consulta</p>
+                  {/* Celular: duas colunas encostadas, cada rótulo acima do seu
+                      dado. Sem `justify-between` — com só dois itens ele os jogava
+                      para as bordas opostas e os dois viravam informações soltas;
+                      juntos, leem-se como um par. A modalidade entra sem pílula
+                      para não pesar mais que o preço ao lado. */}
+                  <div className="md:hidden flex items-start gap-8">
+                      <div>
+                          <p className="h-4 text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Consulta</p>
                           <p
                               className="mt-1 text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
                               style={{ color: BRAND.acento }}
@@ -432,18 +403,10 @@ export function DoctorScheduleCard({
                               {displayPrice}
                           </p>
                       </div>
-                      <div className="min-w-0">
-                          <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Modalidade</p>
-                          <TeleconsultaBadge subtle size="md" className="mt-1 text-[15px] font-extrabold tracking-tight gap-1" />
+                      <div>
+                          <p className="h-4 text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Modalidade</p>
+                          <TeleconsultaBadge subtle size="md" className="mt-1 text-[16px] font-extrabold tracking-tight gap-1" />
                       </div>
-                      {diasAbertos && (
-                          <div className="min-w-0">
-                              <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Agenda</p>
-                              <p className="mt-1 text-[15px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
-                                  {diasAbertos}
-                              </p>
-                          </div>
-                      )}
                   </div>
 
                   {/* Desktop: a grade de horários já está ao lado mostrando os
