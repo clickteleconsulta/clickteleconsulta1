@@ -399,19 +399,33 @@ export function DoctorScheduleCard({
                       para as bordas opostas e os dois viravam informações soltas;
                       juntos, leem-se como um par. A modalidade entra sem pílula
                       para não pesar mais que o preço ao lado. */}
+                  {/* Modalidade à esquerda e preço à direita, a mesma ordem do
+                      desktop. As duas linhas de valor ficam em caixas de mesma
+                      altura com `items-center`.
+
+                      O `leading-none` vai repetido no override do selo: como as
+                      utilidades de tamanho do Tailwind também definem entrelinha,
+                      o twMerge descarta o `leading-none` que vem de dentro do
+                      componente ao ver o `text-[16px]` daqui. Sem repetir, o selo
+                      fica com 26,4 px de entrelinha contra 16 do preço e as duas
+                      linhas de base se descolam. */}
                   <div className="md:hidden flex items-start gap-10">
                       <div>
-                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Consulta</p>
-                          <p
-                              className="mt-2 text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
-                              style={{ color: BRAND.acento }}
-                          >
-                              {displayPrice}
-                          </p>
+                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
+                          <div className="mt-2 h-5 flex items-center">
+                              <TeleconsultaBadge subtle size="md" className="text-[16px] leading-none font-extrabold tracking-tight gap-1" />
+                          </div>
                       </div>
                       <div>
-                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
-                          <TeleconsultaBadge subtle size="md" className="mt-2 text-[16px] font-extrabold tracking-tight gap-1" />
+                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Consulta</p>
+                          <div className="mt-2 h-5 flex items-center">
+                              <span
+                                  className="text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
+                                  style={{ color: BRAND.acento }}
+                              >
+                                  {displayPrice}
+                              </span>
+                          </div>
                       </div>
                   </div>
 
