@@ -33,12 +33,24 @@ logo-branco.png e os avatares já usam.
 
 DUAS VERSÕES DO WORDMARK
 
-  padrão   "Doc" em jade          cabeçalho, avatar, apresentação
-  rodapé   nome inteiro em tinta  rodapé, documento, impressão de uma cor
+  logo.png          fundo claro   "avi" em tinta, cruz jade, "Doc" cobalto
+  logo-branco.png   fundo escuro  "avi" em branco, cruz menta, "Doc" azul-claro
 
-A versão de rodapé mantém a cruz, mas nada no texto depende da cor
-para ser lido. Use-a sempre que o material puder acabar em preto e branco ou em
-corpo pequeno. No código: <Wordmark accent={false} />.
+Não há versão monocromática nem variante por contexto: a marca é uma só, e as
+três cores aparecem sempre. A única troca permitida é a de fundo escuro, que
+existe porque o jade some sobre preto — é a mesma marca com a luz corrigida.
+No código: <Wordmark /> e <Wordmark dark />.
+
+
+A FONTE
+
+O wordmark é desenhado em Geist, a mesma família do site inteiro, servida por
+nós em /fonts/geist-variable.woff2 (SIL Open Font License).
+
+Antes o logo pedia 'Avenir Next', que só existe no macOS e no iOS: em Windows
+e Android o navegador caía para Segoe UI ou Roboto e a marca aparecia com um
+desenho diferente conforme o aparelho. Não reintroduza fonte de sistema aqui.
+Detalhes em docs/TIPOGRAFIA.md.
 
 
 NÃO FAÇA
