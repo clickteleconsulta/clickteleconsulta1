@@ -74,6 +74,36 @@ const generateTimeSlotsFromAgenda = (agenda, day) => {
   return [...new Set(slots)].sort();
 };
 
+const DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+/**
+ * Resume em uma linha os dias da semana em que o médico abriu agenda.
+ *
+ * Prefere a forma contínua ("Seg a sáb") porque cabe em qualquer largura; só
+ * lista dia a dia quando há buraco no meio. Domingo é tratado como o começo da
+ * semana, então uma agenda de sábado e domingo aparece como dois dias soltos —
+ * e é isso mesmo que o paciente precisa ler.
+ */
+const resumoDosDias = (agenda) => {
+  const dias = [...new Set(
+    (agenda || [])
+      .filter((b) => b.status === 'disponivel' && Number.isInteger(b.dia_semana))
+      .map((b) => b.dia_semana)
+  )].sort((a, b) => a - b);
+
+  if (!dias.length) return null;
+  if (dias.length === 7) return 'Todos os dias';
+
+  const continuo = dias.every((d, i) => i === 0 || d === dias[i - 1] + 1);
+  if (continuo && dias.length >= 3) {
+    return `${DIAS[dias[0]]} a ${DIAS[dias[dias.length - 1]].toLowerCase()}`;
+  }
+  // Listar quatro ou mais dias soltos não cabe na largura de um celular e vira
+  // uma tira cortada. A contagem informa o mesmo e sempre cabe.
+  if (dias.length >= 4) return `${dias.length} dias por semana`;
+  return dias.map((d) => DIAS[d]).join(', ');
+};
+
 const ScheduleSkeleton = () => (
   <div className="flex-grow flex flex-col">
     <div className="flex items-center justify-between mb-3 border-b border-border/30 pb-2">
@@ -316,6 +346,7 @@ export function DoctorScheduleCard({
   // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
   // dias com disponibilidade. O estado "Sem horários" fica só para quem não tem agenda.
   const hasConfiguredAgenda = !isFallback && Array.isArray(doctorAgenda) && doctorAgenda.length > 0;
+  const diasAbertos = useMemo(() => resumoDosDias(doctorAgenda), [doctorAgenda]);
 
   // Directly use the formatted price passed from the parent which already includes the tax
   const displayPrice = formattedPatientPrice ? formattedPatientPrice : 'Consultar';
@@ -338,15 +369,15 @@ export function DoctorScheduleCard({
       <div className="flex flex-col md:flex-row">
           <div className="p-4 md:p-5 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
               <div className="flex items-start gap-3">
-                  <Avatar className="w-14 h-14 shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-2xl">
-                      <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-2xl object-cover" />
-                      <AvatarFallback className="bg-gradient-to-br from-brand-400 to-brand-400 text-white rounded-2xl"><User size={24} /></AvatarFallback>
+                  <Avatar className="w-16 h-16 shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
+                      <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-full object-cover" />
+                      <AvatarFallback className="bg-gradient-to-br from-brand-400 to-brand-400 text-white rounded-full"><User size={26} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          <h3 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-1 min-w-0" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
+                          <h3 className="text-[21px] leading-tight font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 min-w-0" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
                               <span className="overflow-hidden text-ellipsis whitespace-nowrap">{formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}</span>
-                              <VerifiedSeal className="w-[18px] h-[18px] shrink-0" />
+                              <VerifiedSeal className="w-[19px] h-[19px] shrink-0" />
                           </h3>
                       </Link>
 
@@ -365,36 +396,47 @@ export function DoctorScheduleCard({
                               <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
                       )}
-                      <p className="text-sm text-slate-500 font-medium overflow-hidden text-ellipsis whitespace-nowrap mt-0.5" title={specialtyLabel}>
+                      {/* Especialidade e CRM em cobalto: são o par que qualifica
+                          o profissional. Em linhas separadas porque um CRM de
+                          nove dígitos junto da especialidade não cabe na largura
+                          de um celular — na mesma linha, o separador sobrava
+                          pendurado no fim. O CRM em negrito por ser o verificável. */}
+                      <p className="text-[13.5px] text-brand-700 font-medium mt-1 leading-snug overflow-hidden text-ellipsis whitespace-nowrap" title={specialtyLabel}>
                           {specialtyLabel}
                       </p>
                       {crmDisplay && (
-                          <p className="text-[13px] text-slate-400">{crmDisplay}</p>
+                          <p className="text-[13.5px] font-bold text-brand-700 leading-snug whitespace-nowrap">{crmDisplay}</p>
                       )}
                   </div>
               </div>
 
-              {/* Modalidade + preço lado a lado. A certificação do médico fica só
-                  na roseta de verificado ao lado do nome.
-
-                  A modalidade é informação institucional e usa o cobalto; o preço
-                  usa o jade da marca, porque é o dado que mais diferencia a
-                  plataforma e o que o paciente procura primeiro. É a única vez que
-                  o jade aparece fora do logo — por isso vem de BRAND.acento e não
-                  de uma classe do Tailwind, para continuar sendo uma exceção
+              {/* Modalidade e agenda em colunas, cada rótulo acima do seu dado.
+                  O preço usa o jade da marca porque é o que mais diferencia a
+                  plataforma e o primeiro dado que o paciente procura. É a única
+                  aparição do jade fora do logo — por isso vem de BRAND.acento e
+                  não de uma classe do Tailwind, para seguir sendo uma exceção
                   rastreável em vez de virar cor de interface. */}
-              {/* Altura fixa (h-7) nos dois para ficarem alinhados. */}
-              <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-brand-50 text-brand-700 border border-brand-100 rounded-full text-[12px] font-semibold leading-none">
-                      <Video className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-                      Teleconsulta
-                  </span>
-                  <span
-                      className="inline-flex items-center h-7 text-[17px] font-extrabold tracking-tight tabular-nums leading-none"
-                      style={{ color: BRAND.acento }}
-                  >
-                      {displayPrice}
-                  </span>
+              <div className="pt-3 border-t border-slate-100 flex items-start gap-8">
+                  <div className="min-w-0">
+                      <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                          <Video className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                          Teleconsulta
+                      </dt>
+                      <dd
+                          className="mt-1 text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
+                          style={{ color: BRAND.acento }}
+                      >
+                          {displayPrice}
+                      </dd>
+                  </div>
+                  {diasAbertos && (
+                      <div className="min-w-0">
+                          <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</dt>
+                          <dd className="mt-1 text-[17px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
+                              {diasAbertos}
+                          </dd>
+                      </div>
+                  )}
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
@@ -404,26 +446,20 @@ export function DoctorScheduleCard({
               </div>
 
               {/* Abre a agenda no celular. Some a partir de md, onde a grade já
-                  está ao lado. Quando fechada, adianta a próxima vaga — é a
-                  informação que decide se vale abrir. */}
+                  está ao lado. Só a seta: o rótulo textual sujava o cartão, e a
+                  seta para baixo já é entendida como "tem mais aqui". O nome
+                  acessível fica no aria-label, para quem usa leitor de tela. */}
               {!loadingSlots && hasConfiguredAgenda && (
                   <button
                       type="button"
                       onClick={() => setAgendaAberta((v) => !v)}
                       aria-expanded={agendaAberta}
                       aria-controls={`agenda-${doctor?.id}`}
-                      className="md:hidden mt-1 flex items-center justify-between gap-2 w-full h-11 px-4 rounded-xl border border-brand-200 bg-brand-50 text-brand-700 text-[13px] font-semibold active:bg-brand-100 transition-colors"
+                      aria-label={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
+                      title={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
+                      className="md:hidden mt-1 flex items-center justify-center w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 active:bg-slate-100 transition-colors"
                   >
-                      <span className="flex items-center gap-1.5 min-w-0">
-                          <CalendarCheck className="w-4 h-4 shrink-0" />
-                          {agendaAberta ? 'Ocultar horários' : 'Ver horários'}
-                      </span>
-                      {!agendaAberta && nextAvailable && (
-                          <span className="text-[11.5px] font-medium text-brand-500 truncate">
-                              {titleCase(nextAvailable.label)} · {nextAvailable.time}
-                          </span>
-                      )}
-                      <ChevronDown className={cn('w-4 h-4 shrink-0 transition-transform duration-200', agendaAberta && 'rotate-180')} />
+                      <ChevronDown className={cn('w-5 h-5 transition-transform duration-200', agendaAberta && 'rotate-180')} />
                   </button>
               )}
           </div>
