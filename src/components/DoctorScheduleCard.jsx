@@ -75,36 +75,6 @@ const generateTimeSlotsFromAgenda = (agenda, day) => {
   return [...new Set(slots)].sort();
 };
 
-const DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-
-/**
- * Resume em uma linha os dias da semana em que o médico abriu agenda.
- *
- * Prefere a forma contínua ("Seg a sáb") porque cabe em qualquer largura; só
- * lista dia a dia quando há buraco no meio. Domingo é tratado como o começo da
- * semana, então uma agenda de sábado e domingo aparece como dois dias soltos —
- * e é isso mesmo que o paciente precisa ler.
- */
-const resumoDosDias = (agenda) => {
-  const dias = [...new Set(
-    (agenda || [])
-      .filter((b) => b.status === 'disponivel' && Number.isInteger(b.dia_semana))
-      .map((b) => b.dia_semana)
-  )].sort((a, b) => a - b);
-
-  if (!dias.length) return null;
-  if (dias.length === 7) return 'Todos os dias';
-
-  const continuo = dias.every((d, i) => i === 0 || d === dias[i - 1] + 1);
-  if (continuo && dias.length >= 3) {
-    return `${DIAS[dias[0]]} a ${DIAS[dias[dias.length - 1]].toLowerCase()}`;
-  }
-  // Listar quatro ou mais dias soltos não cabe na largura de um celular e vira
-  // uma tira cortada. A contagem informa o mesmo e sempre cabe.
-  if (dias.length >= 4) return `${dias.length} dias por semana`;
-  return dias.map((d) => DIAS[d]).join(', ');
-};
-
 const ScheduleSkeleton = () => (
   <div className="flex-grow flex flex-col">
     <div className="flex items-center justify-between mb-3 border-b border-border/30 pb-2">
@@ -347,7 +317,6 @@ export function DoctorScheduleCard({
   // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
   // dias com disponibilidade. O estado "Sem horários" fica só para quem não tem agenda.
   const hasConfiguredAgenda = !isFallback && Array.isArray(doctorAgenda) && doctorAgenda.length > 0;
-  const diasAbertos = useMemo(() => resumoDosDias(doctorAgenda), [doctorAgenda]);
 
   // Directly use the formatted price passed from the parent which already includes the tax
   const displayPrice = formattedPatientPrice ? formattedPatientPrice : 'Consultar';
@@ -411,56 +380,26 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              {/* O preço usa o jade da marca porque é o que mais diferencia a
+              {/* Modalidade e preço na mesma linha, nas duas pontas — o mesmo
+                  arranjo em qualquer largura.
+
+                  O preço usa o jade da marca porque é o que mais diferencia a
                   plataforma e o primeiro dado que o paciente procura. É a única
                   aparição do jade fora do logo — por isso vem de BRAND.acento e
                   não de uma classe do Tailwind, para seguir sendo uma exceção
                   rastreável em vez de virar cor de interface.
 
-                  As duas telas pedem arranjos diferentes, e cada um só existe na
-                  sua largura. No celular, rótulo acima do dado em duas colunas,
-                  com os dias da agenda — a grade de horários está recolhida, e
-                  saber em que dias o médico atende ajuda a decidir se vale abrir.
-                  A partir de md a grade já está ao lado mostrando os dias reais,
-                  então repeti-los seria ruído: sobra uma linha só, modalidade à
-                  esquerda e preço à direita. */}
-              <div className="pt-3 border-t border-slate-100">
-                  <div className="md:hidden flex items-start gap-8">
-                      <div className="min-w-0">
-                          <TeleconsultaBadge />
-                          {/* Mesmo corpo e mesmo leading que o valor da agenda ao
-                              lado, para as duas linhas assentarem na mesma base.
-                              O preço continua liderando pela cor e pelo peso, não
-                              pelo tamanho. */}
-                          <p
-                              className="mt-1.5 text-[18px] font-extrabold tracking-tight tabular-nums leading-none"
-                              style={{ color: BRAND.acento }}
-                          >
-                              {displayPrice}
-                          </p>
-                      </div>
-                      {diasAbertos && (
-                          <div className="min-w-0">
-                              <p className="h-6 flex items-center text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</p>
-                              <p className="mt-1.5 text-[18px] font-bold tracking-tight text-slate-900 leading-none whitespace-nowrap">
-                                  {diasAbertos}
-                              </p>
-                          </div>
-                      )}
-                  </div>
-
-                  <div className="hidden md:flex items-center justify-between gap-3">
-                      <TeleconsultaBadge size="md" />
-                      {/* 19px encosta na altura do selo (h-7) sem ultrapassá-la,
-                          então o `items-center` do flex centraliza os dois de
-                          verdade em vez de compensar uma caixa maior. */}
-                      <span
-                          className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
-                          style={{ color: BRAND.acento }}
-                      >
-                          {displayPrice}
-                      </span>
-                  </div>
+                  19px encosta na altura do selo sem ultrapassá-la, então o
+                  `items-center` centraliza os dois de verdade em vez de compensar
+                  uma caixa maior que a outra. */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                  <TeleconsultaBadge size="md" />
+                  <span
+                      className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
+                      style={{ color: BRAND.acento }}
+                  >
+                      {displayPrice}
+                  </span>
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
