@@ -396,16 +396,19 @@ export function DoctorScheduleCard({
                               <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
                       )}
-                      {/* Especialidade e CRM sempre na mesma linha, como no
-                          modelo. Quem cede espaço é a especialidade, que trunca;
-                          o CRM nunca encolhe, por ser o dado verificável — e
-                          assim o separador nunca sobra pendurado numa quebra.
-                          O texto completo fica no title. */}
-                      <p className="flex items-baseline gap-1 text-[13px] mt-1 leading-snug min-w-0" title={[specialtyLabel, crmDisplay].filter(Boolean).join(' · ')}>
-                          <span className="text-slate-500 font-medium truncate">{specialtyLabel}</span>
-                          {specialtyLabel && crmDisplay && <span className="text-slate-300 shrink-0">·</span>}
-                          {crmDisplay && <span className="text-brand-700 font-bold shrink-0">{crmDisplay}</span>}
+                      {/* CRM embaixo da especialidade, cada um na sua linha e
+                          nenhum truncado. Na mesma linha, um CRM de nove dígitos
+                          somado a "Médico · Generalista" não cabe na largura de
+                          um celular: ou o separador sobrava pendurado na quebra,
+                          ou a especialidade saía cortada. Em duas linhas os dois
+                          aparecem inteiros. CRM em cobalto e negrito, por ser o
+                          dado verificável. */}
+                      <p className="text-[13px] text-slate-500 font-medium mt-1 leading-snug">
+                          {specialtyLabel}
                       </p>
+                      {crmDisplay && (
+                          <p className="text-[13px] text-brand-700 font-bold leading-snug">{crmDisplay}</p>
+                      )}
                   </div>
               </div>
 
