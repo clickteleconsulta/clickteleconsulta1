@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Video, Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, CalendarCheck, ShieldCheck } from 'lucide-react';
+import { Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, CalendarCheck, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
+import { TeleconsultaBadge } from '@/components/TeleconsultaBadge';
 import { BRAND } from '@/config/brand';
 import { Skeleton } from './ui/skeleton';
 
@@ -426,32 +427,26 @@ export function DoctorScheduleCard({
               <div className="pt-3 border-t border-slate-100">
                   <div className="md:hidden flex items-start gap-8">
                       <div className="min-w-0">
-                          <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                              <Video className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-                              Teleconsulta
-                          </dt>
-                          <dd
-                              className="mt-1 text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
+                          <TeleconsultaBadge />
+                          <p
+                              className="mt-1.5 text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
                               style={{ color: BRAND.acento }}
                           >
                               {displayPrice}
-                          </dd>
+                          </p>
                       </div>
                       {diasAbertos && (
                           <div className="min-w-0">
-                              <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</dt>
-                              <dd className="mt-1 text-[17px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
+                              <p className="h-6 flex items-center text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</p>
+                              <p className="mt-1.5 text-[17px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
                                   {diasAbertos}
-                              </dd>
+                              </p>
                           </div>
                       )}
                   </div>
 
                   <div className="hidden md:flex items-center justify-between gap-3">
-                      <span className="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600">
-                          <Video className="w-4 h-4 text-brand-500 shrink-0" />
-                          Teleconsulta
-                      </span>
+                      <TeleconsultaBadge size="md" />
                       <span
                           className="text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
                           style={{ color: BRAND.acento }}
