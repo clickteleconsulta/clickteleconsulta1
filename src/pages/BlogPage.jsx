@@ -16,8 +16,13 @@ const BlogPage = () => (
     </Helmet>
 
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
+      {/* SEM ilustração, de propósito. Numa lista, quem manda são os cards dos
+          artigos; uma arte antes deles competia por atenção com o conteúdo e
+          empurrava o primeiro título para baixo da dobra. Nem toda página ganha
+          com ilustração — pôr em todas é o que dá cara de site montado em série.
+          A arte de blog segue em public/ilustra/ para quando houver um lugar em
+          que ela renda, como uma página de artigo sem imagem própria. */}
       <div className="text-center max-w-2xl mx-auto mb-10">
-            <img src="/ilustra/blog.svg" alt="" aria-hidden="true" className="h-40 md:h-48 w-auto mx-auto mb-6 select-none pointer-events-none" />
         <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Blog</span>
         <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">Saúde e teleconsulta</h1>
         <p className="text-slate-500 mt-3 text-lg">Conteúdo para você entender e aproveitar melhor o atendimento online.</p>

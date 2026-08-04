@@ -46,27 +46,39 @@ const QuemSomosPage = () => {
       </Helmet>
 
       <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
-        {/* Intro */}
-        <div className="text-center max-w-2xl mx-auto">
-          <img src="/ilustra/quem-somos.svg" alt="" aria-hidden="true" className="h-40 md:h-48 w-auto mx-auto mb-6 select-none pointer-events-none" />
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Quem somos</span>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">
-            Democratizar o acesso à saúde, um agendamento de cada vez
-          </h1>
-          <p className="text-slate-500 mt-4 text-lg leading-relaxed">
-            A {BRAND.name} nasceu para tornar o cuidado com a saúde mais simples e acessível.
-            Nosso propósito é <strong className="text-slate-700">democratizar o acesso à saúde</strong>:
-            para situações que podem ser conduzidas a distância, você resolve com agilidade — sem
-            deslocamento, sem fila de espera e por um preço acessível, com ótimo custo-benefício.
-          </p>
-          <p className="text-slate-500 mt-3 text-lg leading-relaxed">
-            Somos um <strong className="text-slate-700">marketplace de agendamentos</strong> que conecta
-            pacientes a médicos parceiros: você encontra o profissional, escolhe o horário e realiza o
-            pagamento pela plataforma, tudo em poucos cliques.
-          </p>
-          <Button asChild className="mt-6 h-12 px-7 text-base rounded-xl">
-            <Link to="/agendamentos">Agendar consulta <ArrowRight className="w-4 h-4 ml-2" /></Link>
-          </Button>
+        {/* Intro em duas colunas: o texto ancora à esquerda e a arte fica ao
+            LADO dele, não por cima. Acima do título a ilustração não se referia
+            a nada e só empurrava o conteúdo para baixo; ao lado, ela divide o
+            peso da abertura com o texto. */}
+        <div className="grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:items-center gap-8 md:gap-10">
+          <div className="text-left">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Quem somos</span>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">
+              Democratizar o acesso à saúde, um agendamento de cada vez
+            </h1>
+            <p className="text-slate-500 mt-4 text-lg leading-relaxed">
+              A {BRAND.name} nasceu para tornar o cuidado com a saúde mais simples e acessível.
+              Nosso propósito é <strong className="text-slate-700">democratizar o acesso à saúde</strong>:
+              para situações que podem ser conduzidas a distância, você resolve com agilidade — sem
+              deslocamento, sem fila de espera e por um preço acessível, com ótimo custo-benefício.
+            </p>
+            <p className="text-slate-500 mt-3 text-lg leading-relaxed">
+              Somos um <strong className="text-slate-700">marketplace de agendamentos</strong> que conecta
+              pacientes a médicos parceiros: você encontra o profissional, escolhe o horário e realiza o
+              pagamento pela plataforma, tudo em poucos cliques.
+            </p>
+            <Button asChild className="mt-6 h-12 px-7 text-base rounded-xl">
+              <Link to="/agendamentos">Agendar consulta <ArrowRight className="w-4 h-4 ml-2" /></Link>
+            </Button>
+          </div>
+          {/* Some no celular: numa coluna só, ela voltaria a ser um bloco solto
+              antes do texto — o problema que esta mudança resolve. */}
+          <img
+            src="/ilustra/quem-somos.svg"
+            alt=""
+            aria-hidden="true"
+            className="hidden md:block w-full max-w-[300px] h-auto justify-self-end select-none pointer-events-none"
+          />
         </div>
 
         {/* O que somos / o que não somos */}

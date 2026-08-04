@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Home, CalendarCheck, Search } from 'lucide-react';
+import { Home, CalendarCheck } from 'lucide-react';
 
 const NotFoundPage = () => (
   <>
@@ -13,11 +13,14 @@ const NotFoundPage = () => (
     </Helmet>
 
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-16">
+      {/* Centralizado é o certo AQUI: não existe conteúdo para a arte ficar ao
+          lado, e a página tem uma mensagem só. É a exceção que confirma a regra
+          das outras telas.
+
+          Saiu a caixa com a lupa que ficava logo abaixo: ilustração e ícone
+          diziam a mesma coisa, um em cima do outro. */}
       <div className="text-center max-w-md">
-            <img src="/ilustra/nao-achou.svg" alt="" aria-hidden="true" className="h-44 md:h-56 w-auto mx-auto mb-6 select-none pointer-events-none" />
-        <div className="mx-auto w-20 h-20 rounded-2xl bg-brand-50 flex items-center justify-center mb-6">
-          <Search className="w-9 h-9 text-brand-500" />
-        </div>
+        <img src="/ilustra/nao-achou.svg" alt="" aria-hidden="true" className="w-52 md:w-64 h-auto mx-auto mb-8 select-none pointer-events-none" />
         <p className="text-5xl font-extrabold text-slate-900 tracking-tight">404</p>
         <h1 className="mt-3 text-xl font-bold text-slate-800">Página não encontrada</h1>
         <p className="mt-2 text-slate-500 leading-relaxed">

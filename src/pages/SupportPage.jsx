@@ -9,10 +9,21 @@ const SupportPage = () => {
                 <title>{`Suporte · ${BRAND.name}`}</title>
             </Helmet>
             <div className="max-w-3xl mx-auto">
-                <div className="text-center mb-12">
-            <img src="/ilustra/suporte.svg" alt="" aria-hidden="true" className="h-40 md:h-48 w-auto mx-auto mb-6 select-none pointer-events-none" />
-                    <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">Precisa de Ajuda?</h1>
-                    <p className="mt-4 text-lg text-muted-foreground">Estamos aqui para te ajudar. Escolha a melhor forma de contato para você.</p>
+                {/* Título à esquerda, arte à direita. Aqui ela é MAIOR que nas
+                    outras páginas de propósito: suporte é a tela onde a pessoa
+                    chega tensa, e a ilustração faz o trabalho de baixar o tom —
+                    nas demais ela é apoio, não protagonista. */}
+                <div className="grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center gap-8 mb-12">
+                    <div className="text-center md:text-left">
+                        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">Precisa de Ajuda?</h1>
+                        <p className="mt-4 text-lg text-muted-foreground">Estamos aqui para te ajudar. Escolha a melhor forma de contato para você.</p>
+                    </div>
+                    <img
+                        src="/ilustra/suporte.svg"
+                        alt=""
+                        aria-hidden="true"
+                        className="hidden md:block w-[240px] h-auto select-none pointer-events-none"
+                    />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
