@@ -379,18 +379,29 @@ export function DoctorScheduleCard({
                           <h3 className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight">
                               {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
                               <VerifiedSeal className="inline w-[15px] h-[15px] ml-1 align-[-1px]" />
-                              {/* Disponibilidade no dia: só a bolinha, ao lado do selo.
-                                  Sem piscar — o pulso chamava mais atenção que o preço.
+                              {/* Disponibilidade no dia: bolinha verde dentro de um halo
+                                  claro, ao lado do selo. O halo tem o mesmo diâmetro do
+                                  selo, então os dois lêem como um par de indicadores em
+                                  vez de sujeira ao lado do nome — e dá à bolinha um
+                                  contorno próprio, que sozinha ela não tinha sobre o
+                                  branco do card.
+
+                                  Sem piscar: o pulso competia com o preço pela atenção.
                                   Verde de sucesso da interface, não o jade da marca.
                                   Só aparece depois que a agenda carregou; enquanto
                                   carrega, a ausência não significa indisponível. */}
                               {!loadingSlots && disponivelHoje && (
                                   <span
-                                      className="inline-block w-2 h-2 ml-1.5 rounded-full bg-green-500 align-[2px]"
+                                      /* align-[3px] e não o -1px do selo: um inline-flex
+                                         não assenta na mesma linha de base de um <svg>
+                                         inline — medido, o badge caía 4 px abaixo. */
+                                      className="inline-flex items-center justify-center w-[15px] h-[15px] ml-1.5 rounded-full bg-green-100 ring-1 ring-inset ring-green-300 align-[3px]"
                                       role="img"
                                       aria-label="Disponível hoje"
                                       title="Disponível hoje"
-                                  />
+                                  >
+                                      <span className="w-[7px] h-[7px] rounded-full bg-green-500" />
+                                  </span>
                               )}
                           </h3>
                       </Link>
