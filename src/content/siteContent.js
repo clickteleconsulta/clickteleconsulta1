@@ -24,8 +24,28 @@ export const FAQ = [
     a: 'Depois do pagamento confirmado, o médico entra em contato até 15 minutos antes do horário para conduzir a teleconsulta pelos meios próprios dele (por vídeo). Fique atento ao seu WhatsApp e e-mail cadastrados.',
   },
   {
+    q: 'A teleconsulta tem validade legal no Brasil?',
+    a: 'Sim. O atendimento a distância está autorizado pela Lei nº 14.510/2022, que incluiu a telessaúde na Lei nº 8.080/1990, e é regulamentado pela Resolução CFM nº 2.314/2022. A teleconsulta segue os mesmos princípios éticos e o mesmo sigilo da consulta presencial.',
+  },
+  {
+    q: 'Vocês atendem em todo o Brasil?',
+    a: 'Você pode agendar de qualquer lugar do país: como o atendimento é a distância, não há limite de estado ou cidade. Os médicos parceiros têm registro ativo no CRM, válido em território nacional. Basta ter internet e um ambiente reservado no horário marcado.',
+  },
+  {
     q: 'Recebo receita ou atestado?',
-    a: 'A emissão de receitas, atestados e demais documentos é uma decisão exclusiva do médico, conforme a avaliação clínica e as normas do Conselho Federal de Medicina. Quando aplicável, o profissional emite com assinatura digital válida.',
+    a: 'A emissão de receitas, atestados e demais documentos é uma decisão exclusiva do médico, conforme a avaliação clínica e as normas do Conselho Federal de Medicina. Quando cabível, o profissional emite o documento em PDF com assinatura digital.',
+  },
+  {
+    q: 'Que documentos o médico pode emitir depois da consulta?',
+    a: 'Quando a avaliação clínica indicar, o médico pode emitir prescrição (receita) digital, solicitação de exames e atestado médico. Todos em PDF assinado digitalmente. A emissão nunca é automática nem garantida: depende do critério do profissional, como em qualquer consulta.',
+  },
+  {
+    q: 'Como sei que a receita ou o atestado é verdadeiro?',
+    a: 'Documentos assinados com certificado digital do padrão ICP-Brasil podem ser conferidos gratuitamente no validador oficial do Governo Federal, em validar.iti.gov.br: você envia o PDF e o site mostra quem assinou e se o arquivo foi alterado depois. Quando o documento traz QR code, ele leva à mesma conferência. Veja o passo a passo na página Documentos e validade.',
+  },
+  {
+    q: 'Como vocês tratam a ética e o sigilo?',
+    a: 'O que você conversa com o médico é protegido pelo sigilo profissional previsto no Código de Ética Médica (Resolução CFM nº 2.217/2018), e a aviDoc não tem acesso ao conteúdo clínico do atendimento. Seus dados de cadastro e agendamento são tratados conforme a LGPD (Lei nº 13.709/2018) e usados apenas para viabilizar o serviço.',
   },
   {
     q: 'Meus dados ficam protegidos?',
@@ -40,7 +60,7 @@ export const FAQ = [
     a: 'Não é necessário instalar nada para agendar — tudo é feito pelo site. O atendimento é conduzido pelo médico pelos meios que ele utilizar, informados a você antes da consulta.',
   },
   {
-    q: 'A Click é uma operadora de plano de saúde?',
+    q: `A ${BRAND.name} é uma operadora de plano de saúde?`,
     a: 'Não. Não somos plano de saúde, convênio nem cartão de desconto, e não somos uma plataforma de telemedicina. Somos um marketplace de agendamentos: intermediamos o agendamento e o pagamento entre pacientes e médicos independentes.',
   },
 ];
@@ -79,7 +99,7 @@ export const ARTICLES = [
       { t: 'ul', items: ['A receita ou prescrição anterior;', 'Exames recentes, se houver;', 'A lista atualizada dos medicamentos que você usa.'] },
       { t: 'h2', c: 'Documentos' },
       { t: 'p', c: 'Quando indicado, o médico pode emitir a prescrição com assinatura digital válida. Tudo conforme a avaliação clínica e as normas do CFM — não há garantia de emissão, pois isso depende do critério médico.' },
-      { t: 'p', c: 'Importante: a Click intermedia o agendamento; o atendimento e qualquer prescrição são de responsabilidade do médico.' },
+      { t: 'p', c: `Importante: a ${BRAND.name} intermedia o agendamento; o atendimento e qualquer prescrição são de responsabilidade do médico.` },
     ],
   },
   {
@@ -102,3 +122,90 @@ export const ARTICLES = [
 ];
 
 export const getArticle = (slug) => ARTICLES.find((a) => a.slug === slug);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Página "Documentos e validade" (/documentos-e-validade).
+//
+// LEIA ANTES DE EDITAR: quem emite os documentos é o MÉDICO, com as ferramentas
+// dele — a aviDoc não gera receita, atestado nem pedido de exame, e o
+// verificador próprio da plataforma (/verificar/:code) está atrás da flag
+// FEATURES.PRONTUARIO, hoje desligada. Por isso o texto abaixo atribui a
+// emissão e a assinatura ao profissional, e manda conferir no validador do
+// Governo Federal, que independe de nós. Trocar "o médico emite" por "emitimos"
+// tornaria a página falsa e nos colocaria como plataforma de telemedicina, que
+// não somos.
+//
+// As referências normativas estão nomeadas uma a uma de propósito: é o que
+// permite ao leitor (e ao jurídico) conferir cada afirmação na fonte.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const DOCUMENTOS = {
+  titulo: 'Documentos e validade',
+  chamada:
+    'A teleconsulta é reconhecida por lei em todo o Brasil, e os documentos que o médico emite depois dela têm o mesmo valor dos de uma consulta presencial. Veja como conferir a veracidade de cada um.',
+
+  validade: {
+    titulo: 'A teleconsulta é válida — e vale em todo o país',
+    paragrafos: [
+      'O atendimento médico a distância está autorizado pela Lei nº 14.510/2022, que incluiu a telessaúde na Lei nº 8.080/1990, e é regulamentado pela Resolução CFM nº 2.314/2022. Não é uma modalidade paralela nem provisória: é o exercício da medicina, com as mesmas obrigações éticas e o mesmo sigilo da consulta presencial.',
+      'Como o atendimento é a distância, não há limite de estado ou de cidade — você agenda de onde estiver. Os médicos parceiros têm registro ativo no CRM, conferido antes de entrarem na plataforma.',
+      'A autonomia do médico permanece inteira: se a avaliação indicar que o seu caso precisa de exame presencial, ele deve dizer isso. Essa recomendação é parte do bom atendimento, não uma falha dele.',
+    ],
+  },
+
+  emissao: {
+    titulo: 'O que o médico pode emitir depois da consulta',
+    intro:
+      'Quando a avaliação clínica indicar, o profissional emite os documentos abaixo em PDF, assinados digitalmente. A emissão é sempre decisão dele — não é automática nem garantida pelo agendamento.',
+    itens: [
+      {
+        titulo: 'Prescrição digital',
+        texto: 'A receita dos medicamentos, aceita nas farmácias que recebem receituário eletrônico.',
+      },
+      {
+        titulo: 'Solicitação de exames',
+        texto: 'O pedido dos exames que o médico julgar necessários para concluir ou acompanhar o caso.',
+      },
+      {
+        titulo: 'Atestado médico',
+        texto: 'O atestado, quando a condição avaliada justificar, com a validade que o profissional indicar.',
+      },
+    ],
+  },
+
+  conferencia: {
+    titulo: 'Como conferir se o documento é verdadeiro',
+    intro:
+      'Documentos assinados com certificado digital do padrão ICP-Brasil — instituído pela Medida Provisória nº 2.200-2/2001 e reconhecido pela Lei nº 14.063/2020 — podem ser conferidos por qualquer pessoa, de graça, no validador oficial do Governo Federal. Farmácia, empresa e escola podem fazer a mesma conferência.',
+    passos: [
+      'Guarde o arquivo PDF original que o médico enviou — não uma foto nem uma impressão dele, porque a assinatura vive dentro do arquivo.',
+      'Abra validar.iti.gov.br, o validador do Instituto Nacional de Tecnologia da Informação (ITI).',
+      'Envie o PDF e confirme o resultado: o site mostra quem assinou, quando assinou e se o arquivo foi alterado depois disso.',
+    ],
+    qr: {
+      titulo: 'E o QR code?',
+      texto:
+        'Quando o documento traz um QR code, ele é um atalho para essa mesma conferência: a leitura leva à página de verificação do sistema que emitiu o documento. O QR é uma comodidade; a prova de autenticidade é a assinatura digital dentro do PDF.',
+    },
+    url: 'https://validar.iti.gov.br',
+  },
+
+  etica: {
+    titulo: 'Ética, dignidade e sigilo',
+    paragrafos: [
+      'O que você conversa com o médico é protegido pelo sigilo profissional previsto no Código de Ética Médica (Resolução CFM nº 2.217/2018). Esse dever é do profissional e não se desfaz por o atendimento ser online.',
+      `A ${BRAND.name} não participa da consulta e não tem acesso ao conteúdo clínico do atendimento. O que tratamos são os seus dados de cadastro, agendamento e pagamento, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), e apenas para viabilizar o serviço. Você pode acessar e exportar esses dados na sua conta.`,
+      'Respeito ao paciente, para nós, é também não prometer o que não depende de nós: a plataforma garante o agendamento, o pagamento e o reembolso conforme a política publicada. A conduta clínica é do médico, e é assim que deve ser.',
+    ],
+  },
+
+  // Cada afirmação da página tem uma norma correspondente aqui.
+  normas: [
+    { n: 'Lei nº 14.510/2022', d: 'Inclui a telessaúde na Lei nº 8.080/1990 e autoriza o atendimento a distância em todo o território nacional.' },
+    { n: 'Resolução CFM nº 2.314/2022', d: 'Define e regulamenta a telemedicina como forma de serviço médico mediado por tecnologia.' },
+    { n: 'Medida Provisória nº 2.200-2/2001', d: 'Institui a ICP-Brasil e dá validade jurídica aos documentos assinados digitalmente nesse padrão.' },
+    { n: 'Lei nº 14.063/2020', d: 'Dispõe sobre o uso de assinaturas eletrônicas, inclusive em documentos da área da saúde.' },
+    { n: 'Resolução CFM nº 2.217/2018', d: 'Código de Ética Médica — sigilo profissional e deveres do médico com o paciente.' },
+    { n: 'Lei nº 13.709/2018 (LGPD)', d: 'Regula o tratamento de dados pessoais, inclusive os dados de saúde.' },
+  ],
+};

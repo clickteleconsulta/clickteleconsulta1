@@ -37,8 +37,8 @@ export const BRAND = {
   color: '#3B5BA5',
 
   /**
-   * Verde de acento — **exclusivo da marca**. Vive na metade da cápsula e na
-   * sílaba "Doc" do wordmark, e em mais lugar nenhum.
+   * Verde de acento — **exclusivo da marca**. Vive na cruz irradiada entre as
+   * sílabas "avi" e "Doc" do wordmark, e em mais lugar nenhum.
    *
    * NÃO está na escala `brand-*` do Tailwind de propósito: se virasse classe,
    * em pouco tempo apareceria num botão ou num card, e aí deixaria de ser

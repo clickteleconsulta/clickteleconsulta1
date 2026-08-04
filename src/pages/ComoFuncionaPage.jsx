@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CalendarCheck, UserCheck, Video, ShieldCheck, CreditCard, Clock, ArrowRight } from 'lucide-react';
+import { CalendarCheck, UserCheck, Video, ShieldCheck, CreditCard, Clock, ArrowRight, FileCheck2 } from 'lucide-react';
 
 const STEPS = [
   { icon: UserCheck, title: '1. Escolha o médico', text: 'Veja os médicos parceiros disponíveis, os horários e o valor de cada um.' },
@@ -50,7 +50,7 @@ const ComoFuncionaPage = () => {
         </div>
 
         <div className="mt-14">
-          <h2 className="text-xl font-bold text-slate-900 text-center">Por que agendar pela Click</h2>
+          <h2 className="text-xl font-bold text-slate-900 text-center">Por que agendar pela {BRAND.name}</h2>
           <div className="grid sm:grid-cols-3 gap-4 mt-6">
             {BENEFITS.map((b) => (
               <div key={b.title} className="flex items-start gap-3 p-4 rounded-xl bg-brand-50 border border-slate-100">
@@ -61,7 +61,32 @@ const ComoFuncionaPage = () => {
           </div>
         </div>
 
-        <div className="mt-14 bg-gradient-to-br from-brand-600 to-brand-500 rounded-2xl p-8 text-center text-white">
+        {/* O 4º passo que não cabe nos três cards: o que vem DEPOIS do atendimento.
+            É a dúvida mais comum de quem nunca fez teleconsulta. */}
+        <div className="mt-14 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+          <div className="flex items-start gap-3">
+            <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+              <FileCheck2 className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-slate-900">Depois da consulta</h2>
+              <p className="text-slate-600 mt-2 leading-relaxed">
+                Quando a avaliação clínica indicar, o médico pode emitir prescrição digital, solicitação de
+                exames e atestado — em PDF assinado digitalmente, com a mesma validade dos documentos de uma
+                consulta presencial. Você pode conferir a autenticidade de cada um no validador oficial do
+                Governo Federal.
+              </p>
+              <Link
+                to="/documentos-e-validade"
+                className="inline-flex items-center gap-1.5 mt-3 text-brand-600 font-medium hover:underline"
+              >
+                Ver como conferir os documentos <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 bg-gradient-to-br from-brand-600 to-brand-500 rounded-2xl p-8 text-center text-white">
           <h2 className="text-2xl font-bold">Pronto para começar?</h2>
           <p className="opacity-90 mt-2">Encontre um médico e agende sua teleconsulta agora.</p>
           <Button asChild variant="secondary" className="mt-5 h-11 px-6 rounded-xl bg-white text-slate-900 hover:bg-slate-100"><Link to="/agendamentos">Ver médicos disponíveis</Link></Button>

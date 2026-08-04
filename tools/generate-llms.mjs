@@ -40,6 +40,7 @@ const PAGES = [
   { loc: '/como-funciona', titulo: 'Como funciona', desc: 'Como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
   { loc: '/quem-somos', titulo: 'Quem somos', desc: `O propósito de democratizar o acesso à saúde e o que a ${BRAND.name} é — e o que não é — como marketplace de agendamentos.` },
   { loc: '/perguntas-frequentes', titulo: 'Perguntas frequentes', desc: 'Dúvidas sobre como agendar, valores, pagamento, reembolso, receita e atestado, e proteção de dados.' },
+  { loc: '/documentos-e-validade', titulo: 'Documentos e validade', desc: 'A validade legal da teleconsulta no Brasil, os documentos que o médico pode emitir (prescrição, pedido de exames e atestado) e como conferir a autenticidade em validar.iti.gov.br.' },
   { loc: '/suporte', titulo: 'Suporte', desc: 'Canais de atendimento e ajuda para pacientes e médicos parceiros.' },
   { loc: '/legal', titulo: 'Documentos legais', desc: 'Termos de Serviço e Política de Privacidade em vigor.' },
 ];
