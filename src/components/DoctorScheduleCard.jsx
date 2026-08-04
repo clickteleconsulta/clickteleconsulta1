@@ -546,28 +546,28 @@ export function DoctorScheduleCard({
                   aparição do jade fora do logo — por isso vem de BRAND.acento e
                   não de uma classe do Tailwind, para seguir sendo uma exceção
                   rastreável em vez de virar cor de interface. */}
-              {/* Duas colunas encostadas, rótulo acima do dado, iguais em qualquer
-                  largura. A modalidade entra sem pílula para não pesar mais que o
-                  preço ao lado. Sem `justify-between`: com só dois itens ele os
-                  jogava para as bordas opostas e o par se desfazia.
+              {/* Duas colunas encostadas, rótulo acima do dado. Sem
+                  `justify-between`: com só dois itens ele os jogava para as
+                  bordas opostas e o par se desfazia.
 
-                  As linhas de valor ficam em caixas de mesma altura com
-                  `items-center`, e o `leading-none` vai repetido no override do
-                  selo — como as utilidades de tamanho do Tailwind também definem
-                  entrelinha, o twMerge descarta o `leading-none` que vem de dentro
-                  do componente ao ver o `text-[16px]` daqui. Sem repetir, o selo
-                  fica com 26,4 px de entrelinha contra 16 do preço e as duas
-                  linhas de base se descolam. */}
+                  A modalidade voltou a ser SELO EM CAIXA e em corpo pequeno —
+                  antes era um texto de 16 px solto, do mesmo tamanho do preço, e
+                  os dois disputavam a atenção. Modalidade é qualificação; preço
+                  é a informação que decide. Agora só o preço tem corpo grande.
+
+                  A caixa de cada valor tem a altura do selo (h-6) e
+                  `items-center`, para o selo e o preço ficarem centrados na
+                  mesma faixa mesmo tendo alturas diferentes. */}
               <div className="pt-3 border-t border-slate-100 flex items-start gap-10">
                   <div>
                       <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
-                      <div className="mt-2 h-5 flex items-center">
-                          <TeleconsultaBadge subtle size="md" className="text-[16px] leading-none font-extrabold tracking-tight gap-1" />
+                      <div className="mt-2 h-6 flex items-center">
+                          <TeleconsultaBadge size="sm" />
                       </div>
                   </div>
                   <div>
                       <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Valor</p>
-                      <div className="mt-2 h-5 flex items-center">
+                      <div className="mt-2 h-6 flex items-center">
                           <span
                               className="text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
                               style={{ color: BRAND.acento }}
@@ -660,7 +660,7 @@ export function DoctorScheduleCard({
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-full border-0 text-[13px] font-semibold transition-all duration-200 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white hover:-translate-y-px active:translate-y-0 active:scale-[0.97]")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-sm border-0 text-[13px] font-semibold transition-colors duration-150 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>

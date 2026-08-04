@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
  * modalidade, este é o único lugar a mexer.
  *
  * - `size="sm"` para dentro de cartões em lista; `"md"` para páginas de perfil.
+ * - o canto é `rounded-sm` (2px), alinhado ao traço seco do resto da interface.
  * - `subtle` tira a pílula e deixa só ícone e texto em cobalto, para quando o
  *   selo entra como o valor de uma coluna ao lado de outros dados e o
  *   preenchimento o faria pesar mais que os vizinhos.
@@ -29,7 +30,7 @@ export function TeleconsultaBadge({ size = 'sm', subtle = false, className = '' 
   return (
     <span
       className={cn(
-        'inline-flex items-center font-semibold leading-none whitespace-nowrap rounded-full',
+        'inline-flex items-center font-semibold leading-none whitespace-nowrap rounded-sm',
         t.caixa,
         subtle
           ? 'text-brand-700 px-0 h-auto'

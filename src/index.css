@@ -59,10 +59,16 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 222 47.1% 44.3%;
  
-  /* Raio da interface. Medi a Doctoralia em 04/08/2026: botões em pílula
-     (999px) e cards em 16px — exatamente o que tínhamos. Descer para 8px
-     afasta a nossa cara da deles e deixa o traço mais seco. */
-  --radius: 0.5rem;
+  /* Raio da interface, escolhido para não coincidir com concorrente nenhum.
+     Medido com getComputedStyle em 04/08/2026:
+
+       Doctoralia   botões em pílula (999px), cards 16px
+       Medprev      botões 8px, cards 10/16/24px
+
+     Tínhamos a cara da Doctoralia. Descer para 8px nos jogaria em cima da
+     Medprev, então o token é 6px: cards saem em 6 e botões em 4, mais secos
+     que os dois. */
+  --radius: 0.375rem;
 }
  
 body {
