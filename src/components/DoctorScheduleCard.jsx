@@ -254,6 +254,26 @@ export function DoctorScheduleCard({
   }, [scheduleByDay, bookedSlots]);
   const day0HasSlots = (scheduleByDay[0]?.slots?.length || 0) > 0;
 
+  /**
+   * Se ainda dá para ser atendido hoje. Calculado à parte de `scheduleByDay`
+   * porque aquele acompanha a paginação — ao avançar os dias, a posição 0 deixa
+   * de ser hoje e o selo apagaria sem o médico ter mudado nada.
+   *
+   * Conta só vaga que dê para agendar de verdade: fora de bloqueio e ainda
+   * livre. `generateTimeSlotsFromAgenda` já descarta os horários que passaram,
+   * com a folga de 20 minutos que ele aplica ao dia corrente.
+   */
+  const disponivelHoje = useMemo(() => {
+    if (!doctorAgenda || isFallback) return false;
+    const hoje = startOfToday();
+    const dia = format(hoje, 'yyyy-MM-dd');
+    return generateTimeSlotsFromAgenda(doctorAgenda, hoje).some((time) => {
+      const instante = zonedTimeToUtc(`${dia} ${time}:00`, 'America/Sao_Paulo').getTime();
+      if (isInstantBlocked(instante, blocks)) return false;
+      return !bookedSlots.get(`${dia}T${time}:00`);
+    });
+  }, [doctorAgenda, isFallback, blocks, bookedSlots]);
+
   const handleBooking = async (day, time) => {
     if (isFallback) {
       toast({
@@ -430,6 +450,23 @@ export function DoctorScheduleCard({
                   <ShieldCheck className="w-3.5 h-3.5 text-brand-500 shrink-0" />
                   <span>Pagamento online · Pix e cartão</span>
               </div>
+
+              {/* Selo de disponibilidade no dia. Verde aqui é estado, não marca —
+                  é o mesmo verde de sucesso da interface, e por isso não se
+                  confunde com o jade do logo. A bolinha pulsa devagar: dá o
+                  sinal de "agora" sem virar alerta.
+
+                  Só aparece depois que a agenda carregou; enquanto carrega, a
+                  ausência do selo não significa indisponível. */}
+              {!loadingSlots && disponivelHoje && (
+                  <span className="inline-flex items-center gap-1.5 self-start h-6 px-2.5 rounded-full bg-green-50 border border-green-200 text-green-700 text-[11.5px] font-semibold leading-none">
+                      <span className="relative flex w-2 h-2 shrink-0">
+                          <span className="absolute inline-flex w-full h-full rounded-full bg-green-500 opacity-70 motion-safe:animate-ping" />
+                          <span className="relative inline-flex w-2 h-2 rounded-full bg-green-500" />
+                      </span>
+                      Disponível hoje
+                  </span>
+              )}
 
               {/* Abre a agenda no celular. Some a partir de md, onde a grade já
                   está ao lado. A palavra "Horários" ao lado da seta diz o que há
