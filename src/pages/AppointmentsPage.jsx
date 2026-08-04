@@ -133,7 +133,7 @@ const AppointmentsPage = () => {
         .select('medico_id, horario_inicio')
         .in('medico_id', doctorIds)
         .eq('pagamento_status', 'pago')
-        .not('status', 'in', '(cancelado,expirado)')
+        .not('status', 'in', '(cancelado,expirado,expirado_pagamento)')
         .gte('horario_inicio', new Date().toISOString());
       (booked || []).forEach((b) => {
         if (!b.horario_inicio) return;

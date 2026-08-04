@@ -254,8 +254,17 @@ const CheckoutPage = () => {
 
     if (error) {
       setIsConfirming(false);
-      if (error.message.includes('agendamentos_confirmados_unicos_idx')) {
-        navigate('/paciente/dashboard/consultas');
+      // O índice que barra dois pagamentos no mesmo horário chama-se
+      // idx_agendamentos_slot_pago. O nome antigo aqui não existe mais no banco,
+      // então este desvio nunca disparava e o paciente via o erro cru do Postgres.
+      if (/idx_agendamentos_slot_pago|já está reservado|ja esta reservado/i.test(error.message)) {
+        toast({
+          variant: 'destructive',
+          title: 'Horário já reservado',
+          description: 'Alguém confirmou o pagamento deste horário antes. Escolha outro.',
+          duration: 6000,
+        });
+        setTimeout(() => navigate('/agendamentos'), 3000);
         return;
       }
       toast({

@@ -113,7 +113,7 @@ export const AppointmentsProvider = ({ children }) => {
                 .select('horario_inicio, status')
                 .eq('medico_id', doctorId)
                 .eq('pagamento_status', 'pago')
-                .not('status', 'in', '(cancelado,expirado)');
+                .not('status', 'in', '(cancelado,expirado,expirado_pagamento)');
 
             if(error) throw error;
             
