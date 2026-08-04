@@ -19,9 +19,12 @@ const BlogArticlePage = () => {
     '@context': 'https://schema.org', '@type': 'Article',
     headline: article.title, description: article.description,
     datePublished: article.date, dateModified: article.date,
-    image: `${BASE}/og-image.png`,
+    // Versionado junto com o index.html — ver o comentário lá sobre o cache das
+    // redes sociais. O `logo` do publisher aponta para o logo de verdade, não
+    // para o banner: o Schema.org espera a marca, não a arte de divulgação.
+    image: `${BASE}/og-image-v2.png`,
     author: { '@type': 'Organization', name: BRAND.name },
-    publisher: { '@type': 'Organization', name: BRAND.name, logo: { '@type': 'ImageObject', url: `${BASE}/og-image.png` } },
+    publisher: { '@type': 'Organization', name: BRAND.name, logo: { '@type': 'ImageObject', url: `${BASE}/marca/logo.png` } },
     mainEntityOfPage: `${BASE}/blog/${article.slug}`,
   };
 
