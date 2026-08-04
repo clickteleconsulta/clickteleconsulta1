@@ -393,54 +393,35 @@ export function DoctorScheduleCard({
                   aparição do jade fora do logo — por isso vem de BRAND.acento e
                   não de uma classe do Tailwind, para seguir sendo uma exceção
                   rastreável em vez de virar cor de interface. */}
-              <div className="pt-3 border-t border-slate-100">
-                  {/* Celular: duas colunas encostadas, cada rótulo acima do seu
-                      dado. Sem `justify-between` — com só dois itens ele os jogava
-                      para as bordas opostas e os dois viravam informações soltas;
-                      juntos, leem-se como um par. A modalidade entra sem pílula
-                      para não pesar mais que o preço ao lado. */}
-                  {/* Modalidade à esquerda e preço à direita, a mesma ordem do
-                      desktop. As duas linhas de valor ficam em caixas de mesma
-                      altura com `items-center`.
+              {/* Duas colunas encostadas, rótulo acima do dado, iguais em qualquer
+                  largura. A modalidade entra sem pílula para não pesar mais que o
+                  preço ao lado. Sem `justify-between`: com só dois itens ele os
+                  jogava para as bordas opostas e o par se desfazia.
 
-                      O `leading-none` vai repetido no override do selo: como as
-                      utilidades de tamanho do Tailwind também definem entrelinha,
-                      o twMerge descarta o `leading-none` que vem de dentro do
-                      componente ao ver o `text-[16px]` daqui. Sem repetir, o selo
-                      fica com 26,4 px de entrelinha contra 16 do preço e as duas
-                      linhas de base se descolam. */}
-                  <div className="md:hidden flex items-start gap-10">
-                      <div>
-                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
-                          <div className="mt-2 h-5 flex items-center">
-                              <TeleconsultaBadge subtle size="md" className="text-[16px] leading-none font-extrabold tracking-tight gap-1" />
-                          </div>
-                      </div>
-                      <div>
-                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Consulta</p>
-                          <div className="mt-2 h-5 flex items-center">
-                              <span
-                                  className="text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
-                                  style={{ color: BRAND.acento }}
-                              >
-                                  {displayPrice}
-                              </span>
-                          </div>
+                  As linhas de valor ficam em caixas de mesma altura com
+                  `items-center`, e o `leading-none` vai repetido no override do
+                  selo — como as utilidades de tamanho do Tailwind também definem
+                  entrelinha, o twMerge descarta o `leading-none` que vem de dentro
+                  do componente ao ver o `text-[16px]` daqui. Sem repetir, o selo
+                  fica com 26,4 px de entrelinha contra 16 do preço e as duas
+                  linhas de base se descolam. */}
+              <div className="pt-3 border-t border-slate-100 flex items-start gap-10">
+                  <div>
+                      <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
+                      <div className="mt-2 h-5 flex items-center">
+                          <TeleconsultaBadge subtle size="md" className="text-[16px] leading-none font-extrabold tracking-tight gap-1" />
                       </div>
                   </div>
-
-                  {/* Desktop: a grade de horários já está ao lado mostrando os
-                      dias, então sobra o par selo + preço, encostados para se
-                      lerem juntos. 19px encosta na altura do selo sem
-                      ultrapassá-la, e o items-center centraliza os dois. */}
-                  <div className="hidden md:flex items-center gap-4">
-                      <TeleconsultaBadge size="md" />
-                      <span
-                          className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
-                          style={{ color: BRAND.acento }}
-                      >
-                          {displayPrice}
-                      </span>
+                  <div>
+                      <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Consulta</p>
+                      <div className="mt-2 h-5 flex items-center">
+                          <span
+                              className="text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
+                              style={{ color: BRAND.acento }}
+                          >
+                              {displayPrice}
+                          </span>
+                      </div>
                   </div>
               </div>
 
