@@ -159,10 +159,13 @@ const HomePage = () => {
           }}
         />
 
-        <div className="relative z-10 container mx-auto px-4 py-16 md:py-20 lg:py-24">
-          <div className="flex flex-col items-center text-center">
+        {/* Herói mais baixo e assimétrico: o texto ancora à esquerda e a ação vai
+            para a direita, em vez de tudo centrado numa coluna alta. O respiro
+            vertical caiu de py-16/20/24 para py-10/12/14. */}
+        <div className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:py-14">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center gap-8 lg:gap-12">
             <motion.div
-              className="max-w-3xl"
+              className="max-w-2xl text-left"
               variants={stagger}
               initial="hidden"
               animate="visible"
@@ -223,31 +226,39 @@ const HomePage = () => {
 
               <motion.p
                 variants={fadeUp}
-                className="font-body mt-6 text-xl text-slate-600 leading-relaxed max-w-xl mx-auto"
+                className="font-body mt-5 text-lg md:text-xl text-slate-600 leading-relaxed max-w-lg"
               >
                 Veja preço e horários na hora, escolha o profissional e agende.
                 Pix ou cartão, sem mensalidade.
               </motion.p>
 
-              {/* CTAs */}
-              <motion.div variants={fadeUp} className="mt-9 flex flex-wrap justify-center gap-3">
-                <Button
-                  asChild
-                  size="lg"
-                  className="rounded-full bg-brand-600 hover:bg-brand-700 text-white px-8 font-display font-bold shadow-lg shadow-brand-600/25"
-                >
-                  <Link to="/agendamentos" className="flex items-center gap-2">
-                    Agendar Consulta <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-              </motion.div>
-
               {/* Selos de confiança */}
-              <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-body text-slate-500">
+              <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-body text-slate-500">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-brand-500" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-600" /> Proteção LGPD</span>
                 <span className="inline-flex items-center gap-1.5"><Stethoscope className="w-4 h-4 text-teal-500" /> Atendimentos médicos</span>
               </motion.div>
+            </motion.div>
+
+            {/* A ação sai do meio da coluna de texto e vira o segundo bloco da
+                grade, à direita. No celular a grade colapsa e o botão volta a
+                ficar embaixo do texto, ocupando a largura toda — no toque, botão
+                largo vale mais que botão alinhado. */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="lg:justify-self-end lg:pr-4"
+            >
+              <Button
+                asChild
+                size="lg"
+                className="w-full sm:w-auto rounded-full bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-lg shadow-brand-600/25"
+              >
+                <Link to="/agendamentos" className="flex items-center justify-center gap-2">
+                  Agendar Consulta <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Button>
             </motion.div>
           </div>
         </div>
