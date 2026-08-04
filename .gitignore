@@ -5,3 +5,6 @@ dist/
 .env.production
 .vercel
 .env*
+
+# TTFs baixados por tools/gerar-marca.py (o repositório serve woff2, não TTF)
+.cache-fontes/

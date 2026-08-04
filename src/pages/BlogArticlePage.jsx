@@ -22,7 +22,7 @@ const BlogArticlePage = () => {
     // Versionado junto com o index.html — ver o comentário lá sobre o cache das
     // redes sociais. O `logo` do publisher aponta para o logo de verdade, não
     // para o banner: o Schema.org espera a marca, não a arte de divulgação.
-    image: `${BASE}/og-image-v2.png`,
+    image: `${BASE}/og-image-v3.png`,
     author: { '@type': 'Organization', name: BRAND.name },
     publisher: { '@type': 'Organization', name: BRAND.name, logo: { '@type': 'ImageObject', url: `${BASE}/marca/logo.png` } },
     mainEntityOfPage: `${BASE}/blog/${article.slug}`,

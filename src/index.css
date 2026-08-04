@@ -29,6 +29,39 @@
   src: url('/fonts/geist-variable.woff2') format('woff2');
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Gabarito — a fonte do LOGO, e só dele.
+
+   O site inteiro em uma família só deixava a marca sem assinatura: o wordmark
+   era a mesma letra do texto ao lado, em corpo maior. A Gabarito existe para
+   separar a marca do produto.
+
+   Geométrica brasileira da Naipe Foundry (Leandro Assis e Álvaro Franca),
+   nascida em material didático — o "a" de dois andares com barriga curta e os
+   terminais levemente cortados dão o tom amistoso sem cair no infantil.
+
+   Licença SIL OFL 1.1. A FAQ oficial trata logotipo na questão 1.1 ("You are
+   very welcome to do so") e na 1.1.1, que deixa o desenho vetorizado como obra
+   nossa, não derivada da fonte. Ver public/fonts/LICENSE-gabarito.txt.
+
+   O arquivo tem 1,1 KB porque contém SEIS glifos — a, v, i, D, o, c. O latim
+   completo pesava 20 KB, peso morto em toda página por causa de uma palavra.
+   Se algum dia a marca precisar de outra letra (uma assinatura de campanha,
+   por exemplo), o arquivo tem de ser regerado: ver docs/TIPOGRAFIA.md.
+
+   `font-display: block` e não `swap`: com swap o visitante veria a marca em
+   Geist e ela trocaria de desenho no meio da carga. Para um logo, um instante
+   sem nada é melhor que o desenho errado piscando — e com 1,1 KB pré-carregado
+   no index.html a janela é de um round trip.
+   ───────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Gabarito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/gabarito-logo.woff2') format('woff2');
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 47.4% 11.2%;

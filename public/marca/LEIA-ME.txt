@@ -15,8 +15,14 @@ AS DUAS CORES
   Cobalto  #3B5BA5   a cor institucional
   Jade     #0C9769   acento, só no logo
 
-A marca é avi + cruz + Doc. A cruz carrega o verde e o "Doc" fica no cobalto:
-a sílaba que nomeia o que a plataforma faz recebe a cor institucional.
+A marca é aviDoc + cruz, nessa ordem. A cruz carrega o verde e o "Doc" fica no
+cobalto: a sílaba que nomeia o que a plataforma faz recebe a cor institucional.
+
+A CRUZ FICA NO FIM, não entre as sílabas (04/08/2026). No meio ela era
+articulação — separava "avi" de "Doc" e era o que justificava a troca de cor.
+No fim ela é assinatura: fecha a marca em vez de dividi-la, e a divisão de cor
+passa a valer por hierarquia, não por causa de um separador. "avi" e "Doc" são
+uma palavra só, sem espaço entre elas.
 
 A cruz tem DOIS desenhos. Irradiada (com quatro pontos nas diagonais) a partir
 de 16 px; maciça abaixo disso, porque os pontos deixam de se separar do miolo e
@@ -49,13 +55,33 @@ No código: <Wordmark /> e <Wordmark dark />.
 
 A FONTE
 
-O wordmark é desenhado em Geist, a mesma família do site inteiro, servida por
-nós em /fonts/geist-variable.woff2 (SIL Open Font License).
+O wordmark é desenhado em GABARITO — e o site, em Geist. São duas fontes de
+propósito: com uma só, o logo era a mesma letra do texto ao lado, em corpo
+maior, e a marca ficava sem assinatura própria.
+
+  Gabarito   Naipe Foundry (Leandro Assis, Álvaro Franca), geométrica
+             brasileira. SIL Open Font License 1.1.
+             /fonts/gabarito-logo.woff2 — 1,1 KB
+
+A GABARITO É EXCLUSIVA DO LOGO. Não use em título, botão ou texto: o que dá
+identidade a ela é aparecer num lugar só. E o arquivo servido tem apenas SEIS
+glifos (a, v, i, D, o, c) justamente porque só escreve uma palavra — qualquer
+outra letra sai em branco. Precisando de outra palavra na fonte da marca, o
+arquivo tem de ser regerado; o procedimento está em docs/TIPOGRAFIA.md.
 
 Antes o logo pedia 'Avenir Next', que só existe no macOS e no iOS: em Windows
 e Android o navegador caía para Segoe UI ou Roboto e a marca aparecia com um
-desenho diferente conforme o aparelho. Não reintroduza fonte de sistema aqui.
-Detalhes em docs/TIPOGRAFIA.md.
+desenho diferente conforme o aparelho. Por isso a Gabarito é servida do nosso
+domínio, como a Geist. Não reintroduza fonte de sistema aqui.
+
+
+REFAZER ESTES ARQUIVOS
+
+    python3 tools/gerar-marca.py
+
+Refaz logo.png, logo-branco.png, email-header.png, simbolo.png e o og-image.
+Não edite os PNGs à mão: foi assim que eles ficaram, por um tempo, mostrando
+uma marca que o site já não usava.
 
 
 NÃO FAÇA

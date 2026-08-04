@@ -1,11 +1,61 @@
 # Tipografia da aviDoc
 
-**A fonte é a Geist. Uma família para tudo — título, texto, número e logo.**
+**Duas fontes, com fronteira rígida: Geist no produto inteiro, Gabarito só no logo.**
 
-Arquivo: `public/fonts/geist-variable.woff2` (29 KB) · declaração: `src/index.css`
-· Tailwind: `tailwind.config.js` → `fontFamily.sans`
+| onde | fonte | arquivo | peso |
+|---|---|---|---|
+| título, texto, número, interface | Geist | `public/fonts/geist-variable.woff2` | 29 KB |
+| **apenas** o wordmark | Gabarito | `public/fonts/gabarito-logo.woff2` | 1,1 KB |
 
-## Por que uma família só
+Declaração das duas: `src/index.css` · Tailwind (só a Geist):
+`tailwind.config.js` → `fontFamily.sans`
+
+## Por que a segunda fonte existe (04/08/2026)
+
+Por um tempo a Geist cobria também o logo, e isso estava errado por um motivo que
+só aparece olhando a página inteira: **o wordmark era a mesma letra do texto ao
+lado, em corpo maior**. Não havia nada distinguindo a marca do produto — o site
+ficava com cara de genérico justamente no ponto onde precisava de assinatura.
+
+A Gabarito é geométrica brasileira, da Naipe Foundry (Leandro Assis e Álvaro
+Franca), nascida em material didático. O "a" de dois andares com barriga curta e
+os terminais levemente cortados dão o tom amistoso sem cair no infantil.
+
+Foi escolhida entre 12 candidatas livres, comparadas lado a lado escrevendo o
+próprio wordmark, em corpo grande e nos 34 px reais do cabeçalho — que é onde a
+maioria das fontes bonitas desmonta. As descartadas por serem limpas demais e
+sem assinatura: Outfit e Hanken Grotesk. A descartada por ser autoral demais,
+com risco de envelhecer rápido: Syne. Finalistas: Bricolage Grotesque (a mais
+expressiva) e Fraunces (serifada, a maior distância possível do site).
+
+### As duas regras que não podem ser quebradas
+
+1. **A Gabarito não sai do logo.** Em título, botão ou texto ela deixa de ser
+   assinatura e vira mais uma fonte. `fontFamily.sans` do Tailwind aponta só
+   para a Geist de propósito — não adicione a Gabarito lá.
+
+2. **O arquivo servido tem SEIS glifos**: `a`, `v`, `i`, `D`, `o`, `c`. O latim
+   completo pesava 20 KB, peso morto em toda página por causa de uma palavra.
+   Qualquer outra letra sai **em branco**. Para escrever outra coisa na fonte da
+   marca, regere o arquivo:
+
+   ```bash
+   pip3 install --user fonttools brotli
+   # baixe Gabarito[wght].ttf de github.com/google/fonts/tree/main/ofl/gabarito
+   python3 -m fontTools.subset Gabarito.ttf --text='aviDoc' --flavor=woff2 \
+     --layout-features='*' --no-hinting --output-file=public/fonts/gabarito-logo.woff2
+   ```
+
+### Licença
+
+SIL Open Font License 1.1 — `public/fonts/LICENSE-gabarito.txt`. A
+[FAQ oficial da OFL](https://openfontlicense.org/ofl-faq/) trata logotipo na
+questão **1.1** ("You are very welcome to do so") e na **1.1.1**, que deixa o
+desenho vetorizado como obra nossa, não derivada da fonte. A FAQ **não** trata
+de registro de marca no INPI — isso é questão para o advogado, não está
+respondido aqui.
+
+## Por que uma família só no produto
 
 Antes o site carregava **três**: Plus Jakarta Sans (títulos) e DM Sans (corpo) pelo
 `index.html`, e Nunito Sans pelo `App.jsx` — esta última nem era usada de propósito,
