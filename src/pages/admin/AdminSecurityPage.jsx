@@ -64,7 +64,7 @@ const AdminSecurityPage = () => {
       if (error) throw error;
       setEmailSent(email);
       setNewEmail(''); setConfirmEmail('');
-      toast({ title: 'Confirmação enviada', description: `Abra o link enviado para ${email} para concluir a troca.` });
+      toast({ title: 'Confirmações enviadas', description: `Abra o link em ${email} e o link em ${currentEmail} para concluir a troca.` });
     } catch (err) {
       toast({ variant: 'destructive', title: 'Erro ao alterar e-mail', description: err.message });
     } finally {
@@ -186,13 +186,22 @@ const AdminSecurityPage = () => {
               <Label htmlFor="confirmEmail" className="text-xs font-bold text-gray-700 uppercase tracking-wide">Confirmar Novo E-mail</Label>
               <Input id="confirmEmail" type="email" value={confirmEmail} onChange={(e) => setConfirmEmail(e.target.value)} placeholder="Repita o novo e-mail" autoComplete="email" />
             </div>
+            {/* A dupla confirmação NÃO é hipótese: o projeto está com
+                mailer_secure_email_change_enabled = true. Sem dizer isso, quem
+                confirma só o endereço novo acha que terminou e fica achando que
+                a troca falhou. */}
             <div className="flex items-start gap-2 text-xs text-brand-800 bg-brand-50/60 border border-brand-100 rounded-lg p-3">
               <Mail className="w-4 h-4 shrink-0 mt-0.5 text-brand-600" />
-              <span>Por segurança, enviaremos um <strong>link de confirmação</strong> para o novo e-mail (e, se ativado no projeto, também para o atual). A troca só é concluída após clicar no link — até lá, continue usando o e-mail atual para entrar.</span>
+              <span>
+                Por segurança, a troca exige confirmação nos <strong>dois endereços</strong>: enviaremos um link
+                para o e-mail novo e outro para o atual. A troca só se conclui depois de clicar <strong>nos dois</strong>.
+                Até lá, continue entrando com o e-mail atual — nada muda no seu acesso.
+              </span>
             </div>
             {emailSent && (
               <div className="text-xs text-green-800 bg-green-50 border border-green-100 rounded-lg p-3">
-                Link de confirmação enviado para <strong>{emailSent}</strong>. Verifique a caixa de entrada (e o spam).
+                Links enviados para <strong>{emailSent}</strong> e para <strong>{currentEmail}</strong>. Abra os dois
+                (confira também o spam). Enquanto faltar um deles, o login continua sendo o e-mail atual.
               </div>
             )}
             <div>

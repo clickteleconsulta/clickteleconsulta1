@@ -71,7 +71,10 @@ const AdminLayout = () => {
         ]},
         { title: 'Sistema', items: [
             { href: '/admin/dashboard/auditoria', label: 'Auditoria', icon: ScrollText },
+            { href: '/admin/dashboard/legal', label: 'Documentos legais', icon: FileText },
             { href: '/admin/dashboard/configuracoes', label: 'Configurações', icon: SlidersHorizontal },
+            // Onde se troca o e-mail de login, a senha e o 2FA desta conta.
+            { href: '/admin/dashboard/seguranca', label: 'Segurança', icon: ShieldCheck },
         ]},
     ];
 
