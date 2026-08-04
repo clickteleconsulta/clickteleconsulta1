@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Cookie } from 'lucide-react';
 import { getConsent, setConsent, initAnalytics } from '@/lib/analytics';
 
 // Banner de consentimento (LGPD): o tracking (GA4/Meta Pixel) só é carregado após "Aceitar".
@@ -32,10 +31,21 @@ const ConsentBanner = () => {
     return (
         <div className="fixed bottom-0 inset-x-0 z-[100] p-3 sm:p-4 animate-in slide-in-from-bottom-4 duration-300">
             <div className="max-w-3xl mx-auto bg-white border border-gray-200 shadow-xl rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-                <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <div className="p-2 bg-brand-50 text-brand-600 rounded-lg shrink-0">
-                        <Cookie className="w-5 h-5" />
-                    </div>
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                    {/* Ilustração no lugar do ícone genérico de biscoito.
+                        `aria-hidden`: quem usa leitor de tela já recebe o texto
+                        ao lado, e descrever o desenho só acrescentaria ruído
+                        antes de uma decisão que precisa ser rápida.
+                        Some no celular — ali a barra disputa espaço com o
+                        conteúdo e os dois botões têm prioridade sobre o enfeite. */}
+                    <img
+                        src="/ilustra/cookies.svg"
+                        alt=""
+                        aria-hidden="true"
+                        width="96"
+                        height="66"
+                        className="hidden sm:block w-24 h-auto shrink-0 select-none pointer-events-none"
+                    />
                     <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                         Usamos cookies para entender como você usa o site e melhorar sua experiência. Você pode aceitar ou recusar.{' '}
                         <a href="/legal?doc=privacy_policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline hover:text-brand-800">
