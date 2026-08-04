@@ -18,6 +18,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
+import { BrandCross } from '@/components/Logo';
 import { TeleconsultaBadge } from '@/components/TeleconsultaBadge';
 import Estrelas from '@/components/Estrelas';
 import { doctorPath } from '@/lib/doctorSlug';
@@ -132,25 +133,33 @@ const NomeComSelos = ({ nome, mostrarPonto }) => {
   return (
     <h3
       ref={caixaRef}
-      className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight"
+      className="text-[23px] leading-[1.18] font-extrabold text-slate-900 tracking-tight"
       title={nome}
     >
       {exibido}
       {/* `whitespace-nowrap` prende os selos entre si e à última palavra: sem
           isso o ponto verde podia sozinho descer de linha. */}
       <span ref={selosRef} className="inline-flex items-center gap-1.5 ml-1 align-[-2px] whitespace-nowrap">
-        <VerifiedSeal className="w-[15px] h-[15px]" />
-        {/* Disponibilidade no dia: só o ponto verde, sem halo nem piscar.
-            Verde de sucesso da interface, não o jade da marca. Só aparece depois
-            que a agenda carregou; enquanto carrega, a ausência não significa
-            indisponível. */}
+        <VerifiedSeal className="w-[17px] h-[17px]" />
+        {/* Disponibilidade no dia: a CRUZ DA MARCA no jade, no lugar do ponto
+            verde genérico. É o que dá assinatura ao card — qualquer site põe
+            bolinha verde; a cruz é nossa.
+
+            16 px e não os 8 do ponto: renderizei a cruz de 8 a 18 px ao lado do
+            nome e abaixo de ~12 ela vira mancha. O <BrandCross> escolhe sozinho
+            entre a irradiada e a maciça pelo tamanho (CROSS_DETAIL_MIN = 16), e
+            16 é justamente o piso da irradiada — com o card maior, cabe aqui a
+            marca no desenho completo, não a redução.
+
+            Só aparece depois que a agenda carregou; enquanto carrega, a ausência
+            não significa indisponível. */}
         {mostrarPonto && (
-          <span
-            className="w-2 h-2 rounded-full bg-green-500"
-            role="img"
-            aria-label="Disponível hoje"
-            title="Disponível hoje"
-          />
+          // O rótulo vai no invólucro: o <BrandCross> fixa `aria-hidden` e não
+          // repassa props, então um aria-label nele seria descartado e o leitor
+          // de tela perderia a informação.
+          <span className="inline-flex shrink-0" role="img" aria-label="Disponível hoje" title="Disponível hoje">
+            <BrandCross size={16} color={BRAND.acento} />
+          </span>
         )}
       </span>
     </h3>
@@ -202,7 +211,7 @@ const ScheduleSkeleton = () => (
     </div>
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-px bg-border rounded-lg overflow-hidden border border-border">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="bg-white p-2 text-center space-y-1 min-h-[130px]">
+          <div key={i} className="bg-white p-2.5 text-center space-y-1 min-h-[150px]">
                 <Skeleton className="h-3 w-12 mx-auto rounded-md" />
                 <Skeleton className="h-3 w-8 mx-auto rounded-md" />
                 <div className="space-y-1.5 mt-2.5">
@@ -493,16 +502,17 @@ export function DoctorScheduleCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-white rounded-lg border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[800px] mx-auto"
+      className="bg-white rounded-lg border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[920px] mx-auto"
     >
       <div className="flex flex-col md:flex-row">
-          <div className="p-4 md:p-5 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
+          <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[345px] md:min-w-[345px] border-b md:border-b-0 md:border-r border-slate-100">
               {/* Proporções tiradas do cartão de referência e reescaladas: lá o
-                  conteúdo tem 800 px de largura, aqui 311 no celular — fator 0,39.
-                  Foto 186→72, nome 52→20, sub 27→11. Foto e texto centrados um
+                  conteúdo tem 800 px de largura, aqui 345 no desktop — fator 0,43.
+                  Foto 186→84, nome 52→23, sub 27→13. Todo o card foi
+                  reescalado por 1,15 de uma vez, para nada sair de proporção. Foto e texto centrados um
                   com o outro, como no modelo. */}
-              <div className="flex items-center gap-3.5">
-                  <Avatar className="w-[72px] h-[72px] shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
+              <div className="flex items-center gap-4">
+                  <Avatar className="w-[84px] h-[84px] shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
                       <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-full object-cover" />
                       <AvatarFallback className="bg-brand-400 text-white rounded-full"><User size={30} /></AvatarFallback>
                   </Avatar>
@@ -532,11 +542,11 @@ export function DoctorScheduleCard({
                           ou a especialidade saía cortada. Em duas linhas os dois
                           aparecem inteiros. CRM em cobalto e negrito, por ser o
                           dado verificável. */}
-                      <p className="text-[11.5px] text-slate-500 font-medium mt-1 leading-snug">
+                      <p className="text-[13px] text-slate-500 font-medium mt-1 leading-snug">
                           {specialtyLabel}
                       </p>
                       {crmDisplay && (
-                          <p className="text-[11.5px] text-brand-700 font-bold leading-snug">{crmDisplay}</p>
+                          <p className="text-[13px] text-brand-700 font-bold leading-snug">{crmDisplay}</p>
                       )}
                   </div>
               </div>
@@ -555,21 +565,21 @@ export function DoctorScheduleCard({
                   os dois disputavam a atenção. Modalidade é qualificação; preço
                   é a informação que decide. Agora só o preço tem corpo grande.
 
-                  A caixa de cada valor tem a altura do selo (h-6) e
+                  A caixa de cada valor tem a altura do selo (h-7) e
                   `items-center`, para o selo e o preço ficarem centrados na
                   mesma faixa mesmo tendo alturas diferentes. */}
               <div className="pt-3 border-t border-slate-100 flex items-start gap-10">
                   <div>
-                      <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
-                      <div className="mt-2 h-6 flex items-center">
-                          <TeleconsultaBadge size="sm" />
+                      <p className="h-3.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
+                      <div className="mt-2 h-7 flex items-center">
+                          <TeleconsultaBadge size="md" />
                       </div>
                   </div>
                   <div>
-                      <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Valor</p>
-                      <div className="mt-2 h-6 flex items-center">
+                      <p className="h-3.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Valor</p>
+                      <div className="mt-2 h-7 flex items-center">
                           <span
-                              className="text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
+                              className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
                               style={{ color: BRAND.acento }}
                           >
                               {displayPrice}
@@ -579,7 +589,7 @@ export function DoctorScheduleCard({
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
-              <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-500">
+              <div className="flex items-center gap-1.5 text-[13px] font-medium text-slate-500">
                   <ShieldCheck className="w-3.5 h-3.5 text-brand-500 shrink-0" />
                   <span>Pagamento online · Pix e cartão</span>
               </div>
@@ -600,10 +610,10 @@ export function DoctorScheduleCard({
                       aria-controls={`agenda-${doctor?.id}`}
                       aria-label={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
                       title={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
-                      className="md:hidden mt-1 flex items-center justify-center gap-1.5 w-full h-10 rounded-md border border-slate-200 bg-slate-50 text-slate-600 text-[13.5px] font-semibold active:bg-slate-100 transition-colors"
+                      className="md:hidden mt-1 flex items-center justify-center gap-1.5 w-full h-10 rounded-md border border-slate-200 bg-slate-50 text-slate-600 text-[15px] font-semibold active:bg-slate-100 transition-colors"
                   >
                       Horários
-                      <ChevronDown className={cn('w-[18px] h-[18px] transition-transform duration-200', agendaAberta && 'rotate-180')} />
+                      <ChevronDown className={cn('w-[21px] h-[21px] transition-transform duration-200', agendaAberta && 'rotate-180')} />
                   </button>
               )}
           </div>
@@ -611,7 +621,7 @@ export function DoctorScheduleCard({
           <div
               id={`agenda-${doctor?.id}`}
               className={cn(
-                  'p-3 md:p-3.5 flex-1 flex-col min-h-[220px] md:flex',
+                  'p-3 md:p-3.5 flex-1 flex-col min-h-[253px] md:flex',
                   agendaAberta ? 'flex' : 'hidden'
               )}
           >
@@ -625,7 +635,7 @@ export function DoctorScheduleCard({
                               <ChevronLeft className="w-5 h-5" />
                           </Button>
                           {nextAvailable && !day0HasSlots ? (
-                              <span className="text-[11px] font-bold text-brand-600 truncate px-1">Próxima vaga: {titleCase(nextAvailable.label)} · {nextAvailable.time}</span>
+                              <span className="text-[12.5px] font-bold text-brand-600 truncate px-1">Próxima vaga: {titleCase(nextAvailable.label)} · {nextAvailable.time}</span>
                           ) : (
                               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider hidden sm:block">Selecione um horário</span>
                           )}
@@ -640,9 +650,9 @@ export function DoctorScheduleCard({
                                   {scheduleByDay.map(daySchedule => {
               const isDayToday = isToday(daySchedule.date);
               const hasSlots = daySchedule.slots.length > 0;
-              return <div key={daySchedule.dateFormatted} className="flex flex-col min-h-[150px]">
+              return <div key={daySchedule.dateFormatted} className="flex flex-col min-h-[172px]">
                                               <div className="py-1.5 px-1 text-center mb-1.5">
-                                                  <div className={cn("text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mb-0.5", isDayToday ? "text-brand-600" : "text-slate-400")}>
+                                                  <div className={cn("text-[11.5px] sm:text-[12.5px] font-bold uppercase tracking-wider mb-0.5", isDayToday ? "text-brand-600" : "text-slate-400")}>
                                                       {daySchedule.dayName}
                                                   </div>
                                                   <div className={cn("text-sm font-bold", isDayToday ? "text-brand-600" : "text-slate-700")}>
@@ -660,7 +670,7 @@ export function DoctorScheduleCard({
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-sm border-0 text-[13px] font-semibold transition-colors duration-150 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-sm border-0 text-[15px] font-semibold transition-colors duration-150 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>
