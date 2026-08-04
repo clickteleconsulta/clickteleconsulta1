@@ -61,5 +61,11 @@ agora servimos a fonte, o logo sai idêntico em qualquer lugar.
   antes de a certa chegar.
 - **Não** volte a carregar fonte de CDN externa: a CSP foi fechada junto com esta
   mudança (`style-src` e `font-src` não listam mais o Google).
-- Os e-mails transacionais e os PDFs seguem em pilha de sistema, de propósito:
-  cliente de e-mail não baixa webfont, e o PDF embute a fonte no arquivo.
+- **Os PDFs legais usam a Geist e a embutem no arquivo.** O gerador declara um
+  `@font-face` apontando para uma cópia local do `.woff2` e o Chrome embute o
+  subconjunto usado — dá para conferir pelos nomes `AAAAAA+Geist-Bold` dentro do
+  PDF, que só aparecem quando a fonte está embutida. Ao trocar de fonte, atualize
+  a cópia usada pelo gerador junto com a do site.
+- **Os e-mails transacionais seguem em pilha de sistema, de propósito**: cliente
+  de e-mail não baixa webfont, então declarar a Geist ali só criaria uma
+  divergência silenciosa entre o que se vê no site e no e-mail.
