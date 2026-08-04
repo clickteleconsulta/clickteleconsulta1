@@ -446,9 +446,9 @@ export function DoctorScheduleCard({
               </div>
 
               {/* Abre a agenda no celular. Some a partir de md, onde a grade já
-                  está ao lado. Só a seta: o rótulo textual sujava o cartão, e a
-                  seta para baixo já é entendida como "tem mais aqui". O nome
-                  acessível fica no aria-label, para quem usa leitor de tela. */}
+                  está ao lado. A palavra "Horários" ao lado da seta diz o que há
+                  atrás dela — sozinha, a seta não sugeria o suficiente. O nome
+                  acessível completa a ação para quem usa leitor de tela. */}
               {!loadingSlots && hasConfiguredAgenda && (
                   <button
                       type="button"
@@ -457,9 +457,10 @@ export function DoctorScheduleCard({
                       aria-controls={`agenda-${doctor?.id}`}
                       aria-label={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
                       title={agendaAberta ? 'Ocultar horários' : 'Ver horários'}
-                      className="md:hidden mt-1 flex items-center justify-center w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 active:bg-slate-100 transition-colors"
+                      className="md:hidden mt-1 flex items-center justify-center gap-1.5 w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 text-[13.5px] font-semibold active:bg-slate-100 transition-colors"
                   >
-                      <ChevronDown className={cn('w-5 h-5 transition-transform duration-200', agendaAberta && 'rotate-180')} />
+                      Horários
+                      <ChevronDown className={cn('w-[18px] h-[18px] transition-transform duration-200', agendaAberta && 'rotate-180')} />
                   </button>
               )}
           </div>
