@@ -7,17 +7,19 @@
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://meet.jit.si https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://challenges.cloudflare.com;
       connect-src 'self' https://meet.jit.si wss://meet.jit.si https://*.jitsi.net wss://*.jitsi.net https://*.supabase.co wss://*.supabase.co https://api.avidoc.com.br wss://api.avidoc.com.br https://*.hostinger.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://challenges.cloudflare.com;
       img-src 'self' data: blob: https:;
-      style-src 'self' 'unsafe-inline' https://meet.jit.si https://fonts.googleapis.com;
-      font-src 'self' data: https: https://fonts.gstatic.com;
+      style-src 'self' 'unsafe-inline' https://meet.jit.si;
+      font-src 'self' data: https:;
       frame-src 'self' https://meet.jit.si https://challenges.cloudflare.com;
       media-src 'self' blob: https:;
       worker-src 'self' blob:;
     ">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- A fonte da marca é servida do próprio domínio (ver src/index.css). Sem
+         preconnect ao Google: não há mais o que buscar lá. O preload evita que o
+         texto pisque na fonte do sistema antes da Geist chegar — o @font-face
+         mora no CSS, que o navegador só lê depois de baixar o bundle. -->
+    <link rel="preload" href="/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- SEO (padrões da marca; páginas ajustam título/descrição via react-helmet) -->
     <meta name="google-site-verification" content="%VITE_GSC_VERIFICATION%" />

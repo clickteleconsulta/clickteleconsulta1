@@ -17,7 +17,10 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['"Nunito Sans"', 'sans-serif'],
+        // Precisa bater com o body em src/index.css. Antes daqui saía
+        // "Nunito Sans", que nem era carregada: quem usasse `font-sans` pegava a
+        // fonte do sistema, diferente do resto do site.
+        sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         // Escala própria da marca — cobalto suave. O 600 é a cor de ação (#3B5BA5),

@@ -163,9 +163,9 @@ function App() {
         <meta name="description" content="Escolha o profissional, veja preço e horários e agende em minutos. Pix ou cartão, sem mensalidade." />
         <meta property="og:title" content={BRAND.name} />
         <meta property="og:description" content="Escolha o profissional, veja preço e horários e agende em minutos." />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,900&display=swap" rel="stylesheet" />
+        {/* A fonte da marca é carregada uma vez só, no index.html, do próprio
+            domínio. Aqui havia um terceiro carregamento (Nunito Sans) que nem
+            era usado de propósito — só chegava via `font-sans` do Tailwind. */}
       </Helmet>
       
       <TooltipProvider>

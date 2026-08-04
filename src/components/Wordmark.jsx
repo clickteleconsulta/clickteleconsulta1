@@ -3,12 +3,16 @@ import { BRAND } from '@/config/brand';
 import { BrandCross } from '@/components/Logo';
 
 /**
- * O wordmark foi desenhado nesta pilha, no peso 700 — que a Plus Jakarta Sans
- * e a DM Sans do site não cobrem com o mesmo desenho. Fixamos aqui para o logo
- * sair igual em qualquer página.
+ * A fonte do logo é a mesma do site inteiro, e isso é uma correção.
+ *
+ * Antes esta pilha começava por `'Avenir Next', Avenir, Futura` — fontes
+ * proprietárias que só existem no macOS e no iOS. Em Windows e Android o
+ * navegador caía para Segoe UI ou Roboto, então **a marca aparecia com um
+ * desenho diferente conforme o aparelho do visitante**, o oposto de uma
+ * assinatura. Com a Geist, que nós mesmos servimos, o logo sai idêntico em
+ * qualquer lugar.
  */
-const STACK =
-  "'Avenir Next', Avenir, Futura, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+const STACK = "'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
 /**
  * Assinatura da marca: `avi` + cruz + `Doc`.
