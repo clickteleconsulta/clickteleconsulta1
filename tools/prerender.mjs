@@ -3,8 +3,14 @@
 // os previews de link (WhatsApp/Facebook) e os robôs vejam o meta certo SEM rodar JS.
 // O corpo continua sendo o SPA (hidratado pelo JS). Resiliente: nunca quebra o build.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { register } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+
+// Ensina o Node a resolver o atalho `@/` do Vite. Precisa vir ANTES de qualquer
+// import de src/ — sem isso, siteContent.js quebra em `@/config/brand` e o blog
+// fica sem pré-renderização. Ver tools/alias-loader.mjs.
+register('./alias-loader.mjs', import.meta.url);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
@@ -41,8 +47,18 @@ function apply(html, r) {
 }
 
 async function loadArticles() {
-  try { const m = await import('../src/content/siteContent.js'); return m.ARTICLES || []; }
-  catch (e) { console.warn('[prerender] sem artigos:', e.message); return []; }
+  try {
+    const m = await import('../src/content/siteContent.js');
+    const artigos = m.ARTICLES || [];
+    // Zero artigos aqui significa blog sem meta para os buscadores. O build segue
+    // (nunca quebrar o deploy por causa disso), mas o aviso não pode passar batido
+    // no meio do log do Vite — foi assim que ficou meses sem ninguém notar.
+    if (!artigos.length) console.warn('[prerender] ATENÇÃO: nenhum artigo encontrado — o blog vai sem meta.');
+    return artigos;
+  } catch (e) {
+    console.warn('[prerender] ATENÇÃO: artigos não carregaram, blog sem meta —', e.message);
+    return [];
+  }
 }
 
 // Mesmo slug canônico do DoctorPublicProfilePage / sitemap.

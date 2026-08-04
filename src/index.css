@@ -71,11 +71,24 @@
   --radius: 0.375rem;
 }
  
+/* As seções full-bleed usam `w-screen` + `mx-[calc(50%-50vw)]`, e 100vw conta a
+   barra de rolagem vertical — a faixa fica mais larga que a área visível e sobra
+   metade da barra (~7px) de rolagem lateral.
+
+   O clip precisa estar AQUI, no elemento raiz, e não só no body: a propagação do
+   overflow do body para a viewport não vale para `clip`, então a regra no body
+   sozinha não impedia a rolagem (medido: a página ainda corria 7,5px para o lado).
+
+   `clip` e não `hidden` de propósito — `hidden` cria um contêiner de rolagem e
+   isso quebraria o header `sticky`. Com `clip` o header continua grudando no topo. */
+html {
+  overflow-x: clip;
+}
+
 body {
   @apply bg-background text-foreground antialiased;
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.65;
-  /* Permite seções full-bleed (100vw) sem gerar barra de rolagem horizontal. */
   overflow-x: clip;
 }
 
