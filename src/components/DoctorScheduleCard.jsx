@@ -75,6 +75,35 @@ const generateTimeSlotsFromAgenda = (agenda, day) => {
   return [...new Set(slots)].sort();
 };
 
+const DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+/**
+ * Resume em uma linha os dias da semana em que o médico abriu agenda.
+ *
+ * Prefere a forma contínua ("Seg a sáb"). Só lista dia a dia quando há buraco no
+ * meio, e mesmo assim até três — a partir daí a tira não cabe na coluna do
+ * celular e sai cortada, então a contagem informa o mesmo em menos espaço.
+ * Domingo conta como começo da semana, então sábado e domingo aparecem como dois
+ * dias soltos, que é o que o paciente precisa ler.
+ */
+const resumoDosDias = (agenda) => {
+  const dias = [...new Set(
+    (agenda || [])
+      .filter((b) => b.status === 'disponivel' && Number.isInteger(b.dia_semana))
+      .map((b) => b.dia_semana)
+  )].sort((a, b) => a - b);
+
+  if (!dias.length) return null;
+  if (dias.length === 7) return 'Todo dia';
+
+  const continuo = dias.every((d, i) => i === 0 || d === dias[i - 1] + 1);
+  if (continuo && dias.length >= 3) {
+    return `${DIAS[dias[0]]} a ${DIAS[dias[dias.length - 1]].toLowerCase()}`;
+  }
+  if (dias.length >= 4) return `${dias.length} dias/sem`;
+  return dias.map((d) => DIAS[d]).join(', ');
+};
+
 const ScheduleSkeleton = () => (
   <div className="flex-grow flex flex-col">
     <div className="flex items-center justify-between mb-3 border-b border-border/30 pb-2">
@@ -317,6 +346,7 @@ export function DoctorScheduleCard({
   // (mesmo que a janela atual esteja vazia), para que o paciente possa avançar até os
   // dias com disponibilidade. O estado "Sem horários" fica só para quem não tem agenda.
   const hasConfiguredAgenda = !isFallback && Array.isArray(doctorAgenda) && doctorAgenda.length > 0;
+  const diasAbertos = useMemo(() => resumoDosDias(doctorAgenda), [doctorAgenda]);
 
   // Directly use the formatted price passed from the parent which already includes the tax
   const displayPrice = formattedPatientPrice ? formattedPatientPrice : 'Consultar';
@@ -366,43 +396,66 @@ export function DoctorScheduleCard({
                               <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
                       )}
-                      {/* Especialidade e CRM em cobalto: são o par que qualifica
-                          o profissional. Em linhas separadas porque um CRM de
-                          nove dígitos junto da especialidade não cabe na largura
-                          de um celular — na mesma linha, o separador sobrava
-                          pendurado no fim. O CRM em negrito por ser o verificável. */}
-                      <p className="text-[13.5px] text-brand-700 font-medium mt-1 leading-snug overflow-hidden text-ellipsis whitespace-nowrap" title={specialtyLabel}>
-                          {specialtyLabel}
+                      {/* Especialidade e CRM sempre na mesma linha, como no
+                          modelo. Quem cede espaço é a especialidade, que trunca;
+                          o CRM nunca encolhe, por ser o dado verificável — e
+                          assim o separador nunca sobra pendurado numa quebra.
+                          O texto completo fica no title. */}
+                      <p className="flex items-baseline gap-1 text-[13px] mt-1 leading-snug min-w-0" title={[specialtyLabel, crmDisplay].filter(Boolean).join(' · ')}>
+                          <span className="text-slate-500 font-medium truncate">{specialtyLabel}</span>
+                          {specialtyLabel && crmDisplay && <span className="text-slate-300 shrink-0">·</span>}
+                          {crmDisplay && <span className="text-brand-700 font-bold shrink-0">{crmDisplay}</span>}
                       </p>
-                      {crmDisplay && (
-                          <p className="text-[13.5px] font-bold text-brand-700 leading-snug whitespace-nowrap">{crmDisplay}</p>
-                      )}
                   </div>
               </div>
 
-              {/* Modalidade e preço na mesma linha, o preço logo ao lado do selo
-                  em vez de jogado na borda direita: juntos eles se leem como um
-                  par ("teleconsulta, R$ 40"), separados pela largura do cartão
-                  viravam duas informações soltas. Mesmo arranjo em qualquer
-                  largura.
-
-                  O preço usa o jade da marca porque é o que mais diferencia a
+              {/* O preço usa o jade da marca porque é o que mais diferencia a
                   plataforma e o primeiro dado que o paciente procura. É a única
                   aparição do jade fora do logo — por isso vem de BRAND.acento e
                   não de uma classe do Tailwind, para seguir sendo uma exceção
-                  rastreável em vez de virar cor de interface.
+                  rastreável em vez de virar cor de interface. */}
+              <div className="pt-3 border-t border-slate-100">
+                  {/* Celular: as três colunas do cartão de referência, cada rótulo
+                      acima do seu dado. A modalidade entra sem pílula para não
+                      pesar mais que os vizinhos. Os corpos são menores que os do
+                      modelo porque ali o cartão tem 1080 px e aqui, 343. */}
+                  <div className="md:hidden flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                          <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Consulta</p>
+                          <p
+                              className="mt-1 text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
+                              style={{ color: BRAND.acento }}
+                          >
+                              {displayPrice}
+                          </p>
+                      </div>
+                      <div className="min-w-0">
+                          <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Modalidade</p>
+                          <TeleconsultaBadge subtle size="md" className="mt-1 text-[15px] font-extrabold tracking-tight gap-1" />
+                      </div>
+                      {diasAbertos && (
+                          <div className="min-w-0">
+                              <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Agenda</p>
+                              <p className="mt-1 text-[15px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
+                                  {diasAbertos}
+                              </p>
+                          </div>
+                      )}
+                  </div>
 
-                  19px encosta na altura do selo sem ultrapassá-la, então o
-                  `items-center` centraliza os dois de verdade em vez de compensar
-                  uma caixa maior que a outra. */}
-              <div className="pt-3 border-t border-slate-100 flex items-center gap-4">
-                  <TeleconsultaBadge size="md" />
-                  <span
-                      className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
-                      style={{ color: BRAND.acento }}
-                  >
-                      {displayPrice}
-                  </span>
+                  {/* Desktop: a grade de horários já está ao lado mostrando os
+                      dias, então sobra o par selo + preço, encostados para se
+                      lerem juntos. 19px encosta na altura do selo sem
+                      ultrapassá-la, e o items-center centraliza os dois. */}
+                  <div className="hidden md:flex items-center gap-4">
+                      <TeleconsultaBadge size="md" />
+                      <span
+                          className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
+                          style={{ color: BRAND.acento }}
+                      >
+                          {displayPrice}
+                      </span>
+                  </div>
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}

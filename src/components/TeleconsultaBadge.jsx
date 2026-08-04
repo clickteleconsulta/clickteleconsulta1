@@ -14,9 +14,9 @@ import { cn } from '@/lib/utils';
  * modalidade, este é o único lugar a mexer.
  *
  * - `size="sm"` para dentro de cartões em lista; `"md"` para páginas de perfil.
- * - `subtle` tira o preenchimento e deixa só ícone e texto, para quando o selo
- *   dividir espaço com outro elemento de destaque (um preço, por exemplo) e os
- *   dois competirem pela atenção.
+ * - `subtle` tira a pílula e deixa só ícone e texto em cobalto, para quando o
+ *   selo entra como o valor de uma coluna ao lado de outros dados e o
+ *   preenchimento o faria pesar mais que os vizinhos.
  */
 const TAMANHOS = {
   sm: { caixa: 'h-6 px-2 gap-1 text-[11.5px]', icone: 'w-3.5 h-3.5' },
@@ -32,7 +32,7 @@ export function TeleconsultaBadge({ size = 'sm', subtle = false, className = '' 
         'inline-flex items-center font-semibold leading-none whitespace-nowrap rounded-full',
         t.caixa,
         subtle
-          ? 'text-slate-600 px-0'
+          ? 'text-brand-700 px-0 h-auto'
           : 'bg-brand-50 text-brand-700 border border-brand-100',
         className
       )}
