@@ -85,7 +85,14 @@ const STEPS = [
 
 // ─── Features (Bento) ──────────────────────────────────────────────────────────
 const FEATURES = [
-  { icon: Clock, title: 'Sem filas de espera', desc: 'Consulte no horário que funciona para você, sem esperar em salas lotadas.', span: 'md:col-span-2' },
+  // Sem `md:col-span-2` aqui. São 6 itens numa grade de 3 colunas: com um deles
+  // ocupando duas, a conta deixa de fechar e o último cartão fica sozinho na
+  // terceira linha, com dois terços de vazio ao lado. E o cartão largo tinha o
+  // MESMO texto curto dos demais, então o dobro de largura só virava espaço
+  // sobrando — lia como erro de enquadramento, não como destaque.
+  // 6 ÷ 3 = duas linhas cheias. Se algum dia um item merecer destaque, ele
+  // precisa de conteúdo que justifique a largura, não só da classe.
+  { icon: Clock, title: 'Sem filas de espera', desc: 'Consulte no horário que funciona para você, sem esperar em salas lotadas.' },
   { icon: Shield, title: 'Registro verificado', desc: 'Todo médico parceiro tem o registro conferido junto ao CRM do respectivo estado.' },
   { icon: Calendar, title: 'Agendamento Rápido', desc: 'Escolha especialidade, médico e horário e agende em poucos cliques.' },
   { icon: Lock, title: 'Proteção LGPD', desc: 'Seus dados trafegam por conexão criptografada e são tratados conforme a LGPD.' },

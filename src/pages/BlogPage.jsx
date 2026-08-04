@@ -28,7 +28,12 @@ const BlogPage = () => (
         <p className="text-slate-500 mt-3 text-lg">Conteúdo para você entender e aproveitar melhor o atendimento online.</p>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-5">
+      {/* Três colunas no desktop porque hoje são exatamente 3 artigos, e em duas
+          colunas o último ficava sozinho com meia linha vazia ao lado. É uma
+          escolha acoplada à quantidade: ARTICLES é uma constante em
+          src/content/siteContent.js, não vem do banco. Ao publicar um 4º artigo,
+          reveja aqui — com 4, quem fecha certo é `sm:grid-cols-2`. */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {ARTICLES.map((a) => (
           <Link key={a.slug} to={`/blog/${a.slug}`} className="group bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div className="text-[11px] text-slate-400 font-medium flex items-center gap-2">
