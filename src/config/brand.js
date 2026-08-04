@@ -35,6 +35,24 @@ export const BRAND = {
   },
   /** Cor única da marca — cobalto. Espelha --primary no index.css e brand-600 no Tailwind. */
   color: '#3B5BA5',
+
+  /**
+   * Verde de acento — **exclusivo da marca**. Vive na metade da cápsula e na
+   * sílaba "Doc" do wordmark, e em mais lugar nenhum.
+   *
+   * NÃO está na escala `brand-*` do Tailwind de propósito: se virasse classe,
+   * em pouco tempo apareceria num botão ou num card, e aí deixaria de ser
+   * acento. Só `Logo.jsx` e `Wordmark.jsx` importam daqui.
+   *
+   * Também não é o verde de sucesso da interface — esse é o `green-600` do
+   * Tailwind (#16A34A). O jade fica 18° de matiz afastado justamente para o
+   * logo não ser lido como um selo de "confirmado".
+   *
+   * `acento` é para fundo claro (contraste 3,72 no branco — passa em texto
+   * grande); `acentoClaro` é a gêmea para fundo escuro, onde o jade some.
+   */
+  acento: '#0C9769',
+  acentoClaro: '#3DDC97',
 };
 
 /** Dados legais da pessoa jurídica — permanecem mesmo se a marca mudar. */

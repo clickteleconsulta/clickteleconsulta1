@@ -15,7 +15,9 @@ const Footer = () => {
           {/* Marca */}
           <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <Link to="/" className="flex items-center gap-2">
-              <Wordmark size={25} />
+              {/* Rodapé usa a versão sem acento no texto: o nome inteiro em
+                  tinta sobrevive a impressão de uma cor e a corpo pequeno. */}
+              <Wordmark size={25} accent={false} />
             </Link>
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Democratizar o acesso à saúde: agende sua consulta sem deslocamento, sem fila e com preço acessível.

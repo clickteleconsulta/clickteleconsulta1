@@ -35,10 +35,10 @@ Cada profissional tem uma página pública com registro no CRM, preço, duraçã
 horários disponíveis. A lista muda conforme o corpo clínico.
 
 - [Gustavo R. Ayres](https://avidoc.com.br/medico/gustavo-r-ayres-generalista)
-- [Ryan de Brito Silva Oliveira](https://avidoc.com.br/medico/ryan-de-brito-silva-oliveira-generalista)
-- [Renata de Oliveira Dias Mouli](https://avidoc.com.br/medico/renata-de-oliveira-dias-mouli-generalista)
-- [Celso Coelho de Carvalho](https://avidoc.com.br/medico/celso-coelho-de-carvalho-generalista)
 - [Maria Eduarda Senra](https://avidoc.com.br/medico/maria-eduarda-senra-generalista)
+- [Ryan de Brito Silva Oliveira](https://avidoc.com.br/medico/ryan-de-brito-silva-oliveira-generalista)
+- [Celso Coelho de Carvalho](https://avidoc.com.br/medico/celso-coelho-de-carvalho-generalista)
+- [Renata de Oliveira Dias Mouli](https://avidoc.com.br/medico/renata-de-oliveira-dias-mouli-generalista)
 
 ## Optional
 

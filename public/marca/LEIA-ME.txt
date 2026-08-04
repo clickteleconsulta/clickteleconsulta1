@@ -1,13 +1,48 @@
 Arquivos de marca — aviDoc
 
 logo.png            wordmark completo, fundo transparente  (1400×420)
-logo-branco.png     mesma versão em branco, para fundo escuro
-simbolo.png         só a cápsula inclinada, transparente
+logo-branco.png     mesma versão para fundo escuro
+simbolo.png         só a cápsula inclinada, transparente  (1100×780)
 avatar.png          ícone quadrado 1024×1024 — app, crachá, WhatsApp Business
 avatar-redondo.png  ícone redondo 1024×1024 — Instagram, Facebook, Google
 email-header.png    cabeçalho 600×140 com fundo branco, para modelos de e-mail
 
-Cor da marca: #3B5BA5
 Todos servidos publicamente em https://avidoc.com.br/marca/<arquivo>
 
-Regras de uso: docs/TROCA-DE-MARCA.md
+
+AS DUAS CORES
+
+  Cobalto  #3B5BA5   a cor institucional
+  Jade     #0C9769   acento, só no logo
+
+A cápsula é partida na cintura — cobalto na primeira metade, jade na segunda — e
+a sílaba "Doc" repete o jade. As duas se correspondem: a metade verde da forma e
+a sílaba verde do nome.
+
+O jade NÃO é cor de interface. Não está na escala brand-* do Tailwind de
+propósito: se virasse classe, apareceria num botão e deixaria de ser acento.
+Também não é o verde de sucesso do site (#16A34A) — fica 18° de matiz afastado
+justamente para o logo não ser lido como um selo de "confirmado".
+
+Em fundo escuro o jade some. Aí as cores viram #9FB4DE e #3DDC97 — é o que o
+logo-branco.png e os avatares já usam.
+
+
+DUAS VERSÕES DO WORDMARK
+
+  padrão   "Doc" em jade          cabeçalho, avatar, apresentação
+  rodapé   nome inteiro em tinta  rodapé, documento, impressão de uma cor
+
+A versão de rodapé mantém a cápsula partida, mas nada no texto depende da cor
+para ser lido. Use-a sempre que o material puder acabar em preto e branco ou em
+corpo pequeno. No código: <Wordmark accent={false} />.
+
+
+NÃO FAÇA
+
+  - reproduzir o nome digitando: importe de src/config/brand.js
+  - trocar a inclinação de −22° ou as proporções da cápsula
+  - usar o wordmark abaixo de 14 px — nesse tamanho use o símbolo
+  - aplicar o jade em qualquer coisa que não seja o logo
+
+Regras completas: docs/TROCA-DE-MARCA.md
