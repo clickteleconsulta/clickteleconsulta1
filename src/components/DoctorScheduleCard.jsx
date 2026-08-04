@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, CalendarCheck, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -38,6 +38,122 @@ const VerifiedSeal = ({ className }) => (
     <path d="M7.8 12.4 l2.8 2.8 5.4-5.8" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+/**
+ * Nome do médico com os selos SEMPRE logo depois do texto, e nunca em 3 linhas.
+ *
+ * As duas exigências brigam entre si em CSS puro. Com `line-clamp`, o corte come
+ * o que estiver no fim — inclusive os selos. Tirando os selos do bloco cortado,
+ * eles param de acompanhar o texto e ficam pendurados num canto fixo do card.
+ *
+ * A saída é decidir o corte por medida, não por CSS: medimos quanto cabe em duas
+ * linhas descontando a largura dos selos e cortamos o nome em palavras inteiras
+ * até sobrar espaço para eles. O resultado é o texto seguido dos selos, sempre
+ * na mesma linha do fim do nome.
+ *
+ * A medição usa um <span> fora do React (criado e destruído aqui), porque mexer
+ * no DOM que o React controla quebra a reconciliação.
+ */
+const medirLargura = (() => {
+  let regua = null;
+  return (texto, estilo) => {
+    if (!regua) {
+      regua = document.createElement('span');
+      regua.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;top:-9999px;left:-9999px';
+      document.body.appendChild(regua);
+    }
+    regua.style.font = estilo.font;
+    regua.style.letterSpacing = estilo.letterSpacing;
+    regua.textContent = texto;
+    return regua.getBoundingClientRect().width;
+  };
+})();
+
+/** Quebra gulosa em linhas, do jeito que o navegador quebraria. */
+const quebrarLinhas = (texto, largura, estilo) => {
+  const linhas = [];
+  let atual = '';
+  for (const palavra of texto.split(' ')) {
+    const tentativa = atual ? `${atual} ${palavra}` : palavra;
+    if (atual && medirLargura(tentativa, estilo) > largura) {
+      linhas.push(atual);
+      atual = palavra;
+    } else {
+      atual = tentativa;
+    }
+  }
+  if (atual) linhas.push(atual);
+  return linhas;
+};
+
+const NomeComSelos = ({ nome, mostrarPonto }) => {
+  const caixaRef = useRef(null);
+  const selosRef = useRef(null);
+  const [exibido, setExibido] = useState(nome);
+
+  useLayoutEffect(() => {
+    const caixa = caixaRef.current;
+    const selos = selosRef.current;
+    if (!caixa || !selos) return;
+
+    const ajustar = () => {
+      const largura = caixa.clientWidth;
+      if (!largura) return;
+      const cs = getComputedStyle(caixa);
+      const estilo = { font: cs.font, letterSpacing: cs.letterSpacing };
+      // Os selos precisam caber ao lado da última linha, então o espaço útil
+      // dessa linha é menor que o das demais.
+      const larguraSelos = selos.getBoundingClientRect().width + 6;
+
+      const cabe = (txt) => {
+        const linhas = quebrarLinhas(txt, largura, estilo);
+        if (linhas.length > 2) return false;
+        const ultima = linhas[linhas.length - 1] || '';
+        return medirLargura(ultima, estilo) + larguraSelos <= largura;
+      };
+
+      if (cabe(nome)) { setExibido(nome); return; }
+      const palavras = nome.split(' ');
+      for (let n = palavras.length - 1; n >= 1; n--) {
+        const tentativa = `${palavras.slice(0, n).join(' ')}…`;
+        if (cabe(tentativa)) { setExibido(tentativa); return; }
+      }
+      setExibido(`${palavras[0]}…`);
+    };
+
+    ajustar();
+    const ro = new ResizeObserver(ajustar);
+    ro.observe(caixa);
+    return () => ro.disconnect();
+  }, [nome, mostrarPonto]);
+
+  return (
+    <h3
+      ref={caixaRef}
+      className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight"
+      title={nome}
+    >
+      {exibido}
+      {/* `whitespace-nowrap` prende os selos entre si e à última palavra: sem
+          isso o ponto verde podia sozinho descer de linha. */}
+      <span ref={selosRef} className="inline-flex items-center gap-1.5 ml-1 align-[-2px] whitespace-nowrap">
+        <VerifiedSeal className="w-[15px] h-[15px]" />
+        {/* Disponibilidade no dia: só o ponto verde, sem halo nem piscar.
+            Verde de sucesso da interface, não o jade da marca. Só aparece depois
+            que a agenda carregou; enquanto carrega, a ausência não significa
+            indisponível. */}
+        {mostrarPonto && (
+          <span
+            className="w-2 h-2 rounded-full bg-green-500"
+            role="img"
+            aria-label="Disponível hoje"
+            title="Disponível hoje"
+          />
+        )}
+      </span>
+    </h3>
+  );
+};
 
 // Rótulos de data no estilo Doctoralia: "HOJE", "AMANHÃ" ou dia da semana; e "1 Ago", "31 Jul".
 const capMonth = (s) => s.replace(/\./g, '').replace(/ (\p{L})/u, (_, c) => ' ' + c.toUpperCase());
@@ -369,42 +485,10 @@ export function DoctorScheduleCard({
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          {/* O nome trunca em 2 linhas; os selos NUNCA vão junto.
-                              Eles são irmãos do texto, não filhos dele: antes viviam
-                              dentro do bloco com line-clamp e, num nome de três linhas
-                              — a Dra. Renata de Oliveira Dias Mouli —, o clamp cortava
-                              a última linha e apagava a verificação de quem tem o nome
-                              mais longo. Como irmão `shrink-0`, o par de selos fica
-                              fora do que o clamp corta, em qualquer tamanho de nome.
-
-                              `items-baseline` põe os selos na linha de base da PRIMEIRA
-                              linha do nome — é onde o olho os procura, e não muda de
-                              lugar quando o nome passa de uma para duas linhas. */}
-                          <h3 className="flex items-baseline gap-1 text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight">
-                              <span className="line-clamp-2 min-w-0">
-                                  {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
-                              </span>
-                              <span className="shrink-0 inline-flex items-center gap-1.5 translate-y-[1px]">
-                                  <VerifiedSeal className="w-[15px] h-[15px]" />
-                                  {/* Disponibilidade no dia: só o ponto verde, sem halo.
-                                      Sem piscar: o pulso competia com o preço pela atenção.
-                                      Verde de sucesso da interface, não o jade da marca.
-                                      Só aparece depois que a agenda carregou; enquanto
-                                      carrega, a ausência não significa indisponível.
-
-                                      O alinhamento vem do flex do pai (items-center), não
-                                      de vertical-align: um ponto solto no fluxo inline
-                                      assentaria na linha de base e ficaria abaixo do selo. */}
-                                  {!loadingSlots && disponivelHoje && (
-                                      <span
-                                          className="w-2 h-2 rounded-full bg-green-500"
-                                          role="img"
-                                          aria-label="Disponível hoje"
-                                          title="Disponível hoje"
-                                      />
-                                  )}
-                              </span>
-                          </h3>
+                          <NomeComSelos
+                              nome={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
+                              mostrarPonto={!loadingSlots && disponivelHoje}
+                          />
                       </Link>
 
                       {doctor?.reviewCount > 0 && (
