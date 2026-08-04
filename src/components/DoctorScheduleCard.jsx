@@ -380,8 +380,11 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              {/* Modalidade e preço na mesma linha, nas duas pontas — o mesmo
-                  arranjo em qualquer largura.
+              {/* Modalidade e preço na mesma linha, o preço logo ao lado do selo
+                  em vez de jogado na borda direita: juntos eles se leem como um
+                  par ("teleconsulta, R$ 40"), separados pela largura do cartão
+                  viravam duas informações soltas. Mesmo arranjo em qualquer
+                  largura.
 
                   O preço usa o jade da marca porque é o que mais diferencia a
                   plataforma e o primeiro dado que o paciente procura. É a única
@@ -392,7 +395,7 @@ export function DoctorScheduleCard({
                   19px encosta na altura do selo sem ultrapassá-la, então o
                   `items-center` centraliza os dois de verdade em vez de compensar
                   uma caixa maior que a outra. */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+              <div className="pt-3 border-t border-slate-100 flex items-center gap-4">
                   <TeleconsultaBadge size="md" />
                   <span
                       className="text-[19px] font-extrabold tracking-tight tabular-nums leading-none"
