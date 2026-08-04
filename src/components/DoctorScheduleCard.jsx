@@ -338,16 +338,22 @@ export function DoctorScheduleCard({
     >
       <div className="flex flex-col md:flex-row">
           <div className="p-4 md:p-5 flex flex-col gap-3 w-full md:w-[300px] md:min-w-[300px] border-b md:border-b-0 md:border-r border-slate-100">
-              <div className="flex items-start gap-3">
-                  <Avatar className="w-16 h-16 shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
+              {/* Proporções tiradas do cartão de referência e reescaladas: lá o
+                  conteúdo tem 800 px de largura, aqui 311 no celular — fator 0,39.
+                  Foto 186→72, nome 52→20, sub 27→11. Foto e texto centrados um
+                  com o outro, como no modelo. */}
+              <div className="flex items-center gap-3.5">
+                  <Avatar className="w-[72px] h-[72px] shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
                       <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-full object-cover" />
-                      <AvatarFallback className="bg-gradient-to-br from-brand-400 to-brand-400 text-white rounded-full"><User size={26} /></AvatarFallback>
+                      <AvatarFallback className="bg-gradient-to-br from-brand-400 to-brand-400 text-white rounded-full"><User size={30} /></AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                       <Link to={!isFallback ? `/medico/${doctor.id}` : '#'} className={cn("block", !isFallback && "hover:underline")}>
-                          <h3 className="text-[21px] leading-tight font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 min-w-0" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
-                              <span className="overflow-hidden text-ellipsis whitespace-nowrap">{formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}</span>
-                              <VerifiedSeal className="w-[19px] h-[19px] shrink-0" />
+                          {/* Sem truncar: o nome quebra em até duas linhas, como no
+                              modelo. O selo acompanha o fim do texto. */}
+                          <h3 className="text-[20px] leading-[1.18] font-extrabold text-slate-900 tracking-tight line-clamp-2" title={formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}>
+                              {formatDoctorDisplayName(doctor?.sexo, doctor?.public_name || doctor?.name)}
+                              <VerifiedSeal className="inline w-[17px] h-[17px] ml-1 align-[-2px]" />
                           </h3>
                       </Link>
 
@@ -373,11 +379,11 @@ export function DoctorScheduleCard({
                           ou a especialidade saía cortada. Em duas linhas os dois
                           aparecem inteiros. CRM em cobalto e negrito, por ser o
                           dado verificável. */}
-                      <p className="text-[13px] text-slate-500 font-medium mt-1 leading-snug">
+                      <p className="text-[11.5px] text-slate-500 font-medium mt-1 leading-snug">
                           {specialtyLabel}
                       </p>
                       {crmDisplay && (
-                          <p className="text-[13px] text-brand-700 font-bold leading-snug">{crmDisplay}</p>
+                          <p className="text-[11.5px] text-brand-700 font-bold leading-snug">{crmDisplay}</p>
                       )}
                   </div>
               </div>
@@ -393,19 +399,19 @@ export function DoctorScheduleCard({
                       para as bordas opostas e os dois viravam informações soltas;
                       juntos, leem-se como um par. A modalidade entra sem pílula
                       para não pesar mais que o preço ao lado. */}
-                  <div className="md:hidden flex items-start gap-8">
+                  <div className="md:hidden flex items-start gap-10">
                       <div>
-                          <p className="h-4 text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Consulta</p>
+                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Consulta</p>
                           <p
-                              className="mt-1 text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
+                              className="mt-2 text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
                               style={{ color: BRAND.acento }}
                           >
                               {displayPrice}
                           </p>
                       </div>
                       <div>
-                          <p className="h-4 text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Modalidade</p>
-                          <TeleconsultaBadge subtle size="md" className="mt-1 text-[16px] font-extrabold tracking-tight gap-1" />
+                          <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Modalidade</p>
+                          <TeleconsultaBadge subtle size="md" className="mt-2 text-[16px] font-extrabold tracking-tight gap-1" />
                       </div>
                   </div>
 
