@@ -18,6 +18,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
+import { BRAND } from '@/config/brand';
 import { Skeleton } from './ui/skeleton';
 
 // Selo de médico verificado — desenho próprio: círculo + check no gradiente da marca.
@@ -110,6 +111,10 @@ export function DoctorScheduleCard({
   const [loadingSlots, setLoadingSlots] = useState(!isFallback);
   const [dayOffset, setDayOffset] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  // No celular a agenda entra recolhida: o cartão do médico cabe inteiro na tela
+  // e a lista fica navegável. A partir de md a grade é sempre visível e este
+  // estado não tem efeito nenhum.
+  const [agendaAberta, setAgendaAberta] = useState(false);
   const [doctorAgenda, setDoctorAgenda] = useState([]);
   const [bookedSlots, setBookedSlots] = useState(new Map());
   const [blocks, setBlocks] = useState([]);
@@ -369,16 +374,25 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              {/* Selo de teleconsulta + preço lado a lado. A certificação do médico
-                  fica só na roseta de verificado ao lado do nome. */}
-              {/* Altura fixa (h-7) nos dois para ficarem perfeitamente alinhados;
-                  o preço se destaca pelo peso/contraste, não pelo tamanho da caixa. */}
+              {/* Modalidade + preço lado a lado. A certificação do médico fica só
+                  na roseta de verificado ao lado do nome.
+
+                  A modalidade é informação institucional e usa o cobalto; o preço
+                  usa o jade da marca, porque é o dado que mais diferencia a
+                  plataforma e o que o paciente procura primeiro. É a única vez que
+                  o jade aparece fora do logo — por isso vem de BRAND.acento e não
+                  de uma classe do Tailwind, para continuar sendo uma exceção
+                  rastreável em vez de virar cor de interface. */}
+              {/* Altura fixa (h-7) nos dois para ficarem alinhados. */}
               <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-green-50 text-green-700 border border-green-100 rounded-full text-[12px] font-semibold leading-none">
-                      <Video className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                  <span className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-brand-50 text-brand-700 border border-brand-100 rounded-full text-[12px] font-semibold leading-none">
+                      <Video className="w-3.5 h-3.5 text-brand-500 shrink-0" />
                       Teleconsulta
                   </span>
-                  <span className="inline-flex items-center h-7 px-3 bg-slate-100 border border-slate-200/70 rounded-full text-[13px] font-extrabold text-slate-900 tracking-tight tabular-nums leading-none">
+                  <span
+                      className="inline-flex items-center h-7 text-[17px] font-extrabold tracking-tight tabular-nums leading-none"
+                      style={{ color: BRAND.acento }}
+                  >
                       {displayPrice}
                   </span>
               </div>
@@ -388,9 +402,39 @@ export function DoctorScheduleCard({
                   <ShieldCheck className="w-3.5 h-3.5 text-brand-500 shrink-0" />
                   <span>Pagamento online · Pix e cartão</span>
               </div>
+
+              {/* Abre a agenda no celular. Some a partir de md, onde a grade já
+                  está ao lado. Quando fechada, adianta a próxima vaga — é a
+                  informação que decide se vale abrir. */}
+              {!loadingSlots && hasConfiguredAgenda && (
+                  <button
+                      type="button"
+                      onClick={() => setAgendaAberta((v) => !v)}
+                      aria-expanded={agendaAberta}
+                      aria-controls={`agenda-${doctor?.id}`}
+                      className="md:hidden mt-1 flex items-center justify-between gap-2 w-full h-11 px-4 rounded-xl border border-brand-200 bg-brand-50 text-brand-700 text-[13px] font-semibold active:bg-brand-100 transition-colors"
+                  >
+                      <span className="flex items-center gap-1.5 min-w-0">
+                          <CalendarCheck className="w-4 h-4 shrink-0" />
+                          {agendaAberta ? 'Ocultar horários' : 'Ver horários'}
+                      </span>
+                      {!agendaAberta && nextAvailable && (
+                          <span className="text-[11.5px] font-medium text-brand-500 truncate">
+                              {titleCase(nextAvailable.label)} · {nextAvailable.time}
+                          </span>
+                      )}
+                      <ChevronDown className={cn('w-4 h-4 shrink-0 transition-transform duration-200', agendaAberta && 'rotate-180')} />
+                  </button>
+              )}
           </div>
-          
-          <div className="p-3 md:p-3.5 flex-1 flex flex-col min-h-[220px]">
+
+          <div
+              id={`agenda-${doctor?.id}`}
+              className={cn(
+                  'p-3 md:p-3.5 flex-1 flex-col min-h-[220px] md:flex',
+                  agendaAberta ? 'flex' : 'hidden'
+              )}
+          >
               {loadingSlots ? <ScheduleSkeleton /> : !hasConfiguredAgenda ? <div className="flex-grow flex flex-col justify-center items-center text-center text-muted-foreground py-6">
                       <CalendarOff className="w-7 h-7 mb-1" />
                       <p className="font-semibold text-foreground text-sm">Sem horários disponíveis</p>
