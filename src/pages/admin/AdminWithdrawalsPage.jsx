@@ -42,11 +42,35 @@ const AdminWithdrawalsPage = () => {
 
     const fmt = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     // Repasse e taxa de uma guia, usando a taxa CONGELADA no pagamento (imutável).
+    //
+    // Três valores diferentes que costumam ser confundidos:
+    //
+    //   total    o que o paciente pagou
+    //   liquido  o que o Asaas creditou na conta, já descontada a taxa dele —
+    //            é o único dinheiro que existe de verdade para movimentar
+    //   repasse  o que pertence ao médico
+    //
+    // O repasse é `total - taxa da plataforma`, e NÃO parte do líquido: a
+    // cláusula 5.2 do Termo de Adesão define a parte da aviDoc como um
+    // percentual do valor total pago pelo paciente, e o restante como do
+    // parceiro. A taxa do Asaas sai da margem da plataforma, não do médico.
+    //
+    // Por isso a margem real da plataforma é `liquido - repasse`, que é sempre
+    // menor que a taxa nominal — e pode até ficar negativa em consultas baratas,
+    // onde a taxa fixa do Asaas come toda a comissão. É justamente esse caso que
+    // a tela precisa mostrar em vez de esconder.
     const calcGuia = (g) => {
         const total = (g.price_in_cents || 0) / 100;
         const fee = Number(g.taxa_percent_snapshot) || 0;
         const taxa = total * (fee / 100);
-        return { total, taxa, repasse: total - taxa, fee };
+        const repasse = total - taxa;
+        const temLiquido = g.valor_liquido_centavos != null;
+        const liquido = temLiquido ? g.valor_liquido_centavos / 100 : null;
+        return {
+            total, taxa, repasse, fee, liquido, temLiquido,
+            taxaAsaas: temLiquido ? total - liquido : null,
+            margem: temLiquido ? liquido - repasse : null,
+        };
     };
 
     useEffect(() => {
@@ -133,7 +157,7 @@ const AdminWithdrawalsPage = () => {
         try {
             const { data } = await supabase
                 .from('agendamentos')
-                .select('id, protocolo, appointment_date, appointment_time, price_in_cents, taxa_percent_snapshot')
+                .select('id, protocolo, appointment_date, appointment_time, price_in_cents, taxa_percent_snapshot, valor_liquido_centavos')
                 .eq('saque_id', withdrawal.id)
                 .order('appointment_date', { ascending: true });
             setSaqueGuias(data || []);
@@ -447,6 +471,11 @@ const AdminWithdrawalsPage = () => {
                                                         </div>
                                                         <div className="text-right shrink-0 leading-tight">
                                                             <div className="text-gray-600">Pago: <span className="font-medium">{fmt(c.total)}</span></div>
+                                                            {c.temLiquido ? (
+                                                                <div className="text-gray-600">Recebido: <span className="font-medium">{fmt(c.liquido)}</span> <span className="text-gray-400">(Asaas −{fmt(c.taxaAsaas)})</span></div>
+                                                            ) : (
+                                                                <div className="text-amber-600" title="Cobrança anterior ao registro do líquido do Asaas">Recebido: não informado</div>
+                                                            )}
                                                             <div className="text-brand-600">Taxa ({c.fee}%): {fmt(c.taxa)}</div>
                                                             <div className="text-brand-800 font-semibold">Repasse: {fmt(c.repasse)}</div>
                                                         </div>
@@ -458,15 +487,27 @@ const AdminWithdrawalsPage = () => {
                                             const tot = saqueGuias.reduce((acc, g) => {
                                                 const c = calcGuia(g);
                                                 acc.total += c.total; acc.taxa += c.taxa; acc.repasse += c.repasse;
+                                                if (c.temLiquido) acc.liquido += c.liquido; else acc.semLiquido += 1;
                                                 return acc;
-                                            }, { total: 0, taxa: 0, repasse: 0 });
+                                            }, { total: 0, taxa: 0, repasse: 0, liquido: 0, semLiquido: 0 });
+                                            const completo = tot.semLiquido === 0;
+                                            const margem = tot.liquido - tot.repasse;
                                             return (
                                                 <div className="flex items-center justify-between gap-3 text-xs font-semibold border-t pt-2 mt-1">
                                                     <span className="text-gray-700">Totais</span>
                                                     <div className="text-right leading-tight">
                                                         <div className="text-gray-600">Bruto: {fmt(tot.total)}</div>
-                                                        <div className="text-brand-600">Taxa retida: {fmt(tot.taxa)}</div>
-                                                        <div className="text-brand-800">Repasse: {fmt(tot.repasse)}</div>
+                                                        {completo ? (
+                                                            <div className="text-gray-800">Recebido do Asaas: {fmt(tot.liquido)}</div>
+                                                        ) : (
+                                                            <div className="text-amber-600">Recebido: {fmt(tot.liquido)} · {tot.semLiquido} guia(s) sem registro</div>
+                                                        )}
+                                                        <div className="text-brand-800">Repasse ao médico: {fmt(tot.repasse)}</div>
+                                                        {completo && (
+                                                            <div className={margem < 0 ? 'text-red-600' : 'text-gray-500'}>
+                                                                {margem < 0 ? 'Prejuízo da plataforma: ' : 'Margem da plataforma: '}{fmt(margem)}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             );

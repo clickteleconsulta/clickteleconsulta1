@@ -63,12 +63,18 @@ Deno.serve(async (req: Request) => {
   // Verifica a cobrança direto no Asaas (fonte da verdade)
   let realStatus = "";
   let apptId = "";
+  // Valor que o Asaas realmente creditou, já descontada a taxa dele. É o que
+  // existe para repassar — o valor pago pelo paciente nunca chega inteiro na
+  // conta, e sem guardar isto a contabilidade do painel não fecha com o extrato.
+  let liquidoCentavos: number | null = null;
   try {
     const r = await fetch(`${ASAAS_BASE}/payments/${paymentId}`, { headers: { access_token: ASAAS_KEY } });
     if (!r.ok) return new Response(JSON.stringify({ error: `asaas payment ${r.status}` }), { status: 500 });
     const p = await r.json();
     realStatus = p?.status ?? "";
     apptId = p?.externalReference ?? "";
+    const net = Number(p?.netValue);
+    if (Number.isFinite(net) && net > 0) liquidoCentavos = Math.round(net * 100);
   } catch (e) {
     return new Response(JSON.stringify({ error: `asaas fetch: ${String(e)}` }), { status: 500 });
   }
@@ -108,8 +114,13 @@ Deno.serve(async (req: Request) => {
         status: "confirmado",
         pagamento_confirmado_em: new Date().toISOString(),
         checkout_session_id: paymentId,
+        valor_liquido_centavos: liquidoCentavos,
       });
-      await logAppt(apptId, "pagamento_confirmado", { asaas_payment_id: paymentId, status: realStatus });
+      await logAppt(apptId, "pagamento_confirmado", {
+        asaas_payment_id: paymentId,
+        status: realStatus,
+        liquido_centavos: liquidoCentavos,
+      });
     } else if (isRefund && REFUND_STATUS.includes(realStatus)) {
       await patchAppt(`id=eq.${apptId}`, { pagamento_status: "reembolsado", estornado_em: new Date().toISOString() });
     }
