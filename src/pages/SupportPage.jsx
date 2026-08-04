@@ -10,6 +10,7 @@ const SupportPage = () => {
             </Helmet>
             <div className="max-w-3xl mx-auto">
                 <div className="text-center mb-12">
+            <img src="/ilustra/suporte.svg" alt="" aria-hidden="true" className="h-40 md:h-48 w-auto mx-auto mb-6 select-none pointer-events-none" />
                     <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">Precisa de Ajuda?</h1>
                     <p className="mt-4 text-lg text-muted-foreground">Estamos aqui para te ajudar. Escolha a melhor forma de contato para você.</p>
                 </div>

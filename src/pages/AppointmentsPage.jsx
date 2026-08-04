@@ -510,7 +510,9 @@ const AppointmentsPage = () => {
       } else {
         return (
           <div className="text-center py-16 text-muted-foreground bg-white border border-slate-200 rounded-2xl shadow-sm">
-            <Filter className="mx-auto h-12 w-12 text-primary/50" />
+            {/* Estado vazio é onde a ilustração mais rende: a tela sem resultado
+                é a mais fria da jornada. */}
+            <img src="/ilustra/sem-dados.svg" alt="" aria-hidden="true" className="h-32 w-auto mx-auto mb-2 select-none pointer-events-none" />
             <h3 className="mt-4 text-lg font-semibold text-foreground">Nenhum médico encontrado</h3>
             <p className="mt-2 text-sm">
               {doctors.length === 0

@@ -14,6 +14,7 @@ const NotFoundPage = () => (
 
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-16">
       <div className="text-center max-w-md">
+            <img src="/ilustra/nao-achou.svg" alt="" aria-hidden="true" className="h-44 md:h-56 w-auto mx-auto mb-6 select-none pointer-events-none" />
         <div className="mx-auto w-20 h-20 rounded-2xl bg-brand-50 flex items-center justify-center mb-6">
           <Search className="w-9 h-9 text-brand-500" />
         </div>

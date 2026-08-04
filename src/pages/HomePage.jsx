@@ -39,6 +39,15 @@ import {
 import { supabase } from '@/lib/customSupabaseClient';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
+/**
+ * A ilustração do herói. Do unDraw, recolorida para o cobalto da marca com o
+ * jade entrando a cada três acentos — ver docs/ILUSTRACAO-HEROI.md.
+ *
+ * Trocar a arte é trocar este caminho. A caixa usa `object-contain` e altura
+ * máxima, então qualquer proporção entra inteira, sem recorte.
+ */
+const HERO_ARTE = '/ilustra/heroi.svg';
+
 const CYCLING_WORDS = ['sem sair de casa', 'sem fila', 'sem convênio'];
 
 // Reserva o espaço do herói. Derivada da lista, e não escrita à mão: acrescentar
@@ -163,7 +172,10 @@ const HomePage = () => {
             para a direita, em vez de tudo centrado numa coluna alta. O respiro
             vertical caiu de py-16/20/24 para py-10/12/14. */}
         <div className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:py-14">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center gap-8 lg:gap-12">
+          {/* Colunas que ABRAÇAM o conteúdo (`auto`) e ancoram à esquerda. Com
+              `1fr` na primeira, a coluna do botão era empurrada para a borda da
+              tela e ele ficava solto no canto, longe do texto a que pertence. */}
+          <div className="grid lg:grid-cols-[auto_auto] lg:justify-start lg:items-center gap-8 lg:gap-16">
             <motion.div
               className="max-w-2xl text-left"
               variants={stagger}
@@ -240,22 +252,36 @@ const HomePage = () => {
               </motion.div>
             </motion.div>
 
-            {/* A ação sai do meio da coluna de texto e vira o segundo bloco da
-                grade, à direita. No celular a grade colapsa e o botão volta a
-                ficar embaixo do texto, ocupando a largura toda — no toque, botão
-                largo vale mais que botão alinhado. */}
+            {/* Arte em cima, botão embaixo — os dois em fluxo normal, alinhados
+                pelo mesmo eixo. Antes o botão era posicionado em ABSOLUTO sobre
+                a ilustração, para mirar a ponta de um dedo que apontava; essa
+                arte não aponta para nada, e sobrepor o botão só o fazia colidir
+                com a figura, que fica no centro-direita do quadro.
+
+                A arte entra com `object-contain`: cabe inteira, nunca recortada,
+                seja qual for a proporção do arquivo. */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              className="lg:justify-self-end lg:pr-4"
+              // Largura EXPLÍCITA no lg: a coluna da grade é `auto`, então um
+              // `w-full` aqui vira dependência circular (a coluna mede pelo
+              // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
+              // zero — com ela, a imagem some.
+              className="w-full lg:w-[360px] lg:justify-self-start flex flex-col items-center gap-5"
             >
+              <img
+                src={HERO_ARTE}
+                alt=""
+                aria-hidden="true"
+                className="hidden lg:block w-full h-auto max-h-[220px] object-contain select-none pointer-events-none"
+              />
               <Button
                 asChild
                 size="lg"
-                className="w-full sm:w-auto rounded-full bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-lg shadow-brand-600/25"
+                className="w-full lg:w-auto rounded-full bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-lg shadow-brand-600/25"
               >
-                <Link to="/agendamentos" className="flex items-center justify-center gap-2">
+                <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
                   Agendar Consulta <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>

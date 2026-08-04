@@ -27,6 +27,11 @@ propósito: se virasse classe, apareceria num botão e deixaria de ser acento.
 Também não é o verde de sucesso do site (#16A34A) — fica 18° de matiz afastado
 justamente para o logo não ser lido como um selo de "confirmado".
 
+EXCEÇÃO, decidida em 04/08/2026: o jade também entra como DETALHE nas
+ilustrações, para o site não ficar monocromático em cobalto. Continua fora de
+botões, links, ícones de interface e qualquer elemento clicável — em ilustração
+ele é enfeite; em interface, seria estado.
+
 Em fundo escuro o jade some. Aí as cores viram #9FB4DE e #3DDC97 — é o que o
 logo-branco.png e os avatares já usam.
 

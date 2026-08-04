@@ -24,6 +24,7 @@ const FaqPage = () => {
 
       <div className="max-w-3xl mx-auto px-4 py-10 md:py-14">
         <div className="text-center max-w-2xl mx-auto mb-10">
+            <img src="/ilustra/faq.svg" alt="" aria-hidden="true" className="h-40 md:h-48 w-auto mx-auto mb-6 select-none pointer-events-none" />
           <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Ajuda</span>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">Perguntas frequentes</h1>
           <p className="text-slate-500 mt-3 text-lg">Tudo o que você precisa saber para agendar sua teleconsulta.</p>

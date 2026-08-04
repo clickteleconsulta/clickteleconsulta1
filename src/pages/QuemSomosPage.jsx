@@ -48,6 +48,7 @@ const QuemSomosPage = () => {
       <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
         {/* Intro */}
         <div className="text-center max-w-2xl mx-auto">
+          <img src="/ilustra/quem-somos.svg" alt="" aria-hidden="true" className="h-40 md:h-48 w-auto mx-auto mb-6 select-none pointer-events-none" />
           <span className="text-xs font-bold uppercase tracking-widest text-brand-600">Quem somos</span>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2 tracking-tight">
             Democratizar o acesso à saúde, um agendamento de cada vez
