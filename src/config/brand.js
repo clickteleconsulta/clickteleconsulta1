@@ -32,6 +32,19 @@ export const BRAND = {
   },
   social: {
     instagram: '@avidoc.com.br',
+
+    /**
+     * URLs dos perfis. O rodapé só desenha o ícone de quem tem URL aqui — ícone
+     * que leva a página inexistente é pior que ícone ausente.
+     *
+     * O Facebook está VAZIO porque ninguém confirmou o endereço da página. Não
+     * inventei um a partir do handle do Instagram: se o palpite estiver errado,
+     * o site publica um link quebrado. Basta preencher e o ícone aparece.
+     */
+    urls: {
+      instagram: 'https://www.instagram.com/avidoc.com.br/',
+      facebook: '',
+    },
   },
   /** Cor única da marca — cobalto. Espelha --primary no index.css e brand-600 no Tailwind. */
   color: '#3B5BA5',
