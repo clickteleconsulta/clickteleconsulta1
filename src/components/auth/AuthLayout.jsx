@@ -54,8 +54,12 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
 
             {/* Painel de marca — desktop */}
             <div className="hidden lg:flex flex-col justify-between gap-8 p-10 bg-slate-50/70 border-r border-slate-200">
+                {/* `compacto` (24 px), não `destaque`. Aqui o logo é assinatura e
+                    caminho de volta para a home — quem já está na tela de acesso
+                    sabe onde está. Em 40 px ele competia com a ilustração e com
+                    o título, que são o que a tela tem a dizer. */}
                 <Link to="/" className="inline-flex w-fit">
-                    <Wordmark size={TAMANHOS.destaque} />
+                    <Wordmark size={TAMANHOS.compacto} />
                 </Link>
 
                 <div>
@@ -100,7 +104,7 @@ const AuthLayout = ({ variant = 'cliente', children }) => {
                     empurrar o formulário de cadastro, que é longo, para baixo. */}
                 <div className="lg:hidden flex flex-col items-center mb-8">
                     <Link to="/" className="inline-flex">
-                        <Wordmark size={TAMANHOS.destaque} />
+                        <Wordmark size={TAMANHOS.compacto} />
                     </Link>
                     <img
                         src={p.arte}
