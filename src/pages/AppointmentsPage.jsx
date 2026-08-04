@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { patientPriceFromRepasse } from '@/lib/price';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
-import { nextAvailableSlotMs } from '@/lib/doctorAvailability';
+import { nextAvailableSlotMs, temHorarioLivreNoDia } from '@/lib/doctorAvailability';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { Loader2, Frown, Edit, Search, Filter, X } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { parseISO, getDay, format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 
 /**
@@ -76,7 +76,6 @@ const AppointmentsPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [specialties, setSpecialties] = useState([]);
 
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -95,7 +94,13 @@ const AppointmentsPage = () => {
   // Barra de filtros retrátil (recolhe ao rolar para baixo, reaparece ao subir).
   const [hideFilters, setHideFilters] = useState(false);
 
-  useEffect(() => { setVisibleCount(5); }, [activeFilters]);
+  useEffect(() => { setVisibleCount(5); }, [activeFilters, searchName]);
+
+  // A busca da home manda ?q=. Sem isto, o valor só era lido na montagem: quem
+  // já estava nesta página e buscava de novo pela home via a URL mudar e a lista
+  // continuar igual.
+  const qDaUrl = searchParams.get('q') || '';
+  useEffect(() => { setSearchName(qDaUrl); }, [qDaUrl]);
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -212,6 +217,9 @@ const AppointmentsPage = () => {
         agendaPronta: doc.agenda_medico || [],
         bookedSlotsProntos: bookedMapByDoctor[doc.id] || new Map(),
         blocksProntos: blocksByDoctor[doc.id] || [],
+        // Mesma informação em instantes (ms), que é o formato do ranking e do
+        // filtro por data.
+        bookedSetMs: bookedByDoctor[doc.id] || new Set(),
       };
     });
 
@@ -224,34 +232,37 @@ const AppointmentsPage = () => {
     return processedDoctors;
   }, []);
 
-  const fetchSpecialties = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('medicos')
-      .select('specialty')
-      .eq('is_active', true)
-      .eq('is_public', true);
-
-    if (!error && data) {
-      const uniqueSpecialties = [...new Set(data.map(d => d.specialty).filter(Boolean))].sort();
-      setSpecialties(uniqueSpecialties);
-    }
-  }, []);
-
   const { execute: loadData, status, value: doctors, error: loadError } = useAsync(fetchPublicDoctors, true);
 
+  // As especialidades saem da lista já carregada. Antes eram uma segunda
+  // varredura na mesma tabela `medicos`, com os mesmos filtros, só para ler uma
+  // coluna — e podia divergir da lista se as duas consultas caíssem em momentos
+  // diferentes.
+  const specialties = useMemo(
+    () => [...new Set((doctors || []).map(d => d.specialty).filter(Boolean))].sort(),
+    [doctors],
+  );
+
   useEffect(() => {
-    fetchSpecialties();
+    // Recarrega com atraso e agrupado. Qualquer médico salvando o perfil
+    // dispara este evento em TODOS os visitantes com a página aberta, e a
+    // recarga são quatro consultas; um médico mexendo em vários campos gerava
+    // uma rajada de recargas. Meio segundo junta a rajada numa só.
+    let timer = null;
+    const recarregarEmBreve = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => loadData(), 500);
+    };
     const channel = supabase
       .channel('public:medicos-list-updates')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'medicos' }, () => {
-        loadData();
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'medicos' }, recarregarEmBreve)
       .subscribe();
 
     return () => {
+      clearTimeout(timer);
       supabase.removeChannel(channel);
     };
-  }, [loadData, fetchSpecialties]);
+  }, [loadData]);
 
   const handleScheduleSave = useCallback(() => {
     loadData();
@@ -324,14 +335,13 @@ const AppointmentsPage = () => {
     }
 
     if (activeFilters.date) {
-      const dateObj = parseISO(activeFilters.date);
-      const dayOfWeek = getDay(dateObj);
-
-      result = result.filter(doc => {
-        return doc.agenda_medico?.some(
-          rule => rule.dia_semana === dayOfWeek && rule.status === 'disponivel'
-        );
-      });
+      // Vaga de verdade, não "tem regra nesse dia da semana". Antes o filtro
+      // olhava só a agenda: um médico com o dia inteiro vendido ou bloqueado
+      // aparecia na lista, e o paciente descobria a ausência de vaga só ao
+      // abrir o card. Os dados para checar já estão carregados.
+      const dia = parseISO(activeFilters.date);
+      result = result.filter(doc =>
+        temHorarioLivreNoDia(doc.agenda_medico, dia, doc.bookedSetMs, doc.blocksProntos));
     }
 
     // Ranking para dar mais visualizações a quem tem agenda disponível:
@@ -505,6 +515,9 @@ const AppointmentsPage = () => {
               <div className="md:w-40">
                 <Input
                   type="date"
+                  // Campo de data não tem texto visível para servir de rótulo:
+                  // sem isto o leitor de tela anunciava apenas "editar".
+                  aria-label="Filtrar por data de atendimento"
                   className="h-10 px-2 md:px-3 w-full bg-white border border-slate-200 rounded-lg text-sm shadow-sm text-slate-700 block"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
@@ -549,13 +562,24 @@ const AppointmentsPage = () => {
         {/* Lista */}
         <div className="container mx-auto px-4 py-8 pb-12">
           <div className="max-w-6xl mx-auto">
-            {status === 'success' && filteredDoctors.length > 0 && (
-              <p className="text-sm text-slate-500 mb-4">
-                {filteredDoctors.length === 1
-                  ? '1 médico disponível'
-                  : `Mostrando ${Math.min(visibleCount, filteredDoctors.length)} de ${filteredDoctors.length} médicos`}
-              </p>
-            )}
+            {/* Título de seção entre o h1 e os nomes dos médicos (que são h3).
+                Sem ele a hierarquia pulava de h1 para h3, e quem navega por
+                títulos no leitor de tela não tinha como saber onde a lista
+                começa. Invisível na tela, onde o contexto já é óbvio. */}
+            <h2 className="sr-only">Médicos disponíveis</h2>
+
+            {/* `aria-live`: filtrar trocava a lista em silêncio para quem usa
+                leitor de tela. Agora a contagem — e o "carregando" — são
+                anunciados sozinhos, sem roubar o foco de onde a pessoa está. */}
+            <p className="text-sm text-slate-500 mb-4" role="status" aria-live="polite">
+              {status === 'pending' || status === 'idle'
+                ? 'Carregando médicos…'
+                : status === 'success' && filteredDoctors.length > 0
+                  ? (filteredDoctors.length === 1
+                      ? '1 médico disponível'
+                      : `Mostrando ${Math.min(visibleCount, filteredDoctors.length)} de ${filteredDoctors.length} médicos`)
+                  : ''}
+            </p>
             {renderContent()}
           </div>
         </div>

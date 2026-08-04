@@ -412,6 +412,10 @@ const AiChatWidget = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
+        // O botão só tem ícone: sem nome acessível o leitor de tela anunciava
+        // apenas "botão". `aria-expanded` diz se o painel está aberto.
+        aria-label={isOpen ? 'Fechar o assistente' : 'Abrir o assistente'}
+        aria-expanded={isOpen}
         className={cn(
           "pointer-events-auto h-14 w-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300",
           isOpen 

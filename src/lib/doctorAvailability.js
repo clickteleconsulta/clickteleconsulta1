@@ -47,6 +47,32 @@ export function isInstantBlocked(instantMs, blocks) {
   return false;
 }
 
+/**
+ * O médico tem ao menos UM horário livre neste dia?
+ *
+ * Usa a mesma geração de horários do card, e desconta o que está vendido e o
+ * que está bloqueado. O filtro por data da listagem depende disso: antes ele
+ * olhava só se havia regra de agenda naquele dia da semana, então oferecia
+ * médicos cuja agenda daquele dia estava inteira vendida ou bloqueada — o
+ * paciente filtrava por uma data, abria o card e não achava vaga nenhuma.
+ *
+ * `dia` é um Date local; `bookedSetMs` é um Set de instantes (ms).
+ */
+export function temHorarioLivreNoDia(agenda, dia, bookedSetMs, blocks = []) {
+  const times = generateTimeSlotsFromAgenda(agenda, dia);
+  if (times.length === 0) return false;
+  const diaStr = format(dia, 'yyyy-MM-dd');
+  const agoraMs = Date.now();
+  for (const time of times) {
+    const instante = zonedTimeToUtc(`${diaStr} ${time}:00`, TZ).getTime();
+    if (Number.isNaN(instante) || instante <= agoraMs) continue;
+    if (bookedSetMs && bookedSetMs.has(instante)) continue;
+    if (isInstantBlocked(instante, blocks)) continue;
+    return true;
+  }
+  return false;
+}
+
 // Próximo horário disponível do médico, como instante (ms epoch), ignorando horários
 // já reservados (pagos) e bloqueios. Retorna null se não houver disponibilidade no horizonte.
 // `bookedSetMs` = Set de timestamps (ms) ocupados; `blocks` = array de { inicio, fim } em ms.
