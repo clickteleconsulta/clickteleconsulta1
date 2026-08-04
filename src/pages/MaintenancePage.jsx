@@ -1,7 +1,7 @@
 import React from 'react';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
-import { BrandCapsule } from '@/components/Logo';
+import { BrandCross } from '@/components/Logo';
 import Wordmark from '@/components/Wordmark';
 
 const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo melhor. Voltamos em instantes.';
@@ -17,9 +17,7 @@ const MaintenancePage = ({ message }) => (
 
     <div className="max-w-md">
       <div className="mx-auto mb-7 w-20 h-20 rounded-2xl bg-white shadow-lg shadow-brand-500/10 border border-brand-100 flex items-center justify-center">
-        <svg viewBox="0 0 104 44" className="w-14" aria-hidden="true">
-          <BrandCapsule color="#3B5BA5" />
-        </svg>
+        <BrandCross size={48} color="#3B5BA5" />
       </div>
 
       <div className="flex justify-center mb-4">

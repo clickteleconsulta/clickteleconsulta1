@@ -2,7 +2,7 @@ Arquivos de marca — aviDoc
 
 logo.png            wordmark completo, fundo transparente  (1400×420)
 logo-branco.png     mesma versão para fundo escuro
-simbolo.png         só a cápsula inclinada, transparente  (1100×780)
+simbolo.png         só a cruz irradiada em jade, transparente  (1100×780)
 avatar.png          ícone quadrado 1024×1024 — app, crachá, WhatsApp Business
 avatar-redondo.png  ícone redondo 1024×1024 — Instagram, Facebook, Google
 email-header.png    cabeçalho 600×140 com fundo branco, para modelos de e-mail
@@ -15,9 +15,12 @@ AS DUAS CORES
   Cobalto  #3B5BA5   a cor institucional
   Jade     #0C9769   acento, só no logo
 
-A cápsula é partida na cintura — cobalto na primeira metade, jade na segunda — e
-a sílaba "Doc" repete o jade. As duas se correspondem: a metade verde da forma e
-a sílaba verde do nome.
+A marca é avi + cruz + Doc. A cruz carrega o verde e o "Doc" fica no cobalto:
+a sílaba que nomeia o que a plataforma faz recebe a cor institucional.
+
+A cruz tem DOIS desenhos. Irradiada (com quatro pontos nas diagonais) a partir
+de 16 px; maciça abaixo disso, porque os pontos deixam de se separar do miolo e
+viram mancha. Não é redundância — é tamanho óptico, o mesmo que fontes fazem.
 
 O jade NÃO é cor de interface. Não está na escala brand-* do Tailwind de
 propósito: se virasse classe, apareceria num botão e deixaria de ser acento.
@@ -33,7 +36,7 @@ DUAS VERSÕES DO WORDMARK
   padrão   "Doc" em jade          cabeçalho, avatar, apresentação
   rodapé   nome inteiro em tinta  rodapé, documento, impressão de uma cor
 
-A versão de rodapé mantém a cápsula partida, mas nada no texto depende da cor
+A versão de rodapé mantém a cruz, mas nada no texto depende da cor
 para ser lido. Use-a sempre que o material puder acabar em preto e branco ou em
 corpo pequeno. No código: <Wordmark accent={false} />.
 
@@ -41,7 +44,9 @@ corpo pequeno. No código: <Wordmark accent={false} />.
 NÃO FAÇA
 
   - reproduzir o nome digitando: importe de src/config/brand.js
-  - trocar a inclinação de −22° ou as proporções da cápsula
+  - usar a cruz irradiada abaixo de 16 px — use a maciça
+  - pôr a cruz verde sozinha num quadrado: cruz verde no Brasil é farmácia.
+    No ícone ela é BRANCA sobre cobalto; o verde fica no wordmark
   - usar o wordmark abaixo de 14 px — nesse tamanho use o símbolo
   - aplicar o jade em qualquer coisa que não seja o logo
 

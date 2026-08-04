@@ -27,7 +27,7 @@ function shell(title: string, accent: string, bodyHtml: string) {
   <div style="max-width:560px;margin:0 auto;padding:24px 16px;">
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;">
       <div style="background:linear-gradient(135deg,#28385C 0%,#3B5BA5 100%);padding:22px 28px;">
-        <div style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;">avi<span style="color:#3DDC97">Doc</span></div>
+        <div style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;">avi<span style="color:#3DDC97;padding:0 3px;">+</span>Doc</div>
         <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;">Marketplace de agendamentos médicos</div>
       </div>
       <div style="padding:28px;">

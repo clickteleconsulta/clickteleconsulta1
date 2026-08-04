@@ -24,7 +24,7 @@ function buildHtml(link: string) {
   <div style="max-width:560px;margin:0 auto;padding:28px 14px;">
     <div style="background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;">
       <div style="background:linear-gradient(135deg,#28385C 0%,#3B5BA5 100%);padding:26px 28px;">
-        <h1 style="color:#ffffff;margin:0;font-size:20px;">avi<span style="color:#3DDC97">Doc</span></h1>
+        <h1 style="color:#ffffff;margin:0;font-size:20px;">avi<span style="color:#3DDC97;padding:0 3px;">+</span>Doc</h1>
         <p style="color:#C9D6EE;margin:6px 0 0;font-size:13px;">Convite para médico parceiro</p>
       </div>
       <div style="padding:28px;font-size:15px;line-height:1.65;">
