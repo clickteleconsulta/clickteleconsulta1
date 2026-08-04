@@ -24,7 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { parseISO, getDay } from 'date-fns';
+import { parseISO, getDay, format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 /**
  * Pré-visualização das estrelas de avaliação — SÓ EM DESENVOLVIMENTO.
@@ -127,17 +128,36 @@ const AppointmentsPage = () => {
       throw new Error("Não foi possível buscar os dados dos médicos. Tente novamente.");
     }
 
-    // Notas reais: média + contagem de avaliações publicadas por médico (medico_id = user_id).
+    // As três consultas seguintes dependem só dos ids que já temos, então correm
+    // JUNTAS. Em série elas somavam ~1,2 s de espera encadeada antes do primeiro
+    // card aparecer: avaliações esperavam médicos, agendamentos esperavam
+    // avaliações, bloqueios esperavam agendamentos — sem nenhuma precisar da
+    // anterior.
     const userIds = (publicDoctors || []).map(d => d.user_id).filter(Boolean);
+    const doctorIds = (publicDoctors || []).map(d => d.id).filter(Boolean);
+    const agora = new Date().toISOString();
+
+    const [revsRes, bookedRes, blocksRes] = await Promise.all([
+      userIds.length
+        ? supabase.from('avaliacoes').select('medico_id, rating').eq('status', 'publicada').in('medico_id', userIds)
+        : Promise.resolve({ data: [] }),
+      doctorIds.length
+        ? supabase.from('agendamentos').select('medico_id, horario_inicio')
+            .in('medico_id', doctorIds)
+            .eq('pagamento_status', 'pago')
+            .not('status', 'in', '(cancelado,expirado,expirado_pagamento)')
+            .gte('horario_inicio', agora)
+        : Promise.resolve({ data: [] }),
+      doctorIds.length
+        ? supabase.from('bloqueios_agenda').select('medico_id, inicio, fim').in('medico_id', doctorIds).gte('fim', agora)
+        : Promise.resolve({ data: [] }),
+    ]);
+
+    // Notas reais: média + contagem de avaliações publicadas por médico (medico_id = user_id).
     const ratingsByUser = {};
-    if (userIds.length) {
-      const { data: revs } = await supabase
-        .from('avaliacoes')
-        .select('medico_id, rating')
-        .eq('status', 'publicada')
-        .in('medico_id', userIds);
+    {
       const agg = {};
-      (revs || []).forEach(r => {
+      (revsRes.data || []).forEach(r => {
         if (r.rating == null) return;
         (agg[r.medico_id] = agg[r.medico_id] || { sum: 0, n: 0 });
         agg[r.medico_id].sum += Number(r.rating);
@@ -147,6 +167,29 @@ const AppointmentsPage = () => {
         ratingsByUser[uid] = { rating: agg[uid].sum / agg[uid].n, reviewCount: agg[uid].n };
       });
     }
+
+    // Um índice por médico, servindo aos dois consumidores: o ranking desta
+    // página (que quer instantes em ms) e o card (que procura por chave
+    // "aaaa-mm-ddThh:mm:ss" no fuso de Brasília).
+    const bookedByDoctor = {};   // id -> Set de instantes (ms)
+    const bookedMapByDoctor = {}; // id -> Map chave -> true
+    (bookedRes.data || []).forEach((b) => {
+      if (!b.horario_inicio) return;
+      const d = new Date(b.horario_inicio);
+      (bookedByDoctor[b.medico_id] ||= new Set()).add(d.getTime());
+      // No fuso de Brasília, e não no do visitante: a grade de horários do card
+      // é montada em Brasília, então a chave precisa nascer no mesmo fuso. Antes
+      // isto usava a hora local de quem acessa — quem abrisse o site fora do
+      // horário de Brasília via como livre um horário já vendido.
+      const emBrasilia = utcToZonedTime(d, 'America/Sao_Paulo');
+      const chave = `${format(emBrasilia, 'yyyy-MM-dd')}T${format(emBrasilia, 'HH:mm:ss')}`;
+      (bookedMapByDoctor[b.medico_id] ||= new Map()).set(chave, true);
+    });
+
+    const blocksByDoctor = {};
+    (blocksRes.data || []).forEach((b) => {
+      (blocksByDoctor[b.medico_id] ||= []).push({ inicio: new Date(b.inicio).getTime(), fim: new Date(b.fim).getTime() });
+    });
 
     const newDoctorPrices = {};
 
@@ -164,38 +207,15 @@ const AppointmentsPage = () => {
         price_in_cents: Math.round(precoFinal * 100),
         rating: notas ? notas.rating : 0,
         reviewCount: notas ? notas.reviewCount : 0,
+        // Entregues prontos ao card. O `agenda_medico` já vem no join da consulta
+        // de médicos, então nem ele precisa de ida ao banco.
+        agendaPronta: doc.agenda_medico || [],
+        bookedSlotsProntos: bookedMapByDoctor[doc.id] || new Map(),
+        blocksProntos: blocksByDoctor[doc.id] || [],
       };
     });
 
-    // Próximo horário disponível de cada médico (para ranking por proximidade).
-    // Uma única consulta traz os horários já reservados (pagos) de todos os médicos.
-    const doctorIds = processedDoctors.map((d) => d.id);
-    const bookedByDoctor = {};
-    if (doctorIds.length) {
-      const { data: booked } = await supabase
-        .from('agendamentos')
-        .select('medico_id, horario_inicio')
-        .in('medico_id', doctorIds)
-        .eq('pagamento_status', 'pago')
-        .not('status', 'in', '(cancelado,expirado,expirado_pagamento)')
-        .gte('horario_inicio', new Date().toISOString());
-      (booked || []).forEach((b) => {
-        if (!b.horario_inicio) return;
-        (bookedByDoctor[b.medico_id] ||= new Set()).add(new Date(b.horario_inicio).getTime());
-      });
-    }
-    // Bloqueios (indisponibilidade) de cada médico — também escondem horários no ranking.
-    const blocksByDoctor = {};
-    if (doctorIds.length) {
-      const { data: blk } = await supabase
-        .from('bloqueios_agenda')
-        .select('medico_id, inicio, fim')
-        .in('medico_id', doctorIds)
-        .gte('fim', new Date().toISOString());
-      (blk || []).forEach((b) => {
-        (blocksByDoctor[b.medico_id] ||= []).push({ inicio: new Date(b.inicio).getTime(), fim: new Date(b.fim).getTime() });
-      });
-    }
+    // Próximo horário livre de cada médico, para o ranking por proximidade.
     processedDoctors.forEach((d) => {
       d.nextSlotMs = nextAvailableSlotMs(d.agenda_medico, bookedByDoctor[d.id], blocksByDoctor[d.id]);
     });
@@ -397,6 +417,9 @@ const AppointmentsPage = () => {
                     isFallback={doctor.is_fallback}
                     patientPrice={doctorPrices[doctor.id]}
                     formattedPatientPrice={formatPrice(doctorPrices[doctor.id])}
+                    agendaPronta={doctor.agendaPronta}
+                    bookedSlotsProntos={doctor.bookedSlotsProntos}
+                    blocksProntos={doctor.blocksProntos}
                   />
                 ))}
                 {filteredDoctors.length > visibleCount && (

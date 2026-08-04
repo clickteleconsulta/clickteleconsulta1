@@ -218,24 +218,32 @@ export function DoctorScheduleCard({
   onScheduleUpdate,
   isFallback = false,
   patientPrice,
-  formattedPatientPrice
+  formattedPatientPrice,
+  // A listagem já carrega agenda, horários pagos e bloqueios de TODOS os médicos
+  // para montar o ranking. Recebendo isso pronto, o card não repete as três
+  // consultas por médico — eram 3 requisições por cartão, 15 numa página de 5.
+  // Sem os props (uso do card fora da listagem), ele volta a buscar sozinho.
+  agendaPronta,
+  bookedSlotsProntos,
+  blocksProntos,
 }) {
+  const temDadosProntos = !!agendaPronta;
   const { session } = useAuth();
   const { getBookedSlots } = useAppointments();
   const navigate = useNavigate();
   const { toast } = useToast();
   
   const [doctor, setDoctor] = useState(initialDoctor);
-  const [loadingSlots, setLoadingSlots] = useState(!isFallback);
+  const [loadingSlots, setLoadingSlots] = useState(!isFallback && !temDadosProntos);
   const [dayOffset, setDayOffset] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   // No celular a agenda entra recolhida: o cartão do médico cabe inteiro na tela
   // e a lista fica navegável. A partir de md a grade é sempre visível e este
   // estado não tem efeito nenhum.
   const [agendaAberta, setAgendaAberta] = useState(false);
-  const [doctorAgenda, setDoctorAgenda] = useState([]);
-  const [bookedSlots, setBookedSlots] = useState(new Map());
-  const [blocks, setBlocks] = useState([]);
+  const [doctorAgenda, setDoctorAgenda] = useState(agendaPronta || []);
+  const [bookedSlots, setBookedSlots] = useState(bookedSlotsProntos || new Map());
+  const [blocks, setBlocks] = useState(blocksProntos || []);
   const [isFavorite, setIsFavorite] = useState(false);
   const [authPrompt, setAuthPrompt] = useState(null); // convidado tentando agendar
   // Dias visíveis por página: 3 no mobile (uma linha), 5 no desktop.
@@ -286,10 +294,23 @@ export function DoctorScheduleCard({
   }, [doctor?.id, toast, isFallback, getBookedSlots]);
 
   useEffect(() => {
+    // Com os dados vindos da listagem não há o que buscar na montagem. As
+    // inscrições de tempo real abaixo seguem chamando fetchAllData() quando
+    // algo muda de verdade — aí a consulta se paga.
+    if (temDadosProntos) return;
     if (!isFallback && doctor?.id) {
       fetchAllData();
     }
-  }, [doctor?.id, isFallback, fetchAllData]);
+  }, [doctor?.id, isFallback, fetchAllData, temDadosProntos]);
+
+  // A listagem refaz a busca (tempo real, filtros) e manda dados novos.
+  useEffect(() => {
+    if (!temDadosProntos) return;
+    setDoctorAgenda(agendaPronta || []);
+    setBookedSlots(bookedSlotsProntos || new Map());
+    setBlocks(blocksProntos || []);
+    setLoadingSlots(false);
+  }, [agendaPronta, bookedSlotsProntos, blocksProntos, temDadosProntos]);
 
   useEffect(() => {
     if (isFallback || !doctor?.id) return;
