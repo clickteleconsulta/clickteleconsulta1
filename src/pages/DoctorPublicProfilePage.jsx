@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import Estrelas from '@/components/Estrelas';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -90,11 +91,10 @@ const ReviewsSection = ({ reviews }) => {
         {averageRating && (
           <div className="text-right">
             <div className="text-2xl font-bold text-gray-900">{averageRating}</div>
-            <div className="flex justify-end mt-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className={cn("w-3 h-3", i < Math.round(Number(averageRating)) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30")} />
-              ))}
-            </div>
+            {/* Mesmo componente do card da listagem: sem isso, o mesmo médico
+                aparecia com estrelas diferentes aqui e lá — aqui a vazia era
+                contornada, lá era cinza cheia, e as duas arredondavam. */}
+            <Estrelas nota={Number(averageRating)} tamanho={12} className="justify-end mt-0.5" />
             <p className="text-[11px] text-gray-400 mt-0.5">{reviews.length} avaliações</p>
           </div>
         )}

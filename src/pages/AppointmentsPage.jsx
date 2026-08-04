@@ -49,12 +49,16 @@ import { parseISO, getDay } from 'date-fns';
  * cinco variações de uma vez — nota cheia e quebrada, e contagem de um, dois e
  * três dígitos, para conferir o alinhamento em todas.
  */
+// Escolhidas para cair METADE em estrela cheia e metade em meia: com 4,8 e 4,2
+// a quantização levava quase tudo para cheia e a meia estrela mal aparecia na
+// pré-visualização, que é justamente o que se quer conferir.
+//   5,0 → 5    4,7 → 4½    4,0 → 4    3,4 → 3½    2,8 → 3
 const AMOSTRAS = [
   { rating: 5.0, reviewCount: 3 },
-  { rating: 4.8, reviewCount: 47 },
-  { rating: 4.2, reviewCount: 128 },
-  { rating: 3.6, reviewCount: 9 },
-  { rating: 2.9, reviewCount: 214 },
+  { rating: 4.7, reviewCount: 47 },
+  { rating: 4.0, reviewCount: 128 },
+  { rating: 3.4, reviewCount: 9 },
+  { rating: 2.8, reviewCount: 214 },
 ];
 
 const avaliacoesDeTeste = () =>

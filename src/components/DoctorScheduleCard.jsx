@@ -19,6 +19,7 @@ import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
 import { TeleconsultaBadge } from '@/components/TeleconsultaBadge';
+import Estrelas from '@/components/Estrelas';
 import { BRAND } from '@/config/brand';
 import { Skeleton } from './ui/skeleton';
 
@@ -498,11 +499,7 @@ export function DoctorScheduleCard({
                               title="Ver avaliações"
                               aria-label={`Nota ${doctor.rating.toFixed(1)} de 5, ${doctor.reviewCount} avaliações`}
                           >
-                              <div className="flex items-center gap-0.5">
-                                  {Array.from({ length: 5 }).map((_, i) => (
-                                    <Star key={i} className={cn("w-3 h-3 transition-transform group-hover:scale-110", i < Math.round(doctor.rating) ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200")} />
-                                  ))}
-                              </div>
+                              <Estrelas nota={doctor.rating} tamanho={12} className="transition-transform group-hover:scale-110" />
                               <span className="text-xs text-slate-400 ml-0.5">({doctor.reviewCount})</span>
                           </Link>
                       )}
