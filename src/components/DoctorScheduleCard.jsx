@@ -413,7 +413,7 @@ export function DoctorScheduleCard({
                       </div>
                   </div>
                   <div>
-                      <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Consulta</p>
+                      <p className="h-3.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 leading-none">Valor</p>
                       <div className="mt-2 h-5 flex items-center">
                           <span
                               className="text-[16px] font-extrabold tracking-tight tabular-nums leading-none"
