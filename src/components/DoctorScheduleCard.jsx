@@ -410,33 +410,55 @@ export function DoctorScheduleCard({
                   </div>
               </div>
 
-              {/* Modalidade e agenda em colunas, cada rótulo acima do seu dado.
-                  O preço usa o jade da marca porque é o que mais diferencia a
+              {/* O preço usa o jade da marca porque é o que mais diferencia a
                   plataforma e o primeiro dado que o paciente procura. É a única
                   aparição do jade fora do logo — por isso vem de BRAND.acento e
                   não de uma classe do Tailwind, para seguir sendo uma exceção
-                  rastreável em vez de virar cor de interface. */}
-              <div className="pt-3 border-t border-slate-100 flex items-start gap-8">
-                  <div className="min-w-0">
-                      <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                          <Video className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                  rastreável em vez de virar cor de interface.
+
+                  As duas telas pedem arranjos diferentes, e cada um só existe na
+                  sua largura. No celular, rótulo acima do dado em duas colunas,
+                  com os dias da agenda — a grade de horários está recolhida, e
+                  saber em que dias o médico atende ajuda a decidir se vale abrir.
+                  A partir de md a grade já está ao lado mostrando os dias reais,
+                  então repeti-los seria ruído: sobra uma linha só, modalidade à
+                  esquerda e preço à direita. */}
+              <div className="pt-3 border-t border-slate-100">
+                  <div className="md:hidden flex items-start gap-8">
+                      <div className="min-w-0">
+                          <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                              <Video className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                              Teleconsulta
+                          </dt>
+                          <dd
+                              className="mt-1 text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
+                              style={{ color: BRAND.acento }}
+                          >
+                              {displayPrice}
+                          </dd>
+                      </div>
+                      {diasAbertos && (
+                          <div className="min-w-0">
+                              <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</dt>
+                              <dd className="mt-1 text-[17px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
+                                  {diasAbertos}
+                              </dd>
+                          </div>
+                      )}
+                  </div>
+
+                  <div className="hidden md:flex items-center justify-between gap-3">
+                      <span className="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600">
+                          <Video className="w-4 h-4 text-brand-500 shrink-0" />
                           Teleconsulta
-                      </dt>
-                      <dd
-                          className="mt-1 text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
+                      </span>
+                      <span
+                          className="text-[22px] font-extrabold tracking-tight tabular-nums leading-none"
                           style={{ color: BRAND.acento }}
                       >
                           {displayPrice}
-                      </dd>
+                      </span>
                   </div>
-                  {diasAbertos && (
-                      <div className="min-w-0">
-                          <dt className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Agenda</dt>
-                          <dd className="mt-1 text-[17px] font-extrabold tracking-tight text-slate-900 leading-none whitespace-nowrap">
-                              {diasAbertos}
-                          </dd>
-                      </div>
-                  )}
               </div>
 
               {/* Sinal de confiança: pagamento online (Pix e cartão via Asaas) */}
