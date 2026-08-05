@@ -34,7 +34,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-border h-[88px] flex items-center">
+      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-border h-[var(--altura-cabecalho)] flex items-center">
         <nav className="container mx-auto px-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
             {/* No mobile mostramos só o símbolo, para dar espaço ao resto */}

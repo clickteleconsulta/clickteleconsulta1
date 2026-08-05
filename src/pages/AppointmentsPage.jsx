@@ -550,16 +550,21 @@ const AppointmentsPage = () => {
       )}
 
       {/* Fundo de página cinza full-bleed (ocupa a largura toda; barra de busca vai de ponta a ponta) */}
-      <div className="mx-[calc(50%-50vw)] w-screen -my-8 bg-slate-100 min-h-[calc(100vh-4rem)]">
-        {/* Título da página — sempre visível no topo (inclusive no mobile) */}
-        <div className="container mx-auto px-4 pt-5 pb-2">
-          <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Agendar Consulta</h1>
-          <p className="text-sm text-slate-500 mt-0.5">Escolha um médico e agende sua teleconsulta online.</p>
-        </div>
+      <div className="mx-[calc(50%-50vw)] w-screen -my-8 bg-slate-100 min-h-[calc(100vh-var(--altura-cabecalho))]">
+        {/* O título e o subtítulo VISÍVEIS saíram: repetiam o "Agendar Consulta"
+            do cabeçalho, que fica a poucos pixels acima, e empurravam a barra de
+            filtros para baixo sem acrescentar informação.
+
+            O <h1> continua existindo, só que apenas para leitor de tela e
+            buscador. Esta é a página que responde por "agendar consulta online"
+            na busca; deixá-la sem h1 nenhum trocaria uma redundância visual por
+            uma perda de estrutura, e quem usa leitor de tela ficaria sem o
+            marco que diz onde chegou. */}
+        <h1 className="sr-only">Agendar Consulta</h1>
 
         {/* Barra de busca / filtros — compacta no mobile (busca em cima, filtros em 3 colunas, botão embaixo) */}
         <div className={cn(
-          "bg-white/90 backdrop-blur-md border-y border-slate-200 py-3 shadow-sm sticky top-16 z-20 transition-transform duration-300 ease-out",
+          "bg-white/90 backdrop-blur-md border-y border-slate-200 py-3 shadow-sm sticky top-[var(--altura-cabecalho)] z-20 transition-transform duration-300 ease-out",
           hideFilters ? "-translate-y-full shadow-none" : "translate-y-0"
         )}>
           <div className="container mx-auto px-4">

@@ -102,6 +102,12 @@
      Medprev, então o token é 6px: cards saem em 6 e botões em 4, mais secos
      que os dois. */
   --radius: 0.375rem;
+
+  /* Altura do cabeçalho fixo. Vive aqui porque QUEM GRUDA ABAIXO DELE precisa
+     do mesmo número: a barra de filtros de /agendamentos usava `top-16` (64 px)
+     enquanto o cabeçalho tem 88, e 24 px dela ficavam escondidos atrás dele ao
+     rolar. Com o valor num lugar só, os dois não têm como divergir de novo. */
+  --altura-cabecalho: 88px;
 }
  
 /* As seções full-bleed usam `w-screen` + `mx-[calc(50%-50vw)]`, e 100vw conta a
