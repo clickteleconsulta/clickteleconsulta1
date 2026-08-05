@@ -181,7 +181,13 @@ const HomePage = () => {
         {/* Herói mais baixo e assimétrico: o texto ancora à esquerda e a ação vai
             para a direita, em vez de tudo centrado numa coluna alta. O respiro
             vertical caiu de py-16/20/24 para py-10/12/14. */}
-        <div className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:py-16">
+        <div // O respiro de baixo é MENOR que o de cima de propósito: com a base do
+          // calendário travada na linha do botão, as pernas do personagem ficam
+          // sempre 16,3% da altura da arte abaixo dessa linha (57 px em 350). O
+          // padding inferior é o que decide quanto disso o fundo azul cobre —
+          // 32 px deixam ~25 px de pé para fora. Com pb-14 (56) as pernas
+          // sumiam inteiras dentro da caixa.
+          className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:pt-16 lg:pb-8">
           {/* Colunas que ABRAÇAM o conteúdo (`auto`) e ancoram à esquerda. Com
               `1fr` na primeira, a coluna do botão era empurrada para a borda da
               tela e ele ficava solto no canto, longe do texto a que pertence. */}
@@ -190,7 +196,13 @@ const HomePage = () => {
                   texto faz o herói inteiro assentar sobre uma base só. Centrado,
                   a arte flutuava 124 px acima do botão — medido — e os dois
                   pareciam duas peças soltas em vez de uma cena. */}
-              <div className="grid lg:grid-cols-2 lg:items-start gap-8 lg:gap-10">
+              {/* `minmax(0,...)` nas duas colunas: sem isso a coluna da arte não
+                  encolhe abaixo da largura da imagem (o mínimo de um `fr` é o
+                  conteúdo), a imagem passa a empurrar a grade e rouba largura do
+                  texto — foi o que jogou o título de volta para três linhas em
+                  1024 px. Com o mínimo zerado, a arte transborda para fora da
+                  tela em vez de espremer a frase. */}
+              <div className="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-end gap-8 lg:gap-10">
             <motion.div
               className="max-w-2xl lg:max-w-none text-left"
               variants={stagger}
@@ -214,7 +226,7 @@ const HomePage = () => {
                   correção. Sem classe pronta, ninguém injeta entrelinha. */}
               <motion.h1
                 variants={fadeUp}
-                className="font-display text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.12] tracking-[-0.025em]"
+                className="font-display text-[2.6rem] md:text-[3rem] lg:text-[2.25rem] xl:text-[2.75rem] 2xl:text-[3rem] font-extrabold text-slate-900 leading-[1.12] tracking-[-0.025em]"
               >
                 Consulta marcada em{' '}
                 {/* A vírgula fica presa a "minutos" pelo whitespace-nowrap. Sem ele,
@@ -288,7 +300,7 @@ const HomePage = () => {
                   (`order-first`): empilhado, quem vem primeiro é quem se lê
                   primeiro, e deixar três linhas de selo antes da ação seria
                   justamente o que a troca corrigiu no desktop. */}
-              <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
+              <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row sm:items-end gap-5 sm:gap-7">
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-500">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-brand-500" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-600" /> Proteção LGPD</span>
@@ -315,7 +327,26 @@ const HomePage = () => {
                 equilibrar sozinha o peso do título, em vez de dividir a coluna.
 
                 `object-contain`: cabe inteira, nunca recortada, seja qual for a
-                proporção do arquivo. */}
+                proporção do arquivo.
+
+                O ALINHAMENTO É ANCORADO, NÃO CALCULADO EM PIXEL.
+                A coluna alinha pela base (`items-end`), então a base da arte
+                encostaria na base do botão. Mas o que precisa coincidir com o
+                botão é a BASE DO CALENDÁRIO, e no arquivo ela está a 83,7% da
+                altura da imagem — os 16,3% restantes são as pernas e os pés.
+                Daí o `translate-y-[16.3%]`: a porcentagem no translate resolve
+                contra a ALTURA DO PRÓPRIO ELEMENTO, então a conta se refaz
+                sozinha se a arte mudar de tamanho, e o que sobra para baixo é
+                exatamente o trecho das pernas.
+                Como é `transform`, não mexe no layout: a altura da seção
+                continua vindo da coluna de texto.
+
+                A caixa é `h-[350px] w-auto`, e NÃO `max-h` com `w-full`. Com
+                `max-h` a caixa ficava mais larga que o desenho, o desenho era
+                centralizado dentro dela, e os 16,3% passavam a medir a CAIXA em
+                vez da ARTE — em 1024 px isso já dava 10 px de desalinhamento.
+                Com a altura fixa a caixa tem a proporção exata do arquivo e não
+                sobra vão nenhum. */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -324,13 +355,13 @@ const HomePage = () => {
               // `w-full` aqui vira dependência circular (a coluna mede pelo
               // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
               // zero — com ela, a imagem some.
-              className="w-full lg:w-auto lg:justify-self-stretch lg:-mr-10 xl:-mr-16 lg:-mb-36 flex items-end justify-center lg:justify-end"
+              className="w-full lg:w-auto lg:justify-self-stretch lg:-mr-10 xl:-mr-16 flex items-end justify-center lg:justify-end"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block w-full h-auto max-h-[480px] object-contain object-right select-none pointer-events-none"
+                className="hidden lg:block h-[350px] w-auto max-w-none select-none pointer-events-none lg:translate-y-[16.3%]"
               />
             </motion.div>
           </div>

@@ -85,6 +85,14 @@ HEROI = {
     # slot marcado que o personagem NÃO está escolhendo (o da esquerda —
     # verificado pintando os dois e olhando para onde o dedo aponta)
     'M388.773,459.72':   '#f2f5fb',
+
+    # Casaco e manga em amarelo claro. O cinza sumia contra o azul do banner e
+    # contra os próprios slots. O amarelo é quente e recua na hierarquia — não
+    # disputa com o cobalto nem com o jade, que continuam sendo as cores com
+    # significado. A LINHA DE CHÃO (M906.378) fica de fora de propósito: é
+    # sombra, não roupa.
+    'M19274.021,7160.922': '#f6d68a',
+    'M224.918,407.565':    '#f6d68a',
 }
 
 
