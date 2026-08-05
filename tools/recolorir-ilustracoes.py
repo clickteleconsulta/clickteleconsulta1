@@ -57,8 +57,18 @@ DESTINO = {
     # só — a do meio em jade é o que dá o respiro de cor que a seção existe para
     # trazer.
     'secao-escolher.svg':   COBALTO,
-    'secao-avaliacoes.svg': JADE,
     'secao-documentos.svg': COBALTO,
+
+    # EXCEÇÃO: 'secao-avaliacoes.svg' NÃO entra nesta tabela.
+    # É a única arte que não vem do unDraw — é do Storyset (Freepik), estilo
+    # cuate, e o acento dela é AMARELO #FFC100 de propósito: ilustra a nota em
+    # estrelas, e estrela de avaliação é amarela em qualquer lugar. Repintar de
+    # cobalto ou jade tiraria justamente o que a imagem tem para dizer.
+    # Ela segue a regra de uma cor por arte — a cor é que é outra.
+    #
+    # ATENÇÃO: a licença gratuita do Storyset EXIGE ATRIBUIÇÃO, e o crédito
+    # está no rodapé (src/components/Footer.jsx). Nenhuma outra arte do projeto
+    # depende disso; se esta sair, o crédito pode sair junto.
 }
 
 
@@ -185,6 +195,9 @@ if __name__ == '__main__':
     # senão uma arte nova entra bicolor sem ninguém perceber.
     for arquivo in sorted(os.listdir(DIR)):
         if arquivo.endswith('.svg') and arquivo not in DESTINO:
+            if arquivo == 'secao-avaliacoes.svg':
+                print(f'  {arquivo:<20} amarelo  fora da tabela DE PROPÓSITO (Storyset, ver acima)')
+                continue
             print(f'  {arquivo:<20} FORA DA TABELA — defina a cor em DESTINO')
             falhas.append(arquivo)
 

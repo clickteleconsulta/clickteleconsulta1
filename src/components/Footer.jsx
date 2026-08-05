@@ -157,6 +157,20 @@ const Footer = () => {
           <div className="text-[12.5px] text-slate-500 text-center sm:text-left space-y-1">
             <p>&copy; {year} {BRAND.name}. Todos os direitos reservados.</p>
             <p>{EMPRESA.razaoSocial} · CNPJ {EMPRESA.cnpj} · {EMPRESA.endereco}</p>
+            {/* CRÉDITO OBRIGATÓRIO, não cortesia. A ilustração de avaliações da
+                home vem do Storyset (Freepik), cuja licença gratuita permite uso
+                comercial SOMENTE com atribuição — a dispensa exige assinatura
+                paga. Tirar esta linha sem trocar aquela arte deixa o site fora
+                da licença. As demais ilustrações são do unDraw e não exigem
+                crédito. */}
+            <p className="text-slate-600">
+              Ilustrações por{' '}
+              <a href="https://storyset.com/" target="_blank" rel="noopener noreferrer"
+                 className="underline hover:text-slate-400">Storyset</a>
+              {' '}e{' '}
+              <a href="https://undraw.co/" target="_blank" rel="noopener noreferrer"
+                 className="underline hover:text-slate-400">unDraw</a>.
+            </p>
           </div>
 
           {REDES.length > 0 && (
