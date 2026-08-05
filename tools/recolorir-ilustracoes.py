@@ -88,17 +88,21 @@ HEROI = {
     'M388.473,605.191':  '#cfd9ea',
     'M793.66,605.191':   '#cfd9ea',
     'M793.66,460.013':   '#cfd9ea',
-    # slot marcado que o personagem NÃO está escolhendo (o da esquerda —
-    # verificado pintando os dois e olhando para onde o dedo aponta)
-    'M388.773,459.72':   '#f2f5fb',
+    # O slot da esquerda — o que o personagem NÃO está escolhendo (verificado
+    # pintando os dois e olhando para onde o dedo aponta). Fica do mesmo tom dos
+    # vazios: quem o diferencia é o traço de OCUPADO desenhado por cima, não a
+    # cor. Antes ele era brand-50, quase branco, e saltava mais que o horário
+    # escolhido — hierarquia invertida.
+    'M388.773,459.72':   '#cfd9ea',
 
-    # Casaco e manga em amarelo claro. O cinza sumia contra o azul do banner e
-    # contra os próprios slots. O amarelo é quente e recua na hierarquia — não
-    # disputa com o cobalto nem com o jade, que continuam sendo as cores com
-    # significado. A LINHA DE CHÃO (M906.378) fica de fora de propósito: é
-    # sombra, não roupa.
-    'M19274.021,7160.922': '#f6d68a',
-    'M224.918,407.565':    '#f6d68a',
+    # Casaco e manga em TERRACOTA. O cinza original sumia contra o azul do
+    # banner. O amarelo que veio antes resolvia isso mas criava outro problema:
+    # amarelo + o jade das folhas + o cobalto do calendário liam como bandeira
+    # do Brasil. A terracota é quente igual, complementar ao cobalto, e não
+    # entra em nenhuma tríade institucional. A LINHA DE CHÃO (M906.378) fica de
+    # fora de propósito: é sombra, não roupa.
+    'M19274.021,7160.922': '#d08b6c',
+    'M224.918,407.565':    '#d08b6c',
 }
 
 
