@@ -8,3 +8,7 @@ dist/
 
 # TTFs baixados por tools/gerar-marca.py (o repositório serve woff2, não TTF)
 .cache-fontes/
+
+# Lixo do Finder do macOS. Aparecia como arquivo novo a cada `git status`,
+# e um deles ia junto no commit se ninguém reparasse.
+.DS_Store

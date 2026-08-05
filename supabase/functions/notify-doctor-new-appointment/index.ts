@@ -1,17 +1,26 @@
 // Supabase Edge Function: notify-doctor-new-appointment
-// ESQUELETO (ainda não envia de verdade). Objetivo: quando o pagamento de um
-// agendamento é confirmado, enviar uma notificação de WhatsApp ao MÉDICO, a partir
-// de um número "bot" da plataforma, com os dados do agendamento.
 //
-// Fluxo previsto:
-//   1) Pagamento confirmado -> chamar esta função com { appointmentId }.
-//      (pode ser chamada pelo cliente após o verify-stripe-payment, ou por um
-//       Database Webhook/trigger no UPDATE de agendamentos quando pagamento_status='pago')
-//   2) Esta função busca os dados do agendamento (data, hora, protocolo, paciente)
-//      e o WhatsApp do médico, monta a mensagem e envia pelo provedor escolhido.
+// Avisa o MÉDICO, por WhatsApp, que um agendamento foi PAGO.
 //
-// PARA ATIVAR (quando decidir o provedor): implemente `sendWhatsApp()` abaixo e
-// configure os secrets correspondentes (ex.: Z-API, Meta Cloud API, Twilio, Evolution).
+// Provedor: WhatsApp Cloud API da Meta (oficial). A escolha tem uma
+// consequência que manda no formato desta função inteira:
+//
+//   MENSAGEM INICIADA PELA EMPRESA SÓ SAI POR MODELO APROVADO.
+//
+// Texto livre só é aceito dentro da janela de 24h depois que a pessoa escreve
+// para o número. O médico não escreve para o bot antes de receber o aviso, então
+// aqui NUNCA cabe texto livre — e é por isso que esta função monta uma lista
+// ordenada de variáveis em vez de uma string. Se um dia alguém "simplificar"
+// isto para mandar texto solto, a Meta devolve erro e nenhum médico é avisado.
+//
+// O modelo a cadastrar (categoria UTILIDADE, idioma pt_BR) está em
+// docs/WHATSAPP.md, com o texto exato e a ordem das variáveis.
+//
+// Quem chama: o asaas-webhook, no instante em que o pagamento vira "pago" —
+// server-to-server, e não o navegador. Isso é deliberado: a chamada ficava na
+// tela de confirmação, então bastava o paciente fechar a aba (ou pagar um Pix
+// horas depois) para o médico nunca ser avisado de um agendamento que já estava
+// na agenda dele.
 
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -23,115 +32,205 @@ const corsHeaders = {
 };
 
 function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
 }
 
-// Apenas dígitos, com DDI Brasil (55) se não houver.
-function normalizePhone(raw: string): string {
-  let d = (raw || "").replace(/\D/g, "");
+const API_VERSION = Deno.env.get("META_WA_API_VERSION") ?? "v21.0";
+const WA_TOKEN = Deno.env.get("META_WA_TOKEN") ?? "";
+const WA_PHONE_ID = Deno.env.get("META_WA_PHONE_ID") ?? "";
+const WA_TEMPLATE = Deno.env.get("META_WA_TEMPLATE") ?? "novo_agendamento_medico";
+const WA_LANG = Deno.env.get("META_WA_LANG") ?? "pt_BR";
+
+// Marca no histórico do agendamento. É também a TRAVA contra aviso repetido:
+// ver supabase/sql/whatsapp-medico.sql, que põe um índice único parcial nesta
+// ação — em dois envios simultâneos o segundo INSERT falha em vez de virar uma
+// segunda mensagem no celular do médico.
+const ACAO_ENVIADO = "whatsapp_medico_enviado";
+
+/**
+ * Número em formato E.164 sem o "+", como a Cloud API espera.
+ *
+ * A validação não é frescura: número torto aqui vira mensagem entregue a um
+ * DESCONHECIDO com o nome do paciente, a data e o protocolo dentro. Aceita só o
+ * que tem cara de telefone brasileiro — 55 + DDD válido + 8 ou 9 dígitos.
+ */
+function normalizarTelefone(bruto: string): string {
+  let d = (bruto || "").replace(/\D/g, "");
   if (!d) return "";
-  if (!d.startsWith("55")) d = "55" + d;
+  if (d.length <= 11) d = "55" + d;            // veio sem DDI
+  if (!d.startsWith("55")) return "";          // fora do Brasil: fora do escopo
+  const semDdi = d.slice(2);
+  if (semDdi.length !== 10 && semDdi.length !== 11) return "";
+  const ddd = Number(semDdi.slice(0, 2));
+  if (ddd < 11 || ddd > 99) return "";
   return d;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PONTO DE ENVIO — trocar pela integração do provedor escolhido.
-// Hoje: apenas "esquematizado" (retorna sent:false se não configurado).
-// Exemplos de secrets por provedor:
-//   Z-API:        ZAPI_INSTANCE, ZAPI_TOKEN, ZAPI_CLIENT_TOKEN
-//   Meta Cloud:   META_WA_TOKEN, META_WA_PHONE_ID, META_WA_TEMPLATE
-//   Twilio:       TWILIO_SID, TWILIO_TOKEN, TWILIO_WA_FROM
-//   Evolution:    EVOLUTION_URL, EVOLUTION_KEY, EVOLUTION_INSTANCE
-// ─────────────────────────────────────────────────────────────────────────────
-async function sendWhatsApp(to: string, message: string): Promise<{ sent: boolean; detail?: string }> {
-  const provider = Deno.env.get("WHATSAPP_PROVIDER"); // ex.: "zapi" | "meta" | "twilio" | "evolution"
-  if (!provider) {
-    // Esquema ainda não ativado — não envia, apenas registra.
-    console.log("[notify-doctor] WHATSAPP_PROVIDER não configurado. Mensagem que seria enviada para", to, ":\n", message);
-    return { sent: false, detail: "provedor não configurado" };
+/**
+ * A Meta rejeita variável de modelo com quebra de linha, tabulação ou quatro
+ * espaços seguidos. Nome de paciente vem de campo digitado, então passa por
+ * aqui antes de virar parâmetro.
+ */
+function limparVariavel(v: string): string {
+  return (v || "").replace(/\s+/g, " ").trim().slice(0, 200) || "-";
+}
+
+async function enviarModelo(
+  para: string,
+  variaveis: string[],
+): Promise<{ enviado: boolean; detalhe: string; messageId?: string }> {
+  if (!WA_TOKEN || !WA_PHONE_ID) {
+    // Sem credencial não é erro: é a integração ainda desligada. O agendamento
+    // já aconteceu e não pode falhar por causa do aviso.
+    console.log("[notify-doctor] Meta não configurada. Enviaria para", para, variaveis);
+    return { enviado: false, detalhe: "META_WA_TOKEN/META_WA_PHONE_ID ausentes" };
   }
 
-  // TODO: implementar o envio conforme o provider escolhido, por exemplo (Z-API):
-  //
-  // if (provider === "zapi") {
-  //   const instance = Deno.env.get("ZAPI_INSTANCE");
-  //   const token = Deno.env.get("ZAPI_TOKEN");
-  //   const clientToken = Deno.env.get("ZAPI_CLIENT_TOKEN") ?? "";
-  //   const url = `https://api.z-api.io/instances/${instance}/token/${token}/send-text`;
-  //   const resp = await fetch(url, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json", "Client-Token": clientToken },
-  //     body: JSON.stringify({ phone: to, message }),
-  //   });
-  //   const body = await resp.json().catch(() => ({}));
-  //   return { sent: resp.ok, detail: JSON.stringify(body) };
-  // }
+  const resp = await fetch(`https://graph.facebook.com/${API_VERSION}/${WA_PHONE_ID}/messages`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${WA_TOKEN}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: para,
+      type: "template",
+      template: {
+        name: WA_TEMPLATE,
+        language: { code: WA_LANG },
+        components: [
+          { type: "body", parameters: variaveis.map((text) => ({ type: "text", text })) },
+        ],
+      },
+    }),
+  });
 
-  return { sent: false, detail: `provider '${provider}' ainda não implementado` };
+  const corpo = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    const err = corpo?.error ?? {};
+    return { enviado: false, detalhe: `${resp.status} ${err.code ?? ""} ${err.message ?? ""}`.trim() };
+  }
+  return { enviado: true, detalhe: "ok", messageId: corpo?.messages?.[0]?.id };
 }
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Método não permitido" }, 405);
 
-  try {
-    const url = Deno.env.get("SUPABASE_URL")!;
-    const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const admin = createClient(url, service);
+  const url = Deno.env.get("SUPABASE_URL")!;
+  const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
+  // Só quem tem a service role chama. Antes qualquer usuário autenticado podia
+  // POSTar um appointmentId qualquer; com o WhatsApp de verdade ligado isso
+  // deixaria de ser barulho no log e passaria a ser mensagem no celular de um
+  // médico, paga por nós e contada na cota da Meta.
+  const auth = req.headers.get("Authorization") ?? "";
+  if (!service || auth.replace(/^Bearer\s+/i, "") !== service) {
+    return json({ error: "Não autorizado" }, 401);
+  }
+
+  try {
+    const admin = createClient(url, service);
     const { appointmentId } = await req.json().catch(() => ({}));
     if (!appointmentId) return json({ error: "appointmentId obrigatório" }, 400);
 
-    // Busca o agendamento + médico + paciente
     const { data: appt, error } = await admin
       .from("agendamentos")
-      .select("id, protocolo, horario_inicio, appointment_date, appointment_time, paciente_nome, patient_id, medico_id, pagamento_status")
+      .select(
+        "id, protocolo, horario_inicio, appointment_date, appointment_time, paciente_nome, patient_id, medico_id, pagamento_status, status",
+      )
       .eq("id", appointmentId)
       .maybeSingle();
     if (error) throw error;
     if (!appt) return json({ error: "Agendamento não encontrado" }, 404);
 
-    // Só notifica se estiver pago
-    if (appt.pagamento_status !== "pago") return json({ ok: true, skipped: "agendamento não está pago" });
+    if (appt.pagamento_status !== "pago") return json({ ok: true, pulou: "agendamento não está pago" });
+    if (appt.status === "cancelado") return json({ ok: true, pulou: "agendamento cancelado" });
 
-    // Contato do médico (telefone público do médico ou WhatsApp do perfil)
-    const { data: medico } = await admin.from("medicos").select("user_id, phone_number, public_name, name").eq("id", appt.medico_id).maybeSingle();
-    let doctorPhone = medico?.phone_number || "";
-    if (!doctorPhone && medico?.user_id) {
-      const { data: perfilMed } = await admin.from("perfis_usuarios").select("whatsapp").eq("id", medico.user_id).maybeSingle();
-      doctorPhone = perfilMed?.whatsapp || "";
+    // Já avisado? Mais de uma porta chega aqui (o webhook e, um dia, um reenvio
+    // manual do admin) e o médico não pode receber a mesma consulta duas vezes.
+    const { data: jaFoi } = await admin
+      .from("agendamento_logs")
+      .select("id")
+      .eq("agendamento_id", appt.id)
+      .eq("acao", ACAO_ENVIADO)
+      .maybeSingle();
+    if (jaFoi) return json({ ok: true, pulou: "já notificado" });
+
+    const { data: medico } = await admin
+      .from("medicos")
+      .select("user_id, phone_number, public_name, name")
+      .eq("id", appt.medico_id)
+      .maybeSingle();
+
+    let telefoneBruto = medico?.phone_number || "";
+    if (!telefoneBruto && medico?.user_id) {
+      const { data: perfilMed } = await admin
+        .from("perfis_usuarios").select("whatsapp").eq("id", medico.user_id).maybeSingle();
+      telefoneBruto = perfilMed?.whatsapp || "";
     }
 
-    // Nome do paciente (snapshot ou perfil)
     let pacienteNome = appt.paciente_nome || "";
     if (!pacienteNome && appt.patient_id) {
-      const { data: perfilPac } = await admin.from("perfis_usuarios").select("full_name").eq("id", appt.patient_id).maybeSingle();
+      const { data: perfilPac } = await admin
+        .from("perfis_usuarios").select("full_name").eq("id", appt.patient_id).maybeSingle();
       pacienteNome = perfilPac?.full_name || "Paciente";
     }
 
-    // Data e hora (Horário de Brasília)
-    const raw = appt.horario_inicio || (appt.appointment_date ? `${appt.appointment_date}T${appt.appointment_time || "00:00:00"}` : null);
+    const bruto = appt.horario_inicio ||
+      (appt.appointment_date ? `${appt.appointment_date}T${appt.appointment_time || "00:00:00"}` : null);
     let dataStr = "-", horaStr = "-";
-    if (raw) {
-      const d = new Date(raw);
+    if (bruto) {
+      const d = new Date(bruto);
       if (!isNaN(d.getTime())) {
         dataStr = d.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
         horaStr = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
       }
     }
 
-    const message =
-      `*Novo Agendamento*\n` +
-      `Data: ${dataStr}\n` +
-      `Hora: ${horaStr}\n` +
-      `Protocolo: ${appt.protocolo || "-"}\n` +
-      `Paciente: ${pacienteNome}`;
+    const para = normalizarTelefone(telefoneBruto);
+    if (!para) {
+      // Fica registrado: sem isto, um médico com telefone em branco no cadastro
+      // simplesmente não recebe avisos e ninguém descobre por quê.
+      await admin.from("agendamento_logs").insert({
+        agendamento_id: appt.id,
+        acao: "whatsapp_medico_sem_telefone",
+        dados: { medico_id: appt.medico_id, telefone_cadastrado: telefoneBruto || null },
+      });
+      return json({ ok: false, error: "Médico sem WhatsApp válido no cadastro" });
+    }
 
-    const to = normalizePhone(doctorPhone);
-    if (!to) return json({ ok: false, error: "Médico sem telefone/WhatsApp cadastrado", message });
+    // A ORDEM É A DO MODELO APROVADO NA META. Trocar a ordem aqui não dá erro
+    // nenhum: entrega uma mensagem com a data no lugar do nome do paciente.
+    // Ver docs/WHATSAPP.md antes de mexer.
+    const variaveis = [
+      limparVariavel(pacienteNome),           // {{1}} paciente
+      limparVariavel(dataStr),                // {{2}} data
+      limparVariavel(horaStr),                // {{3}} hora
+      limparVariavel(appt.protocolo || "-"),  // {{4}} protocolo
+    ];
 
-    const result = await sendWhatsApp(to, message);
-    return json({ ok: true, sent: result.sent, detail: result.detail, to, message });
+    const r = await enviarModelo(para, variaveis);
+
+    if (r.enviado) {
+      const { error: erroLog } = await admin.from("agendamento_logs").insert({
+        agendamento_id: appt.id,
+        acao: ACAO_ENVIADO,
+        dados: { message_id: r.messageId ?? null, modelo: WA_TEMPLATE },
+      });
+      // 23505 = o índice único pegou uma corrida: outra execução já avisou.
+      if (erroLog && erroLog.code !== "23505") console.error("[notify-doctor] log falhou:", erroLog);
+    } else {
+      await admin.from("agendamento_logs").insert({
+        agendamento_id: appt.id,
+        acao: "whatsapp_medico_falhou",
+        dados: { detalhe: r.detalhe, modelo: WA_TEMPLATE },
+      });
+    }
+
+    return json({ ok: true, enviado: r.enviado, detalhe: r.detalhe });
   } catch (e) {
     return json({ error: String((e as Error)?.message ?? e) }, 500);
   }

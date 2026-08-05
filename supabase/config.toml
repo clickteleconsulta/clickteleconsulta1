@@ -1,0 +1,52 @@
+# Configuração do CLI do Supabase.
+#
+# Este arquivo existe por UM motivo, e ele é grave o bastante para ficar no
+# topo: o CLI publica toda função com verificação de JWT LIGADA por padrão.
+#
+# O asaas-webhook é chamado pelo Asaas, que não manda token nenhum. Publicá-lo
+# com JWT ligado faz o Asaas levar 401 em toda notificação de pagamento — e o
+# estrago é silencioso: o site continua no ar, o paciente continua pagando, e os
+# agendamentos simplesmente param de ser confirmados. Ninguém vê erro nenhum.
+#
+# Enquanto não havia este arquivo, a única proteção era alguém lembrar de passar
+# --no-verify-jwt na linha de comando. Agora está declarado.
+
+project_id = "fnzvopspcoefzybtmwlg"
+
+[functions.asaas-webhook]
+# Quem chama é o Asaas, sem token. A segurança aqui não vem de JWT: a função
+# CONFERE a cobrança direto na API do Asaas antes de agir, então um POST forjado
+# não passa. Ver o comentário no topo de functions/asaas-webhook/index.ts.
+verify_jwt = false
+
+[functions.notify-doctor-new-appointment]
+# Esta exige token, e ainda por cima confere se é a service role — sem isso,
+# qualquer usuário logado dispararia WhatsApp pago para médicos.
+verify_jwt = true
+
+[functions.create-asaas-payment]
+verify_jwt = true
+
+[functions.refund-asaas-payment]
+verify_jwt = true
+
+[functions.reconcile-asaas]
+verify_jwt = true
+
+[functions.send-appointment-email]
+verify_jwt = true
+
+[functions.send-doctor-invite]
+verify_jwt = true
+
+[functions.record-legal-consent]
+verify_jwt = true
+
+[functions.generate-jaas-token]
+verify_jwt = true
+
+[functions.jaas-token]
+verify_jwt = true
+
+[functions.social-publish]
+verify_jwt = true

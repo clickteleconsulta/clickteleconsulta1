@@ -67,8 +67,11 @@ const AppointmentConfirmationPage = () => {
               description: "Sua consulta foi confirmada com sucesso.",
               variant: "success"
             });
-            // Notifica o médico (best-effort).
-            supabase.functions.invoke('notify-doctor-new-appointment', { body: { appointmentId } }).catch(() => {});
+            // O aviso de WhatsApp ao médico NÃO sai daqui. Saía, e dependia de
+            // o paciente voltar para esta tela: quem fechava a aba, ou pagava um
+            // Pix duas horas depois, deixava o médico com uma consulta na agenda
+            // sem nunca ter sido avisado. Agora quem dispara é o asaas-webhook,
+            // no mesmo instante em que o pagamento vira "pago" no banco.
             // Evento de conversão do funil (uma vez, no retorno do checkout).
             trackPurchase({ value: paidValue, transactionId: appointmentId });
           } else {

@@ -28,11 +28,31 @@ async function restGet(query: string) {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/${query}`, { headers: svcHeaders });
   return r.ok ? await r.json() : [];
 }
-async function patchAppt(query: string, patch: Record<string, unknown>) {
+// Devolve QUANTAS linhas mudaram. Não é curiosidade: os PATCH daqui são
+// condicionais (`pagamento_status=eq.pendente`), então "mudou 1 linha" é a
+// prova de que ESTA execução fez a transição, e não uma reentrega do webhook
+// pelo Asaas. É nisso que o aviso ao médico se apoia para sair uma vez só.
+async function patchAppt(query: string, patch: Record<string, unknown>): Promise<number> {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/agendamentos?${query}`, {
-    method: "PATCH", headers: { ...svcHeaders, Prefer: "return=minimal" }, body: JSON.stringify(patch),
+    method: "PATCH", headers: { ...svcHeaders, Prefer: "return=representation" }, body: JSON.stringify(patch),
   });
   if (!r.ok) throw new Error(`patch ${r.status}: ${await r.text()}`);
+  const linhas = await r.json().catch(() => []);
+  return Array.isArray(linhas) ? linhas.length : 0;
+}
+
+// Avisa o médico por WhatsApp. Best-effort de verdade: o `catch` vazio é
+// deliberado, porque o webhook do Asaas NÃO pode falhar por causa do aviso — se
+// respondermos erro, o Asaas reenvia o evento e o risco vira pagamento
+// processado duas vezes. Aviso perdido é ruim; cobrança bagunçada é pior.
+async function avisarMedico(apptId: string) {
+  try {
+    await fetch(`${SUPABASE_URL}/functions/v1/notify-doctor-new-appointment`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${SERVICE_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ appointmentId: apptId }),
+    });
+  } catch (_) { /* ver comentário acima */ }
 }
 async function logAppt(id: string, acao: string, dados: unknown) {
   await fetch(`${SUPABASE_URL}/rest/v1/agendamento_logs`, {
@@ -109,7 +129,7 @@ Deno.serve(async (req: Request) => {
         }
       }
 
-      await patchAppt(`id=eq.${apptId}&pagamento_status=eq.pendente`, {
+      const confirmou = await patchAppt(`id=eq.${apptId}&pagamento_status=eq.pendente`, {
         pagamento_status: "pago",
         status: "confirmado",
         pagamento_confirmado_em: new Date().toISOString(),
@@ -121,6 +141,11 @@ Deno.serve(async (req: Request) => {
         status: realStatus,
         liquido_centavos: liquidoCentavos,
       });
+
+      // Só na transição de verdade. O Asaas reenvia o mesmo evento quando não
+      // recebe 200 na primeira tentativa, e o PATCH condicional acima é o que
+      // separa "acabou de ser pago" de "já estava pago".
+      if (confirmou > 0) await avisarMedico(apptId);
     } else if (isRefund && REFUND_STATUS.includes(realStatus)) {
       await patchAppt(`id=eq.${apptId}`, { pagamento_status: "reembolsado", estornado_em: new Date().toISOString() });
     }
