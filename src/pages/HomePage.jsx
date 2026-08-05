@@ -310,7 +310,7 @@ const HomePage = () => {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full sm:w-auto order-first sm:order-none sm:ml-auto shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
+                  className="w-full sm:w-auto order-first sm:order-none sm:ml-auto lg:translate-x-6 shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
                 >
                   <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
                     Agendar Consulta <ArrowRight className="w-4 h-4" />
