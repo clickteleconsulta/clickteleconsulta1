@@ -19,11 +19,17 @@ const Header = () => {
     navigate('/paciente/dashboard');
   };
 
+  // A caixa cinza é PERSISTENTE, não só no hover. Antes o fundo só aparecia ao
+  // passar o mouse — e no celular não existe hover, então os dois itens eram
+  // texto solto no branco, sem nada indicando que são clicáveis.
+  const CAIXA_CINZA = 'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900';
+
+  // Medidas menores na base (corpo 14, altura 40, padding e gaps curtos) para os
+  // quatro elementos caberem em 360 px COM a palavra "Agendar" visível. A partir
+  // de sm tudo volta ao tamanho cheio.
   const navLinkClasses = ({ isActive }) =>
-    `flex items-center gap-2 px-4 py-2 rounded-md text-[15px] font-normal transition-all duration-200 ${
-      isActive
-        ? 'bg-primary/10 text-primary font-medium'
-        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+    `flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 h-10 sm:h-11 rounded-md text-[14px] sm:text-[15px] font-normal transition-colors ${
+      isActive ? 'bg-primary/10 text-primary font-medium' : CAIXA_CINZA
     }`;
 
   return (
@@ -31,21 +37,37 @@ const Header = () => {
       <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-border h-[88px] flex items-center">
         <nav className="container mx-auto px-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            {/* No mobile mostramos só o símbolo, para dar espaço ao botão do meio */}
-            <Logo className="w-12 h-12 sm:hidden group-hover:scale-105 transition-transform" />
+            {/* No mobile mostramos só o símbolo, para dar espaço ao resto */}
+            <Logo className="w-10 h-10 sm:hidden group-hover:scale-105 transition-transform" />
             <Wordmark size={TAMANHOS.padrao} className="hidden sm:inline-flex group-hover:scale-105 transition-transform" />
           </Link>
 
           <div className="flex items-center gap-4">
-              {/* No celular fica só o ícone. Com o botão "Cadastre-se" no lugar
-                  do antigo "Entrar", o trio logo + link + ações passou a
-                  estourar a barra abaixo de ~430 px. Esconder o link inteiro
-                  deixaria o celular sem caminho para a listagem, então o que sai
-                  é o texto — o ícone segue clicável e nomeado para leitor de
-                  tela. */}
+              {/* O celular mostrava SÓ o ícone da agenda, sem palavra nenhuma —
+                  um quadradinho que não dizia para onde levava. Agora aparece
+                  "Agendar"; o "Consulta" é que fica para telas maiores.
+
+                  Foi por espaço que o texto tinha sumido: com logo, link e as
+                  duas ações, a barra estourava abaixo de ~430 px. A saída foi
+                  encolher as MEDIDAS de todos no celular em vez de esconder a
+                  palavra — corpo 14, altura 40, padding e gaps curtos. Medido:
+                  em 360 px sobram 16 px de folga. */}
+              {/* O `aria-label` cobre a faixa abaixo de 360 px, onde só resta o
+                  ícone e o link ficaria sem nome nenhum. Acima disso ele
+                  CONTÉM o texto visível ("Agendar"), que é o que a WCAG 2.5.3
+                  exige — quem usa comando de voz consegue dizer "agendar". */}
               <NavLink to="/agendamentos" className={navLinkClasses} aria-label="Agendar Consulta" title="Agendar Consulta">
                   <CalendarDays className="w-[18px] h-[18px] shrink-0" />
-                  <span className="whitespace-nowrap hidden sm:inline">Agendar Consulta</span>
+                  {/* "Agendar" aparece a partir de 360 px — o que cobre todo
+                      celular atual (o menor em uso é 375). Abaixo disso volta a
+                      ser só o ícone, e não por preciosismo: em 320 px a barra
+                      estoura mesmo com as medidas reduzidas. Como a página tem
+                      `overflow-x: clip`, o excesso seria RECORTADO em silêncio —
+                      o "Cadastre-se" sumiria sem nem dar para rolar até ele.
+                      Melhor perder a palavra que perder o botão. */}
+                  <span className="whitespace-nowrap hidden min-[360px]:inline">
+                    Agendar<span className="hidden sm:inline"> Consulta</span>
+                  </span>
               </NavLink>
           </div>
 
@@ -66,17 +88,23 @@ const Header = () => {
                // Dois botões com a mesma força competiriam entre si e nenhum
                // apontaria o caminho.
                <div className="flex items-center gap-1 sm:gap-2">
-                  {/* Só texto: sem caixa, sem borda e sem fundo no hover. */}
+                  {/* "Entrar" ganha a MESMA caixa cinza do "Agendar" ao lado.
+                      Ele já foi texto solto, sem caixa — o que funcionava no
+                      desktop, onde o hover denunciava que era clicável, mas no
+                      celular deixava duas palavras soltas no branco sem nenhum
+                      sinal de que uma delas era um botão. Com a caixa, a barra
+                      passa a ter três níveis legíveis: cinza para navegar,
+                      cobalto cheio para a ação principal. */}
                   <Button
                       variant="ghost"
                       onClick={() => navigate('/acesso-cliente', { state: { authMode: 'login' } })}
-                      className="text-[15px] font-normal text-slate-600 hover:text-brand-700 hover:bg-transparent px-2 sm:px-3 h-11 shrink-0"
+                      className={`text-[14px] sm:text-[15px] font-normal px-2 sm:px-3 h-10 sm:h-11 shrink-0 ${CAIXA_CINZA}`}
                   >
                       Entrar
                   </Button>
                   <Button
                       onClick={() => navigate('/acesso-cliente', { state: { authMode: 'signup' } })}
-                      className="text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-md px-4 sm:px-7 h-11 shrink-0"
+                      className="text-[14px] sm:text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-md px-2.5 sm:px-7 h-10 sm:h-11 shrink-0"
                   >
                       Cadastre-se
                   </Button>
