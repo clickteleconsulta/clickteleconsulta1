@@ -187,7 +187,7 @@ const HomePage = () => {
           // padding inferior é o que decide quanto disso o fundo azul cobre —
           // 32 px deixam ~25 px de pé para fora. Com pb-14 (56) as pernas
           // sumiam inteiras dentro da caixa.
-          className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:pt-16 lg:pb-8">
+          className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:pt-12 lg:pb-8">
           {/* Colunas que ABRAÇAM o conteúdo (`auto`) e ancoram à esquerda. Com
               `1fr` na primeira, a coluna do botão era empurrada para a borda da
               tela e ele ficava solto no canto, longe do texto a que pertence. */}
@@ -280,7 +280,7 @@ const HomePage = () => {
 
               <motion.p
                 variants={fadeUp}
-                className="font-body mt-5 text-lg md:text-xl text-slate-600 leading-relaxed max-w-lg lg:max-w-none"
+                className="font-body mt-4 text-lg md:text-xl text-slate-600 leading-relaxed max-w-lg lg:max-w-none"
               >
                 Veja preço e horários na hora, escolha o profissional e agende.
                 Pix ou cartão, sem mensalidade.
@@ -300,7 +300,7 @@ const HomePage = () => {
                   (`order-first`): empilhado, quem vem primeiro é quem se lê
                   primeiro, e deixar três linhas de selo antes da ação seria
                   justamente o que a troca corrigiu no desktop. */}
-              <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row sm:items-end gap-5 sm:gap-7">
+              <motion.div variants={fadeUp} className="mt-6 flex flex-col sm:flex-row sm:items-end gap-5 sm:gap-7">
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-500">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-brand-500" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-600" /> Proteção LGPD</span>
@@ -346,7 +346,15 @@ const HomePage = () => {
                 centralizado dentro dela, e os 16,3% passavam a medir a CAIXA em
                 vez da ARTE — em 1024 px isso já dava 10 px de desalinhamento.
                 Com a altura fixa a caixa tem a proporção exata do arquivo e não
-                sobra vão nenhum. */}
+                sobra vão nenhum.
+
+                E ela é ABSOLUTA no desktop. Em fluxo normal, a arte (350) é mais
+                alta que a coluna de texto (263) e, com as duas alinhadas pela
+                base, a diferença toda virava vazio ACIMA do título — 87 px de
+                banner sobrando sem nada dentro. Fora do fluxo, a altura da seção
+                passa a ser só a do texto e a arte se ancora na base da coluna,
+                que continua sendo a linha do botão. O alinhamento não muda; o
+                que some é a sobra. */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -355,13 +363,13 @@ const HomePage = () => {
               // `w-full` aqui vira dependência circular (a coluna mede pelo
               // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
               // zero — com ela, a imagem some.
-              className="w-full lg:w-auto lg:justify-self-stretch lg:-mr-10 xl:-mr-16 flex items-end justify-center lg:justify-end"
+              className="w-full lg:w-auto lg:justify-self-stretch lg:relative lg:-mr-10 xl:-mr-16 flex items-end justify-center lg:justify-end"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block h-[350px] w-auto max-w-none select-none pointer-events-none lg:translate-y-[16.3%]"
+                className="hidden lg:block h-[320px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[16.3%]"
               />
             </motion.div>
           </div>
