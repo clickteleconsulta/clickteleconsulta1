@@ -18,9 +18,17 @@ hoje, no primeiro dia:
   AGILIDADE     agendar leva minutos, e isso é demonstrável na hora.
   DISPONIBILIDADE  7 dias por semana.
   SEM AMARRA    sem convênio, sem mensalidade — paga quem usa.
-  VERIFICAÇÃO   registro conferido junto ao CRM. Este é o substituto honesto da
-                prova social: não diz "confie porque outros confiaram", diz
-                "confie porque foi checado".
+  ESCOLHA       o paciente escolhe o médico, o dia e a hora. É o que separa um
+                MARKETPLACE de uma plataforma de teleconsulta, que encaixa quem
+                estiver livre — e reforça, no anúncio, o posicionamento que o
+                site inteiro sustenta.
+
+NÃO USE VERIFICAÇÃO DE REGISTRO COMO ARGUMENTO sem antes acertar o que é dito no
+site. Houve uma peça assim, dizendo "registro checado junto ao CRM do estado", e
+ela saiu: a conferência é feita PELA PLATAFORMA, que checa se o médico é quem diz
+ser e se o registro é válido. Afirmar checagem "junto ao CRM" sugere integração
+com o órgão, que não existe. Em publicidade de saúde essa distância vira
+problema.
 
 TODO O TEXTO SAI DE FRASES JÁ APROVADAS NO SITE. Nada aqui foi escrito do zero
 para o anúncio — copy de saúde inventada é como se cria problema jurídico.
@@ -87,10 +95,10 @@ MENSAGENS = [
         escuro=True,
     ),
     dict(
-        arquivo='verificacao',
-        chapeu='REGISTRO VERIFICADO',
-        titulo='Todo médico\né conferido',
-        apoio='Registro checado junto ao CRM do estado.',
+        arquivo='escolha',
+        chapeu='VOCÊ NO CONTROLE',
+        titulo='Você escolhe\no médico',
+        apoio='E o dia e a hora. Ninguém escolhe por você.',
         escuro=False,
     ),
 ]
