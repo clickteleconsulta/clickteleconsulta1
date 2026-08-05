@@ -161,7 +161,7 @@ const HomePage = () => {
           1. HERO
       ═══════════════════════════════════════════════════════════════════════ */}
       <section
-        className="relative w-full overflow-hidden"
+        className="relative w-full overflow-x-clip"
         // Azul claro CHAPADO. Era um degradê que começava em branco, e o
         // branco no topo fazia o banner sumir dentro do cabeçalho — a página
         // parecia começar no meio. #E3EAF6 é o brand-100, o mesmo azul que já
@@ -190,7 +190,7 @@ const HomePage = () => {
                   texto faz o herói inteiro assentar sobre uma base só. Centrado,
                   a arte flutuava 124 px acima do botão — medido — e os dois
                   pareciam duas peças soltas em vez de uma cena. */}
-              <div className="grid lg:grid-cols-2 lg:items-end gap-8 lg:gap-10">
+              <div className="grid lg:grid-cols-2 lg:items-start gap-8 lg:gap-10">
             <motion.div
               className="max-w-2xl lg:max-w-none text-left"
               variants={stagger}
@@ -281,25 +281,29 @@ const HomePage = () => {
                   a última linha volta a ter a largura da coluna e o bloco fecha
                   como um retângulo.
 
-                  A ação continua ANTES do reforço na ordem de leitura; o que
-                  mudou foi só o eixo, de vertical para horizontal. No celular
-                  eles voltam a empilhar, porque ali não há largura para dividir. */}
+                  Os selos vêm primeiro e o botão vai para a DIREITA da faixa. Num
+                  bloco alinhado à esquerda, o canto direito é o fim natural da
+                  leitura — a ação fica onde o olho termina, e não onde começa. No celular
+                  eles voltam a empilhar, e ali o BOTÃO volta para cima
+                  (`order-first`): empilhado, quem vem primeiro é quem se lê
+                  primeiro, e deixar três linhas de selo antes da ação seria
+                  justamente o que a troca corrigiu no desktop. */}
               <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full sm:w-auto shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
-                >
-                  <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
-                    Agendar Consulta <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-500">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-brand-500" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-600" /> Proteção LGPD</span>
                 <span className="inline-flex items-center gap-1.5"><Stethoscope className="w-4 h-4 text-teal-500" /> Atendimentos médicos</span>
                 </div>
+
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full sm:w-auto order-first sm:order-none sm:ml-auto shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
+                >
+                  <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
+                    Agendar Consulta <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
               </motion.div>
             </motion.div>
 
@@ -320,13 +324,13 @@ const HomePage = () => {
               // `w-full` aqui vira dependência circular (a coluna mede pelo
               // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
               // zero — com ela, a imagem some.
-              className="w-full lg:w-auto lg:justify-self-stretch lg:-mr-10 xl:-mr-16 flex items-center justify-center lg:justify-end"
+              className="w-full lg:w-auto lg:justify-self-stretch lg:-mr-10 xl:-mr-16 lg:-mb-36 flex items-end justify-center lg:justify-end"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block w-full h-auto max-h-[440px] object-contain object-right select-none pointer-events-none"
+                className="hidden lg:block w-full h-auto max-h-[480px] object-contain object-right select-none pointer-events-none"
               />
             </motion.div>
           </div>
