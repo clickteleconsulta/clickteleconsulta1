@@ -396,12 +396,21 @@ const HomePage = () => {
           </motion.div>
 
           <motion.div
-            className="flex flex-col md:flex-row items-start md:items-center justify-center gap-8 md:gap-0 max-w-5xl mx-auto"
+            className="grid grid-cols-2 md:flex md:flex-row items-start md:items-center justify-center gap-x-4 gap-y-10 md:gap-0 max-w-5xl mx-auto"
             variants={stagger}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
+            {/* GRADE de 2 colunas no celular, linha única a partir de md.
+                Empilhados, os quatro passos esticavam a página sem necessidade —
+                cada um é curto e cabe em meia largura.
+
+                Dá para trocar `flex` por `grid` sem tocar nos conectores porque
+                eles são `hidden md:block`: item com `display:none` não ocupa
+                célula na grade, então no celular sobram exatamente os quatro
+                passos, dois por linha. A partir de md volta a ser flex e os
+                conectores reaparecem entre eles. */}
             {STEPS.map((step, index) => {
               const Icon = step.icon;
               return (
