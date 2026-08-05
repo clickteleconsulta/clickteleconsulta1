@@ -68,10 +68,16 @@ DESTINO = {
 # dois juntos; aqui cada elemento é encontrado pelo início do seu `d`.
 #
 # A hierarquia dos slots é o que a imagem precisa comunicar:
-#   escolhido pelo personagem  cobalto cheio      — o mais forte
-#   marcado, não escolhido     brand-50 + tique   — igual aos slots do site
-#   vazio                      azul acinzentado   — presente, mas recuado
+#   escolhido pelo personagem  cobalto cheio + tique  — o mais forte
+#   disponível, em destaque    brand-50, SEM tique    — igual aos slots do site
+#   vazio                      azul acinzentado       — presente, mas recuado
 # Antes os vazios eram #f2f2f2 sobre um fundo quase do mesmo tom, e sumiam.
+#
+# O tique do slot em destaque foi REMOVIDO do arquivo (04/08/2026): um selo de
+# confirmado num horário que o personagem não escolheu contradizia a cena. A
+# remoção está no próprio SVG, com comentário no lugar — não é recoloração, e
+# por isso não aparece na tabela abaixo. Se a arte for baixada de novo do
+# unDraw, esse tique volta e precisa sair outra vez.
 HEROI = {
     # folhas do fundo
     'M994.932,546.427':  '#0c9769',
