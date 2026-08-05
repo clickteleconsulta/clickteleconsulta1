@@ -30,6 +30,36 @@ COBALTO = '#3b5ba5'
 JADE = '#0c9769'
 ROXO_UNDRAW = '#6c63ff'   # o acento padrão de toda arte baixada do unDraw
 
+# ─────────────────────────────────────────────────────────────────────────────
+# O GUARDA-ROUPA (05/08/2026). Duas cores, e NENHUMA delas é cor de marca.
+#
+# As camisas dos personagens estavam todas em cinza, e a fileira de três
+# cartões da home ficou sem vida. Colorir com cobalto ou jade não resolvia: numa
+# arte cujo acento já é cobalto, a camisa cobalto some; e cor de marca em cima
+# de personagem começa a competir com o significado que ela tem na interface.
+#
+# Por isso as roupas usam uma paleta PRÓPRIA, deliberadamente fora da marca:
+#
+#   TERRACOTA  quente, complementar ao cobalto. Já tinha sido escolhida para o
+#              casaco do herói, e por um motivo que continua valendo: não entra
+#              em nenhuma tríade institucional (o amarelo que veio antes, com o
+#              jade e o cobalto ao lado, lia como bandeira do Brasil).
+#   ÍNDIGO     o cobalto puxado para o ardósia. Azul de roupa, não de botão —
+#              é justamente por ser mais apagado que ele não se confunde com a
+#              cor de ação.
+#
+# Ficam FORA da regra de uma cor por arte, e de propósito: a regra existe para
+# impedir que DUAS CORES DE MARCA disputem dentro do mesmo desenho. Roupa não é
+# acento. Elas também não estão em ACENTOS abaixo, então a troca por cor nunca
+# as alcança — camisa repintada aqui não volta atrás sozinha.
+#
+# A distribuição alterna para dois cartões vizinhos não vestirem igual:
+#   secao-escolher     terracota  (contra as barras cobalto)
+#   secao-avaliacoes   índigo     (contra o amarelo das estrelas)
+#   secao-documentos   terracota  (complementar ao verde do selo)
+TERRACOTA = '#d08b6c'
+INDIGO    = '#5e6b8c'
+
 # Qualquer um destes vira o acento escolhido do arquivo.
 ACENTOS = {COBALTO, JADE, ROXO_UNDRAW}
 
@@ -50,40 +80,61 @@ DESTINO = {
     # Telas de acesso: cada público entra por uma porta de cor diferente, para a
     # pessoa saber num relance se está no lado certo. O jade aqui é ILUSTRAÇÃO,
     # não interface — segue proibido em botão, link e estado.
+    #
+    # 'acesso-cliente.svg' é a "Log in" do unDraw (slug login_weas, baixada em
+    # 05/08/2026 de https://cdn.undraw.co/illustration/login_weas.svg). Aqui a
+    # porta é literal: o personagem está entrando por uma. Ele veste o cobalto
+    # de propósito, e isto é EXCEÇÃO ao guarda-roupa definido acima — nesta arte
+    # a cor não é roupa, é o sinal de qual porta é a do paciente, o mesmo papel
+    # que o jade cumpre na do profissional. Trocar por terracota apagaria a
+    # única coisa que diferencia as duas telas de acesso à primeira vista.
+    #
+    # Para achar outra arte do unDraw: https://undraw.co/api/search?q=<termo>
+    # devolve JSON com o campo `media`, que é o SVG direto. É GET; POST responde
+    # "Method not allowed", e /api/illustrations (o endpoint antigo) dá 404.
     'acesso-cliente.svg':      COBALTO,
     'acesso-profissional.svg': JADE,
 
-    # Seção de três cartões da home. Alternam para a faixa não ficar de uma cor
-    # só — a do meio em jade é o que dá o respiro de cor que a seção existe para
-    # trazer.
-    # Do STORYSET (não do unDraw), estilo cuate: fundo oculto e camadas
-    # Clipboard e Pills removidas. O acento já vem gravado no cobalto, então a
-    # troca por cor abaixo não tem o que fazer nela — a entrada existe para o
-    # arquivo não cair na rede de segurança como "fora da tabela".
+    # Seção de três cartões da home. Cada cartão tem UM acento, e os três são
+    # diferentes — é a alternância que dá o respiro de cor, não a mistura.
     'secao-escolher.svg':   COBALTO,
 
-    'secao-documentos.svg': COBALTO,
+    # Passou de cobalto para jade em 05/08/2026: a única cor que restou nela é a
+    # do selo de validado — círculo VERDE com o V branco dentro, e não o
+    # contrário —, e verde é o que este projeto usa para sucesso. A
+    # camisa da personagem saiu do cobalto para um cinza neutro (#b3b3b3, e não
+    # o #cccccc da arte ao lado, porque aqui a camisa encosta no documento
+    # #e6e6e6 e os dois cinzas se dissolviam um no outro). O selo redondo do
+    # documento acompanhou o tique: é o mesmo carimbo de validade, e deixá-lo
+    # cobalto devolveria a arte à condição bicolor.
+    'secao-documentos.svg': JADE,
 
-    # EXCEÇÃO: 'secao-avaliacoes.svg' NÃO entra nesta tabela.
-    # Também é do Storyset, e o acento dela é AMARELO #FFC100 de propósito:
-    # ilustra a nota em estrelas, e estrela de avaliação é amarela em qualquer
-    # lugar. Repintar de cobalto ou jade tiraria justamente o que a imagem tem
-    # para dizer. Segue a regra de uma cor por arte — a cor é que é outra.
-    #
-    # ATENÇÃO: a licença gratuita do Storyset EXIGE ATRIBUIÇÃO, e o crédito está
-    # no rodapé (src/components/Footer.jsx). DUAS artes dependem dele hoje —
-    # 'secao-escolher.svg' e 'secao-avaliacoes.svg'. O crédito só pode sair se as
-    # duas saírem.
+    # EXCEÇÃO: 'secao-avaliacoes.svg' NÃO entra nesta tabela — ver abaixo.
+}
+
+
+# Artes que ficam de fora do DESTINO de propósito, e o porquê aparece na saída
+# do script para ninguém "consertar" isso achando que foi esquecimento.
+FORA_DA_TABELA = {
+    # As estrelas, a barra de cada avaliação e a estrelinha na mão estão em
+    # AMARELO #ffc100, não em cobalto nem em jade. Estrela de avaliação é
+    # amarela em qualquer lugar; repintá-la com a cor da marca tiraria
+    # justamente o que a imagem tem para dizer. A regra de UMA cor por arte
+    # continua valendo — a cor é que é outra, e a camisa da personagem foi para
+    # um cinza neutro (#cccccc) para não disputar com ela. O cinza é um passo
+    # abaixo do #e6e6e6 da camisa da arte vizinha, para as duas não parecerem a
+    # mesma pessoa.
+    'secao-avaliacoes.svg': 'amarelo  fora da tabela DE PROPÓSITO (estrelas, ver FORA_DA_TABELA)',
 }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# O HERÓI É EXCEÇÃO DECLARADA À REGRA DE UMA COR POR ARTE (04/08/2026).
+# O HERÓI TEM REPINTURA MANUAL (04/08/2026, revisto em 05/08/2026).
 #
-# Ele tem folhas em jade e um calendário em cobalto na mesma imagem. Foi decisão
-# do cliente, e está registrada aqui em vez de acontecer em silêncio — se ficasse
-# só no arquivo, a varredura por cor acima marcaria "ok" numa arte bicolor e a
-# regra viraria letra morta.
+# Ele JÁ FOI exceção à regra de uma cor por arte, quando tinha folhas jade atrás
+# de um calendário cobalto. As folhas saíram e a exceção morreu junto: hoje a
+# arte não tem nenhuma cor de marca além do cobalto. O que sobra aqui é
+# repintura manual, não exceção de cor.
 #
 # A repintura dele não cabe na troca por cor porque UM MESMO hex (#f2f2f2)
 # pintava as folhas E os slots vazios do calendário. Trocar por cor mexeria nos
@@ -101,10 +152,10 @@ DESTINO = {
 # por isso não aparece na tabela abaixo. Se a arte for baixada de novo do
 # unDraw, esse tique volta e precisa sair outra vez.
 HEROI = {
-    # folhas do fundo
-    'M994.932,546.427':  '#0c9769',
-    'M1027.109,398.517': '#0c9769',
-    'M884.712,380.124':  '#0c9769',
+    # As três folhas de fundo, que eram jade, foram REMOVIDAS do arquivo em
+    # 05/08/2026 — não repintadas, apagadas. Planta atrás de um calendário de
+    # agendamento não dizia nada, e era só ela que obrigava esta arte a usar
+    # duas cores de marca ao mesmo tempo.
     # slots vazios
     'M591.261,605.191':  '#cfd9ea',
     'M388.473,605.191':  '#cfd9ea',
@@ -183,7 +234,7 @@ if __name__ == '__main__':
         if arquivo == 'heroi.svg':
             feitos, total = recolorir_heroi(caminho)
             estado = 'ok' if feitos == total else f'SÓ {feitos}/{total} ELEMENTOS'
-            print(f'  {arquivo:<20} {"exceção":<8} {estado} (bicolor por decisão, ver HEROI)')
+            print(f'  {arquivo:<20} {"manual":<8} {estado} (repintura elemento a elemento, ver HEROI)')
             if feitos != total:
                 falhas.append(arquivo)
             continue
@@ -200,8 +251,8 @@ if __name__ == '__main__':
     # senão uma arte nova entra bicolor sem ninguém perceber.
     for arquivo in sorted(os.listdir(DIR)):
         if arquivo.endswith('.svg') and arquivo not in DESTINO:
-            if arquivo == 'secao-avaliacoes.svg':
-                print(f'  {arquivo:<20} amarelo  fora da tabela DE PROPÓSITO (Storyset, ver acima)')
+            if arquivo in FORA_DA_TABELA:
+                print(f'  {arquivo:<20} {FORA_DA_TABELA[arquivo]}')
                 continue
             print(f'  {arquivo:<20} FORA DA TABELA — defina a cor em DESTINO')
             falhas.append(arquivo)
