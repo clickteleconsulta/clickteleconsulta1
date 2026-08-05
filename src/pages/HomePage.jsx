@@ -129,7 +129,7 @@ const DESTAQUES = [
   {
     arte: '/ilustra/secao-documentos.svg',
     titulo: 'Documentos com validade em todo o Brasil',
-    rotulo: 'Ver validade',
+    rotulo: 'Saiba mais',
     para: '/documentos-e-validade',
   },
 ];
@@ -189,7 +189,7 @@ const HomePage = () => {
       </Helmet>
 
       {/* Full-bleed: as seções ocupam a largura toda da tela (cancela o container/padding do main) */}
-      <div className="-my-8 mx-[calc(50%-50vw)] w-screen">
+      <div className="-my-8 full-bleed">
 
       {/* ═══════════════════════════════════════════════════════════════════════
           1. HERO
@@ -490,7 +490,7 @@ const HomePage = () => {
             className="text-center mb-14"
           >
             <h2 className="font-display text-3xl md:text-4xl font-extrabold text-slate-900">
-              Por que {BRAND.name}?
+              Por que agendar pela {BRAND.name}
             </h2>
             <p className="font-body mt-3 text-slate-500 max-w-lg mx-auto">
               Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a
@@ -557,7 +557,7 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="font-display text-2xl md:text-3xl font-extrabold text-slate-900 text-center max-w-2xl mx-auto"
           >
-            Tudo à vista antes de você agendar
+            Você vê tudo antes de agendar
           </motion.h2>
 
           <motion.div

@@ -550,7 +550,7 @@ const AppointmentsPage = () => {
       )}
 
       {/* Fundo de página cinza full-bleed (ocupa a largura toda; barra de busca vai de ponta a ponta) */}
-      <div className="mx-[calc(50%-50vw)] w-screen -my-8 bg-slate-100 min-h-[calc(100vh-var(--altura-cabecalho))]">
+      <div className="full-bleed -my-8 bg-slate-100 min-h-[calc(100vh-var(--altura-cabecalho))]">
         {/* O título e o subtítulo VISÍVEIS saíram: repetiam o "Agendar Consulta"
             do cabeçalho, que fica a poucos pixels acima, e empurravam a barra de
             filtros para baixo sem acrescentar informação.
