@@ -56,19 +56,24 @@ DESTINO = {
     # Seção de três cartões da home. Alternam para a faixa não ficar de uma cor
     # só — a do meio em jade é o que dá o respiro de cor que a seção existe para
     # trazer.
+    # Do STORYSET (não do unDraw), estilo cuate: fundo oculto e camadas
+    # Clipboard e Pills removidas. O acento já vem gravado no cobalto, então a
+    # troca por cor abaixo não tem o que fazer nela — a entrada existe para o
+    # arquivo não cair na rede de segurança como "fora da tabela".
     'secao-escolher.svg':   COBALTO,
+
     'secao-documentos.svg': COBALTO,
 
     # EXCEÇÃO: 'secao-avaliacoes.svg' NÃO entra nesta tabela.
-    # É a única arte que não vem do unDraw — é do Storyset (Freepik), estilo
-    # cuate, e o acento dela é AMARELO #FFC100 de propósito: ilustra a nota em
-    # estrelas, e estrela de avaliação é amarela em qualquer lugar. Repintar de
-    # cobalto ou jade tiraria justamente o que a imagem tem para dizer.
-    # Ela segue a regra de uma cor por arte — a cor é que é outra.
+    # Também é do Storyset, e o acento dela é AMARELO #FFC100 de propósito:
+    # ilustra a nota em estrelas, e estrela de avaliação é amarela em qualquer
+    # lugar. Repintar de cobalto ou jade tiraria justamente o que a imagem tem
+    # para dizer. Segue a regra de uma cor por arte — a cor é que é outra.
     #
-    # ATENÇÃO: a licença gratuita do Storyset EXIGE ATRIBUIÇÃO, e o crédito
-    # está no rodapé (src/components/Footer.jsx). Nenhuma outra arte do projeto
-    # depende disso; se esta sair, o crédito pode sair junto.
+    # ATENÇÃO: a licença gratuita do Storyset EXIGE ATRIBUIÇÃO, e o crédito está
+    # no rodapé (src/components/Footer.jsx). DUAS artes dependem dele hoje —
+    # 'secao-escolher.svg' e 'secao-avaliacoes.svg'. O crédito só pode sair se as
+    # duas saírem.
 }
 
 
