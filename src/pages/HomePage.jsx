@@ -162,9 +162,12 @@ const HomePage = () => {
       ═══════════════════════════════════════════════════════════════════════ */}
       <section
         className="relative w-full overflow-hidden"
-        style={{
-          background: 'linear-gradient(170deg, #FFFFFF 0%, #F2F5FB 55%, #E3EAF6 100%)',
-        }}
+        // Azul claro CHAPADO. Era um degradê que começava em branco, e o
+        // branco no topo fazia o banner sumir dentro do cabeçalho — a página
+        // parecia começar no meio. #E3EAF6 é o brand-100, o mesmo azul que já
+        // era a ponta de baixo daquele degradê: a cor não é nova, o degradê é
+        // que desabou nela.
+        style={{ background: '#E3EAF6' }}
       >
         {/* Dot grid pattern */}
         <div
@@ -182,7 +185,12 @@ const HomePage = () => {
           {/* Colunas que ABRAÇAM o conteúdo (`auto`) e ancoram à esquerda. Com
               `1fr` na primeira, a coluna do botão era empurrada para a borda da
               tela e ele ficava solto no canto, longe do texto a que pertence. */}
-          <div className="grid lg:grid-cols-[auto_auto] lg:justify-start lg:items-center gap-8 lg:gap-16">
+          {/* `items-end` e não `items-center`: o personagem da ilustração pisa
+                  numa linha de chão, e alinhar essa linha com o pé do bloco de
+                  texto faz o herói inteiro assentar sobre uma base só. Centrado,
+                  a arte flutuava 124 px acima do botão — medido — e os dois
+                  pareciam duas peças soltas em vez de uma cena. */}
+              <div className="grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end gap-8 lg:gap-10">
             <motion.div
               className="max-w-2xl text-left"
               variants={stagger}
@@ -310,13 +318,13 @@ const HomePage = () => {
               // `w-full` aqui vira dependência circular (a coluna mede pelo
               // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
               // zero — com ela, a imagem some.
-              className="w-full lg:w-[400px] lg:justify-self-start flex items-center justify-center"
+              className="w-full lg:w-[520px] xl:w-[560px] lg:justify-self-end lg:-mr-8 xl:-mr-20 flex items-center justify-center"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block w-full h-auto max-h-[260px] object-contain select-none pointer-events-none"
+                className="hidden lg:block w-full h-auto max-h-[340px] object-contain select-none pointer-events-none"
               />
             </motion.div>
           </div>

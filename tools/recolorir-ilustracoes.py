@@ -55,6 +55,61 @@ DESTINO = {
 }
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# O HERÓI É EXCEÇÃO DECLARADA À REGRA DE UMA COR POR ARTE (04/08/2026).
+#
+# Ele tem folhas em jade e um calendário em cobalto na mesma imagem. Foi decisão
+# do cliente, e está registrada aqui em vez de acontecer em silêncio — se ficasse
+# só no arquivo, a varredura por cor acima marcaria "ok" numa arte bicolor e a
+# regra viraria letra morta.
+#
+# A repintura dele não cabe na troca por cor porque UM MESMO hex (#f2f2f2)
+# pintava as folhas E os slots vazios do calendário. Trocar por cor mexeria nos
+# dois juntos; aqui cada elemento é encontrado pelo início do seu `d`.
+#
+# A hierarquia dos slots é o que a imagem precisa comunicar:
+#   escolhido pelo personagem  cobalto cheio      — o mais forte
+#   marcado, não escolhido     brand-50 + tique   — igual aos slots do site
+#   vazio                      azul acinzentado   — presente, mas recuado
+# Antes os vazios eram #f2f2f2 sobre um fundo quase do mesmo tom, e sumiam.
+HEROI = {
+    # folhas do fundo
+    'M994.932,546.427':  '#0c9769',
+    'M1027.109,398.517': '#0c9769',
+    'M884.712,380.124':  '#0c9769',
+    # slots vazios
+    'M591.261,605.191':  '#cfd9ea',
+    'M388.473,605.191':  '#cfd9ea',
+    'M793.66,605.191':   '#cfd9ea',
+    'M793.66,460.013':   '#cfd9ea',
+    # slot marcado que o personagem NÃO está escolhendo (o da esquerda —
+    # verificado pintando os dois e olhando para onde o dedo aponta)
+    'M388.773,459.72':   '#f2f5fb',
+}
+
+
+def recolorir_heroi(caminho):
+    import re as _re
+    with open(caminho, encoding='utf-8') as f:
+        svg = f.read()
+    mudou = 0
+    for inicio, cor in HEROI.items():
+        # o fill pode vir antes ou depois do `d` no mesmo <path>
+        padrao = _re.compile(
+            r'(<path\b[^>]*?)fill="#[0-9a-fA-F]{3,6}"([^>]*?d="' + _re.escape(inicio) + r')'
+            r'|(<path\b[^>]*?d="' + _re.escape(inicio) + r'[^"]*"[^>]*?)fill="#[0-9a-fA-F]{3,6}"'
+        )
+        def troca(m):
+            if m.group(1) is not None:
+                return f'{m.group(1)}fill="{cor}"{m.group(2)}'
+            return f'{m.group(3)}fill="{cor}"'
+        svg, n = padrao.subn(troca, svg, count=1)
+        mudou += n
+    with open(caminho, 'w', encoding='utf-8') as f:
+        f.write(svg)
+    return mudou, len(HEROI)
+
+
 def recolorir(caminho, destino):
     with open(caminho, encoding='utf-8') as f:
         svg = f.read()
@@ -83,6 +138,16 @@ if __name__ == '__main__':
         caminho = os.path.join(DIR, arquivo)
         if not os.path.exists(caminho):
             print(f'  {arquivo:<20} AUSENTE'); falhas.append(arquivo); continue
+
+        # O herói não passa pela troca por cor: ver o bloco HEROI acima.
+        if arquivo == 'heroi.svg':
+            feitos, total = recolorir_heroi(caminho)
+            estado = 'ok' if feitos == total else f'SÓ {feitos}/{total} ELEMENTOS'
+            print(f'  {arquivo:<20} {"exceção":<8} {estado} (bicolor por decisão, ver HEROI)')
+            if feitos != total:
+                falhas.append(arquivo)
+            continue
+
         recolorir(caminho, cor)
         restantes = acentos_em(caminho)
         nome = 'cobalto' if cor == COBALTO else 'jade'
