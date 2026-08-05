@@ -583,21 +583,21 @@ const HomePage = () => {
                 a tela. Num grid, esse texto solto vira uma célula anônima e
                 empurra os cartões para a coluna seguinte. */}
             {DESTAQUES.map((d) => (
-              <motion.div key={d.titulo} variants={fadeUp} className="relative sm:pt-16">
+              <motion.div key={d.titulo} variants={fadeUp} className="relative sm:pt-28">
                 {/* Arte grande, só no desktop, saindo por cima do cartão. */}
                 <img
                   src={d.arte}
                   alt=""
                   aria-hidden="true"
-                  className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 h-32 w-auto max-w-[80%] object-contain select-none pointer-events-none"
+                  className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 h-56 w-auto max-w-full object-contain select-none pointer-events-none"
                 />
-                <div className="h-full bg-white rounded-lg border border-slate-200/80 p-4 sm:px-6 sm:pt-20 sm:pb-7 flex items-center gap-4 sm:block sm:text-center">
+                <div className="h-full bg-white rounded-lg border border-slate-200/80 p-4 sm:px-6 sm:pt-36 sm:pb-7 flex items-center gap-4 sm:block sm:text-center">
                   {/* Mesma arte, pequena e em fluxo — só no celular. */}
                   <img
                     src={d.arte}
                     alt=""
                     aria-hidden="true"
-                    className="sm:hidden h-16 w-16 shrink-0 object-contain select-none pointer-events-none"
+                    className="sm:hidden h-24 w-24 shrink-0 object-contain select-none pointer-events-none"
                   />
                   <div className="min-w-0 flex-1 flex flex-col items-start gap-3 sm:items-center sm:h-full sm:gap-0">
                     <h3 className="font-display text-[15px] sm:text-base font-bold text-slate-900 leading-snug">
