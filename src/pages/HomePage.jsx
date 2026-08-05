@@ -189,9 +189,24 @@ const HomePage = () => {
               initial="hidden"
               animate="visible"
             >
+              {/* Era 68 px com entrelinha 68 — proporção 1,0 exata. Num título de
+                  três linhas isso encosta a descendente de uma linha na maiúscula
+                  da seguinte: é a sensação de texto espremido. Agora 56 px com
+                  1,12, que devolve o ar sem o título deixar de ser o maior
+                  elemento da tela. O tracking afrouxa junto (-0,035em ->
+                  -0,025em): quanto menor o corpo, menos aperto horizontal o
+                  desenho aguenta.
+
+                  TODOS os tamanhos em valor arbitrário, de propósito. As classes
+                  prontas do Tailwind (`text-5xl` e afins) trazem `line-height`
+                  embutido, e no CSS gerado a regra de `text-*` vem DEPOIS da de
+                  `leading-*` — resultado: um `md:text-5xl` no meio da lista
+                  reimpunha entrelinha 1,0 e o `leading-[1.12]` era ignorado.
+                  Foi exatamente o que aconteceu na primeira tentativa desta
+                  correção. Sem classe pronta, ninguém injeta entrelinha. */}
               <motion.h1
                 variants={fadeUp}
-                className="font-display text-5xl md:text-6xl lg:text-[4.25rem] font-extrabold text-slate-900 leading-[1.04] tracking-[-0.035em]"
+                className="font-display text-[2.6rem] md:text-[3rem] lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.12] tracking-[-0.025em]"
               >
                 Consulta marcada em{' '}
                 {/* A vírgula fica presa a "minutos" pelo whitespace-nowrap. Sem ele,
@@ -251,22 +266,42 @@ const HomePage = () => {
                 Pix ou cartão, sem mensalidade.
               </motion.p>
 
+              {/* A AÇÃO VEM AQUI, não na coluna da arte.
+                  Embaixo da ilustração ela caía no pé do banner — medido: y=428
+                  num herói que termina em 524, ou seja, a última coisa do bloco.
+                  Quem lê o título e a promessa encontrava os selos de confiança
+                  antes de encontrar o que fazer.
+                  Na coluna do texto a ordem vira título -> promessa -> ação ->
+                  reforço, que é a ordem em que a pessoa decide. */}
+              <motion.div variants={fadeUp} className="mt-8">
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
+                >
+                  <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
+                    Agendar Consulta <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+              </motion.div>
+
               {/* Selos de confiança */}
-              <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-body text-slate-500">
+              <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-body text-slate-500">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-brand-500" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-600" /> Proteção LGPD</span>
                 <span className="inline-flex items-center gap-1.5"><Stethoscope className="w-4 h-4 text-teal-500" /> Atendimentos médicos</span>
               </motion.div>
             </motion.div>
 
-            {/* Arte em cima, botão embaixo — os dois em fluxo normal, alinhados
-                pelo mesmo eixo. Antes o botão era posicionado em ABSOLUTO sobre
-                a ilustração, para mirar a ponta de um dedo que apontava; essa
-                arte não aponta para nada, e sobrepor o botão só o fazia colidir
-                com a figura, que fica no centro-direita do quadro.
+            {/* Só a ARTE nesta coluna.
+                Ela já morou aqui com o botão embaixo, e antes disso com o botão
+                em ABSOLUTO por cima — aquela versão existia para mirar a ponta
+                de um dedo que apontava, numa ilustração que não usamos mais.
+                Sem o botão, a arte cresce de 220 para 260 de altura e passa a
+                equilibrar sozinha o peso do título, em vez de dividir a coluna.
 
-                A arte entra com `object-contain`: cabe inteira, nunca recortada,
-                seja qual for a proporção do arquivo. */}
+                `object-contain`: cabe inteira, nunca recortada, seja qual for a
+                proporção do arquivo. */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -275,27 +310,14 @@ const HomePage = () => {
               // `w-full` aqui vira dependência circular (a coluna mede pelo
               // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
               // zero — com ela, a imagem some.
-              className="w-full lg:w-[360px] lg:justify-self-start flex flex-col items-center gap-5"
+              className="w-full lg:w-[400px] lg:justify-self-start flex items-center justify-center"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block w-full h-auto max-h-[220px] object-contain select-none pointer-events-none"
+                className="hidden lg:block w-full h-auto max-h-[260px] object-contain select-none pointer-events-none"
               />
-              {/* Sem `rounded-full` e sem sombra colorida: o botão herda o
-                  `rounded-md` da base (4 px), que é o traço do resto do site.
-                  A sombra em cobalto translúcido era o que sobrava do visual
-                  antigo — vinha junto com a pílula e brigava com o traço fino. */}
-              <Button
-                asChild
-                size="lg"
-                className="w-full lg:w-auto bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
-              >
-                <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
-                  Agendar Consulta <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
             </motion.div>
           </div>
         </div>
