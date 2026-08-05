@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { getConsent, setConsent, initAnalytics } from '@/lib/analytics';
+import { capturarAtribuicao, limparAtribuicao } from '@/lib/atribuicao';
 
 // Banner de consentimento (LGPD): o tracking (GA4/Meta Pixel) só é carregado após "Aceitar".
 const ConsentBanner = () => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
+        // A captura da origem vem ANTES da decisão, e de propósito: o
+        // identificador de clique só existe na URL da página de entrada, e some
+        // no primeiro link que a pessoa toca. Se esperasse o banner ser
+        // respondido, na metade dos casos já não haveria o que capturar.
+        //
+        // Guardar não é usar. Nada é enviado a lugar nenhum sem consentimento, e
+        // quem RECUSA tem o dado apagado logo abaixo, no `reject`.
+        capturarAtribuicao();
+
         const decision = getConsent();
         if (decision === 'accepted') {
             initAnalytics(); // já consentiu em visita anterior
-        } else if (!decision) {
+        } else if (decision === 'rejected') {
+            limparAtribuicao(); // recusou numa visita anterior: não acumula origem
+        } else {
             setVisible(true); // ainda não decidiu
         }
     }, []);
@@ -23,6 +35,7 @@ const ConsentBanner = () => {
 
     const reject = () => {
         setConsent('rejected');
+        limparAtribuicao(); // recusou: a origem guardada na entrada vai embora
         setVisible(false);
     };
 

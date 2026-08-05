@@ -5,6 +5,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { buildJitsiRoomId } from '@/utils/jitsiRoomId';
+import { atribuicaoParaAgendamento } from '@/lib/atribuicao';
 
 const AppointmentsContext = createContext();
 
@@ -171,6 +172,12 @@ export const AppointmentsProvider = ({ children }) => {
                     status: 'pendente', 
                     pagamento_status: 'pendente',
                     source: 'site',
+                    // De qual anúncio veio, se veio de algum. Vai gravado no
+                    // agendamento porque é o servidor — não o navegador — que
+                    // vai reportar a venda ao TikTok quando o pagamento
+                    // confirmar. Sem isso, uma consulta paga por Pix duas horas
+                    // depois nunca é creditada à campanha que a trouxe.
+                    atribuicao: atribuicaoParaAgendamento(),
                     video_provider: 'jitsi',
                     video_room: generateVideoRoom(),
                     call_open_minutes_after: 30
