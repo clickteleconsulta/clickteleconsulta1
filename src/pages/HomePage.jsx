@@ -181,7 +181,7 @@ const HomePage = () => {
         {/* Herói mais baixo e assimétrico: o texto ancora à esquerda e a ação vai
             para a direita, em vez de tudo centrado numa coluna alta. O respiro
             vertical caiu de py-16/20/24 para py-10/12/14. */}
-        <div className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:py-14">
+        <div className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:py-16">
           {/* Colunas que ABRAÇAM o conteúdo (`auto`) e ancoram à esquerda. Com
               `1fr` na primeira, a coluna do botão era empurrada para a borda da
               tela e ele ficava solto no canto, longe do texto a que pertence. */}
@@ -190,9 +190,9 @@ const HomePage = () => {
                   texto faz o herói inteiro assentar sobre uma base só. Centrado,
                   a arte flutuava 124 px acima do botão — medido — e os dois
                   pareciam duas peças soltas em vez de uma cena. */}
-              <div className="grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end gap-8 lg:gap-10">
+              <div className="grid lg:grid-cols-2 lg:items-end gap-8 lg:gap-10">
             <motion.div
-              className="max-w-2xl text-left"
+              className="max-w-2xl lg:max-w-none text-left"
               variants={stagger}
               initial="hidden"
               animate="visible"
@@ -268,36 +268,38 @@ const HomePage = () => {
 
               <motion.p
                 variants={fadeUp}
-                className="font-body mt-5 text-lg md:text-xl text-slate-600 leading-relaxed max-w-lg"
+                className="font-body mt-5 text-lg md:text-xl text-slate-600 leading-relaxed max-w-lg lg:max-w-none"
               >
                 Veja preço e horários na hora, escolha o profissional e agende.
                 Pix ou cartão, sem mensalidade.
               </motion.p>
 
-              {/* A AÇÃO VEM AQUI, não na coluna da arte.
-                  Embaixo da ilustração ela caía no pé do banner — medido: y=428
-                  num herói que termina em 524, ou seja, a última coisa do bloco.
-                  Quem lê o título e a promessa encontrava os selos de confiança
-                  antes de encontrar o que fazer.
-                  Na coluna do texto a ordem vira título -> promessa -> ação ->
-                  reforço, que é a ordem em que a pessoa decide. */}
-              <motion.div variants={fadeUp} className="mt-8">
+              {/* AÇÃO E SELOS NA MESMA FAIXA.
+                  Separados em duas linhas, o bloco afunilava — 672 px de título,
+                  573 de subtítulo, 229 de botão — e a cunha que sobrava à
+                  direita do botão era o "centro vazio" do banner. Lado a lado,
+                  a última linha volta a ter a largura da coluna e o bloco fecha
+                  como um retângulo.
+
+                  A ação continua ANTES do reforço na ordem de leitura; o que
+                  mudou foi só o eixo, de vertical para horizontal. No celular
+                  eles voltam a empilhar, porque ali não há largura para dividir. */}
+              <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
                 <Button
                   asChild
                   size="lg"
-                  className="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
+                  className="w-full sm:w-auto shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-8 h-14 text-base font-display font-bold shadow-sm"
                 >
                   <Link to="/agendamentos" className="flex items-center justify-center gap-2 whitespace-nowrap">
                     Agendar Consulta <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
-              </motion.div>
 
-              {/* Selos de confiança */}
-              <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-body text-slate-500">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-body text-slate-500">
                 <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4 text-brand-500" /> Agende a qualquer hora</span>
                 <span className="inline-flex items-center gap-1.5"><Shield className="w-4 h-4 text-green-600" /> Proteção LGPD</span>
                 <span className="inline-flex items-center gap-1.5"><Stethoscope className="w-4 h-4 text-teal-500" /> Atendimentos médicos</span>
+                </div>
               </motion.div>
             </motion.div>
 
@@ -318,13 +320,13 @@ const HomePage = () => {
               // `w-full` aqui vira dependência circular (a coluna mede pelo
               // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
               // zero — com ela, a imagem some.
-              className="w-full lg:w-[520px] xl:w-[560px] lg:justify-self-end lg:-mr-8 xl:-mr-20 flex items-center justify-center"
+              className="w-full lg:w-auto lg:justify-self-stretch lg:-mr-10 xl:-mr-16 flex items-center justify-center lg:justify-end"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block w-full h-auto max-h-[340px] object-contain select-none pointer-events-none"
+                className="hidden lg:block w-full h-auto max-h-[440px] object-contain object-right select-none pointer-events-none"
               />
             </motion.div>
           </div>
