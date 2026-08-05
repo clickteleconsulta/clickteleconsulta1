@@ -145,6 +145,80 @@ def encaixar(img, larg, alt, margem=0.14):
     return tela
 
 
+# ── Kit de mídias sociais ────────────────────────────────────────────────────
+# As medidas não são chute: cada rede corta a imagem de um jeito, e o que
+# estraga logo é o CORTE, não a resolução.
+#
+#   perfil        1080×1080, mas desenhado para sobreviver ao RECORTE CIRCULAR
+#                 que Instagram, Facebook e TikTok aplicam. O círculo inscrito
+#                 num quadrado descarta ~21% da área — os cantos. Por isso aqui
+#                 vai só a CRUZ, e não o wordmark: "aviDoc" em 1080px vira uma
+#                 tarja ilegível depois do corte, e as pontas das letras somem.
+#   capa-facebook 1640×856 é a tela; a área que aparece igual em desktop e
+#                 celular é bem menor e fica no centro. Daí a margem larga.
+#   post          1080×1080, o quadrado padrão de feed.
+#   story         1080×1920, serve para Stories, Reels e TikTok. Os 250px de
+#                 cima e 250 de baixo são cobertos pela interface do app em
+#                 quase todo aparelho, então nada importante entra ali.
+SOCIAL = os.path.join(SAIDA_MARCA, 'social')
+
+
+def _tela(larg, alt, cor):
+    return Image.new('RGB', (larg, alt), cor)
+
+
+def gerar_social():
+    """Kit para as redes. Tudo na Gabarito do logo e nas cores da marca."""
+    os.makedirs(SOCIAL, exist_ok=True)
+    feitos = []
+
+    def salvar(img, nome):
+        alvo = os.path.join(SOCIAL, nome)
+        img.save(alvo)
+        feitos.append(alvo)
+
+    # ── Foto de perfil ──────────────────────────────────────────────────────
+    # Cruz jade sobre branco. Testada contra o corte circular: o desenho ocupa
+    # 46% do lado, o que o mantém inteiro dentro do círculo com folga.
+    perfil = _tela(1080, 1080, (255, 255, 255))
+    cruz = encaixar(desenhar_cruz(700, JADE), 1080, 1080, margem=0.27)
+    perfil.paste(cruz, (0, 0), cruz)
+    salvar(perfil, 'perfil-1080.png')
+
+    # Versão em fundo cobalto, para onde o branco some (tema escuro, avatar
+    # sobre foto de capa clara).
+    perfil_cobalto = _tela(1080, 1080, COBALTO)
+    cruz_clara = encaixar(desenhar_cruz(700, (255, 255, 255)), 1080, 1080, margem=0.27)
+    perfil_cobalto.paste(cruz_clara, (0, 0), cruz_clara)
+    salvar(perfil_cobalto, 'perfil-1080-cobalto.png')
+
+    # ── Capa do Facebook ────────────────────────────────────────────────────
+    capa = _tela(1640, 856, (255, 255, 255))
+    wm = encaixar(desenhar_wordmark(300), 1640, 856, margem=0.30)
+    capa.paste(wm, (0, 0), wm)
+    salvar(capa, 'capa-facebook-1640x856.png')
+
+    # ── Post quadrado ───────────────────────────────────────────────────────
+    post = _tela(1080, 1080, (255, 255, 255))
+    wm_post = encaixar(desenhar_wordmark(300), 1080, 1080, margem=0.22)
+    post.paste(wm_post, (0, 0), wm_post)
+    salvar(post, 'post-1080x1080.png')
+
+    # ── Story / Reels / TikTok ──────────────────────────────────────────────
+    # Fundo cobalto cheio: é o formato que aparece em tela inteira, e é onde a
+    # cor da marca tem mais chance de fixar.
+    story = _tela(1080, 1920, COBALTO)
+    # A marca fica no terço central, longe das faixas que a interface cobre.
+    # Margem de 0,12 e não 0,30: o `encaixar` escala pela MENOR sobra, e numa
+    # tela de 1080×1920 quem manda é a largura. Com 0,30 a marca saía ocupando
+    # 40% da largura — some no feed, que é justamente onde este formato vive.
+    wm_story = encaixar(desenhar_wordmark(300, escuro=True), 1080, 1920, margem=0.12)
+    story.paste(wm_story, (0, 0), wm_story)
+    salvar(story, 'story-1080x1920.png')
+
+    return feitos
+
+
 def gerar():
     os.makedirs(SAIDA_MARCA, exist_ok=True)
     feitos = []
@@ -171,6 +245,7 @@ def gerar():
     encaixar(desenhar_cruz(700, JADE), 1100, 780).save(alvo); feitos.append(alvo)
 
     feitos.append(gerar_og())
+    feitos.extend(gerar_social())
     return feitos
 
 
