@@ -19,6 +19,8 @@
  * agendamento é o que permite contar a venda no servidor, onde ela é certa.
  */
 
+import { getConsent } from '@/lib/analytics';
+
 const CHAVE = 'avidoc_atribuicao_v1';
 
 // 30 dias. O identificador de clique não vale para sempre: guardá-lo por tempo
@@ -106,5 +108,14 @@ export const atribuicaoParaAgendamento = () => {
   const a = ler();
   if (!a) return null;
   const { capturado_em, ...resto } = a;
-  return { ...resto, capturado_em: new Date(capturado_em).toISOString() };
+  return {
+    ...resto,
+    capturado_em: new Date(capturado_em).toISOString(),
+    // A decisão do banner viaja JUNTO com a origem, e não fica só no navegador.
+    // Quem reporta a venda ao TikTok é o servidor, horas depois, quando o
+    // pagamento confirma — nesse instante não há navegador nenhum para
+    // consultar. Sem este campo o servidor teria que adivinhar, e adivinhar
+    // sobre consentimento é o tipo de coisa que a LGPD não perdoa.
+    consentimento: getConsent(),
+  };
 };

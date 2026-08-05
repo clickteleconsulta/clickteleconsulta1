@@ -54,6 +54,77 @@ async function avisarMedico(apptId: string) {
     });
   } catch (_) { /* ver comentário acima */ }
 }
+// Conta a venda para o TikTok, pelo SERVIDOR.
+//
+// POR QUE NÃO BASTA O PIXEL DO NAVEGADOR: o pagamento acontece fora do site, no
+// checkout do Asaas. Quem fecha a aba, ou paga o Pix horas depois de outro
+// aparelho, nunca volta para a página que dispararia o evento. Aqui é o único
+// lugar que sabe, com certeza, que a consulta foi paga.
+//
+// NENHUM DADO PESSOAL SAI DAQUI — e isso é escolha, não esquecimento. A Events
+// API aceita e-mail e telefone com hash para melhorar a correspondência, e seria
+// fácil mandar. Mas o `ttclid` é o identificador do PRÓPRIO clique no anúncio:
+// ele casa de forma determinística, sem ambiguidade, e não diz ao TikTok nada
+// sobre quem é a pessoa. Com ele em mãos, mandar dado de paciente junto seria
+// aumentar a exposição sem ganhar precisão.
+//
+// SÓ SAI COM AS DUAS CONDIÇÕES: consentimento aceito e ttclid presente. Sem
+// ttclid a pessoa não veio de anúncio nenhum, e reportar uma venda orgânica ao
+// TikTok não ajuda ninguém — só entrega movimento do negócio de graça.
+async function reportarTikTok(apptId: string) {
+  const TOKEN = Deno.env.get("TIKTOK_EVENTS_TOKEN");
+  const PIXEL = Deno.env.get("TIKTOK_PIXEL_ID");
+  if (!TOKEN || !PIXEL) return;
+
+  try {
+    const [a] = await restGet(
+      `agendamentos?id=eq.${apptId}&select=id,price_in_cents,atribuicao,horario_inicio`,
+    );
+    if (!a) return;
+
+    const atr = (a.atribuicao ?? {}) as Record<string, string>;
+    if (atr.consentimento !== "accepted") return;
+    if (!atr.ttclid) return;
+
+    const resp = await fetch("https://business-api.tiktok.com/open_api/v1.3/event/track/", {
+      method: "POST",
+      headers: { "Access-Token": TOKEN, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event_source: "web",
+        event_source_id: PIXEL,
+        data: [{
+          event: "CompletePayment",
+          event_time: Math.floor(Date.now() / 1000),
+          // O MESMO id que o navegador usa em trackPurchase. É o que permite ao
+          // TikTok jogar fora a duplicata quando os dois caminhos reportam a
+          // mesma venda — e os dois REPORTAM, quando o paciente volta à página
+          // de confirmação. Sem isto, toda venda com retorno contaria dobrado e
+          // o ROI apareceria inflado.
+          event_id: String(a.id),
+          user: { ttclid: atr.ttclid },
+          properties: {
+            currency: "BRL",
+            value: Number(((a.price_in_cents ?? 0) / 100).toFixed(2)),
+            content_type: "product",
+          },
+        }],
+      }),
+    });
+
+    const corpo = await resp.json().catch(() => ({}));
+    // code 0 é sucesso na API do TikTok; qualquer outro vira registro para a
+    // auditoria, com a mensagem dele. Falha silenciosa aqui significaria
+    // descobrir semanas depois que a campanha nunca teve conversão nenhuma.
+    if (corpo?.code !== 0) {
+      await logAppt(apptId, "tiktok_conversao_falhou", { code: corpo?.code, message: corpo?.message });
+    } else {
+      await logAppt(apptId, "tiktok_conversao_enviada", { valor_centavos: a.price_in_cents });
+    }
+  } catch (e) {
+    await logAppt(apptId, "tiktok_conversao_falhou", { erro: String((e as Error)?.message ?? e) }).catch(() => {});
+  }
+}
+
 async function logAppt(id: string, acao: string, dados: unknown) {
   await fetch(`${SUPABASE_URL}/rest/v1/agendamento_logs`, {
     method: "POST", headers: { ...svcHeaders, Prefer: "return=minimal" },
@@ -145,7 +216,12 @@ Deno.serve(async (req: Request) => {
       // Só na transição de verdade. O Asaas reenvia o mesmo evento quando não
       // recebe 200 na primeira tentativa, e o PATCH condicional acima é o que
       // separa "acabou de ser pago" de "já estava pago".
-      if (confirmou > 0) await avisarMedico(apptId);
+      if (confirmou > 0) {
+        await avisarMedico(apptId);
+        // Mesma trava do aviso ao médico, e pelo mesmo motivo: reenvio do Asaas
+        // não pode virar conversão contada duas vezes.
+        await reportarTikTok(apptId);
+      }
     } else if (isRefund && REFUND_STATUS.includes(realStatus)) {
       await patchAppt(`id=eq.${apptId}`, { pagamento_status: "reembolsado", estornado_em: new Date().toISOString() });
     }
