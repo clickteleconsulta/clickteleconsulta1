@@ -52,6 +52,13 @@ DESTINO = {
     # não interface — segue proibido em botão, link e estado.
     'acesso-cliente.svg':      COBALTO,
     'acesso-profissional.svg': JADE,
+
+    # Seção de três cartões da home. Alternam para a faixa não ficar de uma cor
+    # só — a do meio em jade é o que dá o respiro de cor que a seção existe para
+    # trazer.
+    'secao-escolher.svg':   COBALTO,
+    'secao-avaliacoes.svg': JADE,
+    'secao-documentos.svg': COBALTO,
 }
 
 

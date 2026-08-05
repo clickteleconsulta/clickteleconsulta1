@@ -100,6 +100,40 @@ const FEATURES = [
   { icon: Users, title: 'Profissionais Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
 ];
 
+// ─── Seção de destaques com ilustração ──────────────────────────────────────────
+/**
+ * Três cartões com arte, para dar cor a uma página que é quase toda cobalto
+ * sobre branco.
+ *
+ * O TEXTO NÃO FOI INVENTADO: cada linha reaproveita o que já está aprovado no
+ * site — a descrição do passo "Escolha o médico" (STEPS) e a chamada da página
+ * de documentos (siteContent). Só o rótulo dos botões é novo, e é rótulo de
+ * navegação, não afirmação sobre o serviço.
+ *
+ * Cada cartão leva a uma página que EXISTE. Três botões apontando para o mesmo
+ * lugar seria só enfeite com cara de escolha.
+ */
+const DESTAQUES = [
+  {
+    arte: '/ilustra/secao-escolher.svg',
+    titulo: 'Escolha o médico por especialidade, horário e preço',
+    rotulo: 'Ver médicos',
+    para: '/agendamentos',
+  },
+  {
+    arte: '/ilustra/secao-avaliacoes.svg',
+    titulo: 'Veja a avaliação de quem já foi atendido',
+    rotulo: 'Ver avaliações',
+    para: '/agendamentos',
+  },
+  {
+    arte: '/ilustra/secao-documentos.svg',
+    titulo: 'Documentos com validade em todo o Brasil',
+    rotulo: 'Ver validade',
+    para: '/documentos-e-validade',
+  },
+];
+
 // ─── FAQ ────────────────────────────────────────────────────────────────────────
 const FAQ_ITEMS = [
   { q: 'O que é teleconsulta?', a: 'É o atendimento médico à distância, regulamentado pelo CFM. Você encontra o profissional e agenda pela plataforma; o próprio médico realiza a consulta pelos meios que utiliza, sem você precisar se deslocar.' },
@@ -496,6 +530,92 @@ const HomePage = () => {
                 </motion.div>
               );
             })}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          6. DESTAQUES COM ILUSTRAÇÃO
+
+          Faixa de cor no meio da página, que até aqui era cobalto sobre branco
+          do começo ao fim.
+
+          O fundo é um JADE bem diluído (6% sobre branco). O jade é proibido em
+          interface — botão, link, ícone clicável, estado — e continua sendo:
+          aqui ele é só a tinta do papel, e todo controle desta seção segue em
+          ardósia e cobalto. É a mesma licença que a regra já dá às ilustrações.
+
+          A arte transborda o topo do cartão de propósito: é o que tira a seção
+          da cara de tabela e dá o ar de composição.
+      ═══════════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20" style={{ background: '#EDF7F2' }}>
+        <div className="container mx-auto px-4">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="font-display text-2xl md:text-3xl font-extrabold text-slate-900 text-center max-w-2xl mx-auto"
+          >
+            Tudo à vista antes de você agendar
+          </motion.h2>
+
+          <motion.div
+            className="grid sm:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto mt-14 md:mt-16"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {/* DOIS ARRANJOS. No celular o cartão é uma LINHA — arte pequena à
+                esquerda, texto e botão à direita —, porque empilhar os três no
+                formato do desktop dava 1074 px de seção. Com três itens não dá
+                para usar duas colunas sem deixar um órfão, então a saída é
+                encurtar cada cartão em vez de reparti-los.
+                A partir de sm volta o formato da referência: arte grande
+                transbordando o topo do cartão.
+
+                Este comentário fica FORA do `map`: o corpo da arrow é uma
+                expressão entre parênteses, e um comentário JSX como primeira
+                coisa dentro dela é lido como objeto e quebra o parse.
+                E não escreva a sequência de fechar comentário aqui dentro —
+                ela encerra o bloco antes da hora e o resto do texto vaza para
+                a tela. Num grid, esse texto solto vira uma célula anônima e
+                empurra os cartões para a coluna seguinte. */}
+            {DESTAQUES.map((d) => (
+              <motion.div key={d.titulo} variants={fadeUp} className="relative sm:pt-16">
+                {/* Arte grande, só no desktop, saindo por cima do cartão. */}
+                <img
+                  src={d.arte}
+                  alt=""
+                  aria-hidden="true"
+                  className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 h-32 w-auto max-w-[80%] object-contain select-none pointer-events-none"
+                />
+                <div className="h-full bg-white rounded-lg border border-slate-200/80 p-4 sm:px-6 sm:pt-20 sm:pb-7 flex items-center gap-4 sm:block sm:text-center">
+                  {/* Mesma arte, pequena e em fluxo — só no celular. */}
+                  <img
+                    src={d.arte}
+                    alt=""
+                    aria-hidden="true"
+                    className="sm:hidden h-16 w-16 shrink-0 object-contain select-none pointer-events-none"
+                  />
+                  <div className="min-w-0 flex-1 flex flex-col items-start gap-3 sm:items-center sm:h-full sm:gap-0">
+                    <h3 className="font-display text-[15px] sm:text-base font-bold text-slate-900 leading-snug">
+                      {d.titulo}
+                    </h3>
+                    {/* `mt-auto` cola os botões na mesma linha no desktop, mesmo
+                        com títulos de alturas diferentes. */}
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="sm:mt-auto border-slate-300 text-slate-700 hover:bg-slate-50 hover:text-slate-900 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-semibold"
+                    >
+                      <Link to={d.para}>{d.rotulo}</Link>
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
