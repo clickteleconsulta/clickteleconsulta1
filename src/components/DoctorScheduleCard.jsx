@@ -108,11 +108,31 @@ const NomeComSelos = ({ nome, mostrarPonto }) => {
       // dessa linha é menor que o das demais.
       const larguraSelos = selos.getBoundingClientRect().width + 6;
 
+      // Até TRÊS linhas. Eram duas, e com duas o nome de um médico com quatro
+      // sobrenomes chegava cortado ao paciente — o pior lugar possível para
+      // abreviar, porque é por ele que a pessoa reconhece quem vai atender.
+      //
+      // Três linhas não desalinham nada: os cartões são uma LISTA vertical, um
+      // por linha, então o nome comprido estica só o próprio cartão. Numa grade
+      // de colunas isso não valeria.
+      //
+      // Medido com os nomes reais mais o pior caso plausível (43 caracteres,
+      // "Dr. Pedro Henrique Cavalcanti de Albuquerque"): com a coluna em 400 px
+      // e o título em 20 px, nenhum dos oito precisa de corte. O corte por
+      // palavra continua abaixo como último recurso.
+      // Os selos PODEM descer sozinhos para a linha seguinte. Antes não podiam,
+      // e isso truncava nome CURTO: "Dr. Gustavo R. Ayres" cabia inteiro numa
+      // linha, os selos não cabiam ao lado, e em vez de empurrá-los para baixo
+      // a função reprovava o nome inteiro e ia cortando palavra por palavra —
+      // o resultado era "Dr. Gustavo R.…" num cartão com espaço de sobra.
+      // O que precisa caber é o TOTAL de linhas, contando a linha extra que os
+      // selos ocupariam sozinhos.
+      const LINHAS_MAX = 3;
       const cabe = (txt) => {
         const linhas = quebrarLinhas(txt, largura, estilo);
-        if (linhas.length > 2) return false;
         const ultima = linhas[linhas.length - 1] || '';
-        return medirLargura(ultima, estilo) + larguraSelos <= largura;
+        const selosNaMesmaLinha = medirLargura(ultima, estilo) + larguraSelos <= largura;
+        return linhas.length + (selosNaMesmaLinha ? 0 : 1) <= LINHAS_MAX;
       };
 
       if (cabe(nome)) { setExibido(nome); return; }
@@ -133,7 +153,7 @@ const NomeComSelos = ({ nome, mostrarPonto }) => {
   return (
     <h3
       ref={caixaRef}
-      className="text-[23px] leading-[1.18] font-extrabold text-slate-900 tracking-tight"
+      className="text-[20px] leading-[1.2] font-extrabold text-slate-900 tracking-tight"
       title={nome}
     >
       {exibido}
@@ -505,14 +525,14 @@ export function DoctorScheduleCard({
       className="bg-white rounded-lg border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[920px] mx-auto"
     >
       <div className="flex flex-col md:flex-row">
-          <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[345px] md:min-w-[345px] border-b md:border-b-0 md:border-r border-slate-100">
+          <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[345px] md:min-w-[345px] lg:w-[400px] lg:min-w-[400px] border-b md:border-b-0 md:border-r border-slate-100">
               {/* Proporções tiradas do cartão de referência e reescaladas: lá o
                   conteúdo tem 800 px de largura, aqui 345 no desktop — fator 0,43.
                   Foto 186→84, nome 52→23, sub 27→13. Todo o card foi
                   reescalado por 1,15 de uma vez, para nada sair de proporção. Foto e texto centrados um
                   com o outro, como no modelo. */}
-              <div className="flex items-center gap-4">
-                  <Avatar className="w-[84px] h-[84px] shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
+              <div className="flex items-center gap-3 lg:gap-4">
+                  <Avatar className="w-[68px] h-[68px] lg:w-[84px] lg:h-[84px] shadow-lg shadow-slate-200/60 ring-2 ring-white shrink-0 rounded-full">
                       <AvatarImage src={toSiteUrl(doctor?.image_url)} alt={`Foto de ${doctor?.public_name || 'médico'}`} className="rounded-full object-cover" />
                       <AvatarFallback className="bg-brand-400 text-white rounded-full"><User size={30} /></AvatarFallback>
                   </Avatar>
