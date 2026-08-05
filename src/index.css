@@ -107,7 +107,23 @@
      do mesmo número: a barra de filtros de /agendamentos usava `top-16` (64 px)
      enquanto o cabeçalho tem 88, e 24 px dela ficavam escondidos atrás dele ao
      rolar. Com o valor num lugar só, os dois não têm como divergir de novo. */
-  --altura-cabecalho: 88px;
+  /* 60, e o número que importa é o RENDERIZADO, não este. Com o zoom de 110%
+     a barra sai com 66 px na tela, dentro da faixa de 60–72 que os sites de
+     referência usam. Já foi 88 (97 na tela, absurdo) e 72 (79, ainda acima da
+     faixa). Sempre que mexer aqui, multiplique por --zoom-site antes de julgar.
+     Quem gruda abaixo dela acompanha sozinho, porque lê desta variável. */
+  --altura-cabecalho: 60px;
+
+  /* Escala global da interface. Ver a regra `zoom` no html e `.full-bleed`. */
+  --zoom-site: 1.1;
+}
+
+/* Faixa que ocupa a largura toda da tela, cancelando o container.
+   Divide por --zoom-site porque `vw` é medido na viewport SEM zoom: sem a
+   divisão a faixa fica 10% larga demais e empurra o conteúdo para fora. */
+.full-bleed {
+  width: calc(100vw / var(--zoom-site));
+  margin-inline: calc(50% - (50vw / var(--zoom-site)));
 }
  
 /* As seções full-bleed usam `w-screen` + `mx-[calc(50%-50vw)]`, e 100vw conta a
@@ -122,6 +138,12 @@
    isso quebraria o header `sticky`. Com `clip` o header continua grudando no topo. */
 html {
   overflow-x: clip;
+
+  /* O site inteiro em 110%. O valor mora em --zoom-site porque o full-bleed
+     PRECISA descontá-lo: `vw` não é escalado pelo zoom, então uma faixa de
+     100vw sai 10% mais larga que a tela e o excesso come o respiro lateral —
+     em 375 px o texto do topo chegou a ficar 1 px FORA da tela. */
+  zoom: var(--zoom-site);
 }
 
 body {

@@ -22,13 +22,24 @@ const Header = () => {
   // A caixa cinza é PERSISTENTE, não só no hover. Antes o fundo só aparecia ao
   // passar o mouse — e no celular não existe hover, então os dois itens eram
   // texto solto no branco, sem nada indicando que são clicáveis.
-  const CAIXA_CINZA = 'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900';
+  // 40 px de altura em TODAS as larguras, e não 44 no desktop como era antes.
+// 40 é o PISO, não uma escolha estética: com o zoom de 110% eles chegam ao dedo
+// com 44, que é o mínimo de alvo de toque. Descer mais aqui pouparia altura na
+// barra e cobraria isso de quem usa no celular.
+//
+// Os dois <Button> levam `py-0` junto. A variante padrão do componente traz
+// `h-9 px-4 py-2`; o tailwind-merge tira o h-9 quando passamos h-10, mas o
+// `py-2` FICA, e aquele padding sobrevivente empurrava os botões para 44 px de
+// altura enquanto os links de navegação ficavam em 40 — 4 px de diferença
+// dentro da mesma barra, visível no alinhamento. Medido: com py-0 os três
+// controles rendem 44 px na tela, iguais.
+const CAIXA_CINZA = 'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900';
 
   // Medidas menores na base (corpo 14, altura 40, padding e gaps curtos) para os
   // quatro elementos caberem em 360 px COM a palavra "Agendar" visível. A partir
   // de sm tudo volta ao tamanho cheio.
   const navLinkClasses = ({ isActive }) =>
-    `flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 h-10 sm:h-11 rounded-md text-[14px] sm:text-[15px] font-normal transition-colors ${
+    `flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 h-10 rounded-md text-[14px] sm:text-[15px] font-normal transition-colors ${
       isActive ? 'bg-primary/10 text-primary font-medium' : CAIXA_CINZA
     }`;
 
@@ -98,13 +109,13 @@ const Header = () => {
                   <Button
                       variant="ghost"
                       onClick={() => navigate('/acesso-cliente', { state: { authMode: 'login' } })}
-                      className={`text-[14px] sm:text-[15px] font-normal px-2 sm:px-3 h-10 sm:h-11 shrink-0 ${CAIXA_CINZA}`}
+                      className={`text-[14px] sm:text-[15px] font-normal px-2 sm:px-3 h-10 py-0 shrink-0 ${CAIXA_CINZA}`}
                   >
                       Entrar
                   </Button>
                   <Button
                       onClick={() => navigate('/acesso-cliente', { state: { authMode: 'signup' } })}
-                      className="text-[14px] sm:text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-md px-2.5 sm:px-7 h-10 sm:h-11 shrink-0"
+                      className="text-[14px] sm:text-[15px] font-semibold bg-primary hover:bg-primary/90 rounded-md px-2.5 sm:px-7 h-10 py-0 shrink-0"
                   >
                       Cadastre-se
                   </Button>
