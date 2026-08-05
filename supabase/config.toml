@@ -8,20 +8,50 @@
 # estrago é silencioso: o site continua no ar, o paciente continua pagando, e os
 # agendamentos simplesmente param de ser confirmados. Ninguém vê erro nenhum.
 #
-# Enquanto não havia este arquivo, a única proteção era alguém lembrar de passar
-# --no-verify-jwt na linha de comando. Agora está declarado.
+# OS VALORES ABAIXO FORAM LIDOS DA PRODUÇÃO, não deduzidos. A primeira versão
+# deste arquivo foi escrita no chute, marcando `true` em tudo que "parecia"
+# precisar de token, e cinco funções estavam com `false` no ar — publicar
+# qualquer uma delas teria causado exatamente a falha que este arquivo existe
+# para evitar. Se for acrescentar função nova aqui, confira antes com:
+#
+#   npx supabase functions list --project-ref fnzvopspcoefzybtmwlg
 
 project_id = "fnzvopspcoefzybtmwlg"
 
+# ─── Sem JWT: quem chama é serviço externo ou cron, sem token de usuário ──────
+
 [functions.asaas-webhook]
-# Quem chama é o Asaas, sem token. A segurança aqui não vem de JWT: a função
-# CONFERE a cobrança direto na API do Asaas antes de agir, então um POST forjado
-# não passa. Ver o comentário no topo de functions/asaas-webhook/index.ts.
+# A segurança aqui não vem de JWT: a função CONFERE a cobrança direto na API do
+# Asaas antes de agir, então um POST forjado não passa. Ver o comentário no topo
+# de functions/asaas-webhook/index.ts.
 verify_jwt = false
 
+[functions.reconcile-asaas]
+verify_jwt = false
+
+[functions.send-appointment-email]
+verify_jwt = false
+
+[functions.send-doctor-invite]
+verify_jwt = false
+
+[functions.record-legal-consent]
+verify_jwt = false
+
+[functions.social-publish]
+verify_jwt = false
+
+[functions.livekit-webhook]
+verify_jwt = false
+
+[functions.check-expired-offers]
+verify_jwt = false
+
+# ─── Com JWT ─────────────────────────────────────────────────────────────────
+
 [functions.notify-doctor-new-appointment]
-# Esta exige token, e ainda por cima confere se é a service role — sem isso,
-# qualquer usuário logado dispararia WhatsApp pago para médicos.
+# Além do JWT, a função confere se é a service role — sem isso, qualquer usuário
+# logado dispararia WhatsApp pago para médicos.
 verify_jwt = true
 
 [functions.create-asaas-payment]
@@ -30,23 +60,8 @@ verify_jwt = true
 [functions.refund-asaas-payment]
 verify_jwt = true
 
-[functions.reconcile-asaas]
-verify_jwt = true
-
-[functions.send-appointment-email]
-verify_jwt = true
-
-[functions.send-doctor-invite]
-verify_jwt = true
-
-[functions.record-legal-consent]
-verify_jwt = true
-
 [functions.generate-jaas-token]
 verify_jwt = true
 
 [functions.jaas-token]
-verify_jwt = true
-
-[functions.social-publish]
 verify_jwt = true
