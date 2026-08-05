@@ -465,27 +465,32 @@ const HomePage = () => {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-5xl mx-auto"
             variants={stagger}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
+            {/* Duas colunas no celular. Empilhados, os seis cartões faziam a
+                página rolar sem necessidade. Em meia largura o cartão fica com
+                ~163 px, então padding, ícone e corpos de texto encolhem junto
+                até md — com o p-8 do desktop sobrariam 99 px de conteúdo e o
+                texto viraria uma coluna estreita demais para ler. */}
             {FEATURES.map((feature, i) => {
               const Icon = feature.icon;
               return (
                 <motion.div
                   key={i}
                   variants={fadeUp}
-                  className={`bg-white rounded-lg p-8 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ${feature.span || ''}`}
+                  className={`bg-white rounded-lg p-5 md:p-8 shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ${feature.span || ''}`}
                 >
-                  <div className="w-12 h-12 rounded-md bg-brand-50 flex items-center justify-center mb-4">
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-md bg-brand-50 flex items-center justify-center mb-3 md:mb-4">
                     <Icon className="w-6 h-6 text-brand-500" />
                   </div>
-                  <h3 className="font-display text-lg font-bold text-slate-900 mb-2">
+                  <h3 className="font-display text-[15px] md:text-lg font-bold text-slate-900 mb-1.5 md:mb-2">
                     {feature.title}
                   </h3>
-                  <p className="font-body text-sm text-slate-500 leading-relaxed">
+                  <p className="font-body text-[13px] md:text-sm text-slate-500 leading-relaxed">
                     {feature.desc}
                   </p>
                 </motion.div>
