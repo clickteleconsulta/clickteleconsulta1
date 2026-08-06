@@ -121,8 +121,26 @@ const ReviewsSection = ({ reviews }) => {
           ))}
         </div>
       ) : (
+        // "Este profissional ainda não possui avaliações visíveis" constatava
+        // uma falta e a pendurava no médico — quem lê entende que faltou algo
+        // com ELE, quando na verdade a plataforma é que ainda é nova. O selo
+        // nomeia o estado e a frase diz o que vai acontecer.
+        //
+        // O selo vive AQUI e não no card de agendamento: nos cards ele estaria
+        // em todos os médicos ao mesmo tempo, deixaria de distinguir alguém e
+        // viraria o anúncio de que a lista está vazia. Dentro do perfil ele
+        // aparece uma vez só, no lugar exato onde a pergunta surge.
+        //
+        // Cinza dos tokens neutros de propósito: descreve a ausência de um
+        // dado, não uma credencial. Em cobalto ou jade ficaria ao lado do selo
+        // de verificado parecendo um segundo mérito.
         <div className="text-center py-6 bg-muted/20 rounded-md border border-dashed">
-          <p className="text-muted-foreground text-sm">Este profissional ainda não possui avaliações visíveis.</p>
+          <span className="inline-flex items-center rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+            Novo na plataforma
+          </span>
+          <p className="text-muted-foreground text-sm mt-2">
+            As avaliações aparecem assim que os primeiros pacientes forem atendidos.
+          </p>
         </div>
       )}
     </div>
