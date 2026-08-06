@@ -12,3 +12,7 @@ dist/
 # Lixo do Finder do macOS. Aparecia como arquivo novo a cada `git status`,
 # e um deles ia junto no commit se ninguém reparasse.
 .DS_Store
+
+# Cache de rasterização das ilustrações (tools/gerar-anuncios.py).
+# Reconstruído sozinho a partir dos SVGs; versionar só duplicaria peso no repo.
+.cache-ilustra/

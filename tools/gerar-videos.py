@@ -38,7 +38,7 @@ from importlib import import_module
 
 _a = import_module('gerar-anuncios')
 _m = import_module('gerar-marca')
-MENSAGENS, _quebrar = _a.MENSAGENS, _a._quebrar
+MENSAGENS, _quebrar, ARTES, rasterizar = _a.MENSAGENS, _a._quebrar, _a.ARTES, _a.rasterizar
 BRANCO, COBALTO_FUNDO = _a.BRANCO, _a.COBALTO_FUNDO
 fonte, desenhar_wordmark = _m.fonte, _m.desenhar_wordmark
 COBALTO, JADE, TINTA = _m.COBALTO, _m.JADE, _m.TINTA
@@ -51,7 +51,10 @@ FPS = 24
 SEGUNDOS = 6
 TOTAL = FPS * SEGUNDOS
 
-CORPO, CHAPEU_PX, APOIO_PX = 136, 40, 50
+# Mesmos valores da peça estática vertical, de propósito: o vídeo e a imagem da
+# mesma mensagem precisam parecer a mesma campanha quando aparecem lado a lado
+# no gerenciador de anúncios.
+CORPO, CHAPEU_PX, APOIO_PX = 124, 38, 46
 MARGEM = int(LARG * 0.09)
 
 
@@ -89,7 +92,10 @@ def render(msg, quadro):
         caro em 720 quadros."""
         return tuple(round(fundo[i] + (cor[i] - fundo[i]) * p) for i in range(3))
 
-    y0 = int(ALT * 0.30)
+    # 13% e não 30%: com o texto começando no meio da tela sobrava banda de menos
+    # para a ilustração, que saía do tamanho de um selo. Subir o texto é o que
+    # devolve espaço ao desenho sem encolher a fonte.
+    y0 = int(ALT * 0.13)
 
     # Traço jade: cresce em largura em vez de aparecer pronto. É o primeiro
     # movimento do vídeo e o que ancora o olho no canto do texto.
@@ -121,6 +127,30 @@ def render(msg, quadro):
         if p > 0:
             d.text((MARGEM, y + int(24 * (1 - p))), linha, font=f_apoio, fill=mistura(apoio_cor, p))
         y += int(APOIO_PX * 1.35)
+
+    # A ilustração entra por último no tempo e por baixo no espaço: aparece
+    # depois que a frase já foi lida, para não competir com ela nos primeiros
+    # segundos, que é quando a pessoa decide se continua vendo.
+    caminho = ARTES.get(msg['arquivo'])
+    p_arte = entrada(quadro, 34, 20)
+    if caminho and os.path.exists(caminho) and p_arte > 0:
+        arte = rasterizar(caminho, int(LARG * 0.80))
+        teto = y + int(ALT * 0.03)
+        chao = ALT - MARGEM - int(ALT * 0.16)
+        banda = max(1, chao - teto)
+        if arte.height > banda:
+            arte = arte.resize((max(1, round(arte.width * banda / arte.height)), banda), Image.LANCZOS)
+        x = (LARG - arte.width) // 2
+        if escuro:
+            folga = int(LARG * 0.035)
+            d.rounded_rectangle(
+                [x - folga, chao - arte.height - folga, x + arte.width + folga, chao + folga],
+                radius=int(LARG * 0.028), fill=(255, 255, 255))
+        # Sobe 30px enquanto aparece, o mesmo gesto do texto — movimento
+        # coerente é o que separa peça animada de slide com transição.
+        camada = Image.new('RGBA', arte.size, (0, 0, 0, 0))
+        camada = Image.blend(camada, arte, p_arte)
+        img.paste(camada, (x, chao - arte.height + int(30 * (1 - p_arte))), camada)
 
     # Fecho: marca e endereço. Entram por último porque são o que a pessoa deve
     # levar embora — e o endereço só faz sentido depois de ela querer ir.

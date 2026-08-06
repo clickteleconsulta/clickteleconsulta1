@@ -1,0 +1,30 @@
+Ilustrações de terceiros usadas nos anúncios
+============================================
+
+Origem: unDraw (https://undraw.co) — Katerina Limpitsouni.
+Licença: livre para uso pessoal e comercial, sem atribuição obrigatória e sem
+custo. Pode ser modificada, inclusive nas cores. O que a licença NÃO permite é
+redistribuir ou revender as ilustrações como produto próprio — usá-las dentro
+dos nossos anúncios e do nosso site está coberto.
+
+Arquivos
+  videocall.svg   teleconsulta em vídeo   → peça "A partir de R$ 40"
+  booking.svg     escolha de horário      → peça "7 dias por semana"
+  doctors.svg     dois médicos de jaleco  → peça "Sem convênio, sem mensalidade"
+
+O roxo padrão do unDraw (#6c63ff) foi trocado pelo cobalto da marca (#3B5BA5)
+direto no SVG. Se baixar uma arte nova, fazer a mesma troca antes de usar, senão
+a peça sai fora da paleta.
+
+Duas outras artes foram baixadas e descartadas, e vale registrar o motivo para
+ninguém repetir o download:
+
+  doctor.svg    médico auscultando paciente no consultório. Anunciar
+                teleconsulta com imagem de consulta presencial promete o que o
+                site não entrega.
+  medicine.svg  não achou mensagem que precisasse dela; arte sem uso no repo é
+                peso morto.
+
+As outras duas artes dos anúncios (heroi, secao-escolher) NÃO estão aqui: são as
+mesmas do site, lidas de src/assets/ilustracoes/. É de propósito — quem clica no
+anúncio reencontra o mesmo desenho na página inicial.

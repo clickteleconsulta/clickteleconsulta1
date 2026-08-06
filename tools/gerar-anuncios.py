@@ -50,8 +50,75 @@ _m = import_module('gerar-marca')
 fonte, desenhar_cruz, desenhar_wordmark, encaixar = _m.fonte, _m.desenhar_cruz, _m.desenhar_wordmark, _m.encaixar
 COBALTO, JADE, TINTA = _m.COBALTO, _m.JADE, _m.TINTA
 
+import glob
+import shutil
+import subprocess
+import tempfile
+
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAIDA = os.path.join(RAIZ, 'public', 'marca', 'anuncios')
+
+ILUSTRA = os.path.join(RAIZ, 'public', 'ilustra')
+FONTES = os.path.join(RAIZ, 'public', 'marca', 'anuncios', 'fontes')
+CACHE_PNG = os.path.join(RAIZ, '.cache-ilustra')
+
+
+def rasterizar(caminho_svg, larg):
+    """SVG -> PNG usando o Quick Look do macOS.
+
+    Nada precisa ser instalado: o `qlmanage` já vem no sistema e desenha SVG
+    corretamente. As alternativas todas custavam mais — cairosvg exige libcairo,
+    que não existe aqui, e rasterizar pelo navegador obriga a trafegar a imagem
+    inteira em base64 de volta.
+
+    Ele devolve a arte dentro de um quadrado, com folga transparente em volta;
+    o recorte abaixo é o que devolve a proporção real do desenho.
+    """
+    os.makedirs(CACHE_PNG, exist_ok=True)
+    nome = os.path.splitext(os.path.basename(caminho_svg))[0]
+    destino = os.path.join(CACHE_PNG, f'{nome}-{larg}.png')
+    if os.path.exists(destino):
+        return Image.open(destino)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(['qlmanage', '-t', '-s', str(larg * 2), '-o', tmp, caminho_svg],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+        achados = glob.glob(os.path.join(tmp, '*.png'))
+        if not achados:
+            raise RuntimeError(f'qlmanage não rasterizou {caminho_svg}')
+        im = Image.open(achados[0]).convert('RGBA')
+
+    # O recorte é contra BRANCO, não contra transparência: o qlmanage devolve a
+    # imagem com alfa 255 em tudo, chapada sobre branco. Usar getbbox() aqui não
+    # recorta nada — a folga do quadrado fica, e o desenho sai pequeno no meio
+    # de uma margem que não deveria existir.
+    from PIL import ImageChops
+    fundo = Image.new('RGB', im.size, (255, 255, 255))
+    caixa = ImageChops.difference(im.convert('RGB'), fundo).getbbox()
+    if caixa:
+        im = im.crop(caixa)
+    im = im.resize((larg, max(1, round(im.height * larg / im.width))), Image.LANCZOS)
+    im.save(destino)
+    return im
+
+
+# Qual arte acompanha cada mensagem.
+#
+# DUAS VÊM DO PRÓPRIO SITE (heroi, secao-escolher), e não é economia: quem clica
+# no anúncio cai na página inicial, e reencontrar ali o mesmo desenho que viu no
+# feed reduz o atrito de "cheguei no lugar certo?". As outras três são do unDraw,
+# recoloridas para o cobalto da marca.
+#
+# A arte 'doctor' do unDraw foi baixada e DESCARTADA: mostra médico auscultando
+# paciente no consultório. Anunciar teleconsulta com imagem de consulta
+# presencial promete o que o site não entrega.
+ARTES = {
+    'preco':           os.path.join(FONTES, 'videocall.svg'),
+    'agilidade':       os.path.join(ILUSTRA, 'heroi.svg'),
+    'disponibilidade': os.path.join(FONTES, 'booking.svg'),
+    'sem-mensalidade': os.path.join(FONTES, 'doctors.svg'),
+    'escolha':         os.path.join(ILUSTRA, 'secao-escolher.svg'),
+}
 
 BRANCO = (255, 255, 255)
 COBALTO_FUNDO = (47, 74, 138)     # um passo mais escuro que o cobalto da marca:
@@ -111,9 +178,15 @@ FORMATOS = [
     # engolem o texto e a peça chega ao feed parecendo inacabada. E o bloco
     # sobe para o terço superior, que é onde o olho pousa em vídeo vertical —
     # centrado de verdade ele briga com a interface do app no meio da tela.
-    dict(nome='story', larg=1080, alt=1920, corpo=136, chapeu_px=40, apoio_px=50, ancora=0.30),
-    dict(nome='feed', larg=1080, alt=1080, corpo=104, chapeu_px=32, apoio_px=40),
-    dict(nome='link', larg=1200, alt=628, corpo=82, chapeu_px=26, apoio_px=32),
+    # `arte` diz onde a ilustração entra: 'abaixo' empilha texto em cima e
+    # desenho embaixo (verticais e quadrado); 'lado' põe o desenho à direita,
+    # que é o único arranjo que funciona numa peça larga e baixa.
+    dict(nome='story', larg=1080, alt=1920, corpo=124, chapeu_px=38, apoio_px=46,
+         ancora=0.13, arte='abaixo', arte_larg=0.86),
+    dict(nome='feed', larg=1080, alt=1080, corpo=88, chapeu_px=30, apoio_px=36,
+         ancora=0.09, arte='abaixo', arte_larg=0.66),
+    dict(nome='link', larg=1200, alt=628, corpo=64, chapeu_px=24, apoio_px=28,
+         ancora=0.20, arte='lado', arte_larg=0.40),
 ]
 
 
@@ -146,7 +219,9 @@ def desenhar(msg, fmt):
     d = ImageDraw.Draw(img)
 
     margem = int(larg * 0.09)
-    util = larg - 2 * margem
+    # Com a arte ao lado, o texto não pode usar a largura toda — senão passa por
+    # cima do desenho.
+    util = int((larg - 2 * margem) * (0.52 if fmt.get('arte') == 'lado' else 1.0))
 
     f_chapeu = fonte('Geist.ttf', fmt['chapeu_px'], 700)
     f_titulo = fonte('Geist.ttf', fmt['corpo'], 800)
@@ -184,13 +259,54 @@ def desenhar(msg, fmt):
         d.text((margem, y), linha, font=f_apoio, fill=apoio_cor)
         y += int(fmt['apoio_px'] * 1.35)
 
-    # Assinatura embaixo. Nas verticais fica acima da faixa que a interface do
-    # app cobre; no 1200×628 vai no canto, que é onde o olho termina.
+    # ── Assinatura primeiro, porque ela define o teto da ilustração ─────────
+    # Na primeira versão a arte era colocada antes e escalada só pela LARGURA.
+    # Resultado: nas peças de desenho alto ela descia por cima do logo — e um
+    # anúncio com a marca encoberta é um anúncio sem marca.
     alvo_l = int(larg * (0.30 if fmt['nome'] != 'link' else 0.22))
     wm = desenhar_wordmark(300, escuro=escuro)
-    escala = alvo_l / wm.width
-    wm = wm.resize((alvo_l, max(1, int(wm.height * escala))), Image.LANCZOS)
+    wm = wm.resize((alvo_l, max(1, round(wm.height * alvo_l / wm.width))), Image.LANCZOS)
     y_wm = alt - margem - wm.height - (int(alt * 0.06) if fmt['nome'] == 'story' else 0)
+
+    # ── Ilustração ──────────────────────────────────────────────────────────
+    # Depois do texto, porque as artes do unDraw têm manchas de fundo claras que
+    # passariam por cima das letras. Colada com máscara alfa, senão o retângulo
+    # do PNG apaga o fundo colorido das peças escuras.
+    caminho = ARTES.get(msg['arquivo'])
+    if caminho and os.path.exists(caminho) and fmt.get('arte'):
+        respiro = int(alt * 0.04)
+        if fmt['arte'] == 'lado':
+            teto, chao = margem, alt - margem
+        else:
+            teto, chao = y + respiro, y_wm - respiro
+        banda = max(1, chao - teto)
+
+        arte = rasterizar(caminho, int(larg * fmt['arte_larg']))
+        # A arte obedece ao MENOR entre a largura reservada e a banda livre.
+        # Sem o segundo limite, desenho alto invade o que estiver embaixo.
+        if arte.height > banda:
+            nova_l = max(1, round(arte.width * banda / arte.height))
+            arte = arte.resize((nova_l, banda), Image.LANCZOS)
+
+        if fmt['arte'] == 'lado':
+            x = larg - margem - arte.width
+        else:
+            x = (larg - arte.width) // 2
+
+        # Nas peças de fundo cobalto a arte ganha um CARTÃO BRANCO por baixo.
+        # Não é enfeite: as ilustrações vêm chapadas sobre branco e contêm
+        # branco de verdade (o jaleco dos médicos), então não dá para vazar o
+        # branco por transparência sem furar o desenho. O cartão assume isso e
+        # transforma o retângulo inevitável em decisão de layout.
+        if escuro:
+            folga = int(larg * 0.035)
+            d.rounded_rectangle(
+                [x - folga, chao - arte.height - folga, x + arte.width + folga, chao + folga],
+                radius=int(larg * 0.028), fill=BRANCO)
+        # Assentada no chão da banda: desenho boiando no meio da sobra parece
+        # diagramação automática.
+        img.paste(arte, (x, chao - arte.height), arte)
+
     img.paste(wm, (margem, y_wm), wm)
 
     return img
