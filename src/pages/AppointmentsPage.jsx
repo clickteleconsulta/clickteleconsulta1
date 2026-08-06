@@ -9,7 +9,7 @@ import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { nextAvailableSlotMs, temHorarioLivreNoDia } from '@/lib/doctorAvailability';
 import { doctorPath } from '@/lib/doctorSlug';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
-import { Loader2, Frown, Pencil, Search, Filter, X } from '@/components/ui/icones';
+import { Loader2, Frown, Pencil, X } from '@/components/ui/icones';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import DoctorSchedule from '@/components/doctor/DoctorSchedule';
@@ -618,7 +618,11 @@ const AppointmentsPage = () => {
                   className="h-10 px-4 md:px-6 flex-1 md:flex-grow-0 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md transition"
                   onClick={handleSearch}
                 >
-                  <Search className="mr-2 h-4 w-4" /> Buscar
+                  {/* Sem lupa. O botão já diz "Buscar" — o ícone repetia a
+                      palavra, e sólido a 16 px a lupa vira um disco pesado ao
+                      lado do texto. Ícone ao lado de rótulo só se acrescentar
+                      informação que o rótulo não dá. */}
+                  Buscar
                 </Button>
                 {(searchName || selectedSpecialty || selectedDate || priceSort) && (
                   <Button

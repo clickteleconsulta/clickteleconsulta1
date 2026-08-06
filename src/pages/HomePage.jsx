@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Shield, Users, Heart, Brain, Bone, Baby, Stethoscope, Calendar, CalendarCheck, CheckCircle2, ArrowRight, Sparkles, BrainCircuit, User, Clock, Lock } from '@/components/ui/icones';
+import { ArrowRight, Baby, Bone, Brain, BrainCircuit, Calendar, CalendarCheck, CalendarPlus, CheckCircle2, Clock, Heart, Lock, Search, Shield, Sparkles, Stethoscope, User, Users } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -62,9 +62,16 @@ const SPECIALTIES = [
 // código é exatamente o tipo de coisa que ninguém lembra de conferir depois.
 
 // ─── Steps ──────────────────────────────────────────────────────────────────────
+// Cada passo mostra a AÇÃO dele, não o resultado dela. Parece óbvio e não é:
+// o passo 2 usava CalendarCheck e o 3 usava CheckCircle2, ou seja, dois vistos
+// em sequência. Lado a lado, os dois liam como o mesmo passo repetido, e a
+// progressão de quatro etapas perdia justamente o meio.
+//
+// Agora as quatro formas são distintas de longe — lupa, calendário, círculo,
+// estetoscópio — que é o que faz a sequência ser lida como sequência.
 const STEPS = [
   { icon: Search, title: 'Escolha o médico', desc: 'Filtre por especialidade, horário e preço e veja quem tem vaga.' },
-  { icon: CalendarCheck, title: 'Agende e pague', desc: 'Reserve o horário e pague com Pix ou cartão, de forma protegida.' },
+  { icon: CalendarPlus, title: 'Agende e pague', desc: 'Reserve o horário e pague com Pix ou cartão, de forma protegida.' },
   { icon: CheckCircle2, title: 'Confirmação na hora', desc: 'Você recebe a confirmação e um lembrete antes da consulta.' },
   { icon: Stethoscope, title: 'Seja atendido', desc: 'O médico entra em contato e realiza o atendimento pelos meios próprios.' },
 ];
