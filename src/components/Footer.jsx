@@ -49,16 +49,30 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  *    alinhamento centralizado, e A ALTURA DAS OUTRAS NÃO PODE SUPERAR A DO PIX.
  *    Por isso, no canvas comum, o Pix ocupa 26 de altura, a Mastercard 22 e a
  *    Visa ~12: a hierarquia está embutida no desenho, não depende de CSS.
- *  - pág. 13: redução máxima do símbolo em digital é 24 px. As placas de 34 px
- *    deixam o Pix em ~28 px, acima do piso.
+ *  - pág. 13: a redução máxima do símbolo em digital é 24 px, E A MEDIDA DE
+ *    REFERÊNCIA É A DO COMPRIMENTO, não a da altura. O símbolo ocupa 26 dos 48
+ *    do canvas, ou seja 54% dele; o canvas de 42 px deixa o Pix em 22,8 px de
+ *    CSS, que viram 25 px na tela no pior caso (celular, zoom 1.1) e 27 no
+ *    desktop. Abaixo de 41 px de canvas o piso é rompido — foi por isso que
+ *    parei em 42 e não em 40.
  *  - pág. 15: proibido gradiente, contorno, sombra ou distorção no símbolo.
  *
  * A Mastercard, por sua vez, exige o símbolo SOMENTE em cores cheias — daí os
  * dois círculos e a lente, e não a silhueta monocromática.
  *
- * As placas são brancas porque o rodapé é escuro e o azul da Visa (#1A1F71)
- * sumiria nele. Placa branca preserva cada marca na cor oficial, que é o que
- * as três exigem.
+ * SEM PLACA BRANCA. As marcas ficam direto sobre o rodapé escuro, e é o próprio
+ * manual que abre essa porta — pág. 13: "São permitidos os usos das versões em
+ * verde Pix e em preto. Em fundos escuros, é permitido o uso da versão em
+ * branco (negativo)". Por isso Pix e Visa usam os arquivos `-negativo`, que são
+ * os mesmos desenhos com o preenchimento em branco. Os positivos continuam na
+ * pasta: são os canônicos, e voltam a ser necessários se alguma tela clara
+ * passar a listar as bandeiras.
+ *
+ * A Mastercard fica em cor cheia, e isso é escolha, não descuido: os dois
+ * círculos já têm contraste de sobra no escuro, e a marca deles não tem versão
+ * monocromática preferencial. É o único ponto em que o tratamento das três não
+ * é idêntico — se um dia isso for questionado na leitura de "igualdade de
+ * cores" da paridade, a saída é a Mastercard reversa, não colorir o Pix.
  *
  * NÃO TROQUE ESTES ARQUIVOS POR ÍCONES DE BIBLIOTECA. São marcas registradas com
  * manual próprio, e nenhuma biblioteca de ícones de interface entrega as três: a
@@ -76,8 +90,8 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  * marca. Se alguém "corrigir" para ele, estará saindo do manual, não entrando.
  */
 const BANDEIRAS = [
-  { nome: 'Pix', src: '/pagamento/pix.svg' },
-  { nome: 'Visa', src: '/pagamento/visa.svg' },
+  { nome: 'Pix', src: '/pagamento/pix-negativo.svg' },
+  { nome: 'Visa', src: '/pagamento/visa-negativo.svg' },
   { nome: 'Mastercard', src: '/pagamento/mastercard.svg' },
 ];
 
@@ -136,24 +150,28 @@ const Footer = () => {
         </div>
 
         {/* Formas de pagamento. `items-center` cumpre o alinhamento centralizado
-            que o manual do Pix exige, e as placas têm todas o mesmo tamanho —
+            que o manual do Pix exige, e as três marcas dividem o mesmo canvas —
             "igualdade de proporções" vale para as três, não só para o Pix. */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap items-center gap-x-4 gap-y-3">
           <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
             Formas de pagamento
           </span>
-          <div className="flex items-center gap-2.5">
+          {/* gap-4 e não gap-2.5: sem a placa branca em volta, as marcas ficam
+              soltas no escuro e 10 px de respiro as encostava umas nas outras —
+              o manual pede espaçamento respeitado e proíbe "aproximação
+              demasiada". O canvas de 42 px é comum às três, então a paridade de
+              proporções continua embutida no desenho, sem depender de CSS. */}
+          <div className="flex items-center gap-4">
             {BANDEIRAS.map((b) => (
-              <span
+              <img
                 key={b.nome}
-                className="w-[58px] h-[36px] rounded-md bg-white flex items-center justify-center"
+                src={b.src}
+                alt={b.nome}
                 title={b.nome}
-              >
-                {/* 48 px de canvas = 26 px de símbolo Pix. O piso do manual é
-                    24; com os 46 px que tentei antes dava 24,9 e ficava na
-                    dependência de arredondamento do navegador. */}
-                <img src={b.src} alt={b.nome} width="48" height="30" className="w-[48px] h-auto" />
-              </span>
+                width="42"
+                height="26"
+                className="w-[42px] h-auto"
+              />
             ))}
           </div>
         </div>
