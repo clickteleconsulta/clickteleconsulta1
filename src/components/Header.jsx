@@ -24,13 +24,36 @@ const Header = () => {
     navigate(painelDoPapel(profile?.role));
   };
 
+  /**
+   * O que o botão de volta diz, e quanto peso ele tem.
+   *
+   * PACIENTE está no site como cliente: navegar é o que ele veio fazer, então o
+   * acesso à conta é secundário e fica discreto.
+   *
+   * MÉDICO E ADMIN estão de passagem. Quem administra a plataforma abre a página
+   * pública para conferir como ela ficou, ler um documento ou ver o próprio
+   * perfil — e depois quer voltar. Para eles, voltar É a ação principal da
+   * barra, então o botão ganha o preenchimento que o "Cadastre-se" tem para
+   * quem é visitante. Cada público vê em destaque a coisa que de fato vai fazer.
+   *
+   * O rótulo também muda: "Minha conta" não diz nada a quem tem um painel de
+   * trabalho do outro lado.
+   */
+  const VOLTA = {
+    medico: { rotulo: 'Meu painel', destaque: true },
+    admin: { rotulo: 'Painel admin', destaque: true },
+    paciente: { rotulo: 'Minha conta', destaque: false },
+  };
+  const volta = VOLTA[profile?.role] || VOLTA.paciente;
+
   // A caixa cinza é PERSISTENTE, não só no hover. Antes o fundo só aparecia ao
   // passar o mouse — e no celular não existe hover, então os dois itens eram
   // texto solto no branco, sem nada indicando que são clicáveis.
   // 40 px de altura em TODAS as larguras, e não 44 no desktop como era antes.
-// 40 é o PISO, não uma escolha estética: com o zoom de 110% eles chegam ao dedo
-// com 44, que é o mínimo de alvo de toque. Descer mais aqui pouparia altura na
-// barra e cobraria isso de quem usa no celular.
+// 40 é o PISO, não uma escolha estética: é o menor alvo de toque que ainda se
+// acerta com o dedo sem errar o vizinho. Descer mais pouparia altura na barra e
+// cobraria isso de quem usa no celular. (O zoom global de 110% que já
+// multiplicou estes valores foi removido — hoje 40 é 40 na tela.)
 //
 // Os dois <Button> levam `py-0` junto. A variante padrão do componente traz
 // `h-9 px-4 py-2`; o tailwind-merge tira o h-9 quando passamos h-10, mas o
@@ -90,9 +113,27 @@ const CAIXA_CINZA = 'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-sl
           <div className="flex items-center gap-3">
             {session ? (
               <>
-                <Button variant="ghost" size="sm" onClick={handleDashboardRedirect} aria-label="Minha conta" title="Minha conta" className="flex items-center gap-2 text-[15px] font-normal text-gray-600 hover:text-primary hover:bg-primary/5 px-2 sm:px-3 h-10 shrink-0">
+                {/* O rótulo aparece a partir de 360px, e não de sm: no celular
+                    o ícone sozinho não distingue "minha conta" de "meu painel",
+                    e é justamente no celular que o médico usa isto de passagem.
+                    O aria-label e o title carregam o texto nas larguras em que
+                    ele não cabe. */}
+                <Button
+                  size="sm"
+                  variant={volta.destaque ? 'default' : 'ghost'}
+                  onClick={handleDashboardRedirect}
+                  aria-label={volta.rotulo}
+                  title={volta.rotulo}
+                  className={`flex items-center gap-2 text-[15px] px-2 sm:px-3 h-10 py-0 shrink-0 ${
+                    volta.destaque
+                      ? 'font-semibold bg-primary hover:bg-primary/90 text-white'
+                      : 'font-normal text-gray-600 hover:text-primary hover:bg-primary/5'
+                  }`}
+                >
                   <LayoutDashboard className="w-4 h-4" />
-                  <span className="hidden sm:inline">Minha conta</span>
+                  {/* nowrap porque "Meu painel" quebrava em duas linhas no
+                      celular e estourava a altura do botão. */}
+                  <span className="hidden min-[360px]:inline whitespace-nowrap">{volta.rotulo}</span>
                 </Button>
                 <Button variant="ghost" size="sm" onClick={handleSignOut} aria-label="Sair da conta" title="Sair da conta" className="text-gray-500 hover:text-red-600 hover:bg-red-50">
                   <LogOut className="w-4 h-4" />
