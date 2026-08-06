@@ -117,6 +117,45 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  * O #32BCAD que aparece em banco de logotipo por aí é de uma versão anterior da
  * marca. Se alguém "corrigir" para ele, estará saindo do manual, não entrando.
  */
+/**
+ * Selo do Asaas — o PROCESSADOR, não uma bandeira.
+ *
+ * ISTO NÃO É ENFEITE, É OBRIGAÇÃO. A central do Asaas (artigo "O que é o Selo
+ * Asaas e como deve ser utilizado?", atualizado em 15/04/2026) descreve a regra
+ * de transparência de marca do BaaS:
+ *
+ *   "Com as novas regras, se torna proibido esconder a marca da Instituição
+ *    Prestadora. O seu cliente final deve saber com quem está contratando."
+ *
+ *   "Transparência Mandatória (Art. 14 e Art. 20): A Instituição Prestadora
+ *    deve aparecer de forma visível e acessível nas interfaces (app/site) da
+ *    Tomadora, nos contratos ou termos de uso com os clientes e nos
+ *    comprovantes."
+ *
+ * São TRÊS lugares, e só um está cumprido hoje: o comprovante que o paciente
+ * baixa já traz "Asaas (Pix / cartão)" (ver PatientConsultations). Faltam o site
+ * e os termos de uso.
+ *
+ * O ARQUIVO AINDA NÃO EXISTE, e é de propósito que não foi improvisado. O mesmo
+ * artigo diz: "Para ter acesso aos selos, entre em contato com o suporte do
+ * Asaas." O selo não é público — não está no site deles nem em banco de
+ * logotipo. Desenhar uma versão parecida derrotaria o objetivo da norma, que é
+ * o cliente reconhecer com quem está contratando.
+ *
+ * Assim que o suporte enviar, salve em public/pagamento/asaas.svg e o selo
+ * aparece sozinho: o bloco abaixo já testa a existência do arquivo, do mesmo
+ * jeito que o rodapé faz com as redes sociais.
+ */
+const SELO_PROCESSADOR = {
+  src: '/pagamento/asaas.svg',
+  nome: 'Asaas',
+  // Ligar SÓ quando as duas coisas existirem: o arquivo oficial vindo do
+  // suporte do Asaas E a redação aprovada. Ligar com uma só das duas publica
+  // um selo improvisado ou uma frase legal escrita por engenharia.
+  aprovado: false,
+  texto: 'Pagamentos processados por',
+};
+
 const BANDEIRAS = [
   { nome: 'Pix', src: '/pagamento/pix-negativo.svg' },
   { nome: 'Visa', src: '/pagamento/visa-negativo.svg' },
@@ -202,6 +241,27 @@ const Footer = () => {
               />
             ))}
           </div>
+
+          {/* O selo some sozinho enquanto o arquivo não existir: o `onError`
+              esconde o bloco quando o /pagamento/asaas.svg dá 404. É o mesmo
+              princípio dos ícones de rede social — nada quebrado vai ao ar, e
+              basta salvar o arquivo para aparecer, sem tocar em código.
+
+              O TEXTO AO LADO AINDA NÃO ESTÁ APROVADO. Ele nomeia a instituição
+              que processa os pagamentos, que é o que a norma exige, mas é frase
+              de natureza legal e não se escreve por conta própria. */}
+          {SELO_PROCESSADOR.aprovado && (
+            <div className="flex items-center gap-2 sm:ml-auto">
+              <span className="text-[11px] text-slate-500">{SELO_PROCESSADOR.texto}</span>
+              <img
+                src={SELO_PROCESSADOR.src}
+                alt={SELO_PROCESSADOR.nome}
+                title={SELO_PROCESSADOR.nome}
+                className="h-[22px] w-auto"
+                onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+              />
+            </div>
+          )}
         </div>
 
         {/* Aviso legal — o texto é o mesmo de antes, palavra por palavra. */}
