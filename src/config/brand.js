@@ -28,7 +28,21 @@ export const BRAND = {
   tagline: 'Marketplace de agendamentos médicos',
   emails: {
     suporte: 'contato@avidoc.com.br',
-    contato: 'contato@avidoc.com.br',
+  },
+
+  /**
+   * WhatsApp de SUPORTE — o número que o paciente vê e para o qual escreve.
+   *
+   * NÃO é o número que dispara as notificações automáticas de agendamento para
+   * o médico: esse é outro, e fica no Meta Cloud API. Misturar os dois faria o
+   * paciente escrever para uma caixa que ninguém lê.
+   *
+   * Estava cravado na página de suporte, com um número antigo do Rio que já não
+   * atende. Aqui, quem mudar muda num lugar só.
+   */
+  whatsapp: {
+    numero: '(33) 93618-1034',
+    link: 'https://wa.me/5533936181034',
   },
   social: {
     instagram: '@avidoc.com.br',

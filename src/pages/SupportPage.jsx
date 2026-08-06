@@ -1,7 +1,8 @@
 import React from 'react';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
-import { Mail, Phone, MessageSquare } from '@/components/ui/icones';
+import { Mail, Phone } from '@/components/ui/icones';
+import { WhatsApp } from '@/components/ui/redes';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 const SupportPage = () => {
   return <>
@@ -34,19 +35,23 @@ const SupportPage = () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-muted-foreground">Envie-nos um e-mail com sua dúvida ou problema. Responderemos o mais breve possível.</p>
+                            <p className="text-muted-foreground">Envie-nos um e-mail com sua dúvida ou problema.</p>
+                            <p className="text-muted-foreground">Responderemos o mais breve possível.</p>
                             <a href={`mailto:${BRAND.emails.suporte}`} className="font-semibold text-primary mt-2 block">Email</a>
                         </CardContent>
                     </Card>
                      <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <MessageSquare className="text-primary" /> WhatsApp
+                                {/* Glifo OFICIAL do WhatsApp, e não o balão genérico
+                                    de mensagem que estava aqui. Marca de terceiro se
+                                    reconhece pelo desenho dela — ver ui/redes.jsx. */}
+                                <WhatsApp className="text-primary w-6 h-6" /> WhatsApp
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-muted-foreground">Fale conosco pelo nosso WhatsApp:</p>
-                            <a href="https://wa.me/5521998902451" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary mt-2 block">(21) 99890-2451</a>
+                            <a href={BRAND.whatsapp.link} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary mt-2 block">{BRAND.whatsapp.numero}</a>
                         </CardContent>
                     </Card>
                 </div>
