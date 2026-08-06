@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { AlertTriangle, ArrowRight, Baby, Bone, Brain, BrainCircuit, Calendar, CalendarCheck, CalendarPlus, CheckCircle2, Clock, Heart, Lock, Search, Shield, Sparkles, Stethoscope, User, Users } from '@/components/ui/icones';
+import { ArrowRight, Baby, Bone, Brain, BrainCircuit, Calendar, CalendarCheck, CalendarPlus, CheckCircle2, Clock, Heart, Lock, Search, Shield, Sparkles, Stethoscope, User, Users } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -13,7 +13,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { supabase } from '@/lib/customSupabaseClient';
-import { QUANDO_USAR } from '@/content/siteContent';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
 /**
@@ -511,71 +510,6 @@ const HomePage = () => {
               );
             })}
           </motion.div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          QUANDO A CONSULTA ONLINE RESOLVE
-          Entra logo depois de "como funciona": a pessoa acabou de entender o
-          fluxo e a pergunta seguinte é sempre "serve para o meu caso?".
-          O bloco do presencial vem JUNTO, na mesma seção, e não escondido no
-          rodapé — ver o comentário de QUANDO_USAR em siteContent.js.
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white py-20 border-t border-slate-100">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center max-w-2xl mx-auto"
-          >
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold text-slate-900">
-              {QUANDO_USAR.titulo}
-            </h2>
-            <p className="text-slate-600 mt-3 leading-relaxed">{QUANDO_USAR.chamada}</p>
-          </motion.div>
-
-          <motion.ul
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto"
-          >
-            {QUANDO_USAR.situacoes.map((situacao) => (
-              <motion.li
-                key={situacao}
-                variants={fadeUp}
-                className="flex items-center gap-2.5 bg-brand-100 border border-brand-200 rounded-md px-4 py-3 text-[15px] font-medium text-slate-800"
-              >
-                <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0" />
-                {situacao}
-              </motion.li>
-            ))}
-          </motion.ul>
-
-          <p className="text-center text-slate-600 mt-6 max-w-2xl mx-auto leading-relaxed">
-            {QUANDO_USAR.tambem}
-          </p>
-
-          {/* O contraponto. A referência de mercado não tem, e é justamente ele
-              que evita a pessoa agendar para um caso que a distância não
-              resolve — o que viraria reembolso e avaliação ruim. */}
-          <div className="mt-10 max-w-3xl mx-auto rounded-lg border border-amber-200 bg-amber-50 p-6">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-slate-900">{QUANDO_USAR.presencial.titulo}</h3>
-                <p className="text-sm text-slate-700 mt-1.5 leading-relaxed">
-                  {QUANDO_USAR.presencial.texto}
-                </p>
-                <p className="text-sm font-semibold text-slate-900 mt-3">
-                  {QUANDO_USAR.presencial.urgencia}
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

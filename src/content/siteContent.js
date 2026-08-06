@@ -65,49 +65,47 @@ export const FAQ = [
   },
 ];
 
-// ─── Quando a consulta online resolve ───────────────────────────────────────────
+// ─── Quando a teleconsulta é indicada ──────────────────────────────────────────
 /**
  * A pergunta que trava a decisão: "serve para o meu caso?".
  *
- * ⚠️ A LISTA DE SITUAÇÕES É CONTEÚDO CLÍNICO E PRECISA DO AVAL DE UM MÉDICO.
- * Ela espelha a lista publicada pelo Einstein em telemedicina.einstein.br —
- * hospital com governança clínica própria —, e não uma seleção nossa. Ainda
- * assim, quem deve validá-la é um dos médicos parceiros ou o responsável
- * técnico, porque a aviDoc é marketplace e não presta o atendimento.
+ * O TEXTO É DO PRÓPRIO USUÁRIO, e é assim que tem de continuar. A primeira
+ * versão espelhava a lista de sintomas do telemedicina.einstein.br — diarreia,
+ * dor de garganta, sinusite. Ele trocou por esta, que é melhor por duas razões:
+ * fala em GRUPOS de sintomas em vez de nomear doenças, e traz "a critério do
+ * profissional" dentro da própria frase.
  *
- * O QUE NOS SEPARA DA REFERÊNCIA. A página do Einstein lista os oito sintomas e
- * para por aí: não diz quando NÃO usar, não fala de presencial nem de urgência.
- * Aqui o contraponto vem junto, e não é só cuidado jurídico — é o que evita a
- * pessoa agendar para um caso que a consulta a distância não resolve, pagar, e
- * sair frustrada. Paciente mal encaminhado é reembolso, avaliação ruim e
- * detrator.
+ * E A ATRIBUIÇÃO É O PONTO. A aviDoc não julga o que cabe numa teleconsulta —
+ * quem conduz o atendimento e decide a conduta é o médico. Por isso nada aqui é
+ * dito na voz da plataforma ("atendemos", "resolvemos"): o texto descreve a
+ * modalidade e devolve a decisão a quem é dela.
  *
- * A moldura também é diferente da deles porque o negócio é outro: eles dizem
- * "seja atendido por médicos Einstein"; aqui quem avalia é o médico que a
- * pessoa escolher, e a conduta é dele.
+ * O Einstein pode listar sintomas porque é o prestador, com corpo clínico
+ * próprio. Aqui o prestador é o profissional que a pessoa escolher.
  */
 export const QUANDO_USAR = {
-  titulo: 'Quando a consulta online resolve',
+  titulo: 'Quando a teleconsulta é indicada',
   chamada:
-    'Sintomas comuns, de baixa e média complexidade, costumam ser resolvidos a distância. Quem avalia o seu caso é o médico, durante a consulta.',
+    'Consultas ideais para sintomas leves, orientações médicas, pedidos de exames e renovação de receitas de uso contínuo — a critério do profissional.',
+  // Grupos, e não doenças nomeadas. Palavras do usuário.
   situacoes: [
-    'Dor de garganta',
-    'Resfriado e gripe',
-    'Febre',
-    'Dor de cabeça',
-    'Sinusite',
-    'Diarreia',
-    'Infecção urinária',
-    'Dor muscular',
+    'Sintomas respiratórios',
+    'Sintomas gastrointestinais',
+    'Sintomas urinários',
+    'Sintomas musculares',
+    'Cefaleia',
+    'Orientações médicas',
+    'Pedido de exames',
+    'Renovação de receita de uso contínuo',
   ],
-  // Estes três não são sintoma, são motivo de consulta — e são exatamente o
-  // público que a plataforma quer alcançar. Texto reaproveitado do artigo
-  // "O que dá para resolver em teleconsulta".
-  tambem: 'Também se resolvem online: renovação de receita de uso contínuo, pedido de exame e interpretação de resultados.',
+  criterio:
+    'A indicação e a conduta são do médico que conduz o atendimento, avaliadas caso a caso durante a consulta.',
   presencial: {
-    titulo: 'Quando é caso de atendimento presencial',
+    titulo: 'Quando o atendimento presencial é necessário',
+    // Frase já publicada no artigo do blog e no texto do próprio médico: a
+    // decisão de interromper é do médico E do paciente, não da plataforma.
     texto:
-      'Sempre que a conduta depender de exame físico, de procedimento ou de recursos que só existem no consultório. É direito do médico e do paciente interromper e indicar a continuidade presencial, sem cobrança adicional.',
+      'Quando a conduta depende de exame físico, de procedimento ou de recursos que só existem no consultório. É direito do médico e do paciente interromper e indicar a continuidade presencial, sem cobrança adicional.',
     urgencia:
       'Situação de risco imediato é urgência: procure o pronto-socorro mais próximo ou ligue 192 (SAMU).',
   },

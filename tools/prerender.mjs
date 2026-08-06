@@ -21,7 +21,7 @@ const { BRAND } = await import('../src/config/brand.js');
 const { patientPriceFromRepasse } = await import('../src/lib/price.js');
 const { formatDoctorDisplayName } = await import('../src/lib/doctorName.js');
 const { gerarCartoesOg } = await import('./og-medicos.mjs');
-const { FAQ, DOCUMENTOS } = await import('../src/content/siteContent.js');
+const { FAQ, DOCUMENTOS, QUANDO_USAR } = await import('../src/content/siteContent.js');
 const BASE = BRAND.url;
 const MARCA = BRAND.name;
 
@@ -238,7 +238,21 @@ async function main() {
   );
 
   const routes = [
-    { path: '/como-funciona', title: `Como funciona a teleconsulta · ${MARCA}`, description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
+    {
+      path: '/como-funciona',
+      title: `Como funciona a teleconsulta · ${MARCA}`,
+      description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.',
+      corpo: `<h1>Como funciona a teleconsulta</h1>
+  <p>Escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.</p>
+  <h2>${esc(QUANDO_USAR.titulo)}</h2>
+  <p>${esc(QUANDO_USAR.chamada)}</p>
+  <ul>${QUANDO_USAR.situacoes.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+  <p>${esc(QUANDO_USAR.criterio)}</p>
+  <h2>${esc(QUANDO_USAR.presencial.titulo)}</h2>
+  <p>${esc(QUANDO_USAR.presencial.texto)}</p>
+  <p>${esc(QUANDO_USAR.presencial.urgencia)}</p>
+  ${links('/como-funciona')}`,
+    },
     { path: '/quem-somos', title: `Quem somos · ${MARCA}`, description: `Democratizar o acesso à saúde: sem deslocamento, sem fila e com preço acessível. A ${MARCA} é um marketplace que conecta pacientes a médicos parceiros.` },
     {
       path: '/perguntas-frequentes',

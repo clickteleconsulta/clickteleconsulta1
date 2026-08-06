@@ -1,9 +1,10 @@
 import React from 'react';
 import { BRAND } from '@/config/brand';
+import { QUANDO_USAR } from '@/content/siteContent';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CalendarCheck, UserCheck, Video, ShieldCheck, CreditCard, Clock, ArrowRight, FileCheck2 } from '@/components/ui/icones';
+import { CalendarCheck, UserCheck, Video, ShieldCheck, CreditCard, Clock, ArrowRight, FileCheck2, CheckCircle2, AlertTriangle } from '@/components/ui/icones';
 
 const STEPS = [
   { icon: UserCheck, title: '1. Escolha o médico', text: 'Veja os médicos parceiros disponíveis, os horários e o valor de cada um.' },
@@ -58,6 +59,39 @@ const ComoFuncionaPage = () => {
                 <div><p className="font-semibold text-slate-800 text-sm">{b.title}</p><p className="text-xs text-slate-500 mt-0.5">{b.text}</p></div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* QUANDO A TELECONSULTA É INDICADA.
+            Estava na home e saiu de lá: é conteúdo informativo, e o lugar dele é
+            na página que explica o serviço, não na vitrine. O texto e a
+            atribuição são do usuário — ver o comentário de QUANDO_USAR em
+            siteContent.js. */}
+        <div className="mt-14">
+          <h2 className="font-display text-xl font-bold text-slate-900">{QUANDO_USAR.titulo}</h2>
+          <p className="text-slate-600 mt-2 leading-relaxed max-w-2xl">{QUANDO_USAR.chamada}</p>
+
+          <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {QUANDO_USAR.situacoes.map((situacao) => (
+              <li
+                key={situacao}
+                className="flex items-center gap-2.5 bg-white border border-slate-200 rounded-md px-4 py-3 text-[15px] text-slate-800 shadow-sm"
+              >
+                <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0" />
+                {situacao}
+              </li>
+            ))}
+          </ul>
+
+          <p className="text-sm text-slate-500 mt-4 leading-relaxed max-w-2xl">{QUANDO_USAR.criterio}</p>
+
+          <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-5 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-slate-900">{QUANDO_USAR.presencial.titulo}</h3>
+              <p className="text-sm text-slate-700 mt-1.5 leading-relaxed">{QUANDO_USAR.presencial.texto}</p>
+              <p className="text-sm font-semibold text-slate-900 mt-3">{QUANDO_USAR.presencial.urgencia}</p>
+            </div>
           </div>
         </div>
 
