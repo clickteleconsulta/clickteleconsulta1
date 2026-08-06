@@ -67,6 +67,33 @@ Carvão, cinzas e tons de pele **ficam como estão**. São o que dá volume ao
 traço; trocar tudo por cobalto achata o desenho, que era exatamente o problema
 do unDraw.
 
+### Cor onde o objeto tem cor no mundo real
+
+Tudo em cobalto ficava sem vida. Tudo colorido vira arco-íris e some a marca. A
+regra que separa os dois: **só ganha cor própria o que o olho já espera
+colorido**.
+
+| objeto | cor | por quê esta e não outra |
+|---|---|---|
+| folha, planta, árvore | `#0C9769` | é o jade da cruz da marca. **Nunca** o `#16A34A` de sucesso — verde de estado e verde de enfeite precisam ser distintos |
+| coração | `#E0483E` | mais quente que o `#DC2626` de erro, pela mesma razão: coração desenhado não é alerta |
+| estrela | `#FBBF24` | é o `amber-400` das estrelas de avaliação da interface — a estrela desenhada e a clicável combinam |
+
+Monitor, calendário, pasta, carteira e roupa **continuam cobalto**: a cor real
+deles não é informação nenhuma, e colorir por colorir só rouba atenção do que a
+peça quer dizer.
+
+A cor entra por **camada**, não por busca de tom — o Storyset nomeia os grupos
+(`Plant`, `Heart`, `Stars`), então dá para pintar o objeto certo em vez de torcer
+para que nenhuma outra forma use o mesmo hex. Quando o objeto está no grupo
+errado (a estrela grande de `sem-avaliacoes` mora dentro do personagem, junto
+com o tênis), a regra restringe também o tipo de forma. Tudo em
+`CORES_POR_CAMADA` e `CORES_EXTRA`, dentro de `tools/storyset.py`.
+
+**`heroi.svg` é a exceção e fica todo cobalto.** É a primeira coisa que a pessoa
+vê e a mesma arte da peça de anúncio principal; ali a marca precisa falar
+sozinha, sem concorrência de cor.
+
 ### O que evitar ao escolher
 
 Texto em inglês desenhado como vetor não dá para traduzir sem redesenhar.

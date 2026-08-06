@@ -16,11 +16,13 @@ preciso creditar o Storyset no rodapé do site. Não é detalhe: sem assinatura 
 sem crédito, o uso comercial não está coberto.
 
 O QUE É FEITO EM CADA ARQUIVO
-1. COR — o acento amarelo do Storyset (#ffc727) vira o cobalto da marca.
-   Carvão, cinzas e tons de pele ficam: são o que dá volume ao traço.
-2. CAMADAS — o SVG da API vem com TODAS as camadas ligadas, inclusive o fundo
+1. CAMADAS — o SVG da API vem com TODAS as camadas ligadas, inclusive o fundo
    decorativo que o editor do site deles desliga por padrão. Sem tirar, ele
    aparece como mancha cinza atrás do desenho — e o arquivo fica 5× maior.
+2. COR — o acento amarelo do Storyset (#ffc727) vira o cobalto da marca, e
+   depois volta a ter cor onde o objeto TEM cor no mundo real: folha verde,
+   coração vermelho, estrela amarela. Carvão, cinzas e tons de pele nunca são
+   tocados — são o que dá volume ao traço.
 
 Uso:
     python3 tools/storyset.py            # só o que falta
@@ -39,6 +41,49 @@ FONTES = os.path.join(RAIZ, 'public', 'marca', 'anuncios', 'fontes')
 
 AMARELO_STORYSET = '#ffc727'
 COBALTO_MARCA = '#3B5BA5'
+
+# ── Cor onde o objeto TEM cor no mundo real ──────────────────────────────────
+#
+# Tudo em cobalto ficava sem vida; tudo colorido vira arco-íris e some a marca.
+# A regra que separa os dois: só ganha cor própria o que o olho já espera
+# colorido — folha é verde, coração é vermelho, estrela é amarela. Monitor,
+# calendário, pasta, carteira e roupa continuam cobalto, porque a cor deles no
+# mundo real não é informação nenhuma.
+#
+# Por isso a cor entra por CAMADA, e não por busca de tom: o Storyset nomeia os
+# grupos (Plant, Heart, Stars), então dá para pintar o objeto certo em vez de
+# torcer para que nenhuma outra forma use o mesmo hex.
+VERDE = '#0C9769'      # o jade da cruz da marca. NÃO usar o #16A34A de sucesso:
+                       # verde de estado e verde de enfeite têm que ser distintos.
+VERMELHO = '#E0483E'   # um tom mais quente que o vermelho de erro (#DC2626), pela
+                       # mesma razão — coração desenhado não é alerta.
+AMBAR = '#FBBF24'      # o mesmo amber-400 das estrelas de avaliação na interface:
+                       # a estrela desenhada e a estrela clicável combinam.
+
+CORES_POR_CAMADA = {
+    'Plant': VERDE, 'Plants': VERDE, 'Trees': VERDE,
+    'Heart': VERMELHO,
+    'Stars': AMBAR,
+}
+
+# Camadas cujo nome não diz a cor, arquivo a arquivo. O valor é a cor, ou
+# (cor, tag) quando só um tipo de forma dentro da camada deve mudar.
+CORES_EXTRA = {
+    # Os cartões de avaliação: o acento dentro deles são as estrelas preenchidas.
+    'secao-avaliacoes.svg': {'Reviews': AMBAR},
+
+    # A estrela grande que o personagem carrega ficou dentro do grupo DELE, e não
+    # em 'Stars' — se pintasse o grupo inteiro, o tênis ia junto. Ela é o único
+    # <polygon> ali; o resto do acento são <path>. Sem esse recorte a peça ficava
+    # com uma estrela azul cercada de estrelinhas amarelas.
+    'sem-avaliacoes.svg': {'character-1': (AMBAR, 'polygon')},
+}
+
+# Ficam inteiramente em cobalto, mesmo que tenham camada colorível.
+#
+# O herói é a primeira coisa que a pessoa vê e a mesma arte da peça de anúncio
+# principal. Ali a marca precisa falar sozinha, sem concorrência de cor.
+SEM_COR = {'heroi.svg'}
 
 API = 'https://stories.freepiklabs.com/api/vectors/{slug}/cuate'
 
@@ -97,23 +142,64 @@ SOBRA = {
 }
 
 
-def remover_grupo(svg, id_grupo):
-    """Remove <g id="X"> … </g> respeitando <g> aninhado.
+def _span(svg, id_grupo):
+    """Onde <g id="X"> começa, onde o conteúdo começa e onde o </g> dele fecha.
 
     Regex sozinha não serve: o primeiro </g> que ela encontra costuma fechar um
-    grupo interno, e o corte leva metade do desenho junto. O contador abaixo é o
+    grupo interno, e usá-lo leva metade do desenho junto. O contador abaixo é o
     que faz o fechamento certo ser encontrado.
     """
     abertura = re.search(rf'<g[^>]*\bid="{re.escape(id_grupo)}"[^>]*>', svg)
     if not abertura:
-        return svg, False
-    fim, nivel = len(svg), 1
+        return None
+    nivel = 1
     for tag in re.finditer(r'<g\b[^>]*>|</g>', svg[abertura.end():]):
         nivel += 1 if tag.group().startswith('<g') else -1
         if nivel == 0:
-            fim = abertura.end() + tag.end()
-            break
-    return svg[:abertura.start()] + svg[fim:], True
+            return abertura.start(), abertura.end(), abertura.end() + tag.end()
+    return abertura.start(), abertura.end(), len(svg)
+
+
+def remover_grupo(svg, id_grupo):
+    """Tira a camada inteira do desenho."""
+    lugar = _span(svg, id_grupo)
+    if not lugar:
+        return svg, False
+    inicio, _, fim = lugar
+    return svg[:inicio] + svg[fim:], True
+
+
+def pintar_grupo(svg, id_grupo, cor, so_tag=None):
+    """Troca o acento da marca por `cor`, só DENTRO da camada.
+
+    `so_tag` restringe a troca a um tipo de forma (`polygon`, `circle`…), para
+    quando a camada mistura o objeto que deve ganhar cor com outros que não.
+
+    Devolve também quantas formas mudaram: zero é sinal de que a camada existe
+    mas não tem acento nenhum — a planta é toda carvão, por exemplo — e nesse
+    caso não adianta insistir, o desenho já está do jeito que o autor quis.
+    """
+    lugar = _span(svg, id_grupo)
+    if not lugar:
+        return svg, 0
+    _, corpo, fim = lugar
+    bloco = svg[corpo:fim]
+
+    if so_tag:
+        alvo = re.compile(rf'<{so_tag}\b[^>]*?>')
+        def trocar(m):
+            return re.sub(re.escape(COBALTO_MARCA), cor, m.group(0), flags=re.I)
+    else:
+        alvo = re.compile(re.escape(COBALTO_MARCA), re.I)
+        def trocar(_m):
+            return cor
+
+    novo_bloco, _ = alvo.subn(trocar, bloco)
+    quantas = len(re.findall(re.escape(COBALTO_MARCA), bloco, flags=re.I)) \
+        - len(re.findall(re.escape(COBALTO_MARCA), novo_bloco, flags=re.I))
+    if not quantas:
+        return svg, 0
+    return svg[:corpo] + novo_bloco + svg[fim:], quantas
 
 
 def preparar(nome, slug):
@@ -125,7 +211,19 @@ def preparar(nome, slug):
     svg = re.sub(re.escape(AMARELO_STORYSET), COBALTO_MARCA, svg, flags=re.I)
     for id_grupo in FUNDO + SOBRA.get(nome, []):
         svg, _ = remover_grupo(svg, id_grupo)
-    return svg, bruto
+
+    # A limpeza vem ANTES da pintura de propósito: pintar primeiro gastaria
+    # trabalho em camada que vai ser jogada fora, e o fundo decorativo tem folha
+    # também — folha que sairia verde num desenho onde ela nem aparece.
+    pintadas = {}
+    if nome not in SEM_COR:
+        regras = {**CORES_POR_CAMADA, **CORES_EXTRA.get(nome, {})}
+        for id_grupo, regra in regras.items():
+            cor, so_tag = regra if isinstance(regra, tuple) else (regra, None)
+            svg, quantas = pintar_grupo(svg, id_grupo, cor, so_tag)
+            if quantas:
+                pintadas[id_grupo] = quantas
+    return svg, bruto, pintadas
 
 
 def main(tudo=False):
@@ -141,11 +239,12 @@ def main(tudo=False):
     def uma(item):
         nome, slug, pasta = item
         try:
-            svg, bruto = preparar(nome, slug)
+            svg, bruto, pintadas = preparar(nome, slug)
             open(os.path.join(pasta, nome), 'w', encoding='utf-8').write(svg)
-            return f'  {nome:<26} {slug:<26} {bruto // 1024:>4} KB -> {len(svg) // 1024:>3} KB'
+            cor = ', '.join(f'{k}×{v}' for k, v in pintadas.items()) or ('cobalto' if nome in SEM_COR else '—')
+            return f'  {nome:<26} {len(svg) // 1024:>3} KB (de {bruto // 1024:>3})  {cor}'
         except Exception as erro:                                    # noqa: BLE001
-            return f'  {nome:<26} {slug:<26} FALHOU: {erro}'
+            return f'  {nome:<26} FALHOU: {erro}'
 
     with ThreadPoolExecutor(8) as executor:
         for linha in executor.map(uma, pendentes):

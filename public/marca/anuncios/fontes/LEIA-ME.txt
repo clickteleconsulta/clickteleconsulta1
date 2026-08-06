@@ -1,71 +1,61 @@
-Ilustrações de terceiros usadas nos anúncios
-============================================
+Ilustrações usadas nos anúncios
+===============================
 
 Origem: Storyset (https://storyset.com), estilo "cuate" — Freepik Company S.L.
 
 
-ATRIBUIÇÃO É OBRIGATÓRIA. LEIA ANTES DE PUBLICAR.
--------------------------------------------------
-A licença gratuita do Storyset exige crédito em TODO uso, inclusive comercial.
-A pergunta está no FAQ deles, e a resposta é literal: "you must always include
-the attribution to Storyset every time you use our free illustrations".
+LICENÇA
+-------
+A assinatura do Flaticon/Freepik está ATIVA, e é ela que dispensa a atribuição.
+Sem assinatura, a licença gratuita do Storyset exige crédito em todo uso,
+inclusive comercial — a resposta no FAQ deles é literal: "you must always
+include the attribution to Storyset every time you use our free illustrations".
 
-Sem o crédito, o uso não está coberto pela licença. Publicar anúncio pago com
-arte fora de licença é o tipo de coisa que só aparece quando vira notificação.
+Se a assinatura for cancelada, a obrigação volta para TODAS estas artes E para
+as 18 ilustrações do site, que vêm da mesma biblioteca. O que resolve nesse caso
+é uma linha no rodapé do site com link:
 
-Onde o crédito precisa aparecer:
-
-  NO SITE       uma linha no rodapé ou numa página de créditos, com link:
-                <a href="https://storyset.com">Ilustrações por Storyset</a>
-                AINDA NÃO EXISTE. Precisa ser feito antes de o site usar
-                qualquer uma destas artes.
-
-  NAS REDES     na descrição do post, quando a arte aparecer:
-                "Ilustrações por Storyset"
-
-  EM ANÚNCIO    o gerenciador do TikTok e do Meta não têm campo de crédito, e
-  PAGO          escrever "Storyset" dentro do criativo estraga a peça. O que
-                resolve: o crédito no rodapé do site, para onde o anúncio leva.
-                Não é interpretação criativa da licença — é como a maioria usa,
-                mas se você quiser segurança total, veja a saída abaixo.
-
-  SAÍDA SEM     assinatura do Flaticon/Freepik (poucas dezenas de reais por mês)
-  ATRIBUIÇÃO    remove a obrigação inteira. Se a verba de anúncio for passar de
-                algumas centenas por mês, vale mais que o risco.
+    <a href="https://storyset.com">Ilustrações por Storyset</a>
 
 
-Arquivos e onde cada um é usado
--------------------------------
-  online-doctor.svg   teleconsulta no monitor    -> peça "A partir de R$ 40"
-  date-picker.svg     escolhendo o dia           -> peça "Agende em minutos"
-  events.svg          calendário da semana       -> peça "7 dias por semana"
-  wallet.svg          carteira e cartão          -> peça "Sem convênio, sem mensalidade"
-  doctors.svg         três profissionais         -> peça "Você escolhe o médico"
+Arquivos desta pasta
+--------------------
+  date-picker.svg   escolhendo o dia    -> peça "Agende em minutos"
+  events.svg        semana no calendário -> peça "7 dias por semana"
+  wallet.svg        carteira e cartão   -> peça "Sem convênio, sem mensalidade"
+
+As outras duas peças NÃO têm arte aqui: usam public/ilustra/heroi.svg e
+public/ilustra/secao-escolher.svg, as mesmas imagens da página inicial. É de
+propósito — quem clica no anúncio reencontra o desenho no site.
 
 
-O que foi modificado nos arquivos
----------------------------------
-1. COR. O acento amarelo do Storyset (#ffc727) virou o cobalto da marca
-   (#3B5BA5), direto no SVG. Carvão, cinzas e tons de pele ficaram como estavam:
-   são o que dá volume ao traço, e mexer neles achata o desenho. Se baixar arte
-   nova, fazer a mesma troca antes de usar.
-
-2. CAMADAS. O SVG que a API entrega vem com TODAS as camadas ligadas, incluindo
+O que foi modificado
+--------------------
+1. CAMADAS. O SVG que a API entrega vem com TODAS as camadas ligadas, inclusive
    o fundo decorativo que o editor do site deles desliga por padrão. Rasterizado
-   como veio, esse fundo vira mancha cinza atrás do desenho. Quem tira é
-   tools/limpar-storyset.py, que também remove camada que atrapalha a mensagem
-   (em online-doctor saíram o pote de comprimidos e a prancheta). Rodar o script
-   depois de baixar qualquer arte nova.
+   como veio, esse fundo vira mancha cinza atrás do desenho, e o arquivo fica 5x
+   maior.
+
+2. COR. O acento amarelo do Storyset (#ffc727) virou o cobalto da marca
+   (#3B5BA5). Depois, volta a ter cor onde o objeto TEM cor no mundo real:
+   folha verde (#0C9769), coração vermelho (#E0483E), estrela amarela (#FBBF24).
+   Monitor, calendário, pasta e carteira continuam cobalto. Carvão, cinzas e
+   tons de pele nunca são tocados — são o que dá volume ao traço.
+
+Quem faz as duas coisas é tools/storyset.py. Rodar depois de qualquer arte nova:
+
+    python3 tools/storyset.py --tudo
 
 
-Duas coisas que ficaram de fora, e por quê
-------------------------------------------
+Duas artes ficaram de fora, e vale registrar
+--------------------------------------------
   video-call/cuate   duas pessoas comuns numa videochamada, nenhuma de jaleco, e
-                     o nome "Michael" escrito na tela. Numa peça de teleconsulta
-                     a cena não diz "consulta", diz "ligação".
-  calendar/cuate     calendário grande e bonito, mas com X marcados nos dias. Na
-                     peça "7 dias por semana", X lê como dia indisponível — o
-                     desenho contradizia a frase.
+                     o nome "Michael" na tela. A cena diz "ligação", não
+                     "consulta".
+  calendar/cuate     calendário bonito, mas com X marcados nos dias. Na peça
+                     "7 dias por semana", X lê como dia indisponível — o desenho
+                     contradizia a frase. (Ficou só no estado vazio do médico,
+                     onde "dia sem nada" é justamente o assunto.)
 
 
 Limitação conhecida
@@ -76,9 +66,10 @@ No tamanho em que aparecem no feed, quase não se lê. Se incomodar, a saída é
 outra ilustração, não edição destas.
 
 
-Como baixar uma arte nova do Storyset
--------------------------------------
+Como baixar uma arte nova
+-------------------------
   https://stories.freepiklabs.com/api/vectors/<slug>/cuate     -> JSON, campo "src"
   https://stories.freepiklabs.com/api/vectors?tag=medical&style=cuate&per_page=60
 
-Depois: trocar #ffc727 por #3B5BA5 e rodar tools/limpar-storyset.py.
+Acrescente o slug ao mapa em tools/storyset.py e rode o script — ele faz a cor e
+a limpeza. Documentação completa em docs/ILUSTRACOES-E-ICONES.md.
