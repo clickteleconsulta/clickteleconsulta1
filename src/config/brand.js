@@ -35,22 +35,23 @@ export const BRAND = {
 
     /**
      * URLs dos perfis. O rodapé só desenha o ícone de quem tem URL aqui — ícone
-     * que leva a página inexistente é pior que ícone ausente.
+     * que leva a página inexistente é pior que ícone ausente, porque o link
+     * quebrado custa mais confiança do que o ícone ausente economiza.
+     * Acrescentar um endereço aqui já faz o ícone aparecer; o rodapé filtra por
+     * esta lista.
      *
-     * Facebook e TikTok estão VAZIOS porque ninguém confirmou os endereços. Não
-     * invento a partir do handle do Instagram: se o palpite estiver errado, o
-     * site publica um link quebrado, e link quebrado no rodapé custa mais
-     * confiança do que o ícone ausente economiza. Basta preencher e o ícone
-     * aparece sozinho — o rodapé filtra por esta lista.
+     * O Facebook está em `profile.php?id=…` porque a página ainda não tem nome
+     * de usuário. Funciona; quando o nome for criado, troque por ele — o
+     * endereço numérico continua válido, mas o com nome é o que as pessoas
+     * reconhecem se virem o link.
      *
-     * No TikTok, atenção: o perfil foi criado com um nome de usuário gerado
-     * automaticamente, e a troca ficou travada até 4 de setembro de 2026. O
-     * endereço a colar aqui é o que estiver valendo NO DIA, não o pretendido.
+     * TIKTOK FICA DE FORA POR DECISÃO, e não por falta de endereço: o glifo já
+     * existe em src/components/ui/redes.jsx, pronto. Para ligar, basta uma
+     * chave `tiktok` aqui e a linha correspondente no REDES do rodapé.
      */
     urls: {
       instagram: 'https://www.instagram.com/avidoc.com.br/',
-      tiktok: '',
-      facebook: '',
+      facebook: 'https://www.facebook.com/profile.php?id=61592500808383&locale=pt_BR',
     },
   },
   /** Cor única da marca — cobalto. Espelha --primary no index.css e brand-600 no Tailwind. */
