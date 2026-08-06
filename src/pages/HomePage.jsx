@@ -450,7 +450,13 @@ const HomePage = () => {
                       <div className="w-20 h-20 rounded-lg bg-brand-50 flex items-center justify-center group-hover:bg-brand-50 transition-colors">
                         <Icon className="w-8 h-8 text-brand-500" />
                       </div>
-                      <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-brand-500 text-white text-sm font-display font-bold flex items-center justify-center shadow-lg shadow-brand-500/30">
+                      {/* Número VAZADO, e não disco cheio. Com o ícone sólido dentro
+                          da placa, o disco de cor virava uma segunda forma cheia
+                          empilhada na primeira — duas manchas competindo no mesmo
+                          canto, e o passo parecia carregado sem dizer mais nada.
+                          Em contorno, a hierarquia fica certa: o desenho é o
+                          assunto, o número é só a ordem dele. */}
+                      <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white ring-[1.5px] ring-brand-200 text-brand-600 text-sm font-display font-bold flex items-center justify-center">
                         {index + 1}
                       </span>
                     </div>

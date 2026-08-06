@@ -107,40 +107,22 @@
      do mesmo número: a barra de filtros de /agendamentos usava `top-16` (64 px)
      enquanto o cabeçalho tem 88, e 24 px dela ficavam escondidos atrás dele ao
      rolar. Com o valor num lugar só, os dois não têm como divergir de novo. */
-  /* 60, e o número que importa é o RENDERIZADO, não este: sai com 66 px no
-     celular e 72 no desktop, dentro da faixa de 60–72 que os sites de
-     referência usam. Já foi 88 (97 na tela, absurdo). Sempre que mexer aqui,
-     multiplique por --zoom-site antes de julgar — e se o zoom subir de novo,
-     este número precisa DESCER para a barra não estourar a faixa.
+  /* 60, e agora este número É o renderizado: não há mais zoom global
+     multiplicando por cima. Fica no piso da faixa de 60–72 que os sites de
+     referência usam. Já foi 88 (absurdo) e já saiu a 72 por causa do zoom.
      Quem gruda abaixo dela acompanha sozinho, porque lê desta variável. */
   --altura-cabecalho: 60px;
-
-  /* Escala global da interface. Ver a regra `zoom` no html e `.full-bleed`.
-
-     120% no desktop, e não 110%: os ícones passaram a ser sólidos (Uicons), e
-     traço cheio a 16 px pede mais respiro em volta do que traço vazado — sem a
-     escala, tabela e menu ficam apertados. O ganho de legibilidade vale para o
-     resto da interface também; o público não é jovem em média.
-
-     NO CELULAR FICA EM 110%, e isso não é inconsistência. O zoom multiplica o
-     tamanho mas NÃO a largura da tela: num aparelho de 375 px, 120% deixa só
-     312 px de área útil, e medindo dá zero de folga entre o botão "Cadastre-se"
-     e a borda direita (a 110% sobram 17,6 px). Numa tela larga não existe esse
-     teto, então lá a escala maior só ajuda. */
-  --zoom-site: 1.1;
-}
-
-@media (min-width: 640px) {
-  :root { --zoom-site: 1.2; }
 }
 
 /* Faixa que ocupa a largura toda da tela, cancelando o container.
-   Divide por --zoom-site porque `vw` é medido na viewport SEM zoom: sem a
-   divisão a faixa fica larga demais na exata proporção do zoom e empurra o
-   conteúdo para fora da tela. */
+
+   Era `calc(100vw / var(--zoom-site))`. A divisão existia só porque o site
+   rodava com `zoom` global: `vw` mede a viewport SEM zoom, então a faixa saía
+   larga demais na exata proporção dele e empurrava o conteúdo para fora. Sem
+   zoom, 100vw volta a ser 100vw. */
 .full-bleed {
-  width: calc(100vw / var(--zoom-site));
-  margin-inline: calc(50% - (50vw / var(--zoom-site)));
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
 }
  
 /* As seções full-bleed usam `w-screen` + `mx-[calc(50%-50vw)]`, e 100vw conta a
@@ -156,11 +138,27 @@
 html {
   overflow-x: clip;
 
-  /* O site inteiro ampliado. O valor mora em --zoom-site porque o full-bleed
-     PRECISA descontá-lo: `vw` não é escalado pelo zoom, então uma faixa de
-     100vw sai larga demais na proporção do zoom e o excesso come o respiro
-     lateral — em 375 px o texto do topo chegou a ficar FORA da tela. */
-  zoom: var(--zoom-site);
+  /* SEM `zoom`. O site rodou um tempo com zoom global (110%, depois 120%) para
+     "ficar mais legível", e a medição mostrou que o efeito era o contrário do
+     pretendido: a escala base já estava na faixa profissional e o zoom empurrava
+     tudo para FORA dela. Medido em 1440 px, na tela:
+
+                       com zoom 1.2   sem zoom   referência
+       corpo               19,2 px      16 px      16–17
+       h1                  52,8 px      44 px      40–52
+       botão principal     67 px        56 px      44–56
+       cabeçalho           72 px        60 px      60–72
+
+     E `zoom` cobra caro em outros lugares: não escala a viewport, então quebra
+     todo `vw` (daí o remendo no .full-bleed), e no celular comia o respiro
+     lateral — a 120% o botão "Cadastre-se" ficava com ZERO de folga até a borda
+     num aparelho de 375 px.
+
+     Se um dia o site precisar mesmo ficar maior, o botão certo é a raiz
+     tipográfica (`font-size` aqui), não `zoom`: ela escala junto tudo que está
+     em rem e não mente sobre a largura da tela. Atenção que os 433 valores
+     cravados em px pelo projeto NÃO acompanham — é isso que precisa ser
+     convertido antes, não o zoom ligado de novo. */
 }
 
 body {

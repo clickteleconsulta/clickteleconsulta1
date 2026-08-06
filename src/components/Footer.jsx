@@ -51,10 +51,14 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  *    Visa ~12: a hierarquia está embutida no desenho, não depende de CSS.
  *  - pág. 13: a redução máxima do símbolo em digital é 24 px, E A MEDIDA DE
  *    REFERÊNCIA É A DO COMPRIMENTO, não a da altura. O símbolo ocupa 26 dos 48
- *    do canvas, ou seja 54% dele; o canvas de 42 px deixa o Pix em 22,8 px de
- *    CSS, que viram 25 px na tela no pior caso (celular, zoom 1.1) e 27 no
- *    desktop. Abaixo de 41 px de canvas o piso é rompido — foi por isso que
- *    parei em 42 e não em 40.
+ *    do canvas, ou seja 54% dele; o canvas de 46 px deixa o Pix em 24,9 px.
+ *    Abaixo de 45 px o piso é rompido.
+ *
+ *    ESTE NÚMERO JÁ FOI 42, e quebrou quando o zoom global de 120% saiu do
+ *    site: com o zoom, 42 px de canvas rendiam 27 px na tela; sem ele, rendem
+ *    22,8 e ficam abaixo do mínimo. É o tipo de regressão que não aparece em
+ *    teste nenhum — a peça continua desenhando, só passa a estar fora do
+ *    manual. Se alguém mexer na escala do site de novo, refaça esta conta.
  *  - pág. 15: proibido gradiente, contorno, sombra ou distorção no símbolo.
  *
  * A Mastercard, por sua vez, exige o símbolo SOMENTE em cores cheias — daí os
@@ -159,7 +163,7 @@ const Footer = () => {
           {/* gap-4 e não gap-2.5: sem a placa branca em volta, as marcas ficam
               soltas no escuro e 10 px de respiro as encostava umas nas outras —
               o manual pede espaçamento respeitado e proíbe "aproximação
-              demasiada". O canvas de 42 px é comum às três, então a paridade de
+              demasiada". O canvas de 46 px é comum às três, então a paridade de
               proporções continua embutida no desenho, sem depender de CSS. */}
           <div className="flex items-center gap-4">
             {BANDEIRAS.map((b) => (
@@ -168,9 +172,9 @@ const Footer = () => {
                 src={b.src}
                 alt={b.nome}
                 title={b.nome}
-                width="42"
-                height="26"
-                className="w-[42px] h-auto"
+                width="46"
+                height="29"
+                className="w-[46px] h-auto"
               />
             ))}
           </div>
