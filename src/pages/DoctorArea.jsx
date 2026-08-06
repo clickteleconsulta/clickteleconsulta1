@@ -30,9 +30,7 @@ import DoctorSchedule from '@/components/doctor/DoctorSchedule';
 import DoctorFinance from '@/components/doctor/DoctorFinance';
 import DoctorHelp from '@/components/doctor/DoctorHelp';
 import DoctorSecurity from '@/components/doctor/DoctorSecurity';
-import DoctorDocuments from '@/components/doctor/DoctorDocuments';
 import DoctorSubscriptionPage from '@/pages/doctor/DoctorSubscriptionPage';
-import PacientesListPage from '@/pages/pacientes/PacientesListPage';
 import DoctorAreaHeader from '@/components/doctor/DoctorAreaHeader';
 import MessagesPage from '@/pages/MessagesPage';
 import DoctorReviewsPage from '@/pages/doctor/DoctorReviewsPage';
@@ -304,13 +302,11 @@ const DoctorArea = () => {
                             <Route path="/" element={<Navigate to="consultas" replace />} />
                             <Route path="consultas" element={<DoctorConsultations />} />
                             <Route path="painel" element={<DoctorOverview />} />
-                            {FEATURES.PRONTUARIO && <Route path="pacientes" element={<PacientesListPage />} />}
                             {FEATURES.MESSAGING && <Route path="mensagens" element={<MessagesPage />} />}
                             <Route path="avaliacoes" element={<DoctorReviewsPage />} />
                             <Route path="procedimentos" element={<DoctorProceduresPage />} />
 
                             {/* Core Features */}
-                            {FEATURES.PRONTUARIO && <Route path="prescricoes" element={<DoctorDocuments />} />}
                             <Route path="perfil" element={<DoctorProfile />} />
                             <Route path="agenda" element={<DoctorSchedule />} />
                             <Route path="financeiro" element={<DoctorFinance />} />

@@ -18,11 +18,6 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { trackPurchase } from '@/lib/analytics';
 import Logo from '@/components/Logo';
 
-// Telemedicine Components
-import DoctorTelemedicineButton from '@/components/telemedicine/DoctorTelemedicineButton';
-import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedicineButton';
-import TelemedicineStatusIndicator from '@/components/telemedicine/TelemedicineStatusIndicator';
-import TelemedicineLogsTable from '@/components/telemedicine/TelemedicineLogsTable';
 
 const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
 

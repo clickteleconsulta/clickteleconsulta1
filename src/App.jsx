@@ -28,7 +28,6 @@ const PatientArea = lazy(() => import('@/pages/PatientArea'));
 const PasswordRecoveryPage = lazy(() => import('@/pages/PasswordRecoveryPage'));
 const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 import { TooltipProvider } from '@/components/ui/tooltip';
-const GuideViewerPage = lazy(() => import('@/pages/GuideViewerPage'));
 const AppointmentSuccessPage = lazy(() => import('@/pages/AppointmentSuccessPage'));
 const ConfirmationRequestPage = lazy(() => import('@/pages/ConfirmationRequestPage'));
 const ChangePasswordPage = lazy(() => import('@/pages/ChangePasswordPage'));
@@ -38,11 +37,6 @@ const AuthConfirmPage = lazy(() => import('@/pages/AuthConfirmPage'));
 const DoctorPublicProfilePage = lazy(() => import('@/pages/DoctorPublicProfilePage'));
 const AppointmentReviewPage = lazy(() => import('@/pages/AppointmentReviewPage'));
 const AppointmentConfirmationPage = lazy(() => import('@/pages/AppointmentConfirmationPage'));
-const PatientRecordPage = lazy(() => import('@/pages/prontuario/PatientRecordPage'));
-const PatientPrescriptionsPage = lazy(() => import('@/pages/prontuario/PatientPrescriptionsPage'));
-const VerificationPage = lazy(() => import('@/pages/VerificationPage'));
-const VideoCallPage = lazy(() => import('@/pages/VideoCallPage'));
-const MemedPrescricaoPage = lazy(() => import('@/pages/MemedPrescricaoPage'));
 const LegalPage = lazy(() => import('@/pages/LegalPage'));
 const MessagesPage = lazy(() => import('@/pages/MessagesPage'));
 const DoctorReviewsPage = lazy(() => import('@/pages/doctor/DoctorReviewsPage'));
@@ -69,15 +63,11 @@ const AdminSocialPage = lazy(() => import('@/pages/admin/AdminSocialPage'));
 const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage'));
 const AdminPatientsPage = lazy(() => import('@/pages/admin/AdminPatientsPage'));
 
-// Memed Integration
-const MemedPrescriptionPage = lazy(() => import('@/integrations/memed/MemedPrescriptionPage'));
 
 // New Sprint Pages (21/03)
-const ConsultaEncerradaPage = lazy(() => import('@/pages/ConsultaEncerradaPage'));
 
 // Components
 import AssistenteFlutuante from '@/components/AssistenteFlutuante';
-const GuestAppointmentPage = lazy(() => import('@/pages/GuestAppointmentPage'));
 import Preloader from '@/components/Preloader';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ConsentBanner from '@/components/ConsentBanner';
@@ -228,28 +218,11 @@ function App() {
           </Route>
 
           {/* 3. Specialized Routes */}
-          {FEATURES.PRONTUARIO && <Route path="/verificar/:code" element={<VerificationPage />} />}
-          {FEATURES.GUEST_ACCESS && <Route path="/paciente/guest" element={<GuestAppointmentPage />} />}
           <Route path="/legal" element={<LegalPage />} />
 
-          {FEATURES.VIDEO_CALL && <Route path="/call/:appointmentId" element={
-            <ProtectedRoute allowedRoles={['medico', 'paciente']}>
-              <VideoCallPage />
-            </ProtectedRoute>
-          } />}
 
           {/* Consulta Routes */}
-          {FEATURES.VIDEO_CALL && <Route path="/consulta/:appointmentId" element={
-            <ProtectedRoute allowedRoles={['medico', 'paciente']}>
-              <VideoCallPage />
-            </ProtectedRoute>
-          } />}
 
-          {FEATURES.VIDEO_CALL && <Route path="/consulta/:id/encerrada" element={
-            <ProtectedRoute allowedRoles={['medico', 'paciente']}>
-              <ConsultaEncerradaPage />
-            </ProtectedRoute>
-          } />}
 
           {/* Agenda legada → redireciona para a agenda atual (dashboard) */}
           <Route path="/medico/agenda" element={<Navigate to="/medico/dashboard/agenda" replace />} />
@@ -264,31 +237,11 @@ function App() {
           } />}
 
           {/* Doctor Specific Feature Routes */}
-          {FEATURES.PRONTUARIO && <Route path="/dashboard/medico/pacientes/:patientId" element={
-            <ProtectedRoute allowedRoles={['medico']}>
-              <PatientRecordPage />
-            </ProtectedRoute>
-          } />}
 
-          {FEATURES.PRONTUARIO && <Route path="/dashboard/medico/pacientes/:patientId/prescricoes" element={
-            <ProtectedRoute allowedRoles={['medico']}>
-              <PatientPrescriptionsPage />
-            </ProtectedRoute>
-          } />}
 
-          {FEATURES.PRONTUARIO && <Route path="/dashboard/prescricoes/memed" element={
-            <ProtectedRoute allowedRoles={['medico']}>
-              <MemedPrescriptionPage />
-            </ProtectedRoute>
-          } />}
 
           {/* Protegida por ProtectedRoute, que BLOQUEIA. O DoctorRouteGuard que
               havia aqui antes só redirecionava, e redirecionar não é proteger. */}
-          {FEATURES.PRONTUARIO && <Route path="/prescricao/memed" element={
-            <ProtectedRoute allowedRoles={['medico']}>
-               <MemedPrescricaoPage />
-            </ProtectedRoute>
-          } />}
 
           {/* 4. Rotas públicas e do paciente.
               SEM DoctorRouteGuard. Ele existia aqui e, nas palavras do próprio
@@ -377,11 +330,6 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {FEATURES.PRONTUARIO && <Route path="/guia/:guideId" element={
-              <ProtectedRoute allowedRoles={['paciente']}>
-                <GuideViewerPage />
-              </ProtectedRoute>
-            } />}
 
             {/* Dynamic Routes */}
             <Route path="/medico/:id" element={<DoctorPublicProfilePage />} />

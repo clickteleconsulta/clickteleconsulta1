@@ -11,8 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { motion, AnimatePresence } from 'framer-motion';
-import { useJitsiRoom } from '@/hooks/useJitsiRoom';
-import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedicineButton';
 import { FEATURES } from '@/config/features';
 import { supabase } from '@/lib/customSupabaseClient';
 import { percentualDeReembolso, horasAte } from '@/lib/reembolso';
@@ -40,7 +38,6 @@ const PatientConsultations = () => {
     }, [refetchAppointments]);
 
     // Integrate Jitsi Hook for blocked room handling only
-    const { generateRoomInfo } = useJitsiRoom();
     const [blockedRoom, setBlockedRoom] = useState(null);
     const [cancelTarget, setCancelTarget] = useState(null);
     const [isCancelling, setIsCancelling] = useState(false);
@@ -298,38 +295,6 @@ const PatientConsultations = () => {
                                        </div>
                                         
                                         {/* Action Button: PatientTelemedicineButton now handles logic */}
-                                        {FEATURES.VIDEO_CALL && isUpcoming && (
-                                            <div className="w-full sm:w-auto">
-                                                {callAccess.isAccessible ? (
-                                                    <PatientTelemedicineButton 
-                                                        appointment={appt} 
-                                                        onConsentStatusChange={handleConsentChange}
-                                                    />
-                                                ) : (
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <div className="w-full sm:w-auto">
-                                                                <Button 
-                                                                    disabled 
-                                                                    className="w-full sm:w-[200px] bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
-                                                                >
-                                                                    <Lock size={16} className="mr-2"/>
-                                                                    Acessar videochamada
-                                                                </Button>
-                                                            </div>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent side="bottom" className="bg-slate-800 text-white border-slate-700">
-                                                            <p className="text-xs flex items-center gap-1">
-                                                                <AlertTriangle className="w-3 h-3 text-amber-400" />
-                                                                {callAccess.isTooEarly 
-                                                                    ? `Disponível em ${callAccess.minutesUntil}min` 
-                                                                    : "Expirado"}
-                                                            </p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                )}
-                                            </div>
-                                        )}
 
                                         {/* Cancelar consulta — regras: pendente sempre; pago só até 3h antes; atendido nunca */}
                                         {isUpcoming && !['atendido', 'concluida', 'realizado'].includes(appt.status) && (

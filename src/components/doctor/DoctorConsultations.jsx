@@ -24,7 +24,6 @@ import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { buildJitsiRoomId } from '@/utils/jitsiRoomId';
-import { openJitsiRoom } from '@/utils/telemedicineUtils';
 import { FEATURES } from '@/config/features';
 
 // Constants
@@ -715,29 +714,6 @@ const DoctorConsultations = () => {
     setLocalEmailSentStatus(prev => ({ ...prev, [appointmentId]: true }));
   };
 
-  const handleOpenVideoCall = async (appointment) => {
-    const roomName = appointment.video_room || buildJitsiRoomId(appointment.id);
-    const displayName = `Dr(a). ${appointment.medico_nome || 'Médico'}`;
-
-    // Non-blocking save if not already present
-    if (!appointment.video_room) {
-        supabase.from('agendamentos').update({ video_room: roomName }).eq('id', appointment.id).then(res => {
-            if(res.error) console.error("Error saving video_room", res.error);
-        });
-    }
-
-    const result = openJitsiRoom(roomName, displayName);
-    
-    if (!result.ok) {
-        setBlockedRoom({ url: `https://meet.jit.si/${roomName}` });
-    } else {
-        toast({
-            title: "Abrindo Videochamada",
-            description: "A videochamada abrirá em nova aba segura.",
-            variant: "default"
-        });
-    }
-  };
 
   const copyFallbackInfo = () => {
     if(!blockedRoom) return;
@@ -916,21 +892,11 @@ const DoctorConsultations = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="rounded-md shadow-xl border-gray-100 min-w-[180px] p-1.5">
-                              {FEATURES.PRONTUARIO && (
-                              <DropdownMenuItem onSelect={() => navigate(`/dashboard/medico/pacientes/${appt.patient_id}`)} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
-                                <User className="mr-2 h-4 w-4 text-gray-500" /> Ir para Prontuário
-                              </DropdownMenuItem>
-                              )}
                               <PatientDetailsDialog patient={appt.perfis_usuarios} guest={appt.guest_patients}>
                                 <DropdownMenuItem onSelect={e => e.preventDefault()} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
                                   <Eye className="mr-2 h-4 w-4 text-gray-500" /> Ver Dados Rápidos
                                 </DropdownMenuItem>
                               </PatientDetailsDialog>
-                              {FEATURES.VIDEO_CALL && !isCancelled && !isCheckinCompleted && (
-                                <DropdownMenuItem onSelect={(e) => { e.preventDefault(); handleOpenVideoCall(appt); }} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
-                                  <LinkIcon className="mr-2 h-4 w-4 text-gray-500" /> Iniciar Videochamada
-                                </DropdownMenuItem>
-                              )}
                               {!isCancelled && !isCheckinCompleted && (
                                 <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setSelectedRescheduleAppt(appt); }} className="rounded-lg cursor-pointer text-xs font-medium py-2.5 px-3 focus:bg-gray-50">
                                   <CalendarClock className="mr-2 h-4 w-4 text-gray-500" /> Reagendar
