@@ -15,6 +15,7 @@ import { useJitsiRoom } from '@/hooks/useJitsiRoom';
 import PatientTelemedicineButton from '@/components/telemedicine/PatientTelemedicineButton';
 import { FEATURES } from '@/config/features';
 import { supabase } from '@/lib/customSupabaseClient';
+import { percentualDeReembolso, horasAte } from '@/lib/reembolso';
 
 // Regras de cancelamento do paciente:
 // - Não pagas (pendente): pode cancelar a qualquer momento.
@@ -460,10 +461,10 @@ const PatientConsultations = () => {
                         </DialogDescription>
                     </DialogHeader>
                     {cancelTarget && (() => {
-                        const hoursUntil = (new Date(cancelTarget.horario_inicio).getTime() - Date.now()) / 3600000;
                         const isPaid = cancelTarget.pagamento_status === 'pago';
-                        const fullRefund = isPaid && hoursUntil >= 2;
-                        const partialRefund = isPaid && hoursUntil > 0 && hoursUntil < 2;
+                        const pct = percentualDeReembolso(horasAte(cancelTarget.horario_inicio), isPaid);
+                        const fullRefund = pct === 100;
+                        const partialRefund = pct === 50;
                         return (
                             <div className="py-2 text-sm">
                                 <p className="text-gray-700">

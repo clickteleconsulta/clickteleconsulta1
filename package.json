@@ -7,7 +7,8 @@
     "dev": "vite --host :: --port 3000",
     "build": "node tools/generate-llms.mjs; node tools/generate-sitemap.mjs; vite build && node tools/prerender.mjs",
     "preview": "vite preview --host :: --port 3000",
-    "lint": "eslint . --quiet"
+    "lint": "eslint . --quiet",
+    "test": "node --test src/"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.2.1",
