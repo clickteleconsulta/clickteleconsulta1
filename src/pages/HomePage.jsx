@@ -215,21 +215,31 @@ const HomePage = () => {
           // 32 px deixam ~25 px de pé para fora. Com pb-14 (56) as pernas
           // sumiam inteiras dentro da caixa.
           className="relative z-10 container mx-auto px-4 py-10 md:py-12 lg:pt-12 lg:pb-8">
-          {/* Colunas que ABRAÇAM o conteúdo (`auto`) e ancoram à esquerda. Com
-              `1fr` na primeira, a coluna do botão era empurrada para a borda da
-              tela e ele ficava solto no canto, longe do texto a que pertence. */}
+          {/* A COLUNA DA ARTE TEM LARGURA PRÓPRIA; A SOBRA VAI TODA PARA O TEXTO.
+              Antes as duas eram frações (1,25fr e 1fr), e aí a coluna da direita
+              crescia junto com a tela enquanto o desenho continuava do mesmo
+              tamanho. O que crescia era o vazio entre um e outro. Medido, do
+              texto até a arte:
+
+                1024px   -1px  (encostava no botão)
+                1280px  137px
+                1440px  190px
+                1920px  190px
+
+              Com `auto` na segunda e largura fixa no invólucro, esse vão passa a
+              ser 26px em 1024 e 56px do 1280 para cima, em qualquer tela: o que
+              sobra de largura engorda a coluna do texto, que é onde há conteúdo
+              para ocupar.
+
+              A largura da arte muda no xl porque em 1024 a coluna do texto cai
+              para 512px e o título quebra em três linhas — os 400px de lá são o
+              limite antes disso acontecer. */}
           {/* `items-end` e não `items-center`: o personagem da ilustração pisa
                   numa linha de chão, e alinhar essa linha com o pé do bloco de
                   texto faz o herói inteiro assentar sobre uma base só. Centrado,
                   a arte flutuava 124 px acima do botão — medido — e os dois
                   pareciam duas peças soltas em vez de uma cena. */}
-              {/* `minmax(0,...)` nas duas colunas: sem isso a coluna da arte não
-                  encolhe abaixo da largura da imagem (o mínimo de um `fr` é o
-                  conteúdo), a imagem passa a empurrar a grade e rouba largura do
-                  texto — foi o que jogou o título de volta para três linhas em
-                  1024 px. Com o mínimo zerado, a arte transborda para fora da
-                  tela em vez de espremer a frase. */}
-              <div className="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-end gap-8 lg:gap-10">
+              <div className="grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end gap-8 lg:gap-10">
             <motion.div
               className="max-w-2xl lg:max-w-none text-left"
               variants={stagger}
@@ -386,17 +396,25 @@ const HomePage = () => {
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              // Largura EXPLÍCITA no lg: a coluna da grade é `auto`, então um
-              // `w-full` aqui vira dependência circular (a coluna mede pelo
-              // conteúdo, o conteúdo mede pela coluna) e a caixa colapsa para
-              // zero — com ela, a imagem some.
-              className="w-full lg:w-auto lg:justify-self-stretch lg:relative lg:-mr-10 xl:-mr-16 flex items-end justify-center lg:justify-end"
+              // Largura EXPLÍCITA no lg: a coluna da grade é `auto` e a imagem é
+              // absoluta, então a coluna não tem conteúdo em fluxo para medir —
+              // é este número que a define. Com `w-full` vira dependência
+              // circular (a coluna mede pelo conteúdo, o conteúdo pela coluna) e
+              // a caixa colapsa para zero, levando a imagem junto.
+              //
+              // Não devolva a margem negativa que existia aqui (`lg:-mr-10
+              // xl:-mr-16`). Ela empurrava a arte para fora da tela: medido, o
+              // desenho terminava 17px além da borda em 1024, 41 em 1280 e 21 em
+              // 1440, e a seção tem `overflow-x-clip` — o lado direito do monitor
+              // era cortado em silêncio. E, ao empurrar para a direita, era ela
+              // também que abria metade do vazio no meio do banner.
+              className="w-full lg:w-[400px] xl:w-[520px] lg:relative flex items-end justify-center lg:justify-end"
             >
               <img
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block h-[320px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[16.3%]"
+                className="hidden lg:block h-[260px] xl:h-[320px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[16.3%]"
               />
             </motion.div>
           </div>
