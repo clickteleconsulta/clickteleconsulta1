@@ -28,7 +28,7 @@
     <!-- SEO (padrões da marca; páginas ajustam título/descrição via react-helmet) -->
     <meta name="google-site-verification" content="%VITE_GSC_VERIFICATION%" />
     <title>aviDoc — Agende sua teleconsulta online</title>
-    <meta name="description" content="Marketplace de agendamento de teleconsultas: escolha um médico, agende e seja atendido online, de onde estiver. A partir de R$ 40, com Pix ou cartão e sem mensalidade." />
+    <meta name="description" content="Escolha um médico, veja preço e horários e agende sua teleconsulta online, de onde estiver. A partir de R$ 40, com Pix ou cartão e sem mensalidade." />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#3B5BA5" />
     <meta name="author" content="CLICK TELECONSULTA ONLINE LTDA" />
@@ -61,6 +61,7 @@
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://avidoc.com.br/#organizacao",
       "name": "aviDoc",
       "legalName": "CLICK TELECONSULTA ONLINE LTDA",
       "url": "https://avidoc.com.br",
@@ -78,12 +79,31 @@
         "addressCountry": "BR"
       },
       "areaServed": "BR",
+      "sameAs": [
+        "https://www.instagram.com/avidoc.com.br/",
+        "https://www.facebook.com/profile.php?id=61592500808383"
+      ],
       "contactPoint": {
         "@type": "ContactPoint",
         "email": "contato@avidoc.com.br",
         "contactType": "customer support",
         "availableLanguage": "Portuguese"
       }
+    }
+    </script>
+
+    <!-- Nome do site no resultado de busca. Sem esta marcação o Google exibe o
+         domínio cru; com ela, exibe "aviDoc". O `alternateName` cobre quem
+         procura pelo endereço em vez do nome. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "aviDoc",
+      "alternateName": "avidoc.com.br",
+      "url": "https://avidoc.com.br",
+      "inLanguage": "pt-BR",
+      "publisher": { "@id": "https://avidoc.com.br/#organizacao" }
     }
     </script>
   </head>
