@@ -51,8 +51,11 @@ const COURTESY_RESPONSES = [
   'Imagina! Tenha um ótimo dia.'
 ];
 
-const AiChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const AiChatWidget = ({ abrirDeInicio = false }) => {
+  // `abrirDeInicio` vem de AssistenteFlutuante: quem clicou no botão já pediu
+  // a conversa, e reabrir com um segundo clique seria cobrar duas vezes a mesma
+  // intenção.
+  const [isOpen, setIsOpen] = useState(!!abrirDeInicio);
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);

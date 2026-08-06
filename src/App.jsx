@@ -76,7 +76,7 @@ const MemedPrescriptionPage = lazy(() => import('@/integrations/memed/MemedPresc
 const ConsultaEncerradaPage = lazy(() => import('@/pages/ConsultaEncerradaPage'));
 
 // Components
-import AiChatWidget from '@/components/AiChatWidget';
+import AssistenteFlutuante from '@/components/AssistenteFlutuante';
 const GuestAppointmentPage = lazy(() => import('@/pages/GuestAppointmentPage'));
 import Preloader from '@/components/Preloader';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -91,7 +91,7 @@ const AppLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      <AiChatWidget />
+      <AssistenteFlutuante />
     </div>
   );
 };
