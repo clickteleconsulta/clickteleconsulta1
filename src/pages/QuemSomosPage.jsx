@@ -106,7 +106,7 @@ const QuemSomosPage = () => {
           <h2 className="text-xl font-bold text-slate-900 text-center">No que acreditamos</h2>
           <div className="grid sm:grid-cols-2 gap-4 mt-6">
             {VALORES.map((v) => (
-              <div key={v.title} className="flex items-start gap-3 p-5 rounded-lg bg-brand-50 border border-slate-100">
+              <div key={v.title} className="flex items-start gap-3 p-5 rounded-lg bg-brand-100 border border-brand-200">
                 <div className="w-10 h-10 rounded-md bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
                   <v.icon className="w-5 h-5" />
                 </div>

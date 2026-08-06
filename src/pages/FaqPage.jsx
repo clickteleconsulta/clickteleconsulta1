@@ -48,7 +48,7 @@ const FaqPage = () => {
         {/* Arte AO LADO do texto, e pequena: aqui ela ilustra uma situação
             concreta — a pergunta que ficou sem resposta — em vez de decorar a
             página inteira. */}
-        <div className="mt-10 p-6 bg-brand-50 border border-slate-100 rounded-lg flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="mt-10 p-6 bg-brand-100 border border-brand-200 rounded-lg flex flex-col sm:flex-row sm:items-center gap-6">
           <img
             src="/ilustra/faq.svg"
             alt=""

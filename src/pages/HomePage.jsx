@@ -480,7 +480,11 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════════════════════
           5. POR QUE CLICK TELECONSULTA
       ═══════════════════════════════════════════════════════════════════════ */}
-      <section className="bg-brand-50 py-20">
+      {/* brand-100, e não brand-50: o fundo da página é slate-100 (#F1F5F9) e o
+          brand-50 (#F2F5FB) fica a 2 pontos dele — o bloco de destaque era
+          invisível, sobrava só a borda. Contra BRANCO o brand-50 lê bem, e é
+          por isso que os ladrilhos de ícone dentro dos cartões continuam nele. */}
+      <section className="bg-brand-100 py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

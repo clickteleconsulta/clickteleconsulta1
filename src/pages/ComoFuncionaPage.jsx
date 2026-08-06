@@ -53,7 +53,7 @@ const ComoFuncionaPage = () => {
           <h2 className="text-xl font-bold text-slate-900 text-center">Por que agendar pela {BRAND.name}</h2>
           <div className="grid sm:grid-cols-3 gap-4 mt-6">
             {BENEFITS.map((b) => (
-              <div key={b.title} className="flex items-start gap-3 p-4 rounded-md bg-brand-50 border border-slate-100">
+              <div key={b.title} className="flex items-start gap-3 p-4 rounded-md bg-brand-100 border border-brand-200">
                 <b.icon className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
                 <div><p className="font-semibold text-slate-800 text-sm">{b.title}</p><p className="text-xs text-slate-500 mt-0.5">{b.text}</p></div>
               </div>

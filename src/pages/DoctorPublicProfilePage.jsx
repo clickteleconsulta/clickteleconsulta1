@@ -79,7 +79,7 @@ const ReviewsSection = ({ reviews }) => {
     : null;
 
   return (
-    <div id="avaliacoes" className="mt-6 space-y-4 scroll-mt-24">
+    <div id="avaliacoes" className="bg-card rounded-md border border-border shadow-sm p-5 space-y-4 scroll-mt-24">
       <div className="flex items-start justify-between">
         <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
           <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -415,7 +415,7 @@ const DoctorPublicProfilePage = () => {
           <div className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
               <EmbeddedAppointmentForm doctor={doctor} />
-              <div className="bg-muted/10 rounded-md border border-dashed border-border p-5">
+              <div className="bg-card rounded-md border border-border shadow-sm p-5">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
                   <Info className="w-3 h-3" /> Suporte
                 </h4>

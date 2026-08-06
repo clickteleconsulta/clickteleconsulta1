@@ -94,7 +94,7 @@ const DocumentosPage = () => {
         </section>
 
         {/* Como conferir — o miolo da página */}
-        <section className="mt-8 bg-brand-50 border border-brand-100 rounded-lg p-6 md:p-8">
+        <section className="mt-8 bg-brand-100 border border-brand-200 rounded-lg p-6 md:p-8">
           <h2 className="text-xl font-bold text-slate-900">{conferencia.titulo}</h2>
           <p className="text-slate-600 mt-2 leading-relaxed">{conferencia.intro}</p>
 
