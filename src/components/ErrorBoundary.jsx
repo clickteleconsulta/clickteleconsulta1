@@ -1,4 +1,5 @@
 import React from 'react';
+import { relatarErro } from '@/lib/relatarErro';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,7 +12,11 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
+    // O console continua, porque é o que serve durante o desenvolvimento.
+    // O relato é o que faltava: sem ele, erro em produção não chegava a
+    // ninguém — a pessoa via a tela de falha e ia embora em silêncio.
     console.error('ErrorBoundary caught:', error, errorInfo);
+    relatarErro(error, 'react');
   }
 
   render() {

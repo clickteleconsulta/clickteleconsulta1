@@ -8,6 +8,10 @@ import { Toaster } from '@/components/ui/toaster';
 import { AppointmentsProvider } from '@/contexts/AppointmentsContext';
 import { LoaderProvider } from '@/contexts/LoaderContext';
 import { CartProvider } from '@/hooks/useCart';
+import { ligarCapturaGlobal } from '@/lib/relatarErro';
+
+// Antes de montar: erro durante a montagem também precisa ser visto.
+ligarCapturaGlobal();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <>
