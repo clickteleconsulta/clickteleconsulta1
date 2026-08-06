@@ -256,6 +256,14 @@ export function DoctorScheduleCard({
   agendaPronta,
   bookedSlotsProntos,
   blocksProntos,
+  // SÓ A GRADE DE HORÁRIOS, sem a coluna do médico e sem a moldura do cartão.
+  // Serve ao perfil público, onde o nome, a foto e o CRM já estão na tela logo
+  // acima — repetir tudo ali seria mostrar o mesmo médico duas vezes em duas
+  // caixas diferentes. Tudo o que vem depois (buscar agenda, escutar horário
+  // ocupado em tempo real, levar ao checkout, barrar convidado) continua o
+  // mesmo: é o mesmo componente, não uma segunda implementação da agenda que
+  // um dia divergiria desta.
+  somenteAgenda = false,
 }) {
   const temDadosProntos = !!agendaPronta;
   const { session } = useAuth();
@@ -522,10 +530,14 @@ export function DoctorScheduleCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-white rounded-lg border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-hidden my-3 w-full max-w-[920px] mx-auto"
+      className={cn(
+        'flex flex-col relative overflow-hidden w-full',
+        !somenteAgenda &&
+          'bg-white rounded-lg border border-slate-200/70 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 my-3 max-w-[920px] mx-auto'
+      )}
     >
       <div className="flex flex-col md:flex-row">
-          <div className="p-5 md:p-6 flex flex-col gap-3 w-full md:w-[345px] md:min-w-[345px] lg:w-[400px] lg:min-w-[400px] border-b md:border-b-0 md:border-r border-slate-100">
+          <div className={cn("p-5 md:p-6 flex flex-col gap-3 w-full md:w-[345px] md:min-w-[345px] lg:w-[400px] lg:min-w-[400px] border-b md:border-b-0 md:border-r border-slate-100", somenteAgenda && 'hidden')}>
               {/* Proporções tiradas do cartão de referência e reescaladas: lá o
                   conteúdo tem 800 px de largura, aqui 345 no desktop — fator 0,43.
                   Foto 186→84, nome 52→23, sub 27→13. Todo o card foi
@@ -642,7 +654,8 @@ export function DoctorScheduleCard({
               id={`agenda-${doctor?.id}`}
               className={cn(
                   'p-3 md:p-3.5 flex-1 flex-col min-h-[253px] md:flex',
-                  agendaAberta ? 'flex' : 'hidden'
+                  somenteAgenda || agendaAberta ? 'flex' : 'hidden',
+                  somenteAgenda && 'p-0 md:p-0'
               )}
           >
               {loadingSlots ? <ScheduleSkeleton /> : !hasConfiguredAgenda ? <div className="flex-grow flex flex-col justify-center items-center text-center text-muted-foreground py-6">

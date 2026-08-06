@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
-import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar } from '@/components/ui/icones';
+import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar, ChevronDown } from '@/components/ui/icones';
 import useAsync from '@/hooks/useAsync';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +19,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import Estrelas from '@/components/Estrelas';
+import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { slugify, doctorPath } from '@/lib/doctorSlug';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -147,18 +148,70 @@ const ReviewsSection = ({ reviews }) => {
   );
 };
 
-// ─── Embedded Appointment Form ─────────────────────────────────────────────────
-const EmbeddedAppointmentForm = ({ doctor }) => (
+// ─── Caixa de agendamento ──────────────────────────────────────────────────────
+/**
+ * A caixa "Agendar Consulta".
+ *
+ * DUAS VERSÕES, E O MOTIVO É LARGURA.
+ *
+ * `comAgenda` abre a grade de horários ali mesmo, sem sair da página — é a
+ * versão que aparece até 1023px, onde a caixa ocupa a linha inteira. Quem chega
+ * pelo link compartilhado cai no celular, e mandar essa pessoa para
+ * /agendamentos só para descobrir se existe horário era um desvio que ela não
+ * precisava fazer.
+ *
+ * A partir de lg a caixa vive na coluna lateral, com ~380px. A grade do cartão
+ * abre cinco dias lado a lado nessa faixa (o `sm:grid-cols-5` responde à
+ * LARGURA DA JANELA, não à do contêiner), o que daria colunas de ~65px. Ali a
+ * caixa segue levando para /agendamentos, onde a grade tem a largura de que
+ * precisa.
+ *
+ * A grade é o `DoctorScheduleCard` em modo `somenteAgenda`, e não uma segunda
+ * implementação: agendar daqui passa exatamente pelo mesmo caminho de
+ * /agendamentos — mesma checagem de horário ocupado em tempo real, mesmo
+ * checkout, mesmo tratamento de visitante não logado.
+ */
+const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
+  const [agendaAberta, setAgendaAberta] = useState(false);
+
+  return (
   <div className="bg-card rounded-md border border-border shadow-sm p-6 flex flex-col gap-4">
     <h3 className="font-bold text-lg text-foreground">Agendar Consulta</h3>
     <p className="text-sm text-muted-foreground leading-relaxed">
-      Clique no botão abaixo para ver os horários disponíveis e concluir seu agendamento online em poucos minutos.
+      {comAgenda
+        ? 'Abra a agenda abaixo, escolha um horário e conclua o agendamento em poucos minutos.'
+        : 'Clique no botão abaixo para ver os horários disponíveis e concluir seu agendamento online em poucos minutos.'}
     </p>
-    <Button asChild className="w-full bg-primary hover:bg-primary/90 font-bold py-6">
-      <Link to="/agendamentos">
-        <Calendar className="w-4 h-4 mr-2" /> Ver Horários Disponíveis
-      </Link>
-    </Button>
+    {comAgenda ? (
+      <>
+        <Button
+          type="button"
+          onClick={() => setAgendaAberta((v) => !v)}
+          aria-expanded={agendaAberta}
+          aria-controls={`agenda-perfil-${doctor?.id}`}
+          className="w-full bg-primary hover:bg-primary/90 font-bold py-6"
+        >
+          <Calendar className="w-4 h-4 mr-2" />
+          {agendaAberta ? 'Ocultar horários' : 'Ver Horários Disponíveis'}
+          <ChevronDown className={cn('w-4 h-4 ml-2 transition-transform duration-200', agendaAberta && 'rotate-180')} />
+        </Button>
+        {/* Montada só depois do clique. Fechada, ela não busca agenda nem abre
+            a escuta de horário ocupado — a caixa da barra lateral fica no DOM
+            junto com esta, e duas grades vivas seriam duas vezes o mesmo
+            trabalho na mesma página. */}
+        {agendaAberta && (
+          <div id={`agenda-perfil-${doctor?.id}`} className="border-t border-border pt-4">
+            <DoctorScheduleCard initialDoctor={doctor} somenteAgenda />
+          </div>
+        )}
+      </>
+    ) : (
+      <Button asChild className="w-full bg-primary hover:bg-primary/90 font-bold py-6">
+        <Link to="/agendamentos">
+          <Calendar className="w-4 h-4 mr-2" /> Ver Horários Disponíveis
+        </Link>
+      </Button>
+    )}
     {doctor?.whatsapp_enabled && doctor?.whatsapp && (
       <a
         href={`https://wa.me/55${doctor.whatsapp.replace(/\D/g, '')}`}
@@ -174,7 +227,8 @@ const EmbeddedAppointmentForm = ({ doctor }) => (
       <span>Pagamento por Pix ou cartão · Dados protegidos (LGPD)</span>
     </div>
   </div>
-);
+  );
+};
 
 // ─── Doctor Editor Dialog ──────────────────────────────────────────────────────
 const DoctorEditorDialog = ({ doctor, isOpen, onOpenChange, onSave }) => {
@@ -378,6 +432,18 @@ const DoctorPublicProfilePage = () => {
               </div>
             </div>
 
+            {/* AGENDAR VEM ANTES DE LER SOBRE O MÉDICO — no celular.
+                Até lg a barra lateral desce para o fim da página, e a caixa de
+                agendamento ia junto: quem abria o link compartilhado precisava
+                rolar a bio inteira, a formação e as instruções para descobrir
+                que existia um botão. Quem chega por um link de perfil já
+                escolheu o médico; o que falta é o horário.
+                No lg ela some daqui e reaparece na coluna lateral, que a essa
+                altura está visível ao lado do topo da página. */}
+            <div className="lg:hidden">
+              <EmbeddedAppointmentForm doctor={doctor} comAgenda />
+            </div>
+
             {/* Bio */}
             <div className="bg-card rounded-md border border-border shadow-sm p-5 space-y-3">
               <h2 className="text-base font-semibold text-foreground">Sobre o Profissional</h2>
@@ -421,7 +487,9 @@ const DoctorPublicProfilePage = () => {
           {/* Right column */}
           <div className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
-              <EmbeddedAppointmentForm doctor={doctor} />
+              <div className="hidden lg:block">
+                <EmbeddedAppointmentForm doctor={doctor} />
+              </div>
               <div className="bg-card rounded-md border border-border shadow-sm p-5">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
                   <Info className="w-3 h-3" /> Suporte
