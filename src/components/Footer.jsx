@@ -59,6 +59,21 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  * As placas são brancas porque o rodapé é escuro e o azul da Visa (#1A1F71)
  * sumiria nele. Placa branca preserva cada marca na cor oficial, que é o que
  * as três exigem.
+ *
+ * NÃO TROQUE ESTES ARQUIVOS POR ÍCONES DE BIBLIOTECA. São marcas registradas com
+ * manual próprio, e nenhuma biblioteca de ícones de interface entrega as três: a
+ * família de marcas do Flaticon, que o resto do projeto usa, tem Visa e não tem
+ * Pix nem Mastercard. Um glifo monocromático quebraria a exigência de cor cheia
+ * da Mastercard e a cor exata que o manual do Pix fixa.
+ *
+ * A COR DO PIX É #77B6A8 E ESTÁ CERTA. Ela parece lavada ao lado do vermelho da
+ * Mastercard, e é fácil confundir com erro — eu mesmo achei que fosse, e fui
+ * conferir. A tabela de paleta do manual v1.6 diz, literalmente:
+ *
+ *     Verde Pix · Pantone 7472 C · CMYK 70·0·40·0 · RGB 119·182·168 · # 77B6A8
+ *
+ * O #32BCAD que aparece em banco de logotipo por aí é de uma versão anterior da
+ * marca. Se alguém "corrigir" para ele, estará saindo do manual, não entrando.
  */
 const BANDEIRAS = [
   { nome: 'Pix', src: '/pagamento/pix.svg' },
