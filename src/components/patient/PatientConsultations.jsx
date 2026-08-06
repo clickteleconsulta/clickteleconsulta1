@@ -209,8 +209,12 @@ const PatientConsultations = () => {
 
     const AppointmentList = ({ appointmentsList }) => {
         if (appointmentsList.length === 0) {
+            // Preenchimento e cor de borda explícitos. Antes era só
+            // `border-2 border-dashed`: sem fundo e herdando a cor padrão, sobre
+            // a página branca virava um retângulo pontilhado vazio — parecia
+            // campo por carregar, não "não há nada aqui".
             return (
-                <div className="text-center py-8 border-2 border-dashed rounded-lg mt-4">
+                <div className="text-center py-10 px-4 rounded-lg mt-4 bg-muted/40 border border-dashed border-border">
                     <p className="text-muted-foreground mb-4">Nenhuma consulta encontrada nesta categoria.</p>
                     <Button asChild><Link to="/paciente/dashboard/agendar"><PlusCircle className="w-4 h-4 mr-2"/> Agendar nova consulta</Link></Button>
                 </div>
@@ -374,13 +378,23 @@ const PatientConsultations = () => {
         );
     };
 
+    // CARTÃO DE VERDADE, e não `bg-transparent`.
+    //
+    // A área do paciente é "cartões brancos com borda sobre fundo branco" — é
+    // assim que a barra lateral e o NextAppointmentCard se sustentam. Esta tela
+    // era a única transparente e sem borda, então as abas e o estado vazio
+    // flutuavam no branco da página, sem nada dizendo onde o conteúdo começa.
+    //
+    // A área do MÉDICO resolve o mesmo problema de outro jeito: lá o <main> é
+    // cinza e os cartões brancos aparecem por contraste. Os dois funcionam;
+    // misturar os dois não.
     return (
-        <Card className="border-none shadow-none bg-transparent">
-            <CardHeader className="px-0 pt-0">
+        <Card>
+            <CardHeader>
                 <CardTitle className="text-2xl font-bold text-gray-800">Minhas Consultas</CardTitle>
                 <CardDescription>Gerencie seus agendamentos, realize pagamentos e acesse suas teleconsultas.</CardDescription>
             </CardHeader>
-            <CardContent className="px-0">
+            <CardContent>
                 {loading ? <div className="flex justify-center py-20"><Loader2 className="animate-spin w-10 h-10 text-primary" /></div> : (
                     <Tabs defaultValue="upcoming" className="w-full">
                         <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-6">
