@@ -16,3 +16,8 @@ dist/
 # Cache de rasterização das ilustrações (tools/gerar-anuncios.py).
 # Reconstruído sozinho a partir dos SVGs; versionar só duplicaria peso no repo.
 .cache-ilustra/
+
+# PDFs gerados por tools/gerar-documentos-legais.py. A fonte é o .md ao lado;
+# o PDF é produto, e produto de documento legal se publica por Admin -> Legal,
+# nao por commit.
+documentos-legais/saida/
