@@ -210,7 +210,7 @@ const SideChat = ({ onClose, appointmentId, userRole, userName }) => {
             placeholder="Digite uma mensagem..."
             className="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
           />
-          <Button type="submit" size="sm" className="bg-brand-600 hover:bg-brand-500 rounded-xl px-3">
+          <Button aria-label="Enviar mensagem" type="submit" size="sm" className="bg-brand-600 hover:bg-brand-500 rounded-xl px-3">
             <Send className="w-4 h-4" />
           </Button>
         </div>

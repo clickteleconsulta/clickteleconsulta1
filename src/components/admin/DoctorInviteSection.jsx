@@ -162,7 +162,7 @@ const DoctorInviteSection = () => {
                                 {clearing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />} Limpar histórico
                             </Button>
                         )}
-                        <Button variant="ghost" size="sm" onClick={fetchInvites} disabled={loading}>
+                        <Button aria-label="Recarregar os convites" variant="ghost" size="sm" onClick={fetchInvites} disabled={loading}>
                             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                         </Button>
                     </div>

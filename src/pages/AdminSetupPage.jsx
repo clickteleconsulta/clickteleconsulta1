@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -76,7 +76,7 @@ const AdminSetupPage = ({ functionName }) => {
             case 'success':
                 return (
                     <>
-                        <CheckCircle className="w-12 h-12 text-green-500" />
+                        <CheckCircle2 className="w-12 h-12 text-green-500" />
                         <p className="mt-4 font-semibold text-foreground">{message}</p>
                         <Button asChild className="mt-6">
                             <Link to="/acesso-profissional">Ir para o Login do Médico</Link>

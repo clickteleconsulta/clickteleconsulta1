@@ -7,10 +7,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Plus, Edit2, Trash2, Stethoscope, CheckCircle2 } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, CheckCircle2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
+import EstadoVazio from '@/components/EstadoVazio';
 
 const ProceduresSkeleton = () => (
     <div className="space-y-4">
@@ -179,11 +180,14 @@ const DoctorProcedures = () => {
 
             {procedures.length === 0 ? (
                 <Card className="border-dashed border-2 bg-gray-50">
-                    <CardContent className="flex flex-col items-center justify-center p-12 text-center">
-                        <Stethoscope className="w-12 h-12 text-gray-300 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900">Nenhum procedimento cadastrado</h3>
-                        <p className="text-gray-500 mt-1 mb-4">Adicione os serviços que você oferece para que os pacientes possam agendar.</p>
-                        <Button onClick={() => openModal()} variant="outline">Adicionar Agora</Button>
+                    <CardContent className="p-0">
+                        <EstadoVazio
+                            arte="/ilustra/sem-procedimentos.svg"
+                            titulo="Nenhum procedimento cadastrado"
+                            descricao="Adicione os serviços que você oferece para que os pacientes possam agendar."
+                            acao="Adicionar agora"
+                            onAcao={() => openModal()}
+                        />
                     </CardContent>
                 </Card>
             ) : (
@@ -206,7 +210,7 @@ const DoctorProcedures = () => {
                                 </div>
                                 <div className="flex gap-2 w-full md:w-auto">
                                     <Button variant="outline" size="sm" onClick={() => openModal(proc)} className="flex-1 md:flex-none">
-                                        <Edit2 className="w-4 h-4 mr-2" /> Editar
+                                        <Pencil className="w-4 h-4 mr-2" /> Editar
                                     </Button>
                                     <Button variant="outline" size="sm" onClick={() => handleDelete(proc.id)} className="flex-1 md:flex-none text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200">
                                         <Trash2 className="w-4 h-4" />

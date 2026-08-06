@@ -5,7 +5,7 @@ import { useLocation, useNavigate, Link, useSearchParams } from 'react-router-do
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Helmet } from 'react-helmet';
-import { Loader2, CheckCircle, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock, ClipboardList } from 'lucide-react';
+import { Loader2, CheckCircle2, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -278,7 +278,7 @@ const AppointmentConfirmationPage = () => {
           {isPaid ? (
             <>
               <div className="inline-flex items-center justify-center p-3 bg-green-100 text-green-600 rounded-full mb-4">
-                 <CheckCircle className="w-10 h-10" />
+                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <h1 className="text-3xl font-bold text-foreground">Consulta confirmada!</h1>
               <p className="text-muted-foreground mt-2 text-lg">Seu pagamento foi confirmado e sua teleconsulta está garantida.</p>
@@ -304,7 +304,7 @@ const AppointmentConfirmationPage = () => {
             {isPaid && !isDoctor && (
               <Card className="border-l-4 border-l-green-600 shadow-md bg-green-50/40">
                 <CardContent className="py-6 flex items-start gap-3">
-                  <CheckCircle className="w-7 h-7 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-7 h-7 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
                     <h3 className="font-bold text-green-900 text-lg">Pagamento confirmado — sua consulta está garantida!</h3>
                     <p className="text-sm text-green-900/90 mt-1.5 leading-relaxed">

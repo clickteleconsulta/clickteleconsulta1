@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Star, Trash2, CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Loader2, Star, Trash2, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -177,7 +177,7 @@ const AdminReviewsPage = () => {
                                         <>
                                             <Button size="sm" variant="outline" className="w-full text-green-600 hover:text-green-700 hover:bg-green-50 border-green-200"
                                                 onClick={() => handleUpdateStatus(review.id, 'publicada', true)}>
-                                                <CheckCircle className="w-4 h-4 mr-1" /> Rejeitar Denúncia (publicar)
+                                                <CheckCircle2 className="w-4 h-4 mr-1" /> Rejeitar Denúncia (publicar)
                                             </Button>
                                             <Button size="sm" variant="outline" className="w-full text-orange-600 hover:text-orange-700 hover:bg-orange-50 border-orange-200"
                                                 onClick={() => handleUpdateStatus(review.id, 'denuncia_aprovada', false)}>
@@ -188,7 +188,7 @@ const AdminReviewsPage = () => {
                                     {review.status !== 'publicada' && (
                                         <Button size="sm" className="w-full bg-brand-600 hover:bg-brand-700 text-white"
                                             onClick={() => handleUpdateStatus(review.id, 'publicada', true)}>
-                                            <CheckCircle className="w-4 h-4 mr-1" /> Publicar
+                                            <CheckCircle2 className="w-4 h-4 mr-1" /> Publicar
                                         </Button>
                                     )}
                                     <Button size="sm" variant="destructive" className="w-full"

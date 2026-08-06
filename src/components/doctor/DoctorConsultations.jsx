@@ -911,7 +911,7 @@ const DoctorConsultations = () => {
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" className="h-9 w-9 rounded-lg p-0 hover:bg-gray-50 border-gray-200 text-gray-500 shadow-sm hover:shadow-md transition-all" disabled={isActionLoading}>
+                              <Button aria-label="Ações da consulta" variant="outline" className="h-9 w-9 rounded-lg p-0 hover:bg-gray-50 border-gray-200 text-gray-500 shadow-sm hover:shadow-md transition-all" disabled={isActionLoading}>
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>

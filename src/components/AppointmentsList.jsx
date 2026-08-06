@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, User, Phone, Mail, Video, Trash2, Edit } from 'lucide-react';
+import { Calendar, Clock, User, Phone, Mail, Video, Trash2, Pencil } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import EstadoVazio from '@/components/EstadoVazio';
 
 const statusColors = {
   agendada: 'bg-green-100 text-green-700',
@@ -47,10 +48,13 @@ export function AppointmentsList({ appointments, onUpdateAppointment, onDeleteAp
 
   if (appointments.length === 0) {
     return (
-      <Card className="text-center py-8">
-        <CardContent>
-          <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Nenhuma consulta agendada para esta data.</p>
+      <Card>
+        <CardContent className="p-0">
+          <EstadoVazio
+            arte="/ilustra/sem-consultas.svg"
+            titulo="Nenhuma consulta agendada para esta data"
+            compacto
+          />
         </CardContent>
       </Card>
     );

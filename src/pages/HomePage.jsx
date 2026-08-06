@@ -3,31 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Search,
-  Star,
-  Shield,
-  Users,
-  Video,
-  Heart,
-  Brain,
-  Bone,
-  Baby,
-  Stethoscope,
-  UserPlus,
-  Calendar,
-  CalendarCheck,
-  CheckCircle,
-  ArrowRight,
-  Sparkles,
-  BrainCircuit,
-  User,
-  Clock,
-  FileText,
-  Lock,
-  ClipboardList,
-  MonitorPlay,
-} from 'lucide-react';
+import { Search, Star, Shield, Users, Video, Heart, Brain, Bone, Baby, Stethoscope, UserPlus, Calendar, CalendarCheck, CheckCircle2, ArrowRight, Sparkles, BrainCircuit, User, Clock, FileText, Lock, ClipboardList, MonitorPlay } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -40,8 +16,11 @@ import { supabase } from '@/lib/customSupabaseClient';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
 /**
- * A ilustração do herói. Do unDraw, recolorida para o cobalto da marca com o
- * jade entrando a cada três acentos — ver docs/ILUSTRACAO-HEROI.md.
+ * A ilustração do herói. Do Storyset, estilo cuate, recolorida para o cobalto da
+ * marca — ver docs/ILUSTRACOES-E-ICONES.md.
+ *
+ * É a MESMA arte da peça de anúncio "A partir de R$ 40", de propósito: quem
+ * clica no anúncio reencontra o desenho aqui e não sente que caiu noutro lugar.
  *
  * Trocar a arte é trocar este caminho. A caixa usa `object-contain` e altura
  * máxima, então qualquer proporção entra inteira, sem recorte.
@@ -79,7 +58,7 @@ const TRUST_METRICS = [
 const STEPS = [
   { icon: Search, title: 'Escolha o médico', desc: 'Filtre por especialidade, horário e preço e veja quem tem vaga.' },
   { icon: CalendarCheck, title: 'Agende e pague', desc: 'Reserve o horário e pague com Pix ou cartão, de forma protegida.' },
-  { icon: CheckCircle, title: 'Confirmação na hora', desc: 'Você recebe a confirmação e um lembrete antes da consulta.' },
+  { icon: CheckCircle2, title: 'Confirmação na hora', desc: 'Você recebe a confirmação e um lembrete antes da consulta.' },
   { icon: Stethoscope, title: 'Seja atendido', desc: 'O médico entra em contato e realiza o atendimento pelos meios próprios.' },
 ];
 
@@ -96,7 +75,7 @@ const FEATURES = [
   { icon: Shield, title: 'Registro verificado', desc: 'Todo médico parceiro tem o registro conferido junto ao CRM do respectivo estado.' },
   { icon: Calendar, title: 'Agendamento Rápido', desc: 'Escolha especialidade, médico e horário e agende em poucos cliques.' },
   { icon: Lock, title: 'Proteção LGPD', desc: 'Seus dados trafegam por conexão criptografada e são tratados conforme a LGPD.' },
-  { icon: CheckCircle, title: 'Confirmação na Hora', desc: 'Seu agendamento é confirmado imediatamente após o pagamento.' },
+  { icon: CheckCircle2, title: 'Confirmação na Hora', desc: 'Seu agendamento é confirmado imediatamente após o pagamento.' },
   { icon: Users, title: 'Profissionais Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
 ];
 

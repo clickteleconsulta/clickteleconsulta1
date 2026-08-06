@@ -51,12 +51,14 @@ const ConsentBanner = () => {
                         antes de uma decisão que precisa ser rápida.
                         Some no celular — ali a barra disputa espaço com o
                         conteúdo e os dois botões têm prioridade sobre o enfeite. */}
+                    {/* width/height = 96x96 porque o viewBox do Storyset é quadrado. Errar
+                        esses dois números faz a barra pular de altura quando a imagem carrega. */}
                     <img
                         src="/ilustra/cookies.svg"
                         alt=""
                         aria-hidden="true"
                         width="96"
-                        height="66"
+                        height="96"
                         className="hidden sm:block w-24 h-auto shrink-0 select-none pointer-events-none"
                     />
                     <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">

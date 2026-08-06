@@ -4,20 +4,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-  CheckCircle,
-  ArrowRight,
-  Loader2,
-  User,
-  Calendar,
-  FileText,
-  Download,
-  ExternalLink,
-  Bell,
-  Video,
-  Mail,
-  Clock,
-} from 'lucide-react';
+import { CheckCircle2, ArrowRight, Loader2, User, Calendar, FileText, Download, ExternalLink, Bell, Video, Mail, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { gerarGuiaPdf } from '@/lib/guiaPdf';
 import { useToast } from '@/components/ui/use-toast';
@@ -224,7 +211,7 @@ const AppointmentSuccessPage = () => {
             className="inline-flex"
           >
             <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle className="w-12 h-12 text-green-500" />
+              <CheckCircle2 className="w-12 h-12 text-green-500" />
             </div>
           </motion.div>
 

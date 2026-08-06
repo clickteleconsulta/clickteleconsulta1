@@ -229,7 +229,7 @@ const AdminProfessionalDocsPage = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <Button variant="secondary" size="sm" className="h-9">
+                    <Button aria-label="Buscar" variant="secondary" size="sm" className="h-9">
                         <Search className="w-4 h-4" />
                     </Button>
                 </div>

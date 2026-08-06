@@ -326,7 +326,7 @@ const AdminLegalPage = () => {
                                         <Trash2 className="w-4 h-4 mr-2" /> Limpar histórico
                                     </Button>
                                 )}
-                                <Button variant="ghost" size="sm" onClick={fetchDocumentVersions} disabled={loading}>
+                                <Button aria-label="Recarregar as versões do documento" variant="ghost" size="sm" onClick={fetchDocumentVersions} disabled={loading}>
                                     <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                                 </Button>
                             </div>

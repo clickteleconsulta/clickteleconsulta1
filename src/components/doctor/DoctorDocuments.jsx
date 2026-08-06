@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import EstadoVazio from '@/components/EstadoVazio';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import jsPDF from 'jspdf';
@@ -548,10 +549,12 @@ const DoctorDocuments = () => {
                         )
                     })
                 ) : (
-                    <div className="col-span-full py-12 text-center text-gray-400 border border-dashed border-gray-200 rounded-sm bg-gray-50">
-                        <FileText className="h-10 w-10 mx-auto mb-3 text-gray-300" />
-                        <p className="text-sm font-medium text-gray-600">Nenhum documento interno emitido.</p>
-                        <p className="text-xs mt-1">Use a Prescrição Digital Memed ou gere documentos internos.</p>
+                    <div className="col-span-full border border-dashed border-gray-200 rounded-sm bg-gray-50">
+                        <EstadoVazio
+                            arte="/ilustra/sem-documentos.svg"
+                            titulo="Nenhum documento interno emitido"
+                            descricao="Use a Prescrição Digital Memed ou gere documentos internos."
+                        />
                     </div>
                 )}
             </div>

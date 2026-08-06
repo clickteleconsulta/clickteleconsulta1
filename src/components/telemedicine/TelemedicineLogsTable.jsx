@@ -287,7 +287,7 @@ const TelemedicineLogsTable = ({
             </div>
 
             {/* Refresh */}
-            <Button variant="ghost" size="sm" onClick={fetchLogs} className="h-7 w-7 p-0">
+            <Button aria-label="Recarregar os registros" variant="ghost" size="sm" onClick={fetchLogs} className="h-7 w-7 p-0">
               <RefreshCw className="w-3 h-3" />
             </Button>
 

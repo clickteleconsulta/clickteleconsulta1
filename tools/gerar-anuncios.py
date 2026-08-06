@@ -118,11 +118,11 @@ def rasterizar(caminho_svg, larg):
 # em todo uso. Está registrado em fontes/LEIA-ME.txt, com onde o crédito precisa
 # aparecer. Sem ele, o uso comercial não está coberto.
 ARTES = {
-    'preco':           os.path.join(FONTES, 'online-doctor.svg'),
+    'preco':           os.path.join(ILUSTRA, 'heroi.svg'),
     'agilidade':       os.path.join(FONTES, 'date-picker.svg'),
     'disponibilidade': os.path.join(FONTES, 'events.svg'),
     'sem-mensalidade': os.path.join(FONTES, 'wallet.svg'),
-    'escolha':         os.path.join(FONTES, 'doctors.svg'),
+    'escolha':         os.path.join(ILUSTRA, 'secao-escolher.svg'),
 }
 
 BRANCO = (255, 255, 255)

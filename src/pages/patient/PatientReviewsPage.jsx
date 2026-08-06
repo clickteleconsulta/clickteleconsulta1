@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Loader2, Star, Edit } from 'lucide-react';
+import { Loader2, Star, Pencil } from 'lucide-react';
 import PatientPageHeader from '@/components/patient/PatientPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
+import EstadoVazio from '@/components/EstadoVazio';
 
 const PatientReviewsPage = () => {
     const { user } = useAuth();
@@ -216,7 +217,7 @@ const PatientReviewsPage = () => {
                                 </div>
                                 {review.comentario && <p className="text-sm text-gray-600 italic line-clamp-1 max-w-xs">"{review.comentario}"</p>}
                                 <Button variant="link" size="sm" className="h-auto p-0 text-brand-600" onClick={() => handleOpenReview(appointment)}>
-                                    <Edit className="w-3 h-3 mr-1" /> Editar avaliação
+                                    <Pencil className="w-3 h-3 mr-1" /> Editar avaliação
                                 </Button>
                             </>
                         ) : (
@@ -237,10 +238,12 @@ const PatientReviewsPage = () => {
             {loading ? (
                 <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
             ) : appointments.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-md border border-dashed border-gray-300">
-                    <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <h3 className="text-lg font-medium text-gray-900">Nenhuma consulta concluída</h3>
-                    <p className="text-gray-500 text-sm mt-1">Você poderá avaliar os profissionais após a realização das consultas.</p>
+                <div className="bg-white rounded-md border border-dashed border-gray-300">
+                    <EstadoVazio
+                        arte="/ilustra/sem-avaliacoes.svg"
+                        titulo="Nenhuma consulta concluída"
+                        descricao="Você poderá avaliar os profissionais após a realização das consultas."
+                    />
                 </div>
             ) : (
                 <div className="space-y-4">

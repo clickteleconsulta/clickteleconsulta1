@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Loader2, Star, AlertTriangle, CheckCircle, ShieldAlert } from 'lucide-react';
+import { Loader2, Star, AlertTriangle, CheckCircle2, ShieldAlert } from 'lucide-react';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import EstadoVazio from '@/components/EstadoVazio';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -203,7 +204,7 @@ const DoctorReviewsPage = () => {
             <Tabs defaultValue="pendentes" className="w-full">
                 <TabsList className="mb-4 h-10 p-1 bg-gray-100/80 rounded-md">
                     <TabsTrigger value="pendentes" className="gap-2 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">
-                        <CheckCircle className="w-4 h-4" /> Recebidas ({pendingReviews.length})
+                        <CheckCircle2 className="w-4 h-4" /> Recebidas ({pendingReviews.length})
                     </TabsTrigger>
                     <TabsTrigger value="denunciadas" className="gap-2 rounded-lg transition-all duration-200 hover:text-brand-600 data-[state=active]:text-brand-800 data-[state=active]:shadow-sm">
                         <AlertTriangle className="w-4 h-4" /> Denunciadas ({reportedReviews.length})
@@ -214,10 +215,12 @@ const DoctorReviewsPage = () => {
                     {loading ? (
                         <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
                     ) : pendingReviews.length === 0 ? (
-                        <div className="text-center py-16 bg-white rounded-md border border-dashed border-gray-300">
-                            <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                            <h3 className="text-lg font-medium text-gray-900">Nenhuma avaliação recebida</h3>
-                            <p className="text-gray-500 text-sm mt-1">Você ainda não possui avaliações pendentes.</p>
+                        <div className="bg-white rounded-md border border-dashed border-gray-300">
+                            <EstadoVazio
+                                arte="/ilustra/sem-avaliacoes.svg"
+                                titulo="Nenhuma avaliação recebida"
+                                descricao="Você ainda não possui avaliações pendentes."
+                            />
                         </div>
                     ) : (
                         <div className="space-y-4">
@@ -230,10 +233,15 @@ const DoctorReviewsPage = () => {
                     {loading ? (
                         <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 text-brand-600 animate-spin" /></div>
                     ) : reportedReviews.length === 0 ? (
-                        <div className="text-center py-16 bg-white rounded-md border border-dashed border-gray-300">
-                            <ShieldAlert className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                            <h3 className="text-lg font-medium text-gray-900">Nenhuma denúncia</h3>
-                            <p className="text-gray-500 text-sm mt-1">Você não possui avaliações denunciadas no momento.</p>
+                        <div className="bg-white rounded-md border border-dashed border-gray-300">
+                            {/* Ícone, e não ilustração: "nenhuma denúncia" é notícia boa e
+                                não precisa de destaque. Desenho grande aqui daria à aba
+                                mais peso visual do que às avaliações de verdade. */}
+                            <EstadoVazio
+                                icone={ShieldAlert}
+                                titulo="Nenhuma denúncia"
+                                descricao="Você não possui avaliações denunciadas no momento."
+                            />
                         </div>
                     ) : (
                         <div className="space-y-4">

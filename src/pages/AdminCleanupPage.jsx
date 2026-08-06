@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -58,7 +58,7 @@ const AdminCleanupPage = ({ functionName }) => {
                     )}
                     {status === 'success' && (
                         <>
-                            <CheckCircle className="w-12 h-12 text-green-500" />
+                            <CheckCircle2 className="w-12 h-12 text-green-500" />
                             <p className="mt-4 font-semibold text-foreground">{message}</p>
                             {details && <p className="mt-2 text-sm text-muted-foreground">{details}</p>}
                             <Button asChild className="mt-6">

@@ -311,7 +311,7 @@ const AdminSecurityPage = () => {
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Código manual</Label>
                   <div className="flex items-center gap-2">
                     <code className="flex-1 text-xs bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 break-all font-mono">{enrollData.secret}</code>
-                    <Button type="button" variant="outline" size="icon" onClick={copySecret} className="shrink-0">
+                    <Button aria-label="Copiar a chave de verificação" type="button" variant="outline" size="icon" onClick={copySecret} className="shrink-0">
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>

@@ -120,7 +120,7 @@ const PatientPrescriptionsPage = () => {
                         />
                     </div>
                     
-                    <Button variant="ghost" size="icon" className="text-slate-500">
+                    <Button aria-label="Ver notificações" variant="ghost" size="icon" className="text-slate-500">
                         <Bell className="h-5 w-5" />
                     </Button>
 

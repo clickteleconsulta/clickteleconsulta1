@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
-import { Loader2, Frown, Star, MapPin, Shield, Edit, Save, Info, MessageCircle, CheckCircle, Phone, Calendar } from 'lucide-react';
+import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar } from 'lucide-react';
 import useAsync from '@/hooks/useAsync';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -318,7 +318,7 @@ const DoctorPublicProfilePage = () => {
                   </Avatar>
                   {isOwner && (
                     <Button onClick={() => setIsEditorOpen(true)} variant="outline" size="sm" className="gap-2 h-8 text-xs">
-                      <Edit className="w-3 h-3" /> Editar Perfil
+                      <Pencil className="w-3 h-3" /> Editar Perfil
                     </Button>
                   )}
                 </div>
@@ -327,7 +327,7 @@ const DoctorPublicProfilePage = () => {
                     <h1 className="text-xl md:text-2xl font-bold text-foreground">{formatDoctorDisplayName(doctor.sexo, doctor.public_name || doctor.name)}</h1>
                     {/* Verified badge */}
                     <Badge className="bg-brand-100 text-brand-800 border-brand-200 text-[11px] flex items-center gap-1">
-                      <CheckCircle className="w-3 h-3" /> Verificado — {BRAND.name}
+                      <CheckCircle2 className="w-3 h-3" /> Verificado — {BRAND.name}
                     </Badge>
                   </div>
                   <p className="text-base text-primary font-medium mt-0.5">{doctor.specialty}</p>

@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle, ArrowRight, Loader2, User, Calendar, FileText, Download } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Loader2, User, Calendar, FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { gerarGuiaPdf } from '@/lib/guiaPdf';
 import { useToast } from '@/components/ui/use-toast';
@@ -127,7 +127,7 @@ const ConfirmationPage = () => {
               animate={{ scale: 1, rotate: 360 }}
               transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.2 }}
             >
-              <CheckCircle className="h-20 w-20 text-green-500" />
+              <CheckCircle2 className="h-20 w-20 text-green-500" />
             </motion.div>
             <CardTitle className="text-3xl pt-4">
               Horário agendado com sucesso!

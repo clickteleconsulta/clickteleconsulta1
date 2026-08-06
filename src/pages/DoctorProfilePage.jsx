@@ -12,24 +12,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  Loader2,
-  Star,
-  Shield,
-  MapPin,
-  Clock,
-  ArrowLeft,
-  CheckCircle,
-  Sun,
-  Moon,
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Info,
-  GraduationCap,
-  Stethoscope,
-  MessageSquare,
-} from 'lucide-react';
+import { Loader2, Star, Shield, MapPin, Clock, ArrowLeft, CheckCircle2, Sun, Moon, CalendarDays, ChevronLeft, ChevronRight, Info, GraduationCap, Stethoscope, MessageSquare } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -760,7 +743,7 @@ const DoctorProfilePage = () => {
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : selectedSlot ? (
                     <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
+                      <CheckCircle2 className="w-5 h-5 mr-2" />
                       Confirmar Agendamento
                     </>
                   ) : (

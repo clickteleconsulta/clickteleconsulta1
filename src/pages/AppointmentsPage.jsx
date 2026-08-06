@@ -9,7 +9,7 @@ import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { nextAvailableSlotMs, temHorarioLivreNoDia } from '@/lib/doctorAvailability';
 import { doctorPath } from '@/lib/doctorSlug';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
-import { Loader2, Frown, Edit, Search, Filter, X } from 'lucide-react';
+import { Loader2, Frown, Pencil, Search, Filter, X } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import DoctorSchedule from '@/components/doctor/DoctorSchedule';
@@ -469,7 +469,7 @@ const AppointmentsPage = () => {
             {canEdit && (
               <div className="flex justify-end mb-2">
                 <Button onClick={handleToggleEditor} variant="outline" size="sm">
-                  <Edit className="w-4 h-4 mr-2" />
+                  <Pencil className="w-4 h-4 mr-2" />
                   {isEditorOpen ? 'Fechar Editor' : 'Editar Horários'}
                 </Button>
               </div>

@@ -108,7 +108,7 @@ const ClinicalEpisode = ({ episode, onSave, onConclude, onReturn }) => {
       <CardHeader className="bg-gray-50/50 border-b border-gray-100 py-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={onReturn} className="h-8 w-8 p-0 rounded-full hover:bg-gray-200">
+            <Button aria-label="Voltar ao prontuário" variant="ghost" size="sm" onClick={onReturn} className="h-8 w-8 p-0 rounded-full hover:bg-gray-200">
               <ArrowLeft className="h-4 w-4 text-gray-600" />
             </Button>
             <div className="flex flex-col">

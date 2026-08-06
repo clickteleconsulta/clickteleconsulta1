@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Plus, Edit2, Trash2, Stethoscope, Star } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, Stethoscope, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Lock } from 'lucide-react';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
@@ -409,7 +409,7 @@ const DoctorProceduresPage = () => {
 
                                     <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
                                         <Button variant="outline" size="sm" onClick={() => handleOpenForm(proc)} className="flex-1 text-xs font-semibold rounded-lg h-8">
-                                            <Edit2 className="w-3.5 h-3.5 mr-1.5 shrink-0" /> Editar
+                                            <Pencil className="w-3.5 h-3.5 mr-1.5 shrink-0" /> Editar
                                         </Button>
                                         {isProtectedProc(proc) ? (
                                             <div className="flex-1 flex items-center justify-center gap-1.5 text-xs text-gray-400 font-semibold rounded-lg h-8 bg-gray-50 border border-gray-100 select-none">

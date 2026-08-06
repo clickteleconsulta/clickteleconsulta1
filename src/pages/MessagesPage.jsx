@@ -3,7 +3,8 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import ChatContactsList from '@/components/ChatContactsList';
 import ChatWindow from '@/components/ChatWindow';
-import { Loader2, MessageSquare } from 'lucide-react';
+import EstadoVazio from '@/components/EstadoVazio';
+import { Loader2 } from 'lucide-react';
 
 const MessagesPageWrapper = () => {
     const { user, profile } = useAuth();
@@ -119,9 +120,12 @@ const MessagesPageInternal = ({ currentDoctorId }) => {
                          </div>
                      )
                 ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                        <MessageSquare className="w-12 h-12 mb-4 opacity-20" />
-                        <p>Selecione um contato para conversar</p>
+                    <div className="flex items-center justify-center h-full">
+                        <EstadoVazio
+                            arte="/ilustra/sem-mensagens.svg"
+                            titulo="Selecione um contato para conversar"
+                            descricao="Suas conversas com pacientes e profissionais aparecem aqui."
+                        />
                     </div>
                 )}
             </div>

@@ -238,7 +238,7 @@ const PacientesListPage = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right pr-6">
-                                            <Button variant="ghost" size="icon" className="text-slate-400 group-hover:text-primary">
+                                            <Button aria-label="Abrir o prontuário" variant="ghost" size="icon" className="text-slate-400 group-hover:text-primary">
                                                 <ChevronRight className="h-5 w-5" />
                                             </Button>
                                         </TableCell>
