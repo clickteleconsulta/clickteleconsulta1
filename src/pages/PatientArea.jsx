@@ -253,7 +253,6 @@ const PatientArea = () => {
     ]},
   ];
   const navItems = navSections.flatMap((s) => s.items);
-  const initial = (profile?.full_name || 'Paciente').trim().charAt(0).toUpperCase();
 
   if (!session) {
     return <Navigate to="/" replace />;
@@ -268,9 +267,12 @@ const PatientArea = () => {
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col gap-4 sticky top-24">
           <div className="flex flex-col items-center text-center p-5 border border-border rounded-lg bg-card shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-brand-500 flex items-center justify-center mb-3 text-white text-2xl font-bold shadow-md shadow-brand-500/20">
-              {initial}
-            </div>
+            {/* Ícone, e não círculo com a inicial. O disco cobalto era o
+                elemento mais pesado da coluna e não dizia nada que o nome logo
+                abaixo já não dissesse — a inicial de "Ryan" é informação que a
+                pessoa acabou de ler. Sem ele, o olho vai direto ao nome e ao
+                menu, que é o que se usa aqui. */}
+            <User className="w-9 h-9 text-brand-500 mb-3" />
             <h2 className="text-base font-bold text-slate-900 truncate max-w-full">{profile?.full_name}</h2>
             <p className="text-xs text-muted-foreground">Paciente</p>
             {upcomingCount > 0 && (
