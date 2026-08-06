@@ -8,7 +8,7 @@ import { CalendarCheck, ShieldCheck, Wallet, UserCheck, ArrowRight, Building2 } 
 const VALORES = [
   { icon: CalendarCheck, title: 'Democratizar o acesso à saúde', text: 'Para o que pode ser resolvido a distância, você agenda com agilidade — sem deslocamento e sem fila de espera.' },
   { icon: Wallet, title: 'Transparência no preço', text: 'Você vê o valor antes de agendar e paga somente quando usa. Sem mensalidade, sem assinatura e sem planos de saúde.' },
-  { icon: UserCheck, title: 'Profissionais verificados', text: 'Os médicos parceiros são verificados junto ao CRM do respectivo estado antes de aparecerem na plataforma.' },
+  { icon: UserCheck, title: 'Profissionais conferidos', text: 'Conferimos a identidade e o registro profissional de cada médico antes de ele aparecer na plataforma.' },
   { icon: ShieldCheck, title: 'Proteção de dados (LGPD)', text: 'Tratamos seus dados com cuidado e em conformidade com a Lei Geral de Proteção de Dados.' },
 ];
 

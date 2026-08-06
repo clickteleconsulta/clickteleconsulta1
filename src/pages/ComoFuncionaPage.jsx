@@ -13,7 +13,7 @@ const STEPS = [
 const BENEFITS = [
   { icon: Clock, title: 'Sem filas', text: 'Atendimento online, de onde você estiver, no seu tempo.' },
   { icon: CreditCard, title: 'A partir de R$ 40', text: 'Você paga só quando usa — sem mensalidade nem assinatura.' },
-  { icon: ShieldCheck, title: 'Médicos verificados (CRM)', text: 'E seus dados protegidos conforme a LGPD.' },
+  { icon: ShieldCheck, title: 'Médicos com registro conferido', text: 'E seus dados protegidos conforme a LGPD.' },
 ];
 
 const ComoFuncionaPage = () => {

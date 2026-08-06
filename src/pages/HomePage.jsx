@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Star, Shield, Users, Video, Heart, Brain, Bone, Baby, Stethoscope, UserPlus, Calendar, CalendarCheck, CheckCircle2, ArrowRight, Sparkles, BrainCircuit, User, Clock, FileText, Lock, ClipboardList, MonitorPlay } from 'lucide-react';
+import { Search, Shield, Users, Heart, Brain, Bone, Baby, Stethoscope, Calendar, CalendarCheck, CheckCircle2, ArrowRight, Sparkles, BrainCircuit, User, Clock, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -45,14 +45,21 @@ const SPECIALTIES = [
   { name: 'Psicologia', icon: BrainCircuit, color: 'bg-indigo-50 text-indigo-500' },
 ];
 
-// ─── Métricas de confiança ──────────────────────────────────────────────────────
-// (paridade com a fase avançada: "15.000+" e nº de médicos dinâmico do banco)
-const TRUST_METRICS = [
-  { value: '15.000+', label: 'Consultas realizadas', icon: Video, color: 'text-brand-500' },
-  { value: '50+', key: 'doctors', label: 'Médicos cadastrados', icon: Users, color: 'text-teal-500' },
-  { value: '4,9', label: 'Avaliação média', icon: Star, iconClass: 'fill-amber-400 text-amber-400' },
-  { value: 'CFM', label: 'Certificado', icon: Shield, color: 'text-green-600' },
-];
+// ─── Métricas de confiança: REMOVIDAS ───────────────────────────────────────────
+// Havia aqui um bloco com "15.000+ consultas realizadas", "4,9 de avaliação
+// média" e "CFM · Certificado". Estava declarado e nunca renderizado, então não
+// chegou a ir ao ar — mas era uma arma carregada: bastava alguém usar a
+// constante para a home passar a mentir.
+//
+// Os três números eram falsos. O marketplace ainda não teve o primeiro
+// agendamento, então não há consulta realizada nem nota média para mostrar. E o
+// CFM não certifica plataforma de agendamento: ele regulamenta o exercício da
+// medicina. Dizer "CFM · Certificado" ao lado do nosso logo sugere um aval que
+// não existe.
+//
+// Quando houver consulta e avaliação de verdade, o número vem do banco — como
+// já é feito com a contagem de médicos. Número de confiança escrito à mão no
+// código é exatamente o tipo de coisa que ninguém lembra de conferir depois.
 
 // ─── Steps ──────────────────────────────────────────────────────────────────────
 const STEPS = [
@@ -72,11 +79,11 @@ const FEATURES = [
   // 6 ÷ 3 = duas linhas cheias. Se algum dia um item merecer destaque, ele
   // precisa de conteúdo que justifique a largura, não só da classe.
   { icon: Clock, title: 'Sem filas de espera', desc: 'Consulte no horário que funciona para você, sem esperar em salas lotadas.' },
-  { icon: Shield, title: 'Registro verificado', desc: 'Todo médico parceiro tem o registro conferido junto ao CRM do respectivo estado.' },
+  { icon: Shield, title: 'Registro conferido', desc: 'Antes de aparecer aqui, o médico passa pela nossa conferência de identidade e de registro profissional.' },
   { icon: Calendar, title: 'Agendamento Rápido', desc: 'Escolha especialidade, médico e horário e agende em poucos cliques.' },
   { icon: Lock, title: 'Proteção LGPD', desc: 'Seus dados trafegam por conexão criptografada e são tratados conforme a LGPD.' },
   { icon: CheckCircle2, title: 'Confirmação na Hora', desc: 'Seu agendamento é confirmado imediatamente após o pagamento.' },
-  { icon: Users, title: 'Profissionais Qualificados', desc: 'Profissionais habilitados e verificados, prontos para atender você.' },
+  { icon: Users, title: 'Profissionais qualificados', desc: 'Profissionais habilitados, prontos para atender você.' },
 ];
 
 // ─── Seção de destaques com ilustração ──────────────────────────────────────────
@@ -120,7 +127,7 @@ const FAQ_ITEMS = [
   { q: 'Como acontece o atendimento?', a: 'Após agendar e confirmar o pagamento, o médico entra em contato e conduz o atendimento pelos meios próprios dele (por exemplo telefone, vídeo ou a plataforma que utilizar), conforme as normas do CFM.' },
   { q: 'A prescrição é válida?', a: 'Sim. Quando necessária, a prescrição é emitida pelo próprio médico, com assinatura e validade legal conforme a regulamentação vigente. A plataforma cuida apenas do agendamento e do pagamento.' },
   { q: 'Como pago?', a: 'Aceitamos cartão de crédito, débito e PIX. O pagamento é feito antes da consulta, em ambiente do provedor de pagamentos — os dados do cartão vão direto para ele e não passam pela plataforma.' },
-  { q: 'Como meus dados são protegidos?', a: 'A navegação e o pagamento usam conexão criptografada, o tratamento dos dados segue a LGPD e os médicos parceiros têm o registro verificado junto ao CRM do respectivo estado.' },
+  { q: 'Como meus dados são protegidos?', a: 'A navegação e o pagamento usam conexão criptografada, o tratamento dos dados segue a LGPD e todo médico parceiro passa pela nossa conferência de identidade e de registro profissional antes de aparecer na plataforma.' },
 ];
 
 // ─── Animações ──────────────────────────────────────────────────────────────────

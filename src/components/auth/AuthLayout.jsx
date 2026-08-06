@@ -25,7 +25,7 @@ const PANELS = {
         title: 'Sua consulta marcada em minutos.',
         subtitle: 'Marketplace de agendamento: escolha o médico e agende. O atendimento é feito pelo próprio profissional.',
         features: [
-            { icon: UserCheck, label: 'Escolha entre médicos parceiros verificados (CFM)' },
+            { icon: UserCheck, label: 'Escolha entre médicos parceiros com registro conferido' },
             { icon: CalendarCheck, label: 'Agende em minutos, sem filas' },
             { icon: ShieldCheck, label: 'Protegido e sigiloso — conforme a LGPD' },
         ],

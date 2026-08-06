@@ -29,7 +29,7 @@ export const FAQ = [
   },
   {
     q: 'Vocês atendem em todo o Brasil?',
-    a: 'Você pode agendar de qualquer lugar do país: como o atendimento é a distância, não há limite de estado ou cidade. Os médicos parceiros têm registro ativo no CRM, válido em território nacional. Basta ter internet e um ambiente reservado no horário marcado.',
+    a: 'Você pode agendar de qualquer lugar do país: como o atendimento é a distância, não há limite de estado ou cidade. Os médicos parceiros têm registro ativo no CRM, válido em território nacional, conferido por nós antes de eles aparecerem na plataforma. Basta ter internet e um ambiente reservado no horário marcado.',
   },
   {
     q: 'Recebo receita ou atestado?',
@@ -49,7 +49,7 @@ export const FAQ = [
   },
   {
     q: 'Meus dados ficam protegidos?',
-    a: 'Sim. Tratamos seus dados conforme a Lei Geral de Proteção de Dados (LGPD). Você pode acessar e exportar seus dados na sua conta, e os médicos parceiros são verificados pelo CRM.',
+    a: 'Sim. Tratamos seus dados conforme a Lei Geral de Proteção de Dados (LGPD). Você pode acessar e exportar seus dados na sua conta, e conferimos a identidade e o registro profissional de cada médico parceiro.',
   },
   {
     q: 'Posso cancelar e ter reembolso?',
@@ -111,7 +111,7 @@ export const ARTICLES = [
     body: [
       { t: 'p', c: 'Sim: a teleconsulta é uma prática regulamentada pelo Conselho Federal de Medicina (Resolução CFM nº 2.314/2022). O atendimento à distância segue os mesmos princípios éticos da consulta presencial.' },
       { t: 'h2', c: 'Médicos verificados' },
-      { t: 'p', c: `Na ${BRAND.name}, os médicos parceiros são verificados pelo registro no CRM. O médico tem autonomia para indicar, quando necessário, que o caso exige avaliação presencial.` },
+      { t: 'p', c: `Na ${BRAND.name}, a conferência é feita pela plataforma: antes de o médico aparecer aqui, verificamos a identidade dele e a validade do registro profissional. O médico tem autonomia para indicar, quando necessário, que o caso exige avaliação presencial.` },
       { t: 'h2', c: 'Proteção dos seus dados (LGPD)' },
       { t: 'p', c: 'Seus dados cadastrais e de agendamento são tratados conforme a LGPD, usados apenas para viabilizar o serviço. Você pode acessar e exportar seus dados na sua conta a qualquer momento.' },
       { t: 'h2', c: 'Quando a teleconsulta pode não ser indicada' },
@@ -148,7 +148,7 @@ export const DOCUMENTOS = {
     titulo: 'A teleconsulta é válida — e vale em todo o país',
     paragrafos: [
       'O atendimento médico a distância está autorizado pela Lei nº 14.510/2022, que incluiu a telessaúde na Lei nº 8.080/1990, e é regulamentado pela Resolução CFM nº 2.314/2022. Não é uma modalidade paralela nem provisória: é o exercício da medicina, com as mesmas obrigações éticas e o mesmo sigilo da consulta presencial.',
-      'Como o atendimento é a distância, não há limite de estado ou de cidade — você agenda de onde estiver. Os médicos parceiros têm registro ativo no CRM, conferido antes de entrarem na plataforma.',
+      'Como o atendimento é a distância, não há limite de estado ou de cidade — você agenda de onde estiver. Os médicos parceiros têm registro ativo no CRM, conferido por nós antes de entrarem na plataforma.',
       'A autonomia do médico permanece inteira: se a avaliação indicar que o seu caso precisa de exame presencial, ele deve dizer isso. Essa recomendação é parte do bom atendimento, não uma falha dele.',
     ],
   },
