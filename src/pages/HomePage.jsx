@@ -260,10 +260,28 @@ const HomePage = () => {
                   `leading-*` — resultado: um `md:text-5xl` no meio da lista
                   reimpunha entrelinha 1,0 e o `leading-[1.12]` era ignorado.
                   Foi exatamente o que aconteceu na primeira tentativa desta
-                  correção. Sem classe pronta, ninguém injeta entrelinha. */}
+                  correção. Sem classe pronta, ninguém injeta entrelinha.
+
+                  O TETO DE CADA LARGURA É MEDIDO, NÃO ESCOLHIDO. O que limita é
+                  "Consulta marcada em minutos," caber numa linha só: passando
+                  disso o título vira três linhas, a seção estica e a arte fica
+                  boiando. Varrendo px a px até a quebra:
+
+                    1024px   coluna 552   teto 37   usa 36
+                    1280px   coluna 688   teto 46   usa 44
+                    1400px+  coluna 808   teto 55   usa 50
+
+                  Daí o degrau em `min-[1400px]` e não em `2xl` (1536): o
+                  container para de crescer por volta de 1400, então de lá para
+                  cima a coluna é sempre a mesma 808 e não há razão para esperar
+                  mais 136px de tela para usar o tamanho maior.
+
+                  Em 1024 e 1280 o título já está a 1–2px do teto. Aumentar ali
+                  exige tirar largura da coluna da arte, e aí o buraco do meio do
+                  banner volta — foi testado. */}
               <motion.h1
                 variants={fadeUp}
-                className="font-display text-[2.6rem] md:text-[3rem] lg:text-[2.25rem] xl:text-[2.75rem] 2xl:text-[3rem] font-extrabold text-slate-900 leading-[1.12] tracking-[-0.025em]"
+                className="font-display text-[2.6rem] md:text-[3rem] lg:text-[2.25rem] xl:text-[2.75rem] min-[1400px]:text-[3.125rem] font-extrabold text-slate-900 leading-[1.12] tracking-[-0.025em]"
               >
                 Consulta marcada em{' '}
                 {/* A vírgula fica presa a "minutos" pelo whitespace-nowrap. Sem ele,
@@ -414,7 +432,7 @@ const HomePage = () => {
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block h-[260px] xl:h-[320px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[16.3%]"
+                className="hidden lg:block h-[260px] xl:h-[320px] min-[1400px]:h-[330px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[16.3%]"
               />
             </motion.div>
           </div>
