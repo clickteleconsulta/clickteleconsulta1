@@ -4,6 +4,12 @@ import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
+import { patientPriceFromRepasse } from '@/lib/price';
+
+// O preço do paciente sai do procedimento PRINCIPAL com a taxa da plataforma
+// aplicada por cima — nunca de medicos.price_in_cents, que é legado e está
+// nulo na maioria dos cadastros (ver o comentário em AppointmentsPage.jsx).
+const COLUNAS_COM_PRECO = `${PUBLIC_DOCTOR_COLUMNS}, procedimentos(principal, preco)`;
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar, ChevronDown } from '@/components/ui/icones';
@@ -172,6 +178,14 @@ const ReviewsSection = ({ reviews }) => {
  * checkout, mesmo tratamento de visitante não logado.
  */
 const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
+  // Mesma conta e mesma cor de /agendamentos: o jade da marca, que é a única
+  // aparição dele fora do logo e marca o dado que decide a escolha. Sem
+  // procedimento principal não há preço — e aí a linha não aparece, em vez de
+  // anunciar "R$ 0,00".
+  const principal = (doctor?.procedimentos || []).find((p) => p.principal);
+  const valorPaciente = principal
+    ? patientPriceFromRepasse(Number(principal.preco), doctor?.payment_settings?.platform_fee_percent || 0)
+    : 0;
   const [agendaAberta, setAgendaAberta] = useState(false);
 
   return (
@@ -182,6 +196,16 @@ const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
         ? 'Abra a agenda abaixo, escolha um horário e conclua o agendamento em poucos minutos.'
         : 'Clique no botão abaixo para ver os horários disponíveis e concluir seu agendamento online em poucos minutos.'}
     </p>
+    {valorPaciente > 0 && (
+      <div className="flex items-baseline justify-between border-t border-border pt-4">
+        <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+          Valor da consulta
+        </span>
+        <span className="text-2xl font-extrabold tabular-nums leading-none" style={{ color: BRAND.acento }}>
+          {valorPaciente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        </span>
+      </div>
+    )}
     {comAgenda ? (
       <>
         <Button
@@ -303,12 +327,12 @@ const DoctorPublicProfilePage = () => {
     const isUUID = /^[0-9a-f-]{36}$/.test(id);
 
     if (isUUID) {
-      const { data, error } = await supabase.from('medicos').select(PUBLIC_DOCTOR_COLUMNS).eq('id', id).eq('is_active', true).single();
+      const { data, error } = await supabase.from('medicos').select(COLUNAS_COM_PRECO).eq('id', id).eq('is_active', true).single();
       if (error || !data) throw new Error("Médico não encontrado.");
       doctorData = data;
     } else {
       // Slug lookup: try to match public_name + specialty
-      const { data, error } = await supabase.from('medicos').select(PUBLIC_DOCTOR_COLUMNS).eq('is_active', true);
+      const { data, error } = await supabase.from('medicos').select(COLUNAS_COM_PRECO).eq('is_active', true);
       if (error) throw error;
       doctorData = data?.find(d => {
         const name = slugify(d.public_name || d.name);
