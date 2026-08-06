@@ -21,6 +21,7 @@ const { BRAND } = await import('../src/config/brand.js');
 const { patientPriceFromRepasse } = await import('../src/lib/price.js');
 const { formatDoctorDisplayName } = await import('../src/lib/doctorName.js');
 const { gerarCartoesOg } = await import('./og-medicos.mjs');
+const { FAQ } = await import('../src/content/siteContent.js');
 const BASE = BRAND.url;
 const MARCA = BRAND.name;
 
@@ -37,6 +38,44 @@ function setCanonical(html, url) {
   const re = /<link rel="canonical"[^>]*>/i;
   return re.test(html) ? html.replace(re, tag) : html.replace('</head>', `    ${tag}\n  </head>`);
 }
+/**
+ * O CORPO DA PÁGINA, EM HTML, ANTES DE QUALQUER JAVASCRIPT.
+ *
+ * Medido: todas as 19 páginas saíam com `<div id="root"></div>` e ZERO
+ * caractere de texto. O Google até indexa, porque renderiza JS numa segunda
+ * passada — mas os robôs de IA (o que alimenta o AI Overview, o GPTBot, o
+ * ClaudeBot, o PerplexityBot) em geral NÃO executam JavaScript. Para eles o
+ * site é uma página em branco. É por isso que o resumo do Google dizia que
+ * avidoc.com.br não existe e caía num atacadista francês: não havia texto
+ * nosso para resumir.
+ *
+ * O React monta com `createRoot`, que LIMPA o container ao montar — então este
+ * HTML é substituído assim que o bundle roda. Não é conteúdo escondido nem
+ * diferente do que a pessoa vê: é o mesmo texto, servido antes.
+ */
+const bloco = (b) => {
+  if (b.t === 'h2') return `<h2>${esc(b.c)}</h2>`;
+  if (b.t === 'p') return `<p>${esc(b.c)}</p>`;
+  if (b.t === 'ul') return `<ul>${(b.items || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+  return '';
+};
+
+const corpoDoArtigo = (a) => `<article>
+  <h1>${esc(a.title)}</h1>
+  <p>${esc(a.description)}</p>
+  ${(a.body || []).map(bloco).join('\n  ')}
+  <p><a href="/agendamentos">Ver médicos e horários disponíveis</a></p>
+</article>`;
+
+function setCorpo(html, corpo) {
+  return html.replace('<div id="root"></div>', `<div id="root">${corpo}</div>`);
+}
+
+function addJsonLd(html, obj) {
+  const tag = `    <script type="application/ld+json">${JSON.stringify(obj)}</script>\n  </head>`;
+  return html.replace('</head>', tag);
+}
+
 function apply(html, r) {
   const url = `${BASE}${r.path}`;
   html = setTitle(html, r.title);
@@ -59,6 +98,8 @@ function apply(html, r) {
     html = setMeta(html, 'name', 'twitter:image', img);
     html = setMeta(html, 'name', 'twitter:card', 'summary_large_image');
   }
+  if (r.corpo) html = setCorpo(html, r.corpo);
+  if (r.jsonLd) html = addJsonLd(html, r.jsonLd);
   return html;
 }
 
@@ -150,12 +191,47 @@ async function main() {
   const routes = [
     { path: '/como-funciona', title: `Como funciona a teleconsulta · ${MARCA}`, description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
     { path: '/quem-somos', title: `Quem somos · ${MARCA}`, description: `Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A ${MARCA} é um marketplace de agendamentos que conecta pacientes a médicos parceiros.` },
-    { path: '/perguntas-frequentes', title: `Perguntas frequentes · ${MARCA}`, description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.' },
+    {
+      path: '/perguntas-frequentes',
+      title: `Perguntas frequentes · ${MARCA}`,
+      description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.',
+      corpo: `<h1>Perguntas frequentes</h1>` + FAQ.map((f) => `<h2>${esc(f.q)}</h2><p>${esc(f.a)}</p>`).join('\n'),
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        inLanguage: 'pt-BR',
+        mainEntity: FAQ.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      },
+    },
     { path: '/blog', title: `Blog · ${MARCA} — Saúde e teleconsulta`, description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
     { path: '/agendamentos', title: `Agendar Consulta · ${MARCA}`, description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.' },
     { path: '/suporte', title: `Suporte · ${MARCA}`, description: `Central de ajuda da ${MARCA}: dúvidas sobre agendamento, pagamento, reembolso e atendimento.` },
     { path: '/legal', title: `Termos e Privacidade · ${MARCA}`, description: `Termos de Serviço e Política de Privacidade (LGPD) da ${MARCA}.` },
-    ...articles.map((a) => ({ path: `/blog/${a.slug}`, title: `${a.title} · ${MARCA}`, description: a.description, ogType: 'article' })),
+    ...articles.map((a) => ({
+      path: `/blog/${a.slug}`,
+      title: `${a.title} · ${MARCA}`,
+      description: a.description,
+      ogType: 'article',
+      corpo: corpoDoArtigo(a),
+      // Article: é o que habilita o artigo a aparecer como resultado rico e o
+      // que diz ao buscador QUEM publicou — mais um vínculo com a Organização.
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: a.title,
+        description: a.description,
+        datePublished: a.date,
+        dateModified: a.date,
+        inLanguage: 'pt-BR',
+        mainEntityOfPage: `${BASE}/blog/${a.slug}`,
+        author: { '@id': `${BASE}/#organizacao` },
+        publisher: { '@id': `${BASE}/#organizacao` },
+      },
+    })),
     ...fichas.map((f) => ({
       path: f.caminho,
       title: `${f.nomeExibicao}${f.esp ? ' — ' + f.esp : ''} · ${MARCA}`,
@@ -163,6 +239,28 @@ async function main() {
       ogType: 'profile',
       ogImage: cartoes.get(f.slug),
       ogImageAlt: `${f.nomeExibicao} — ${f.rotuloEspecialidade}. Agende sua consulta online na ${MARCA}.`,
+      // Os mesmos dados do cartão de compartilhamento, agora como texto. Sem
+      // isso o perfil chega ao robô como página em branco — e perfil de médico
+      // é justamente a página que a gente quer que apareça na busca pelo nome
+      // dele.
+      corpo: `<h1>${esc(f.nomeExibicao)}</h1>
+  <p>${esc(f.rotuloEspecialidade)}${f.rotuloCrm ? ' · ' + esc(f.rotuloCrm) : ''}</p>
+  <p>Teleconsulta${f.rotuloPreco ? ` · ${esc(f.rotuloPreco)}` : ''}</p>
+  <p>Agende sua consulta online com ${esc(f.nomeExibicao)}: veja os horários disponíveis e conclua o agendamento em minutos, com Pix ou cartão.</p>
+  <p><a href="/agendamentos">Ver horários disponíveis</a></p>`,
+      // Physician: o mesmo esquema que a página monta por JavaScript, agora
+      // legível sem ele. `provider` amarra o médico à plataforma.
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Physician',
+        name: f.nomeExibicao,
+        medicalSpecialty: f.esp || undefined,
+        identifier: f.rotuloCrm || undefined,
+        url: `${BASE}${f.caminho}`,
+        image: cartoes.get(f.slug) ? `${BASE}${cartoes.get(f.slug)}` : undefined,
+        availableService: { '@type': 'MedicalTherapy', name: 'Teleconsulta' },
+        provider: { '@id': `${BASE}/#organizacao` },
+      },
     })),
   ];
 
