@@ -316,7 +316,6 @@ export default defineConfig({
 					// baixar ícone que só o painel do médico abre.
 					'ui-vendor': ['framer-motion'],
 					'data-vendor': ['@supabase/supabase-js'],
-					'charts': ['recharts'],
 				},
 			},
 		}
