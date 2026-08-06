@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, ArrowRight, Loader2, ShieldCheck as ShieldLock, XCircle, Calendar, User, Tag } from 'lucide-react';
+import { Clock, ArrowRight, Loader2, ShieldCheck as ShieldLock, XCircle, Calendar, User, Tag } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';

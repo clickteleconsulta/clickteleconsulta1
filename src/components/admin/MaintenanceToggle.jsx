@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Power, PowerOff, Globe, EyeOff } from 'lucide-react';
+import { Loader2, Power, PowerOff, Globe, EyeOff } from '@/components/ui/icones';
 
 const DEFAULT_MSG = 'Estamos realizando melhorias na plataforma para atendê-lo melhor. Voltamos em instantes.';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bell, Check, CheckCheck, Clock, Calendar, User, FileText, Phone } from 'lucide-react';
+import { X, Bell, Check, CheckCheck, Clock, Calendar, User, FileText, Phone } from '@/components/ui/icones';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';

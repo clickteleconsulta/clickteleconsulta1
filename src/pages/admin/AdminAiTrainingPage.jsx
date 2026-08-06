@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Plus, Pencil, Trash2, Bot, Search } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, Bot, Search } from '@/components/ui/icones';
 
 const AdminAiTrainingPage = () => {
   const [rules, setRules] = useState([]);

@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import {
   CheckCircle2, Star, Download, Calendar, FileText,
   ArrowRight, Clock, Loader2, ChevronRight, User
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';

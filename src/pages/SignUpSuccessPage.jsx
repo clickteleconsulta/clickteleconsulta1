@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { useLocation, Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MailCheck } from 'lucide-react';
+import { MailCheck } from '@/components/ui/icones';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import AuthLayout from '@/components/auth/AuthLayout';

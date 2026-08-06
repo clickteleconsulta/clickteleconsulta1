@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Shield, Users, Heart, Brain, Bone, Baby, Stethoscope, Calendar, CalendarCheck, CheckCircle2, ArrowRight, Sparkles, BrainCircuit, User, Clock, Lock } from 'lucide-react';
+import { Search, Shield, Users, Heart, Brain, Bone, Baby, Stethoscope, Calendar, CalendarCheck, CheckCircle2, ArrowRight, Sparkles, BrainCircuit, User, Clock, Lock } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {

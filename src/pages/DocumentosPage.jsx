@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { DOCUMENTOS } from '@/content/siteContent';
 import {
   FileText, FlaskConical, FileCheck2, ShieldCheck, MapPin, QrCode, ArrowRight, ExternalLink,
-} from 'lucide-react';
+} from '@/components/ui/icones';
 
 /**
  * Página que explica a validade da teleconsulta e dos documentos que o médico

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import ChatContactsList from '@/components/ChatContactsList';
 import ChatWindow from '@/components/ChatWindow';
 import EstadoVazio from '@/components/EstadoVazio';
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from '@/components/ui/icones';
 
 const MessagesPageWrapper = () => {
     const { user, profile } = useAuth();

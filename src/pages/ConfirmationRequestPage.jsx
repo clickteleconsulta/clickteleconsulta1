@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MailCheck, Loader2 } from 'lucide-react';
+import { MailCheck, Loader2 } from '@/components/ui/icones';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, Wallet, AlertTriangle } from 'lucide-react';
+import { Loader2, Save, Wallet, AlertTriangle } from '@/components/ui/icones';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const labelCls = "text-[10px] font-medium text-gray-500 uppercase tracking-wider";

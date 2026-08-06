@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Mail, Send, Copy, Ban, CheckCircle2, Clock, RefreshCw, Trash2 } from 'lucide-react';
+import { Loader2, Mail, Send, Copy, Ban, CheckCircle2, Clock, RefreshCw, Trash2 } from '@/components/ui/icones';
 import { format } from 'date-fns';
 
 const StatusBadge = ({ status }) => {

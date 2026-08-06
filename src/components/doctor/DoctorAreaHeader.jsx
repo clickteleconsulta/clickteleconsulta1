@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import Logo from '@/components/Logo';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, Loader2 } from 'lucide-react';
+import { LogOut, LayoutDashboard, Loader2 } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 

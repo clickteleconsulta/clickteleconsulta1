@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback, useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, CalendarCheck, ShieldCheck } from 'lucide-react';
+import { Star, User, ChevronLeft, ChevronRight, CalendarOff, ChevronDown, CalendarCheck, ShieldCheck } from '@/components/ui/icones';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useNavigate, Link } from 'react-router-dom';

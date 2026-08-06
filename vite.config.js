@@ -309,7 +309,12 @@ export default defineConfig({
 				// Separa dependências grandes em chunks próprios (melhora o TTI do first load).
 				manualChunks: {
 					'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-					'ui-vendor': ['framer-motion', 'lucide-react'],
+					// Só framer-motion. Os ícones saíram do lucide e passaram a ser um
+					// módulo nosso (src/components/ui/icones.jsx), gerado de fontes do
+					// Flaticon — como é código do projeto, o Vite já o divide junto com
+					// a tela que o usa, e forçá-lo para um chunk de vendor faria a home
+					// baixar ícone que só o painel do médico abre.
+					'ui-vendor': ['framer-motion'],
 					'data-vendor': ['@supabase/supabase-js'],
 					'charts': ['recharts'],
 				},

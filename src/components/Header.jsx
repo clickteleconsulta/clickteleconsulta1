@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Logo from '@/components/Logo';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
-import { LogOut, CalendarDays, LayoutDashboard } from 'lucide-react';
+import { LogOut, CalendarDays, LayoutDashboard } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { BRAND } from '@/config/brand';

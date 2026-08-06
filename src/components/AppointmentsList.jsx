@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, User, Phone, Mail, Video, Trash2, Pencil } from 'lucide-react';
+import { Calendar, Clock, User, Phone, Mail, Video, Trash2, Pencil } from '@/components/ui/icones';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

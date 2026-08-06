@@ -5,7 +5,7 @@ import { useAppointmentAccess } from '@/hooks/useAppointmentAccess';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Loader2, Send, AlertTriangle, Check, CheckCheck } from 'lucide-react';
+import { Loader2, Send, AlertTriangle, Check, CheckCheck } from '@/components/ui/icones';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';

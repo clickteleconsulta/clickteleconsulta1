@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope, FileDown, CalendarDays, DollarSign, Landmark, FileText } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, ArrowRight, Loader2, History, Download, Eye, Calendar as CalendarIcon, User as UserIcon, Stethoscope, FileDown, CalendarDays, DollarSign, Landmark, FileText } from '@/components/ui/icones';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { format, parseISO } from 'date-fns';

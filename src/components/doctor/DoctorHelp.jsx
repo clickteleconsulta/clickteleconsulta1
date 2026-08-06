@@ -6,7 +6,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import {
     LifeBuoy, Mail, ArrowRight, BookOpen, Video, CalendarClock,
     Stethoscope, FileText, ShieldCheck, Wallet, Star, HeartPulse
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Link } from 'react-router-dom';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 

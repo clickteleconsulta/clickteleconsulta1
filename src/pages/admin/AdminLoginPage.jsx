@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Lock, Loader2, Smartphone } from 'lucide-react';
+import { Lock, Loader2, Smartphone } from '@/components/ui/icones';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useLoader } from '@/contexts/LoaderContext';
 

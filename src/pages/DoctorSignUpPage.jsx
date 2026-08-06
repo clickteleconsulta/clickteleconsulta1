@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Loader2, ChevronRight, ChevronLeft, User, Shield, Stethoscope, Calendar, CreditCard, Eye, Check, Star, MapPin, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, User, Shield, Stethoscope, Calendar, CreditCard, Eye, Check, Star, MapPin, CheckCircle2, AlertCircle } from '@/components/ui/icones';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { GripVertical } from "lucide-react";
+import { GripVertical } from "@/components/ui/icones";
 import { Group, Panel, Separator } from "react-resizable-panels";
 
 import { cn } from "@/lib/utils";

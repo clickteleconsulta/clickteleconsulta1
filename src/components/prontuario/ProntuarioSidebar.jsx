@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { 
   ArrowLeft, MessageSquare, Calendar, Wallet, User, MoreHorizontal, 
   Mail, Phone, Pill, Loader2, Save
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from '@/components/ui/use-toast';

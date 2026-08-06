@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Stethoscope } from 'lucide-react';
+import { Loader2, Stethoscope } from '@/components/ui/icones';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatDoctorDisplayName } from '@/lib/doctorName';

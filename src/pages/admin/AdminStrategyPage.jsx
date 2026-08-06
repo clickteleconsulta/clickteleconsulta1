@@ -13,7 +13,7 @@ import {
     Loader2, RefreshCw, Users, Stethoscope, Star, TrendingUp, DollarSign,
     Wallet, Landmark, CalendarCheck, XCircle, RotateCcw, Repeat, Info, LineChart,
     FolderCheck, Banknote, AlertTriangle, CheckCircle2, ChevronRight, BellRing, FileDown, CalendarDays
-} from 'lucide-react';
+} from '@/components/ui/icones';
 
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const pct = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);

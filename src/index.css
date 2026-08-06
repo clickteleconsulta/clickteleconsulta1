@@ -107,20 +107,37 @@
      do mesmo número: a barra de filtros de /agendamentos usava `top-16` (64 px)
      enquanto o cabeçalho tem 88, e 24 px dela ficavam escondidos atrás dele ao
      rolar. Com o valor num lugar só, os dois não têm como divergir de novo. */
-  /* 60, e o número que importa é o RENDERIZADO, não este. Com o zoom de 110%
-     a barra sai com 66 px na tela, dentro da faixa de 60–72 que os sites de
-     referência usam. Já foi 88 (97 na tela, absurdo) e 72 (79, ainda acima da
-     faixa). Sempre que mexer aqui, multiplique por --zoom-site antes de julgar.
+  /* 60, e o número que importa é o RENDERIZADO, não este: sai com 66 px no
+     celular e 72 no desktop, dentro da faixa de 60–72 que os sites de
+     referência usam. Já foi 88 (97 na tela, absurdo). Sempre que mexer aqui,
+     multiplique por --zoom-site antes de julgar — e se o zoom subir de novo,
+     este número precisa DESCER para a barra não estourar a faixa.
      Quem gruda abaixo dela acompanha sozinho, porque lê desta variável. */
   --altura-cabecalho: 60px;
 
-  /* Escala global da interface. Ver a regra `zoom` no html e `.full-bleed`. */
+  /* Escala global da interface. Ver a regra `zoom` no html e `.full-bleed`.
+
+     120% no desktop, e não 110%: os ícones passaram a ser sólidos (Uicons), e
+     traço cheio a 16 px pede mais respiro em volta do que traço vazado — sem a
+     escala, tabela e menu ficam apertados. O ganho de legibilidade vale para o
+     resto da interface também; o público não é jovem em média.
+
+     NO CELULAR FICA EM 110%, e isso não é inconsistência. O zoom multiplica o
+     tamanho mas NÃO a largura da tela: num aparelho de 375 px, 120% deixa só
+     312 px de área útil, e medindo dá zero de folga entre o botão "Cadastre-se"
+     e a borda direita (a 110% sobram 17,6 px). Numa tela larga não existe esse
+     teto, então lá a escala maior só ajuda. */
   --zoom-site: 1.1;
+}
+
+@media (min-width: 640px) {
+  :root { --zoom-site: 1.2; }
 }
 
 /* Faixa que ocupa a largura toda da tela, cancelando o container.
    Divide por --zoom-site porque `vw` é medido na viewport SEM zoom: sem a
-   divisão a faixa fica 10% larga demais e empurra o conteúdo para fora. */
+   divisão a faixa fica larga demais na exata proporção do zoom e empurra o
+   conteúdo para fora da tela. */
 .full-bleed {
   width: calc(100vw / var(--zoom-site));
   margin-inline: calc(50% - (50vw / var(--zoom-site)));
@@ -139,10 +156,10 @@
 html {
   overflow-x: clip;
 
-  /* O site inteiro em 110%. O valor mora em --zoom-site porque o full-bleed
+  /* O site inteiro ampliado. O valor mora em --zoom-site porque o full-bleed
      PRECISA descontá-lo: `vw` não é escalado pelo zoom, então uma faixa de
-     100vw sai 10% mais larga que a tela e o excesso come o respiro lateral —
-     em 375 px o texto do topo chegou a ficar 1 px FORA da tela. */
+     100vw sai larga demais na proporção do zoom e o excesso come o respiro
+     lateral — em 375 px o texto do topo chegou a ficar FORA da tela. */
   zoom: var(--zoom-site);
 }
 

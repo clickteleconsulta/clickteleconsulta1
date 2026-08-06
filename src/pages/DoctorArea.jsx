@@ -23,7 +23,7 @@ import {
     ChevronsLeft,
     ChevronsRight,
     LayoutDashboard
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import DoctorConsultations from '@/components/doctor/DoctorConsultations';
 import DoctorProfile from '@/components/doctor/DoctorProfile';
 import DoctorSchedule from '@/components/doctor/DoctorSchedule';

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Camera, Mic, Wifi, Globe, CheckCircle2, XCircle, Loader2,
   AlertTriangle, ArrowRight, SkipForward, RefreshCw, Info
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';

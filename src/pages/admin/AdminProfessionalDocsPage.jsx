@@ -17,7 +17,7 @@ import {
     Search,
     ShieldCheck,
     Inbox,
-} from 'lucide-react';
+} from '@/components/ui/icones';
 
 const SLOT_LABELS = {
     certificado: 'Certificado de Especialização',

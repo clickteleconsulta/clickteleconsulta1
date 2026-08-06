@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, KeyRound, Mail, Phone, Pencil, ShieldCheck } from 'lucide-react';
+import { Loader2, KeyRound, Mail, Phone, Pencil, ShieldCheck } from '@/components/ui/icones';
 import { useNavigate } from 'react-router-dom';
 import {
   Dialog,

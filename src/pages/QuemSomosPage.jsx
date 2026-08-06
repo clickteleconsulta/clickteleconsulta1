@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CalendarCheck, ShieldCheck, Wallet, UserCheck, ArrowRight, Building2 } from 'lucide-react';
+import { CalendarCheck, ShieldCheck, Wallet, UserCheck, ArrowRight, Building2 } from '@/components/ui/icones';
 
 const VALORES = [
   { icon: CalendarCheck, title: 'Democratizar o acesso à saúde', text: 'Para o que pode ser resolvido a distância, você agenda com agilidade — sem deslocamento e sem fila de espera.' },

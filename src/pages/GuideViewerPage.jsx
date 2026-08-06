@@ -6,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { gerarGuiaPdf } from '@/lib/guiaPdf';
-import { Loader2, AlertCircle, FileText, User, Stethoscope, Calendar, Clock, DollarSign, Download, ArrowLeft } from 'lucide-react';
+import { Loader2, AlertCircle, FileText, User, Stethoscope, Calendar, Clock, DollarSign, Download, ArrowLeft } from '@/components/ui/icones';
 import { Helmet } from 'react-helmet';
 import QRCode from 'qrcode.react';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
-import { Mail, Phone, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MessageSquare } from '@/components/ui/icones';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 const SupportPage = () => {
   return <>

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, FileText, Eye, Check, X, Clock, FileCheck2, ShieldCheck, Inbox } from 'lucide-react';
+import { Loader2, FileText, Eye, Check, X, Clock, FileCheck2, ShieldCheck, Inbox } from '@/components/ui/icones';
 
 const SLOT_LABELS = {
     certificado: 'Certificado de Especialização',

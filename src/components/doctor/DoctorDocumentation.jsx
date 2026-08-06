@@ -20,7 +20,7 @@ import {
     Lock,
     Save,
     UserCog,
-} from 'lucide-react';
+} from '@/components/ui/icones';
 
 const ACCEPTED_MIME = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
 const ACCEPTED_EXT = ['jpg', 'jpeg', 'png', 'pdf'];

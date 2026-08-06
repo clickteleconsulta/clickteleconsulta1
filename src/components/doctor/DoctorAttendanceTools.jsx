@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, AlertTriangle, Wrench } from 'lucide-react';
+import { Loader2, Save, AlertTriangle, Wrench } from '@/components/ui/icones';
 
 // Categorias e opções de ferramentas. Os nomes são apenas produtos de mercado;
 // os textos de aviso/declaração foram redigidos de forma própria da Click.

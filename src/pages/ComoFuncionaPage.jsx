@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CalendarCheck, UserCheck, Video, ShieldCheck, CreditCard, Clock, ArrowRight, FileCheck2 } from 'lucide-react';
+import { CalendarCheck, UserCheck, Video, ShieldCheck, CreditCard, Clock, ArrowRight, FileCheck2 } from '@/components/ui/icones';
 
 const STEPS = [
   { icon: UserCheck, title: '1. Escolha o médico', text: 'Veja os médicos parceiros disponíveis, os horários e o valor de cada um.' },

@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle } from '@/components/ui/icones';
 
 const PatientNewAppointmentPage = () => {
     const { profile, loading } = useAuth();

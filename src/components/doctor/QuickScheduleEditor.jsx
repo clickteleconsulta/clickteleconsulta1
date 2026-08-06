@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, PlusCircle, Trash2, CalendarOff } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2, CalendarOff } from '@/components/ui/icones';
 
 const weekDays = [
     { id: '1', name: 'Seg' }, { id: '2', name: 'Ter' }, { id: '3', name: 'Qua' },

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, FileText, Upload, Link as LinkIcon, ExternalLink, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Loader2, Save, FileText, Upload, Link as LinkIcon, ExternalLink, CheckCircle2, ShieldAlert } from '@/components/ui/icones';
 import useAsync from '@/hooks/useAsync';
 import { Skeleton } from '@/components/ui/skeleton';
 

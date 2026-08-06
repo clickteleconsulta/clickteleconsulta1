@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw, FileDown, AlertTriangle } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, FileText, Banknote, RefreshCcw, FileDown, AlertTriangle } from '@/components/ui/icones';
 import { useToast } from '@/components/ui/use-toast';
 import { format, parseISO } from 'date-fns';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';

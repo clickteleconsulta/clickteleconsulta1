@@ -4,7 +4,7 @@ Duas coisas diferentes, e confundir uma com a outra é o que faz interface
 parecer montada em série:
 
 - **Ilustração** — desenho grande, decorativo, uma por tela. Storyset.
-- **Ícone** — sinal pequeno ao lado de um texto ou dentro de um botão. lucide.
+- **Ícone** — sinal pequeno ao lado de um texto ou dentro de um botão. Uicons.
 
 Ilustração no lugar de ícone deixa a tela infantil. Ícone no lugar de ilustração
 deixa a tela com cara de erro.
@@ -107,15 +107,56 @@ semana".
 
 ## Ícones
 
-**[lucide-react](https://lucide.dev)**, importado por nome — o bundler descarta o
-que não é usado, então acrescentar um ícone não pesa no pacote.
+**Uicons (Flaticon)**, estilo **solid / straight**. Não vêm de uma biblioteca
+instalada: `tools/gerar-icones.py` extrai os contornos da fonte e emite
+`src/components/ui/icones.jsx` com os 160 que o projeto usa.
+
+### Por que não é o pacote npm nem uma webfont
+
+O `@flaticon/flaticon-uicons` pesa 26 MB e entrega os ícones como webfont — uma
+família inteira, 3.567 ícones, ~248 KB de woff2 que o navegador baixaria para
+usar 160. Num site que precisa abrir rápido no celular de quem está procurando
+médico, isso é caro demais por um ganho estético.
+
+Extraídos, custam ~101 bytes por ícone depois do gzip (o lucide custava ~66). A
+diferença total é de poucos KB: traço sólido tem menos contorno que o vazado, e
+por isso comprime bem.
+
+Os arquivos de entrada ficam em `tools/uicons/` — 464 KB, nunca servidos ao
+navegador. A alternativa era uma devDependency de 26 MB ou depender de um
+download que pode sair do ar entre uma build e outra.
+
+### Por que saiu o lucide
+
+Não porque fosse ruim: a 16 px, lucide e Uicons **outline** são quase
+indistinguíveis, e isso foi medido lado a lado antes de decidir. O que o lucide
+não tem é a variante **sólida**. Ícone preenchido carrega mais peso visual, que
+é o que faz uma interface parecer acabada em vez de esquemática — e é a
+convenção para "item ativo" num menu.
+
+### Como acrescentar um ícone
+
+1. Ache o nome em `tools/uicons/solid-straight.css` (ou `brands.css`).
+2. Ponha o par no mapa em `tools/uicons/mapa.json` — a chave é o nome que o
+   código vai importar, o valor é a classe do Flaticon.
+3. `python3 tools/gerar-icones.py`
+
+Nunca edite `src/components/ui/icones.jsx` à mão: ele é sobrescrito.
+
+### Os nomes são os do lucide
+
+O módulo gerado exporta `User`, `Calendar`, `Loader2`… com os nomes da
+biblioteca antiga. Foi assim que a troca em 153 arquivos virou **uma linha de
+import por arquivo** em vez de uma reescrita de JSX, que é onde os erros
+aparecem. Quem escrever código novo não precisa saber disso — só importar de
+`@/components/ui/icones`.
 
 ### Vocabulário
 
 Um significado, um ícone. Quando o mesmo estado é desenhado de dois jeitos, o
 produto parece feito por duas pessoas que não se falaram.
 
-| significado | ícone | não use |
+| significado | importar | não use |
 |---|---|---|
 | deu certo, confirmado | `CheckCircle2` | `CheckCircle` |
 | item marcado numa lista | `Check` | |
@@ -129,8 +170,7 @@ produto parece feito por duas pessoas que não se falaram.
 | carregando | `Loader2` + `animate-spin` | |
 
 `AlertTriangle` e `AlertCircle` **não** são intercambiáveis: triângulo é risco
-("isto vai cobrar taxa"), círculo é falha ("não foi possível salvar"). Trocar um
-pelo outro em massa seria mentir sobre a gravidade.
+("isto vai cobrar taxa"), círculo é falha ("não foi possível salvar").
 
 ### Tamanho
 
@@ -145,6 +185,18 @@ pelo outro em massa seria mentir sobre a gravidade.
 grande no meio de uma tela vazia parece tela quebrada — é o mesmo desenho de um
 erro, no mesmo tom. Use `<EstadoVazio arte="/ilustra/sem-*.svg">`.
 
+`strokeWidth` é aceito e **ignorado**: os ícones são sólidos, não existe traço
+para engrossar. A prop continua sendo aceita para não quebrar as chamadas que
+ainda a passam por herança do lucide.
+
+### A escala do site subiu junto
+
+Traço cheio a 16 px pede mais respiro em volta do que traço vazado. Por isso
+`--zoom-site` foi de 110% para **120% no desktop**, e ficou em **110% no
+celular** — o zoom multiplica o tamanho mas não a largura da tela, e a 375 px o
+botão "Cadastre-se" encostava na borda (medido: 0 px de folga a 120%, 17,6 px a
+110%). Está em `src/index.css`.
+
 ### Botão só com ícone
 
 Sempre com `aria-label`. Sem ele o leitor de tela anuncia apenas "botão", e quem
@@ -157,8 +209,8 @@ depende disso não tem como saber o que ele faz.
 ```
 
 O rótulo é **verbo + objeto**, não o nome do ícone: "Abrir o prontuário", e não
-"Seta". Ícone puramente decorativo, ao lado de um texto que já diz a mesma
-coisa, leva `aria-hidden="true"` — repetir a informação só atrapalha.
+"Seta". O componente já marca o `<svg>` como `aria-hidden`, então o ícone nunca
+é lido duas vezes.
 
 ---
 

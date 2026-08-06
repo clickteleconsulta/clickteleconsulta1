@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot, Stethoscope, ShieldAlert } from 'lucide-react';
+import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot, Stethoscope, ShieldAlert } from '@/components/ui/icones';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import AdminPaymentMethodsPage from '@/pages/admin/AdminPaymentMethodsPage';

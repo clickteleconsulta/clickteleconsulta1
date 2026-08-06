@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, CheckCircle2, Save, ArrowLeft, Unlock, Clock, FileText, Activity, Target, Pill, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, Save, ArrowLeft, Unlock, Clock, FileText, Activity, Target, Pill, AlertCircle } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, Loader2, Check, Clock, Trash2, Calendar, MessageCircle, Info } from 'lucide-react';
+import { Bell, Loader2, Check, Clock, Trash2, Calendar, MessageCircle, Info } from '@/components/ui/icones';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';

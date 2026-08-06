@@ -5,7 +5,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, Clock, Video, PlusCircle, CheckCircle2, AlertTriangle, XCircle, MousePointerClick, ExternalLink, Copy, FileText, Lock, Phone, RotateCcw } from 'lucide-react';
+import { Loader2, Calendar, Clock, Video, PlusCircle, CheckCircle2, AlertTriangle, XCircle, MousePointerClick, ExternalLink, Copy, FileText, Lock, Phone, RotateCcw } from '@/components/ui/icones';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";

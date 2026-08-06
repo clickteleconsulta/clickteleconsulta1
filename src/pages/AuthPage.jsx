@@ -6,7 +6,7 @@ import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileW
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff, Stethoscope, ShieldCheck, CalendarCheck } from 'lucide-react';
+import { Loader2, ArrowLeft, Mail, Lock, Eye, EyeOff, Stethoscope, ShieldCheck, CalendarCheck } from '@/components/ui/icones';
 import { Helmet } from 'react-helmet';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { cn } from "@/lib/utils";

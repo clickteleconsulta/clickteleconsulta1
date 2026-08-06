@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, Calendar, Video, CheckCircle2, User, AlertCircle, FileText, RefreshCw, Clock } from 'lucide-react';
+import { Loader2, Calendar, Video, CheckCircle2, User, AlertCircle, FileText, RefreshCw, Clock } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';

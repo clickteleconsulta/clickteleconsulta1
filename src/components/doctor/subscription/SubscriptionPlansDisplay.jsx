@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Star } from 'lucide-react';
+import { Check, Star } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

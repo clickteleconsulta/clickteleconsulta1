@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, User, MoreHorizontal, Trash2, Search, Users, RefreshCw, FileDown } from 'lucide-react';
+import { Loader2, User, MoreHorizontal, Trash2, Search, Users, RefreshCw, FileDown } from '@/components/ui/icones';
 import { downloadCsv, csvDateSuffix } from '@/lib/exportCsv';
 import { format } from 'date-fns';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';

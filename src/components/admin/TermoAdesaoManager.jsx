@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Eye, CheckCircle2, Trash2, Save, Upload, FileType, AlertTriangle } from 'lucide-react';
+import { Loader2, Eye, CheckCircle2, Trash2, Save, Upload, FileType, AlertTriangle } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { toSiteUrl } from '@/lib/storageUrl';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertTriangle, Info } from '@/components/ui/icones';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';

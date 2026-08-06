@@ -9,7 +9,7 @@ import { ptBR } from 'date-fns/locale';
 import {
   History, Laptop, Globe, User, Download, RefreshCw,
   CheckCircle2, LogIn, LogOut, FileText, AlertCircle, Clock, Filter
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Info, AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { Info, AlertTriangle, CheckCircle2, X } from '@/components/ui/icones';
 
 const STORAGE_KEY = 'comunicados_lidos';
 const readDismissed = () => {

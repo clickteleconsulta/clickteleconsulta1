@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, AlertTriangle, Clock, Check, XCircle, UserX } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Clock, Check, XCircle, UserX } from '@/components/ui/icones';
 
 // Badge de status de consulta — cores semânticas consistentes em todas as telas
 // (Consultas, Painel, etc.). size="sm" para uso compacto.

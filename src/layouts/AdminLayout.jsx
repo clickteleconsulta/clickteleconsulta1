@@ -23,7 +23,7 @@ import {
   Megaphone,
   Share2,
   ScrollText
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useAdminPendingCounts } from '@/hooks/useAdminPendingCounts';

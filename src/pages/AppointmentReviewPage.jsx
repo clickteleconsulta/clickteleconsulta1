@@ -4,13 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Calendar, Clock, User, ArrowLeft, CheckCircle2, AlertCircle, Video } from 'lucide-react';
+import { Calendar, Clock, User, ArrowLeft, CheckCircle2, AlertCircle, Video } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { trackBooking } from '@/lib/analytics';
 import { Helmet } from 'react-helmet';
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from '@/components/ui/icones';
 
 const AppointmentReviewPage = () => {
   const location = useLocation();

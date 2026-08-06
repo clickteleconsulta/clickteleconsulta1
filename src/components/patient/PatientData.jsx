@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, KeyRound, User as UserIcon, ShieldCheck, Trash2, Download } from 'lucide-react';
+import { Loader2, KeyRound, User as UserIcon, ShieldCheck, Trash2, Download } from '@/components/ui/icones';
 import PatientPageHeader from '@/components/patient/PatientPageHeader';
 import { maskPhone } from '@/lib/masks';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';

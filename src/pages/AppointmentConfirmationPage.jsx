@@ -5,7 +5,7 @@ import { useLocation, useNavigate, Link, useSearchParams } from 'react-router-do
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Helmet } from 'react-helmet';
-import { Loader2, CheckCircle2, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock, ClipboardList } from 'lucide-react';
+import { Loader2, CheckCircle2, User, Calendar, DollarSign, FileText, Video, MessageCircle, Copy, Download, ArrowRight, CreditCard, Landmark, QrCode, ShieldCheck, Stethoscope, Lock, ClipboardList } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

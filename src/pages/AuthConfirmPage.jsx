@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, AlertTriangle, MailCheck, CheckCircle2 } from 'lucide-react';
+import { Loader2, AlertTriangle, MailCheck, CheckCircle2 } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 
 // Confirma o token do e-mail (invite / signup / recovery / magiclink / email_change)

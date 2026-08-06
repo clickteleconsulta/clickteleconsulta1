@@ -6,7 +6,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import {
     Loader2, Save, ShieldCheck, CheckCircle2, Circle, Lock, Info, Landmark, FlaskConical
-} from 'lucide-react';
+} from '@/components/ui/icones';
 
 // Provedor de pagamento da plataforma: Asaas (checkout hospedado · Pix e cartão).
 // Ativo em produção: Edge Functions (create-asaas-payment, asaas-webhook, refund, reconcile) no ar e chaves configuradas.

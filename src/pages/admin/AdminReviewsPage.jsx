@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Star, Trash2, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Loader2, Star, Trash2, CheckCircle2, AlertTriangle, ShieldCheck } from '@/components/ui/icones';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

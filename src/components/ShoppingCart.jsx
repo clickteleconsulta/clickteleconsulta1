@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart as ShoppingCartIcon, X } from 'lucide-react';
+import { ShoppingCart as ShoppingCartIcon, X } from '@/components/ui/icones';
 import { useCart } from '@/hooks/useCart';
 import { Button } from '@/components/ui/button';
 import { initializeCheckout, formatCurrency } from '@/api/EcommerceApi';

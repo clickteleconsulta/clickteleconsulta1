@@ -9,7 +9,7 @@ import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { nextAvailableSlotMs, temHorarioLivreNoDia } from '@/lib/doctorAvailability';
 import { doctorPath } from '@/lib/doctorSlug';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
-import { Loader2, Frown, Pencil, Search, Filter, X } from 'lucide-react';
+import { Loader2, Frown, Pencil, Search, Filter, X } from '@/components/ui/icones';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import DoctorSchedule from '@/components/doctor/DoctorSchedule';

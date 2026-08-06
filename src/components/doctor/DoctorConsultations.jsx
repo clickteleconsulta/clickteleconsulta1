@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ConsultationStatusBadge from '@/components/doctor/ConsultationStatusBadge';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
-import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, UserX, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock, Filter, SlidersHorizontal } from 'lucide-react';
+import { Loader2, Check, Search, MoreHorizontal, Trash2, CreditCard, CheckCircle2, Eye, RefreshCw, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, XCircle, Link as LinkIcon, Clock, Calendar as CalendarIcon, Video, User, UserX, Smartphone, Mail, Plus, UserPlus, Copy, Send, Key, CalendarClock, Filter, SlidersHorizontal } from '@/components/ui/icones';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, DialogDescription } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";

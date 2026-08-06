@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, ArrowRight, Instagram, Facebook } from 'lucide-react';
+import { Stethoscope, ArrowRight, Instagram, Facebook } from '@/components/ui/icones';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { BRAND, EMPRESA } from '@/config/brand';
 

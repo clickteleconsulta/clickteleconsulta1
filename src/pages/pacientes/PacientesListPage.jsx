@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Search, Calendar, ChevronRight, ChevronLeft, User, RefreshCw, Phone, Mail } from 'lucide-react';
+import { Loader2, Search, Calendar, ChevronRight, ChevronLeft, User, RefreshCw, Phone, Mail } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 

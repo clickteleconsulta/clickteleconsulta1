@@ -16,7 +16,7 @@ import {
   Stethoscope,
   CheckCircle2,
   Lock,
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import {
   Card,
   CardContent,

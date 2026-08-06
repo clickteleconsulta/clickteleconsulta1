@@ -4,7 +4,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ArrowRight, Loader2, User, Calendar, FileText, Download, ExternalLink, Bell, Video, Mail, Clock } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Loader2, User, Calendar, FileText, Download, ExternalLink, Bell, Video, Mail, Clock } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { gerarGuiaPdf } from '@/lib/guiaPdf';
 import { useToast } from '@/components/ui/use-toast';

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
-import { Loader2, ScrollText, RefreshCw, Search, FileDown, User, Stethoscope, Shield, Calendar, Landmark, FileCheck } from 'lucide-react';
+import { Loader2, ScrollText, RefreshCw, Search, FileDown, User, Stethoscope, Shield, Calendar, Landmark, FileCheck } from '@/components/ui/icones';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { downloadCsv, csvDateSuffix } from '@/lib/exportCsv';
 

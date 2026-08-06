@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, CheckCircle2, XCircle, FileText, Download, User } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, FileText, Download, User } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { format } from 'date-fns';

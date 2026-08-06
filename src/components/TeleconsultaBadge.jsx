@@ -1,5 +1,5 @@
 import React from 'react';
-import { Video } from 'lucide-react';
+import { Video } from '@/components/ui/icones';
 import { cn } from '@/lib/utils';
 
 /**

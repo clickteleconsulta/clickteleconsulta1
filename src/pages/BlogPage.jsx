@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ARTICLES } from '@/content/siteContent';
-import { ArrowRight, Clock } from 'lucide-react';
+import { ArrowRight, Clock } from '@/components/ui/icones';
 
 const fmt = (d) => { try { return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }); } catch { return d; } };
 

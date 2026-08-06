@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { getMemedToken } from './memedService';
-import { Loader2, AlertCircle, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Loader2, AlertCircle, ArrowLeft, RefreshCw } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

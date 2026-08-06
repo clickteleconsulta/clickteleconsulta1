@@ -9,7 +9,7 @@ import {
   Loader2, AlertTriangle, ArrowLeft, Mic, MicOff, Video, VideoOff,
   Monitor, MessageSquare, PhoneOff, Wifi, WifiOff,
   Maximize, Minimize, Clock, Bell, X, Send, ChevronRight
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format, differenceInSeconds } from 'date-fns';

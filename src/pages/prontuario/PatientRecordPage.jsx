@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Loader2, Plus, FileText, CalendarCheck, CreditCard, UserCog, Clock, ChevronRight, AlertCircle, Calendar, Copy, Link as LinkIcon, Download, Printer } from 'lucide-react';
+import { Loader2, Plus, FileText, CalendarCheck, CreditCard, UserCog, Clock, ChevronRight, AlertCircle, Calendar, Copy, Link as LinkIcon, Download, Printer } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import html2pdf from 'html2pdf.js';

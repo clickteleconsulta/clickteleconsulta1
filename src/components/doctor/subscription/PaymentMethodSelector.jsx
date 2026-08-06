@@ -1,7 +1,7 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { CreditCard, QrCode, Building2 } from 'lucide-react';
+import { CreditCard, QrCode, Building2 } from '@/components/ui/icones';
 import { cn } from '@/lib/utils';
 
 const PaymentMethodSelector = ({ selectedMethod, onSelectMethod }) => {

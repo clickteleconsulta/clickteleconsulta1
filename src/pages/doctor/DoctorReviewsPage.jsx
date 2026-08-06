@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Loader2, Star, AlertTriangle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Loader2, Star, AlertTriangle, CheckCircle2, ShieldAlert } from '@/components/ui/icones';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';

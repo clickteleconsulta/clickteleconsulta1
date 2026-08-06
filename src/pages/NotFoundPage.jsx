@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Home, CalendarCheck } from 'lucide-react';
+import { Home, CalendarCheck } from '@/components/ui/icones';
 
 const NotFoundPage = () => (
   <>

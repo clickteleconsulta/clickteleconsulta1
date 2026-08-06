@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Eye, CheckCircle2, Trash2, Save, Upload, FileType, AlertCircle, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Loader2, Eye, CheckCircle2, Trash2, Save, Upload, FileType, AlertCircle, RefreshCw, AlertTriangle } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";

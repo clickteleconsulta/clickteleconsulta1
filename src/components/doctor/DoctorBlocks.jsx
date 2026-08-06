@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Loader2, Plus, Trash2, CalendarOff, Ban } from 'lucide-react';
+import { Loader2, Plus, Trash2, CalendarOff, Ban } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 

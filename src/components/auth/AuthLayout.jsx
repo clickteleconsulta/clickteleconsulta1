@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
-import { CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from 'lucide-react';
+import { CalendarCheck, ShieldCheck, Wallet, Clock, MonitorSmartphone, UserCheck } from '@/components/ui/icones';
 
 /**
  * Telas de acesso — cliente e profissional.

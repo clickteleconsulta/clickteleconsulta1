@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff, FileText, ShieldCheck, Trash2, Stethoscope } from 'lucide-react';
+import { Loader2, Camera, User as UserIcon, Save, ExternalLink, Phone, KeyRound, Eye, EyeOff, FileText, ShieldCheck, Trash2, Stethoscope } from '@/components/ui/icones';
 import DoctorAttendanceTools from '@/components/doctor/DoctorAttendanceTools';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';

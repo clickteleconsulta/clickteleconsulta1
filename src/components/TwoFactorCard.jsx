@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, ShieldCheck, Smartphone, Copy } from 'lucide-react';
+import { Loader2, ShieldCheck, Smartphone, Copy } from '@/components/ui/icones';
 
 // Card reutilizável de Autenticação de 2 Fatores (TOTP) — admin, médico e paciente.
 const TwoFactorCard = () => {

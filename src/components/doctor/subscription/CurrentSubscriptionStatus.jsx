@@ -4,7 +4,7 @@ import { ptBR } from 'date-fns/locale';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, CreditCard, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Calendar, CreditCard, ShieldCheck, AlertCircle } from '@/components/ui/icones';
 import { getPlanDetails } from '@/config/plansConfig';
 
 const CurrentSubscriptionStatus = ({ subscriptionData, onChangePlanClick }) => {

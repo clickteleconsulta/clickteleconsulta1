@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Video, Loader2, FileText, CheckCircle2, AlertTriangle, Lock } from 'lucide-react';
+import { Video, Loader2, FileText, CheckCircle2, AlertTriangle, Lock } from '@/components/ui/icones';
 import { useToast } from '@/components/ui/use-toast';
 import { useTelemedicineRoom } from '@/hooks/useTelemedicineRoom';
 import TCLEConsentModal from './TCLEConsentModal';

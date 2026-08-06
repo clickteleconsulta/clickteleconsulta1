@@ -8,7 +8,7 @@ import {
   Loader2, Calendar, Users, DollarSign, Check, X, Clock, Bell,
   Plus, Lock, FileText, TrendingUp, ChevronRight, Video, Star,
   AlertCircle, CalendarPlus, UserCheck, Activity, BarChart2, Zap
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';

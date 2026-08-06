@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Send } from 'lucide-react';
+import { Loader2, Send } from '@/components/ui/icones';
 import { supabase } from '@/lib/customSupabaseClient';
 const interestSchema = z.object({
   full_name: z.string().min(3, 'Nome completo é obrigatório.'),

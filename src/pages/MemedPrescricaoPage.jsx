@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
-import { Loader2, AlertTriangle, ArrowLeft, ShieldCheck, FileText } from 'lucide-react';
+import { Loader2, AlertTriangle, ArrowLeft, ShieldCheck, FileText } from '@/components/ui/icones';
 import { useToast } from '@/components/ui/use-toast';
 import { Badge } from '@/components/ui/badge';
 

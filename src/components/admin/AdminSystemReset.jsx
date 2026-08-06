@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, AlertTriangle, Trash2, ShieldAlert, CheckCircle2 } from 'lucide-react';
+import { Loader2, AlertTriangle, Trash2, ShieldAlert, CheckCircle2 } from '@/components/ui/icones';
 
 const CONFIRM = 'RESETAR SISTEMA';
 

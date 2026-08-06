@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ARTICLES, getArticle } from '@/content/siteContent';
-import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock } from '@/components/ui/icones';
 
 const fmt = (d) => { try { return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }); } catch { return d; } };
 const BASE = `${BRAND.url}`;

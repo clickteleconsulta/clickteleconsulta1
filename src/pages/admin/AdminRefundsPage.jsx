@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
-import { Loader2, RefreshCcw, RotateCcw, CheckCircle2, AlertTriangle, FileDown, ScrollText, User, Stethoscope } from 'lucide-react';
+import { Loader2, RefreshCcw, RotateCcw, CheckCircle2, AlertTriangle, FileDown, ScrollText, User, Stethoscope } from '@/components/ui/icones';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 

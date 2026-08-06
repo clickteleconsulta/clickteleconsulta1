@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { Loader2, Stethoscope, Plus, Trash2, Check, Pencil, X } from 'lucide-react';
+import { Loader2, Stethoscope, Plus, Trash2, Check, Pencil, X } from '@/components/ui/icones';
 
 // CRUD de especialidades. A leitura é pública (usada no cadastro/perfil do médico
 // e no filtro da página de agendamentos). Escrita restrita ao admin via RLS.

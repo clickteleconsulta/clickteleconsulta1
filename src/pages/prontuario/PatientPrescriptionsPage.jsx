@@ -9,7 +9,7 @@ import {
   ChevronLeft,
   Loader2,
   Search
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';

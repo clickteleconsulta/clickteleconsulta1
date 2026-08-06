@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Loader2 } from 'lucide-react';
+import { ShoppingCart, Loader2 } from '@/components/ui/icones';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/components/ui/use-toast';
 import { getProducts, getProductQuantities } from '@/api/EcommerceApi';

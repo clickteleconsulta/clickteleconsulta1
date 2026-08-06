@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Loader2, ShieldCheck, ArrowRight, ExternalLink, AlertTriangle, User, Stethoscope, Calendar, Globe } from 'lucide-react';
+import { Loader2, ShieldCheck, ArrowRight, ExternalLink, AlertTriangle, User, Stethoscope, Calendar, Globe } from '@/components/ui/icones';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from 'react-router-dom';

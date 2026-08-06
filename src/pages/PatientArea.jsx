@@ -23,7 +23,7 @@ import {
   Clock,
   Bell,
   Stethoscope,
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import PatientConsultations from '@/components/patient/PatientConsultations';
 import SupportPage from '@/pages/SupportPage';
 import PatientNewAppointmentPage from '@/pages/patient/PatientNewAppointmentPage';

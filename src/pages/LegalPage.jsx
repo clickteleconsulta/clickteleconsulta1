@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, AlertCircle, FileText, Download, ExternalLink, RefreshCw } from 'lucide-react';
+import { Loader2, ArrowLeft, AlertCircle, FileText, Download, ExternalLink, RefreshCw } from '@/components/ui/icones';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Helmet } from 'react-helmet';

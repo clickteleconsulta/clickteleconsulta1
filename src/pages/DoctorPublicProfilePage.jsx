@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
-import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar } from 'lucide-react';
+import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar } from '@/components/ui/icones';
 import useAsync from '@/hooks/useAsync';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';

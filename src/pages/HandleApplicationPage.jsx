@@ -3,7 +3,7 @@ import { BRAND } from '@/config/brand';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { Loader2, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, AlertTriangle } from '@/components/ui/icones';
 import { Helmet } from 'react-helmet';
 
 const HandleApplicationPage = () => {

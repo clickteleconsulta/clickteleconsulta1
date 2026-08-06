@@ -4,7 +4,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Loader2, Search } from 'lucide-react';
+import { Loader2, Search } from '@/components/ui/icones';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';

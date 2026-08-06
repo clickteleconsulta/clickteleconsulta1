@@ -11,7 +11,7 @@ import ConsultationStatusBadge from '@/components/doctor/ConsultationStatusBadge
 import {
     Loader2, LayoutDashboard, CalendarDays, Wallet, Star, Clock, ChevronRight,
     BellRing, CheckCircle2, Circle, AlertTriangle, FileWarning, CalendarClock, Landmark, ArrowRight, ExternalLink, Stethoscope
-} from 'lucide-react';
+} from '@/components/ui/icones';
 
 const TZ = 'America/Sao_Paulo';
 const fmtBRL = (v) => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });

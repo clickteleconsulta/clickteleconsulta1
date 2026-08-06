@@ -21,7 +21,7 @@ import DoctorRouteGuard from '@/components/DoctorRouteGuard';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useMaintenance } from '@/hooks/useMaintenance';
 import MaintenancePage from '@/pages/MaintenancePage';
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from '@/components/ui/icones';
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
 const DoctorArea = lazy(() => import('@/pages/DoctorArea'));
 const PatientArea = lazy(() => import('@/pages/PatientArea'));

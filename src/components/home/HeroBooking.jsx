@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Video, ShieldCheck, Check, User } from 'lucide-react';
+import { Video, ShieldCheck, Check, User } from '@/components/ui/icones';
 
 /**
  * Ilustração do hero: o próprio produto.

@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
-import { Loader2, Share2, Plus, Trash2, Send, Pause, Play, Upload, Instagram, Facebook, RefreshCw, Info, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Share2, Plus, Trash2, Send, Pause, Play, Upload, Instagram, Facebook, RefreshCw, Info, Image as ImageIcon } from '@/components/ui/icones';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const STATUS = {

@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
-import { Loader2, Megaphone, Plus, Pencil, Trash2, Info, AlertTriangle, CheckCircle2, RefreshCw } from 'lucide-react';
+import { Loader2, Megaphone, Plus, Pencil, Trash2, Info, AlertTriangle, CheckCircle2, RefreshCw } from '@/components/ui/icones';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 const PUBLICO_LABEL = { todos: 'Todos', medico: 'Médicos', paciente: 'Pacientes' };

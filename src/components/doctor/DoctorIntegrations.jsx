@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ExternalLink, LayoutGrid } from 'lucide-react';
+import { ExternalLink, LayoutGrid } from '@/components/ui/icones';
 
 const DoctorIntegrations = () => {
     return (

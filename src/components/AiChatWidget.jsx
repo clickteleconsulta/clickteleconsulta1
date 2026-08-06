@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BRAND } from '@/config/brand';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Bot, Loader2, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, Loader2, Sparkles } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

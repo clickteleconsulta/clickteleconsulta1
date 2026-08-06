@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   RefreshCw, Clock, CheckCircle2, UserCheck, PlayCircle,
   WifiOff, Bell, Zap
-} from 'lucide-react';
+} from '@/components/ui/icones';
 import { supabase } from '@/lib/customSupabaseClient';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
