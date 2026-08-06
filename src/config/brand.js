@@ -37,12 +37,19 @@ export const BRAND = {
      * URLs dos perfis. O rodapé só desenha o ícone de quem tem URL aqui — ícone
      * que leva a página inexistente é pior que ícone ausente.
      *
-     * O Facebook está VAZIO porque ninguém confirmou o endereço da página. Não
-     * inventei um a partir do handle do Instagram: se o palpite estiver errado,
-     * o site publica um link quebrado. Basta preencher e o ícone aparece.
+     * Facebook e TikTok estão VAZIOS porque ninguém confirmou os endereços. Não
+     * invento a partir do handle do Instagram: se o palpite estiver errado, o
+     * site publica um link quebrado, e link quebrado no rodapé custa mais
+     * confiança do que o ícone ausente economiza. Basta preencher e o ícone
+     * aparece sozinho — o rodapé filtra por esta lista.
+     *
+     * No TikTok, atenção: o perfil foi criado com um nome de usuário gerado
+     * automaticamente, e a troca ficou travada até 4 de setembro de 2026. O
+     * endereço a colar aqui é o que estiver valendo NO DIA, não o pretendido.
      */
     urls: {
       instagram: 'https://www.instagram.com/avidoc.com.br/',
+      tiktok: '',
       facebook: '',
     },
   },

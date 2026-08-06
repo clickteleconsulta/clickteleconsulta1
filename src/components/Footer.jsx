@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, ArrowRight, Instagram, Facebook } from '@/components/ui/icones';
+import { Stethoscope, ArrowRight } from '@/components/ui/icones';
+import { Instagram, Facebook, TikTok } from '@/components/ui/redes';
 import Wordmark, { TAMANHOS } from '@/components/Wordmark';
 import { BRAND, EMPRESA } from '@/config/brand';
 
@@ -19,9 +20,15 @@ import { BRAND, EMPRESA } from '@/config/brand';
  */
 
 // Só entra ícone de rede que tenha URL configurada em src/config/brand.js.
-// Ícone que leva a página inexistente é pior que ícone ausente.
+// Ícone que leva a página inexistente é pior que ícone ausente — o link quebrado
+// custa mais confiança do que o ícone ausente economiza.
+//
+// A ordem é a do peso que cada rede tem para a aviDoc hoje: o Instagram é o
+// perfil que existe, o TikTok é onde a verba de anúncio vai entrar, o Facebook
+// vem por completude.
 const REDES = [
   { nome: 'Instagram', icone: Instagram, url: BRAND.social?.urls?.instagram },
+  { nome: 'TikTok', icone: TikTok, url: BRAND.social?.urls?.tiktok },
   { nome: 'Facebook', icone: Facebook, url: BRAND.social?.urls?.facebook },
 ].filter((r) => r.url);
 
