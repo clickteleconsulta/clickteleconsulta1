@@ -46,8 +46,9 @@ from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from PIL import Image as PILImage
+from reportlab.lib import colors
 from reportlab.platypus import (BaseDocTemplate, Frame, Image, PageTemplate,
-                                Paragraph, Spacer)
+                                Paragraph, Spacer, Table, TableStyle)
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENTRADA = os.path.join(RAIZ, 'documentos-legais')
@@ -123,6 +124,8 @@ def estilos():
                                 textColor=COBALTO, spaceBefore=6 * mm, spaceAfter=2 * mm),
         'corpo': ParagraphStyle('corpo', fontName=corpo_f, fontSize=9.5, leading=15,
                                 textColor=TINTA, alignment=TA_JUSTIFY, spaceAfter=2.5 * mm),
+        'celula': ParagraphStyle('celula', fontName=corpo_f, fontSize=8.5, leading=12.5,
+                                 textColor=TINTA),
         'item': ParagraphStyle('item', fontName=corpo_f, fontSize=9.5, leading=15,
                                textColor=TINTA, alignment=TA_JUSTIFY, spaceAfter=1.5 * mm,
                                leftIndent=7 * mm, bulletIndent=2 * mm,
@@ -156,7 +159,7 @@ def montar(texto, est):
     linha, com espaçamento entre cada um. Ilegível, e nada parecido com o
     documento de origem.
     """
-    fluxo, lista, paragrafo = [], [], []
+    fluxo, lista, paragrafo, tabela = [], [], [], []
 
     def fechar_paragrafo():
         if paragrafo:
@@ -173,9 +176,34 @@ def montar(texto, est):
             fluxo.append(Paragraph(_inline(item), est['item'], bulletText='\u2022'))
         lista.clear()
 
+    def fechar_tabela():
+        # A tabela existe por causa da seção de finalidades e bases legais da
+        # Política: ali a RELAÇÃO entre uma coluna e a outra é o conteúdo. Numa
+        # lista corrida, "legítimo interesse" deixa de estar amarrado à
+        # finalidade que o justifica, e o documento perde justamente o que a
+        # LGPD pede que ele mostre.
+        if not tabela:
+            return
+        dados = [[Paragraph(_inline(c), est['celula']) for c in linha] for linha in tabela]
+        t = Table(dados, colWidths=[95 * mm, 65 * mm], repeatRows=1)
+        t.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('TOPPADDING', (0, 0), (-1, -1), 2.4 * mm),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2.4 * mm),
+            ('LEFTPADDING', (0, 0), (-1, -1), 3 * mm),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 3 * mm),
+            ('LINEBELOW', (0, 0), (-1, -2), 0.4, colors.HexColor('#DFE4EE')),
+            ('LINEBELOW', (0, 0), (-1, 0), 0.9, colors.HexColor(COBALTO)),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor(COBALTO)),
+        ]))
+        fluxo.append(t)
+        fluxo.append(Spacer(1, 4 * mm))
+        tabela.clear()
+
     def fechar():
         fechar_paragrafo()
         fechar_lista()
+        fechar_tabela()
 
     for linha in texto.split('\n'):
         linha = linha.strip()
@@ -187,11 +215,21 @@ def montar(texto, est):
         elif linha.startswith('# '):
             fechar()
             fluxo.append(Paragraph(_inline(linha[2:]), est['titulo']))
+        elif linha.startswith('|') and linha.endswith('|'):
+            # Linha só de hifens é o separador de cabeçalho do markdown: ela
+            # marca a primeira linha como cabeçalho e não vira conteúdo.
+            celulas = [c.strip() for c in linha.strip('|').split('|')]
+            if not all(set(c) <= set('-: ') for c in celulas):
+                fechar_paragrafo()
+                fechar_lista()
+                tabela.append(celulas)
         elif linha.startswith(('- ', '* ')):
             fechar_paragrafo()
+            fechar_tabela()
             lista.append(linha[2:])
         else:
             fechar_lista()
+            fechar_tabela()
             paragrafo.append(linha)
     fechar()
     return fluxo
