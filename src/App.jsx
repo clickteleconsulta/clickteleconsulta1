@@ -11,7 +11,6 @@ const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const ConfirmationPage = lazy(() => import('@/pages/ConfirmationPage'));
 const SupportPage = lazy(() => import('@/pages/SupportPage'));
 const ComoFuncionaPage = lazy(() => import('@/pages/ComoFuncionaPage'));
-const ReceitaAtestadoTeleconsultaPage = lazy(() => import('@/pages/ReceitaAtestadoTeleconsultaPage'));
 const FaqPage = lazy(() => import('@/pages/FaqPage'));
 const DocumentosPage = lazy(() => import('@/pages/DocumentosPage'));
 const QuemSomosPage = lazy(() => import('@/pages/QuemSomosPage'));
@@ -306,11 +305,14 @@ function App() {
             <Route path="/medicos" element={<Navigate to="/agendamentos" replace />} />
             <Route path="/suporte" element={<SupportPage />} />
             <Route path="/como-funciona" element={<ComoFuncionaPage />} />
-            <Route path="/receita-e-atestado-na-teleconsulta" element={<ReceitaAtestadoTeleconsultaPage />} />
-            {/* O endereço antigo chegou a ser publicado e enviado no sitemap.
-                Redireciona em vez de 404: quem já tiver o link não cai no vazio,
-                e o buscador transfere para o novo o pouco que tenha registrado. */}
-            <Route path="/atestado-e-receita-online" element={<Navigate to="/receita-e-atestado-na-teleconsulta" replace />} />
+            {/* PÁGINA REMOVIDA. Existiu por algumas horas com dois endereços, e
+                os dois chegaram a ir ao sitemap enviado ao Google. Redirecionam
+                para a página de documentos em vez de dar 404: o assunto —
+                validade de receita e atestado — continua tratado lá, com a
+                moldura certa. A página própria foi retirada porque foge do
+                objetivo da plataforma, que é agendamento de consulta. */}
+            <Route path="/receita-e-atestado-na-teleconsulta" element={<Navigate to="/documentos-e-validade" replace />} />
+            <Route path="/atestado-e-receita-online" element={<Navigate to="/documentos-e-validade" replace />} />
             <Route path="/quem-somos" element={<QuemSomosPage />} />
             <Route path="/perguntas-frequentes" element={<FaqPage />} />
             <Route path="/documentos-e-validade" element={<DocumentosPage />} />

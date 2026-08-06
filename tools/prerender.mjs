@@ -258,19 +258,6 @@ async function main() {
     },
     { path: '/blog', title: `Blog · ${MARCA} — Saúde e teleconsulta`, description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
     {
-      path: '/receita-e-atestado-na-teleconsulta',
-      title: `Como funcionam receita e atestado na teleconsulta · ${MARCA}`,
-      description: 'Como receita, atestado e pedido de exame funcionam depois de uma consulta online: quem emite, de que depende e por que valem em todo o Brasil.',
-      corpo: `<h1>Como funcionam receita e atestado na teleconsulta</h1>
-  <p>Documentos emitidos em teleconsulta têm o mesmo valor dos de uma consulta presencial e valem em todo o Brasil. O que muda é só o meio do atendimento.</p>
-  <h2>O que você contrata é a consulta</h2>
-  <p>A ${MARCA} é um marketplace de agendamentos: o que você contrata e paga é o atendimento com o médico. Emitir receita, atestado ou pedido de exame é decisão exclusiva do profissional, depois de avaliar o seu caso, e ele pode concluir que não é indicado. Nenhum documento é vendido, prometido ou garantido aqui.</p>
-  <h2>Por que o documento vale</h2>
-  <p>O atendimento a distância está autorizado pela Lei nº 14.510/2022 e regulamentado pela Resolução CFM nº 2.314/2022. Os documentos são assinados com certificado digital do padrão ICP-Brasil — instituído pela Medida Provisória nº 2.200-2/2001 e reconhecido pela Lei nº 14.063/2020 —, o que dá a eles a mesma validade jurídica de uma assinatura de próprio punho.</p>
-  <p><a href="/documentos-e-validade">Veja o passo a passo da conferência</a> · <a href="/agendamentos">Ver médicos e horários</a></p>
-  ${links('/receita-e-atestado-na-teleconsulta')}`,
-    },
-    {
       path: '/documentos-e-validade',
       title: `Documentos e validade · ${MARCA}`,
       description: 'Receita, atestado e pedido de exame emitidos em teleconsulta valem em todo o Brasil. Veja como conferir a autenticidade de cada um, de graça.',
