@@ -25,3 +25,8 @@ documentos-legais/saida/
 # Texto extraido dos PDFs legais vigentes. E insumo para o juridico, nao fonte
 # de verdade: a versao que vale e o PDF publicado em Admin -> Legal.
 documentos-legais/*.txt
+
+# Instancias de peso geradas de public/fonts/geist-variable.woff2 por
+# tools/gerar-documentos-legais.py. Reconstruidas sozinhas; a fonte de verdade
+# e o woff2 do kit da marca.
+.cache-fontes/

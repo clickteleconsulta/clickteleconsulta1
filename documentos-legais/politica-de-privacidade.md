@@ -1,6 +1,8 @@
 <!-- versao: Versão 1.1 · 6 de agosto de 2026 -->
 # Política de Privacidade e Tratamento de Dados
 
+> Lei nº 13.709/2018 (LGPD)
+
 A CLICK TELECONSULTA ONLINE LTDA, pessoa jurídica de direito privado, inscrita no CNPJ nº 68.171.336/0001- 50, com sede na R. Antônio Pereira Ramos, nº 118, Centro, Coroaci/MG, CEP 39.710-000 ("aviDoc", "Plataforma" ou "nós"), apresenta esta Política de Privacidade e Tratamento de Dados ("Política") para explicar, de forma transparente, como coleta, usa, compartilha, armazena e protege dados pessoais na plataforma avidoc.com.br e aplicativos, em conformidade com a Lei nº 13.709/2018 (LGPD), o Marco Civil da Internet (Lei nº 12.965/2014) e o Código de Defesa do Consumidor. Ao criar conta, agendar ou utilizar a Plataforma, você declara ter lido e compreendido esta Política.
 
 ## 1.  QUEM É O CONTROLADOR E A QUEM ESTA POLÍTICA SE APLICA

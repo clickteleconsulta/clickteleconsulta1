@@ -1,6 +1,8 @@
 <!-- versao: Versão 1.1 · 6 de agosto de 2026 -->
 # Termos de Serviço
 
+> Condições de uso da plataforma · Pacientes
+
 Estes Termos de Serviço ("Termos") regem o uso da plataforma aviDoc, disponível no site avidoc.com.br e aplicativos, operada por CLICK TELECONSULTA ONLINE LTDA, inscrita no CNPJ nº 68.171.336/0001-50, com sede na R. Antônio Pereira Ramos, nº 118, Centro, Coroaci/MG, CEP 39.710-000 ("aviDoc", "Plataforma" ou "nós"). A Política de Privacidade integra estes Termos. Ao criar uma conta, agendar ou comprar uma teleconsulta, você declara ter lido, compreendido e aceito estes Termos.
 
 ## 1.  DEFINIÇÕES

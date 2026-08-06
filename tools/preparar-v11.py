@@ -177,15 +177,30 @@ def adesao(t):
     return t[:i] + NAO_COMPARECIMENTO.strip() + '\n\n' + t[i:]
 
 
+# Título e subtítulo COPIADOS DO DOCUMENTO VIGENTE, palavra por palavra.
+#
+# Na primeira versão eu digitei um título encurtado de minha cabeça para o Termo
+# de Adesão — "Termo de Adesão — Médicos Parceiros" — e deixei os três sem
+# subtítulo. Título de contrato é parte do contrato: ele diz o que o instrumento
+# é. Trocá-lo por uma versão mais curta é alterar o documento, não formatá-lo.
 TRANSFORMA = {
-    'politica-de-privacidade': ('Política de Privacidade e Tratamento de Dados', privacidade),
-    'termos-de-servico': ('Termos de Serviço', None),
-    'termo-de-adesao-medicos': ('Termo de Adesão — Médicos Parceiros', adesao),
+    'politica-de-privacidade': (
+        'Política de Privacidade e Tratamento de Dados',
+        'Lei nº 13.709/2018 (LGPD)',
+        privacidade),
+    'termos-de-servico': (
+        'Termos de Serviço',
+        'Condições de uso da plataforma · Pacientes',
+        None),
+    'termo-de-adesao-medicos': (
+        'TERMO DE ADESÃO E CONDIÇÕES DE USO DA PLATAFORMA aviDoc — MÉDICOS PARCEIROS — E DE GESTÃO E REPASSE DE VALORES',
+        'Marketplace de agendamento de teleconsultas',
+        adesao),
 }
 
 
 def main():
-    for slug, (titulo, ajuste) in TRANSFORMA.items():
+    for slug, (titulo, subtitulo, ajuste) in TRANSFORMA.items():
         bruto = open(os.path.join(PASTA, f'{slug}.txt'), encoding='utf-8').read()
         md = para_markdown(bruto)
         if ajuste:
@@ -197,7 +212,10 @@ def main():
         # juntos e apagava o local e a forma do aceite.
         md = re.sub(r'Última atualização: \d{1,2} de \w+ de \d{4} · aviDoc\s*', '', md)
         md = re.sub(r'Versão vigente: \d{1,2} de \w+ de \d{4}\s*·?\s*', '', md)
-        corpo = f'<!-- versao: {VERSAO} -->\n# {titulo}\n\n{md.strip()}\n'
+        corpo = (f'<!-- versao: {VERSAO} -->\n'
+                 f'# {titulo}\n\n'
+                 f'> {subtitulo}\n\n'
+                 f'{md.strip()}\n')
         open(os.path.join(PASTA, f'{slug}.md'), 'w', encoding='utf-8').write(corpo)
         print(f'  {slug:<28} {len(corpo):>6} chars')
 

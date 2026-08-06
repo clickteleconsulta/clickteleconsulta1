@@ -107,21 +107,86 @@ def aplicar_marca(texto):
     return texto.replace(_MARCADOR_RAZAO, RAZAO_SOCIAL), relatorio
 
 
+# A fonte é a MESMA que o site serve: public/fonts/geist-variable.woff2, o
+# arquivo do kit da marca. Não uma cópia parecida, não a Helvetica.
+GEIST = os.path.join(RAIZ, 'public', 'fonts', 'geist-variable.woff2')
+PESOS = {'Geist': 400, 'Geist-Semi': 600, 'Geist-Bold': 700}
+
+
+def _registrar_geist():
+    """Instancia os pesos da Geist variável e registra os três no reportlab.
+
+    POR QUE INSTANCIAR. A Geist do site é uma fonte VARIÁVEL, com eixo de peso
+    de 100 a 900 — é assim que o site usa 400 no corpo e 700 nos títulos sem
+    baixar três arquivos. O reportlab não entende eixo variável: ele embute a
+    instância padrão e ignora o resto. Resultado da primeira versão: o documento
+    inteiro saiu em Regular, e título, seção e negrito perderam o peso. A fonte
+    estava certa; o que faltava era o peso.
+
+    `instancer.instantiateVariableFont` congela o eixo num valor e devolve uma
+    fonte estática, que é o que o reportlab sabe embutir.
+    """
+    from fontTools.ttLib import TTFont as TTF
+    from fontTools.varLib import instancer
+
+    os.makedirs(FONTES, exist_ok=True)
+    for nome, peso in PESOS.items():
+        alvo = os.path.join(FONTES, f'{nome}-{peso}.ttf')
+        if not os.path.exists(alvo):
+            fonte = TTF(GEIST)
+            instancer.instantiateVariableFont(fonte, {'wght': peso}, inplace=True)
+            # O flavor tem que ser zerado: a origem é .woff2, e o fontTools
+            # preserva o formato ao salvar. Sem isto o arquivo sai comprimido em
+            # woff2 e o reportlab recusa com "Not a recognized TrueType font".
+            fonte.flavor = None
+
+            # RENOMEAR É OBRIGATÓRIO, não cosmético. O instancer não muda o nome
+            # interno: as três instâncias saem chamando-se "Geist Regular". O
+            # reportlab indexa a fonte embutida por esse nome, então ele
+            # deduplica as três, embute só a primeira e desenha TUDO com ela — o
+            # documento sai inteiro em 400 mesmo com os estilos pedindo 600 e
+            # 700. Verificável: o PDF listava uma única fonte embutida.
+            tabela = fonte['name']
+            for registro in tabela.names:
+                if registro.nameID in (1, 3, 4, 6):
+                    atual = registro.toUnicode()
+                    novo_nome = atual.replace('Geist', nome).replace(' ', '-') \
+                        if registro.nameID in (3, 6) else atual.replace('Geist', nome)
+                    tabela.setName(novo_nome, registro.nameID, registro.platformID,
+                                   registro.platEncID, registro.langID)
+            fonte.save(alvo)
+        pdfmetrics.registerFont(TTFont(nome, alvo))
+
+    # Sem registerFontFamily o <b> do texto não encontra o desenho do negrito e
+    # o reportlab o SINTETIZA, engrossando o traço da regular — que é justamente
+    # o que ter o peso real evita.
+    pdfmetrics.registerFontFamily('Geist', normal='Geist', bold='Geist-Bold',
+                                  italic='Geist', boldItalic='Geist-Bold')
+    return 'Geist'
+
+
 def _fonte(nome, arquivo):
-    caminho = os.path.join(FONTES, arquivo)
-    if os.path.exists(caminho):
-        pdfmetrics.registerFont(TTFont(nome, caminho))
-        return nome
+    """Compatibilidade: se o arquivo do kit sumir, cai na Helvetica em vez de
+    quebrar a geração. Mas isso é degradação visível, e é para ser notada."""
+    if os.path.exists(GEIST):
+        return _registrar_geist()
     return None
 
 
 def estilos():
     corpo_f = _fonte('Geist', 'Geist.ttf') or 'Helvetica'
+    tem_pesos = corpo_f == 'Geist'
+    titulo_f = 'Geist-Bold' if tem_pesos else 'Helvetica-Bold'
+    secao_f = 'Geist-Semi' if tem_pesos else 'Helvetica-Bold'
     return {
-        'titulo': ParagraphStyle('titulo', fontName=corpo_f, fontSize=19, leading=24,
+        # O peso segue a mesma escala do site: 700 no título, 600 na seção, 400
+        # no corpo. É o que dá hierarquia sem mudar de família.
+        'titulo': ParagraphStyle('titulo', fontName=titulo_f, fontSize=19, leading=24,
                                  textColor=TINTA, spaceAfter=2 * mm),
-        'secao': ParagraphStyle('secao', fontName=corpo_f, fontSize=12.5, leading=17,
+        'secao': ParagraphStyle('secao', fontName=secao_f, fontSize=12.5, leading=17,
                                 textColor=COBALTO, spaceBefore=6 * mm, spaceAfter=2 * mm),
+        'subtitulo': ParagraphStyle('subtitulo', fontName=corpo_f, fontSize=9.5, leading=14,
+                                    textColor=CINZA, spaceAfter=6 * mm),
         'corpo': ParagraphStyle('corpo', fontName=corpo_f, fontSize=9.5, leading=15,
                                 textColor=TINTA, alignment=TA_JUSTIFY, spaceAfter=2.5 * mm),
         'celula': ParagraphStyle('celula', fontName=corpo_f, fontSize=8.5, leading=12.5,
@@ -129,7 +194,7 @@ def estilos():
         'item': ParagraphStyle('item', fontName=corpo_f, fontSize=9.5, leading=15,
                                textColor=TINTA, alignment=TA_JUSTIFY, spaceAfter=1.5 * mm,
                                leftIndent=7 * mm, bulletIndent=2 * mm,
-                               bulletFontName='Helvetica', bulletFontSize=9.5),
+                               bulletFontName=corpo_f, bulletFontSize=9.5),
         'meta': ParagraphStyle('meta', fontName=corpo_f, fontSize=8, leading=11,
                                textColor=CINZA, spaceAfter=5 * mm),
     }
@@ -168,10 +233,10 @@ def montar(texto, est):
 
     def fechar_lista():
         # Um Paragraph com bulletText por item, e não ListFlowable: o
-        # ListFlowable ignora o bulletFontName que se passa a ele, e como a
-        # Geist não tem o glifo do marcador o "•" caía para um traço minúsculo e
-        # alto — parecia sujeira de digitalização num documento legal. Aqui a
-        # fonte do marcador vem do estilo, e o estilo manda.
+        # ListFlowable ignora o bulletFontName que se passa a ele. O marcador
+        # chegou a ser desenhado em Helvetica, porque o arquivo de fonte que eu
+        # usava antes não trazia o glifo; o do kit da marca traz, então o
+        # documento é 100% Geist.
         for item in lista:
             fluxo.append(Paragraph(_inline(item), est['item'], bulletText='\u2022'))
         lista.clear()
@@ -195,6 +260,7 @@ def montar(texto, est):
             ('LINEBELOW', (0, 0), (-1, -2), 0.4, colors.HexColor('#DFE4EE')),
             ('LINEBELOW', (0, 0), (-1, 0), 0.9, colors.HexColor(COBALTO)),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor(COBALTO)),
+            ('FONTNAME', (0, 0), (-1, 0), est['secao'].fontName),
         ]))
         fluxo.append(t)
         fluxo.append(Spacer(1, 4 * mm))
@@ -215,6 +281,12 @@ def montar(texto, est):
         elif linha.startswith('# '):
             fechar()
             fluxo.append(Paragraph(_inline(linha[2:]), est['titulo']))
+        elif linha.startswith('> '):
+            # Subtítulo do documento: a linha que diz a que ele se aplica
+            # ("Pacientes", "Lei nº 13.709/2018"). Existe no documento vigente e
+            # tem que sobreviver.
+            fechar()
+            fluxo.append(Paragraph(_inline(linha[2:]), est['subtitulo']))
         elif linha.startswith('|') and linha.endswith('|'):
             # Linha só de hifens é o separador de cabeçalho do markdown: ela
             # marca a primeira linha como cabeçalho e não vira conteúdo.
