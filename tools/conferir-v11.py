@@ -37,6 +37,11 @@ REMOCOES_OK = [
     r'^aviDoc é o nome comercial',
     r'^Última atualização: \d{1,2} de \w+ de \d{4}',
     r'^Versão vigente: \d{1,2} de \w+ de \d{4}',
+    # Contraparte do acréscimo declarado abaixo: a palavra sai da posição em que
+    # a extração a deixou (depois da segunda coluna) e reaparece dentro da
+    # própria célula. Some de um lugar e nasce em outro — daí precisar constar
+    # nas duas listas.
+    r'^regulatórias$',
 ]
 
 # Marcas do texto NOVO autorizado. Uma inserção só passa se contiver uma delas.
@@ -51,6 +56,12 @@ ACRESCIMOS_OK = [
     '4A.1', '4A.2', '4A.3',
     # A tabela de finalidades é remontada; suas linhas voltam como células.
     'Finalidade', 'Base legal (LGPD)', 'Medir o resultado de campanhas de anúncio',
+    # A célula "Emitir documentos fiscais e cumprir obrigações legais e
+    # regulatórias" quebra de linha no PDF, e a extração intercala a última
+    # palavra depois do texto da SEGUNDA coluna. Na tabela remontada ela volta
+    # para o fim da própria célula — a palavra muda de posição porque a versão
+    # nova está certa, não porque algo se perdeu.
+    'regulatórias',
 ]
 
 

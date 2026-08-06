@@ -36,56 +36,50 @@ PASTA = os.path.join(RAIZ, 'documentos-legais')
 VERSAO = 'Versão 1.1 · 6 de agosto de 2026'
 
 
-def para_markdown(texto):
-    """Texto extraído do PDF -> markdown do gerador, sem tocar nas palavras."""
-    linhas = texto.split('\n')
-    fora, buffer = [], []
+def para_markdown(texto, titulo, subtitulo):
+    """Texto extraído -> markdown do gerador, sem tocar nas palavras.
 
-    def despeja():
-        if buffer:
-            fora.append(' '.join(buffer))
-            fora.append('')
-            buffer.clear()
+    A divisão de parágrafos JÁ VEM PRONTA de tools/extrair-pdf.py, que a lê do
+    espaçamento do PDF. Aqui não se adivinha mais nada: linha em branco é
+    parágrafo, e ponto. A versão que tentava deduzir do texto ("linha começada
+    em 1.2 abre parágrafo") não reconhecia os considerandos em algarismo romano
+    e transformava a abertura do Termo de Adesão num parágrafo gigante.
+    """
+    def limpo(t):
+        return ' '.join(t.split())
 
-    # As duas ou três primeiras linhas são o título e o subtítulo, que o gerador
-    # redesenha a partir do `# ` do markdown. Sem pular, elas voltavam grudadas
-    # no primeiro parágrafo e o documento abria repetindo o próprio nome.
-    cabecalho = True
+    blocos = [limpo(b) for b in texto.split('\n\n') if limpo(b)]
 
-    for linha in linhas:
-        l = linha.strip()
-        if not l:
-            despeja()
-            continue
-        # "avi" e "Doc" soltos são o wordmark do cabeçalho, que o gerador
-        # redesenha; e o rodapé institucional ele também refaz sozinho.
+    # CONSUME O CABEÇALHO POR ACUMULAÇÃO. No PDF, o título longo do Termo de
+    # Adesão está quebrado em três blocos ("TERMO DE ADESÃO E CONDIÇÕES DE USO
+    # DA" / "PLATAFORMA aviDoc — …" / "GESTÃO E REPASSE DE VALORES"), então
+    # comparar bloco a bloco com o título inteiro nunca casa — e o título
+    # acabava aparecendo duas vezes no documento, uma pelo `#` e outra no corpo.
+    # Aqui os blocos vão sendo somados até formarem o título, depois o subtítulo.
+    inicio = 0
+    for alvo in (titulo, subtitulo):
+        junta = ''
+        for i in range(inicio, min(inicio + 6, len(blocos))):
+            if blocos[i] in ('avi', 'Doc', 'avi Doc'):
+                inicio = i + 1
+                continue
+            junta = limpo(f'{junta} {blocos[i]}')
+            if junta == limpo(alvo):
+                inicio = i + 1
+                break
+
+    fora = []
+    for l in blocos[inicio:]:
+        # Rodapé institucional: o gerador redesenha em toda página.
         if l in ('avi', 'Doc', 'avi Doc', '000'):
             continue
         if l.startswith('CLICK TELECONSULTA ONLINE LTDA · CNPJ') or l.startswith('aviDoc é o nome comercial'):
             continue
-        if cabecalho:
-            # O cabeçalho acaba na primeira linha que é texto corrido de verdade
-            # — a que começa a frase de abertura do documento.
-            if len(l) < 90 and not l.endswith('.'):
-                continue
-            cabecalho = False
         if re.match(r'^\d{1,2}\.\s{1,3}[A-ZÁÂÃÉÊÍÓÔÕÚÇ]', l):
-            despeja()
             fora.append(f'## {l}')
-            fora.append('')
-            continue
-        # Item numerado (1.1, 12.3, 4A.2) abre parágrafo novo. Sem isso, uma
-        # seção inteira vira um bloco corrido e some a separação entre os itens
-        # — que num contrato é o que permite citar "nos termos do item 1.2".
-        #
-        # O `\s` no fim NÃO é enfeite: sem ele, "2.314/2022" (a Resolução do
-        # CFM) casa como se fosse o item 2.3, e o número da resolução é partido
-        # ao meio, deixando "nº" no fim de um parágrafo e "2.314/2022" no começo
-        # do seguinte. O mesmo valeria para 13.709/2018 e 2.336/2023.
-        if re.match(r'^\d{1,2}[A-Z]?\.\d{1,2}\s', l):
-            despeja()
-        buffer.append(l)
-    despeja()
+        else:
+            fora.append(l)
+        fora.append('')
     return '\n'.join(fora)
 
 
@@ -202,7 +196,7 @@ TRANSFORMA = {
 def main():
     for slug, (titulo, subtitulo, ajuste) in TRANSFORMA.items():
         bruto = open(os.path.join(PASTA, f'{slug}.txt'), encoding='utf-8').read()
-        md = para_markdown(bruto)
+        md = para_markdown(bruto, titulo, subtitulo)
         if ajuste:
             md = ajuste(md)
         # A data antiga sai; a nova entra pelo rodapé que o gerador desenha.
