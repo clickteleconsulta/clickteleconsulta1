@@ -1,30 +1,84 @@
 Ilustrações de terceiros usadas nos anúncios
 ============================================
 
-Origem: unDraw (https://undraw.co) — Katerina Limpitsouni.
-Licença: livre para uso pessoal e comercial, sem atribuição obrigatória e sem
-custo. Pode ser modificada, inclusive nas cores. O que a licença NÃO permite é
-redistribuir ou revender as ilustrações como produto próprio — usá-las dentro
-dos nossos anúncios e do nosso site está coberto.
+Origem: Storyset (https://storyset.com), estilo "cuate" — Freepik Company S.L.
 
-Arquivos
-  videocall.svg   teleconsulta em vídeo   → peça "A partir de R$ 40"
-  booking.svg     escolha de horário      → peça "7 dias por semana"
-  doctors.svg     dois médicos de jaleco  → peça "Sem convênio, sem mensalidade"
 
-O roxo padrão do unDraw (#6c63ff) foi trocado pelo cobalto da marca (#3B5BA5)
-direto no SVG. Se baixar uma arte nova, fazer a mesma troca antes de usar, senão
-a peça sai fora da paleta.
+ATRIBUIÇÃO É OBRIGATÓRIA. LEIA ANTES DE PUBLICAR.
+-------------------------------------------------
+A licença gratuita do Storyset exige crédito em TODO uso, inclusive comercial.
+A pergunta está no FAQ deles, e a resposta é literal: "you must always include
+the attribution to Storyset every time you use our free illustrations".
 
-Duas outras artes foram baixadas e descartadas, e vale registrar o motivo para
-ninguém repetir o download:
+Sem o crédito, o uso não está coberto pela licença. Publicar anúncio pago com
+arte fora de licença é o tipo de coisa que só aparece quando vira notificação.
 
-  doctor.svg    médico auscultando paciente no consultório. Anunciar
-                teleconsulta com imagem de consulta presencial promete o que o
-                site não entrega.
-  medicine.svg  não achou mensagem que precisasse dela; arte sem uso no repo é
-                peso morto.
+Onde o crédito precisa aparecer:
 
-As outras duas artes dos anúncios (heroi, secao-escolher) NÃO estão aqui: são as
-mesmas do site, lidas de src/assets/ilustracoes/. É de propósito — quem clica no
-anúncio reencontra o mesmo desenho na página inicial.
+  NO SITE       uma linha no rodapé ou numa página de créditos, com link:
+                <a href="https://storyset.com">Ilustrações por Storyset</a>
+                AINDA NÃO EXISTE. Precisa ser feito antes de o site usar
+                qualquer uma destas artes.
+
+  NAS REDES     na descrição do post, quando a arte aparecer:
+                "Ilustrações por Storyset"
+
+  EM ANÚNCIO    o gerenciador do TikTok e do Meta não têm campo de crédito, e
+  PAGO          escrever "Storyset" dentro do criativo estraga a peça. O que
+                resolve: o crédito no rodapé do site, para onde o anúncio leva.
+                Não é interpretação criativa da licença — é como a maioria usa,
+                mas se você quiser segurança total, veja a saída abaixo.
+
+  SAÍDA SEM     assinatura do Flaticon/Freepik (poucas dezenas de reais por mês)
+  ATRIBUIÇÃO    remove a obrigação inteira. Se a verba de anúncio for passar de
+                algumas centenas por mês, vale mais que o risco.
+
+
+Arquivos e onde cada um é usado
+-------------------------------
+  online-doctor.svg   teleconsulta no monitor    -> peça "A partir de R$ 40"
+  date-picker.svg     escolhendo o dia           -> peça "Agende em minutos"
+  events.svg          calendário da semana       -> peça "7 dias por semana"
+  wallet.svg          carteira e cartão          -> peça "Sem convênio, sem mensalidade"
+  doctors.svg         três profissionais         -> peça "Você escolhe o médico"
+
+
+O que foi modificado nos arquivos
+---------------------------------
+1. COR. O acento amarelo do Storyset (#ffc727) virou o cobalto da marca
+   (#3B5BA5), direto no SVG. Carvão, cinzas e tons de pele ficaram como estavam:
+   são o que dá volume ao traço, e mexer neles achata o desenho. Se baixar arte
+   nova, fazer a mesma troca antes de usar.
+
+2. CAMADAS. O SVG que a API entrega vem com TODAS as camadas ligadas, incluindo
+   o fundo decorativo que o editor do site deles desliga por padrão. Rasterizado
+   como veio, esse fundo vira mancha cinza atrás do desenho. Quem tira é
+   tools/limpar-storyset.py, que também remove camada que atrapalha a mensagem
+   (em online-doctor saíram o pote de comprimidos e a prancheta). Rodar o script
+   depois de baixar qualquer arte nova.
+
+
+Duas coisas que ficaram de fora, e por quê
+------------------------------------------
+  video-call/cuate   duas pessoas comuns numa videochamada, nenhuma de jaleco, e
+                     o nome "Michael" escrito na tela. Numa peça de teleconsulta
+                     a cena não diz "consulta", diz "ligação".
+  calendar/cuate     calendário grande e bonito, mas com X marcados nos dias. Na
+                     peça "7 dias por semana", X lê como dia indisponível — o
+                     desenho contradizia a frase.
+
+
+Limitação conhecida
+-------------------
+Os dias da semana nos calendários (SUN MON TUE...) e o mês (July) estão em
+inglês, e são traçado vetorial, não texto — não dá para traduzir sem redesenhar.
+No tamanho em que aparecem no feed, quase não se lê. Se incomodar, a saída é
+outra ilustração, não edição destas.
+
+
+Como baixar uma arte nova do Storyset
+-------------------------------------
+  https://stories.freepiklabs.com/api/vectors/<slug>/cuate     -> JSON, campo "src"
+  https://stories.freepiklabs.com/api/vectors?tag=medical&style=cuate&per_page=60
+
+Depois: trocar #ffc727 por #3B5BA5 e rodar tools/limpar-storyset.py.

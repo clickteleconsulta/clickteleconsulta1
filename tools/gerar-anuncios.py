@@ -104,20 +104,25 @@ def rasterizar(caminho_svg, larg):
 
 # Qual arte acompanha cada mensagem.
 #
-# DUAS VÊM DO PRÓPRIO SITE (heroi, secao-escolher), e não é economia: quem clica
-# no anúncio cai na página inicial, e reencontrar ali o mesmo desenho que viu no
-# feed reduz o atrito de "cheguei no lugar certo?". As outras três são do unDraw,
-# recoloridas para o cobalto da marca.
+# TODAS SÃO DO STORYSET, ESTILO "CUATE". A leva anterior era do unDraw e foi
+# descartada inteira: o traço do unDraw é econômico demais — figura sem rosto,
+# poucos elementos, muito branco — e no feed, ampliado a 1080px, lê como desenho
+# incompleto. O cuate tem cena, profundidade e detalhe, que é o que segura o olho
+# de quem está rolando o dedo.
 #
-# A arte 'doctor' do unDraw foi baixada e DESCARTADA: mostra médico auscultando
-# paciente no consultório. Anunciar teleconsulta com imagem de consulta
-# presencial promete o que o site não entrega.
+# O acento amarelo do Storyset (#ffc727) foi trocado pelo cobalto da marca
+# (#3B5BA5) direto no SVG. Carvão, cinzas e tons de pele ficam como estão: são o
+# que dá volume ao traço, e mexer neles achata o desenho.
+#
+# ATENÇÃO — ATRIBUIÇÃO OBRIGATÓRIA. A licença gratuita do Storyset exige crédito
+# em todo uso. Está registrado em fontes/LEIA-ME.txt, com onde o crédito precisa
+# aparecer. Sem ele, o uso comercial não está coberto.
 ARTES = {
-    'preco':           os.path.join(FONTES, 'videocall.svg'),
-    'agilidade':       os.path.join(ILUSTRA, 'heroi.svg'),
-    'disponibilidade': os.path.join(FONTES, 'booking.svg'),
-    'sem-mensalidade': os.path.join(FONTES, 'doctors.svg'),
-    'escolha':         os.path.join(ILUSTRA, 'secao-escolher.svg'),
+    'preco':           os.path.join(FONTES, 'online-doctor.svg'),
+    'agilidade':       os.path.join(FONTES, 'date-picker.svg'),
+    'disponibilidade': os.path.join(FONTES, 'events.svg'),
+    'sem-mensalidade': os.path.join(FONTES, 'wallet.svg'),
+    'escolha':         os.path.join(FONTES, 'doctors.svg'),
 }
 
 BRANCO = (255, 255, 255)
