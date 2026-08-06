@@ -104,3 +104,13 @@ NÃO FAÇA
   - aplicar o jade em qualquer coisa que não seja o logo
 
 Regras completas: docs/TROCA-DE-MARCA.md
+
+
+CARTÃO DE COMPARTILHAMENTO DO MÉDICO
+
+Cada perfil público tem o seu, gerado no build por tools/og-medicos.mjs e
+servido em https://avidoc.com.br/og/medico/<slug>.png (1200×630). É o que
+aparece quando alguém manda o link do perfil no WhatsApp.
+
+Médico novo só ganha o cartão no próximo deploy — mesma regra do título e da
+descrição da página, que também são escritos no build.

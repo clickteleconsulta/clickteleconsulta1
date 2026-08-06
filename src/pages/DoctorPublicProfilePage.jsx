@@ -19,7 +19,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import Estrelas from '@/components/Estrelas';
-import { slugify } from '@/lib/doctorSlug';
+import { slugify, doctorPath } from '@/lib/doctorSlug';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -304,7 +304,14 @@ const DoctorPublicProfilePage = () => {
   // Build SEO-friendly URL slug
   const seoSlug = doctor ? `${slugify(doctor.public_name || doctor.name)}-${slugify(doctor.specialty || '')}` : '';
   const canonicalUrl = doctor ? `${typeof window !== 'undefined' ? window.location.origin : ''}/medico/${seoSlug || doctor.id}` : '';
-  const ogImage = doctor?.image_url || `${typeof window !== 'undefined' ? window.location.origin : ''}/og-default.jpg`;
+  // O MESMO cartão que o prerender gera em tools/og-medicos.mjs. Esta tag aqui
+  // é escrita por JavaScript e o robô do WhatsApp não a enxerga — quem manda na
+  // prévia é o HTML de dist/medico/<slug>/index.html. Ela existe para os
+  // leitores que rodam JS não verem uma imagem diferente da que o link mostra.
+  const slugDoCartao = doctor ? doctorPath(doctor).replace('/medico/', '') : '';
+  const ogImage = doctor
+    ? `${BRAND.url}/og/medico/${slugDoCartao}.png`
+    : `${BRAND.url}/og-image-v3.png`;
   const averageRating = reviews.length ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1) : null;
 
   const renderContent = () => {
