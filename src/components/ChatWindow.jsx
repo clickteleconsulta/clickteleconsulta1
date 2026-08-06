@@ -271,6 +271,8 @@ const ChatWindow = ({ conversationId, patientId, doctorId, otherUserName, otherU
         <Button 
           type="submit" 
           size="icon" 
+          aria-label="Enviar mensagem"
+          title="Enviar mensagem"
           disabled={!newMessage.trim() || sending}
           className="bg-brand-600 hover:bg-brand-700"
         >

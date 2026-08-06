@@ -396,6 +396,8 @@ const AiChatWidget = () => {
                   <Button 
                     type="submit" 
                     size="icon" 
+                    aria-label="Enviar mensagem"
+                    title="Enviar mensagem"
                     disabled={!inputValue.trim() || isTyping}
                     className="shrink-0 rounded-full h-10 w-10"
                   >

@@ -379,6 +379,13 @@ const AuthPage = ({
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
+                            // O rótulo MUDA com o estado, e é isso que o leitor
+                            // de tela anuncia ao receber o foco. Um nome fixo
+                            // ("Senha") diria o que o campo é, não o que o
+                            // botão faz.
+                            aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                            title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                            aria-pressed={showPassword}
                             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                           >
                             {showPassword ? (
