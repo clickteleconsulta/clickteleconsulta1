@@ -324,7 +324,7 @@ const DoctorDocuments = () => {
         <header className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-30 shadow-sm">
             <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <Avatar className="h-8 w-8 bg-gray-50 text-gray-400 border border-gray-200 rounded-sm">
+                        <Avatar className="h-8 w-8 bg-gray-50 text-gray-400 border border-gray-200 rounded-md">
                             <AvatarFallback><User className="h-4 w-4" /></AvatarFallback>
                         </Avatar>
                         <span className="font-semibold text-sm text-gray-900">Documentos</span>
@@ -334,7 +334,7 @@ const DoctorDocuments = () => {
             <div className="flex items-center gap-3">
                 <Button 
                     variant="outline"
-                    className="h-9 text-xs rounded-sm border-brand-200 text-brand-800 bg-brand-50 hover:bg-brand-100 hover:text-brand-800"
+                    className="h-9 text-xs rounded-md border-brand-200 text-brand-800 bg-brand-50 hover:bg-brand-100 hover:text-brand-800"
                     onClick={handleMemedPrescription}
                     title="Abrir Prescrição Digital Memed"
                 >
@@ -345,7 +345,7 @@ const DoctorDocuments = () => {
 
                 <div className="h-6 w-px bg-gray-200 mx-1"></div>
 
-                <div className="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-sm border border-gray-200">
+                <div className="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-200">
                     <div className="flex flex-col items-end mr-1">
                          <Label htmlFor="digital-sign-toggle" className="text-[11px] font-bold text-gray-700 cursor-pointer uppercase tracking-wide">
                             Assinatura Digital
@@ -371,7 +371,7 @@ const DoctorDocuments = () => {
                 </div>
                 
                 <Button 
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 h-9 text-xs rounded-sm shadow-sm"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 h-9 text-xs rounded-md shadow-sm"
                     onClick={() => {
                         setIsEditorOpen(true);
                     }}
@@ -389,10 +389,10 @@ const DoctorDocuments = () => {
                      const p = patients.find(pat => pat.id === val);
                      setSelectedPatient(p);
                 }}>
-                    <SelectTrigger className="w-[240px] border border-gray-300 shadow-sm text-sm text-gray-900 h-9 rounded-sm focus:ring-1 focus:ring-primary focus:border-primary">
+                    <SelectTrigger className="w-[240px] border border-gray-300 shadow-sm text-sm text-gray-900 h-9 rounded-md focus:ring-1 focus:ring-primary focus:border-primary">
                         <SelectValue placeholder="Selecione um paciente..." />
                     </SelectTrigger>
-                    <SelectContent className="rounded-sm border-gray-200">
+                    <SelectContent className="rounded-lg border-gray-200">
                         {patients.map(p => (
                              <SelectItem key={p.id} value={p.id}>{p.full_name}</SelectItem>
                         ))}
@@ -402,7 +402,7 @@ const DoctorDocuments = () => {
 
             <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-gray-600 uppercase">Data:</span>
-                <div className="flex items-center gap-1 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-sm">
+                <div className="flex items-center gap-1 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md">
                     <span className="text-sm font-medium text-gray-900 capitalize">
                         {format(new Date(), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
                     </span>
@@ -413,10 +413,10 @@ const DoctorDocuments = () => {
         <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
             
             {isEditorOpen && (
-                <div className="mb-6 bg-white rounded-sm border border-gray-200 shadow-sm p-6 animate-in slide-in-from-top-4">
+                <div className="mb-6 bg-white rounded-lg border border-gray-200 shadow-sm p-6 animate-in slide-in-from-top-4">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
                         <h3 className="text-lg font-bold text-gray-900">Novo Documento Interno</h3>
-                        <Button variant="ghost" size="icon" onClick={() => setIsEditorOpen(false)} className="h-8 w-8 rounded-sm hover:bg-gray-100">
+                        <Button variant="ghost" size="icon" onClick={() => setIsEditorOpen(false)} className="h-8 w-8 rounded-md hover:bg-gray-100">
                             <X className="h-4 w-4 text-gray-500" />
                         </Button>
                     </div>
@@ -426,10 +426,10 @@ const DoctorDocuments = () => {
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-bold text-gray-700 uppercase">Tipo de Documento</Label>
                                 <Select value={selectedDocType} onValueChange={setSelectedDocType}>
-                                    <SelectTrigger className="h-10 text-sm rounded-sm border-gray-300">
+                                    <SelectTrigger className="h-10 text-sm rounded-md border-gray-300">
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent className="rounded-sm border-gray-200">
+                                    <SelectContent className="rounded-lg border-gray-200">
                                         {DOCUMENT_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
@@ -441,14 +441,14 @@ const DoctorDocuments = () => {
                              <Textarea 
                                 value={docContent}
                                 onChange={(e) => setDocContent(e.target.value)}
-                                className="min-h-[200px] text-sm rounded-sm border-gray-300 p-4 leading-relaxed font-normal" 
+                                className="min-h-[200px] text-sm rounded-md border-gray-300 p-4 leading-relaxed font-normal" 
                                 placeholder="Digite o conteúdo do documento aqui..." 
                              />
                          </div>
 
                          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 items-center">
-                             <Button variant="outline" onClick={() => setIsEditorOpen(false)} className="h-9 text-sm rounded-sm border-gray-300 text-gray-700">Cancelar</Button>
-                             <Button onClick={handleGenerate} disabled={generating || (digitalSignature && !vidaasSession?.active)} className="bg-primary hover:bg-primary/90 text-primary-foreground min-w-[140px] h-9 text-sm rounded-sm shadow-sm font-medium">
+                             <Button variant="outline" onClick={() => setIsEditorOpen(false)} className="h-9 text-sm rounded-md border-gray-300 text-gray-700">Cancelar</Button>
+                             <Button onClick={handleGenerate} disabled={generating || (digitalSignature && !vidaasSession?.active)} className="bg-primary hover:bg-primary/90 text-primary-foreground min-w-[140px] h-9 text-sm rounded-md shadow-sm font-medium">
                                  {generating ? (
                                     <Loader2 className="animate-spin mr-2 h-4 w-4" />
                                  ) : digitalSignature ? (
@@ -471,14 +471,14 @@ const DoctorDocuments = () => {
             {!isEditorOpen && (
                 <div className="flex justify-center mb-8 gap-4">
                      <button 
-                        className="flex items-center gap-2 bg-brand-50 border border-brand-200 hover:border-brand-300 hover:bg-brand-100 text-brand-800 font-medium text-sm transition-all py-3 px-6 rounded-sm w-full max-w-xs justify-center shadow-sm"
+                        className="flex items-center gap-2 bg-brand-50 border border-brand-200 hover:border-brand-300 hover:bg-brand-100 text-brand-800 font-medium text-sm transition-all py-3 px-6 rounded-md w-full max-w-xs justify-center shadow-sm"
                         onClick={handleMemedPrescription}
                     >
                         <Pill className="h-4 w-4" />
                         Prescrever com Memed
                     </button>
                     <button 
-                        className="flex items-center gap-2 bg-white border border-dashed border-gray-300 hover:border-primary hover:bg-brand-50 text-gray-500 hover:text-primary font-medium text-sm transition-all py-3 px-6 rounded-sm w-full max-w-xs justify-center shadow-sm"
+                        className="flex items-center gap-2 bg-white border border-dashed border-gray-300 hover:border-primary hover:bg-brand-50 text-gray-500 hover:text-primary font-medium text-sm transition-all py-3 px-6 rounded-md w-full max-w-xs justify-center shadow-sm"
                         onClick={() => {
                              if (!selectedPatient) {
                                  toast({title: "Selecione um paciente primeiro", variant: 'default'});
@@ -508,10 +508,10 @@ const DoctorDocuments = () => {
                          const lines = bodyText.split('\n').filter(line => line.trim().length > 0).slice(0, 5);
 
                         return (
-                            <Card key={doc.id} className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow bg-white h-full flex flex-col p-0 rounded-sm">
+                            <Card key={doc.id} className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow bg-white h-full flex flex-col p-0">
                                 <CardHeader className="p-4 pb-3 border-b border-gray-50 bg-gray-50/30">
                                     <div className="flex justify-between items-start mb-2">
-                                        <Badge variant="outline" className="text-[10px] uppercase font-bold text-gray-500 bg-white border-gray-200 px-1.5 py-0.5 rounded-sm">
+                                        <Badge variant="outline" className="text-[10px] uppercase font-bold text-gray-500 bg-white border-gray-200 px-1.5 py-0.5 rounded-md">
                                             {doc.doc_type?.toUpperCase()}
                                         </Badge>
                                         <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 -mt-1 text-gray-400 hover:text-primary" onClick={() => window.open(doc.pdf_path_signed || doc.pdf_path_original, '_blank')}>
@@ -524,7 +524,7 @@ const DoctorDocuments = () => {
                                     <CardDescription className="text-gray-500 font-medium text-xs mt-1 flex items-center justify-between">
                                         <span>{format(new Date(doc.created_at), "dd/MM/yyyy")}</span>
                                         {doc.status === 'signed' && (
-                                            <span className="flex items-center text-green-700 text-[10px] font-bold bg-green-50 px-1.5 py-0.5 rounded-sm border border-green-100">
+                                            <span className="flex items-center text-green-700 text-[10px] font-bold bg-green-50 px-1.5 py-0.5 rounded-md border border-green-100">
                                                 ASSINADO
                                             </span>
                                         )}
@@ -549,7 +549,7 @@ const DoctorDocuments = () => {
                         )
                     })
                 ) : (
-                    <div className="col-span-full border border-dashed border-gray-200 rounded-sm bg-gray-50">
+                    <div className="col-span-full border border-dashed border-gray-200 rounded-lg bg-gray-50">
                         <EstadoVazio
                             arte="/ilustra/sem-documentos.svg"
                             titulo="Nenhum documento interno emitido"

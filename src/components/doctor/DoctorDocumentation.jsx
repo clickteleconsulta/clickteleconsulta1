@@ -71,7 +71,7 @@ const DocumentSlot = ({ slot, doc, uploading, busy, onUpload, onView, onRemove }
     const hasDoc = !!doc?.path;
 
     return (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-sm border border-gray-200 bg-gray-50/40">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg border border-gray-200 bg-gray-50/40">
             <div className="flex items-start gap-3 flex-1 min-w-0">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${hasDoc ? 'bg-primary/10 text-primary' : 'bg-gray-200 text-gray-400'}`}>
                     <FileText className="w-5 h-5" />
@@ -106,15 +106,15 @@ const DocumentSlot = ({ slot, doc, uploading, busy, onUpload, onView, onRemove }
                 />
                 {hasDoc && (
                     <>
-                        <Button type="button" variant="outline" size="sm" onClick={() => onView(slot.key)} disabled={busy} className="h-8 gap-1.5 rounded-sm border-gray-300 text-gray-700 text-xs">
+                        <Button type="button" variant="outline" size="sm" onClick={() => onView(slot.key)} disabled={busy} className="h-8 gap-1.5 rounded-md border-gray-300 text-gray-700 text-xs">
                             {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Eye className="w-3.5 h-3.5" />} Visualizar
                         </Button>
-                        <Button type="button" variant="ghost" size="sm" onClick={() => onRemove(slot.key)} disabled={busy} className="h-8 w-8 p-0 rounded-sm text-gray-400 hover:text-red-600 hover:bg-red-50">
+                        <Button type="button" variant="ghost" size="sm" onClick={() => onRemove(slot.key)} disabled={busy} className="h-8 w-8 p-0 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50">
                             <Trash2 className="w-3.5 h-3.5" />
                         </Button>
                     </>
                 )}
-                <Button type="button" size="sm" onClick={() => inputRef.current?.click()} disabled={uploading} className="h-8 gap-1.5 rounded-sm bg-primary hover:bg-primary/90 text-primary-foreground text-xs min-w-[92px]">
+                <Button type="button" size="sm" onClick={() => inputRef.current?.click()} disabled={uploading} className="h-8 gap-1.5 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground text-xs min-w-[92px]">
                     {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <UploadCloud className="w-3.5 h-3.5" />}
                     {hasDoc ? 'Substituir' : 'Anexar'}
                 </Button>
@@ -264,7 +264,7 @@ const DoctorDocumentation = () => {
 
     return (
         <div className="space-y-4">
-        <Card className="dashboard-card rounded-sm">
+        <Card className="dashboard-card">
             <CardHeader className="px-6 pt-6 pb-2">
                 <CardTitle className="dashboard-title text-lg flex items-center gap-2">
                     <UserCog className="w-4 h-4 text-primary" /> Dados privados do profissional
@@ -310,7 +310,7 @@ const DoctorDocumentation = () => {
             </CardContent>
         </Card>
 
-        <Card className="dashboard-card rounded-sm">
+        <Card className="dashboard-card">
             <CardHeader className="px-6 pt-6 pb-2">
                 <CardTitle className="dashboard-title text-lg flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-primary" /> Documentação
@@ -320,7 +320,7 @@ const DoctorDocumentation = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent className="px-6 pb-6 pt-4 space-y-4">
-                <div className="text-xs text-gray-500 bg-brand-50/60 border border-brand-100 rounded-sm p-3 leading-relaxed">
+                <div className="text-xs text-gray-500 bg-brand-50/60 border border-brand-100 rounded-lg p-3 leading-relaxed">
                     <ul className="list-disc pl-4 space-y-1">
                         <li>Certificado de conclusão que comprove a especialização do profissional;</li>
                         <li>Carteirinha do conselho profissional (frente e verso) contendo a foto do profissional;</li>
@@ -330,9 +330,9 @@ const DoctorDocumentation = () => {
 
                 {loading ? (
                     <div className="space-y-3">
-                        <Skeleton className="h-20 w-full rounded-sm" />
-                        <Skeleton className="h-20 w-full rounded-sm" />
-                        <Skeleton className="h-20 w-full rounded-sm" />
+                        <Skeleton className="h-20 w-full rounded-md" />
+                        <Skeleton className="h-20 w-full rounded-md" />
+                        <Skeleton className="h-20 w-full rounded-md" />
                     </div>
                 ) : (
                     <div className="space-y-3">

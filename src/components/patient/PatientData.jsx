@@ -133,10 +133,10 @@ const PatientData = () => {
   return <div className="space-y-6 max-w-4xl mx-auto">
         <PatientPageHeader icon={UserIcon} title="Meus Dados" subtitle="Gerencie seus dados cadastrais, segurança e conta." />
         <Tabs defaultValue="dados" className="w-full">
-            <TabsList className="grid grid-cols-3 w-full max-w-md h-auto gap-1 bg-gray-100 p-1 rounded-sm">
-                <TabsTrigger value="dados" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><UserIcon className="w-3.5 h-3.5" /> Meus Dados</TabsTrigger>
-                <TabsTrigger value="seguranca" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
-                <TabsTrigger value="conta" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-sm gap-1.5"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
+            <TabsList className="grid grid-cols-3 w-full max-w-md h-auto gap-1 bg-gray-100 p-1 rounded-md">
+                <TabsTrigger value="dados" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-md gap-1.5"><UserIcon className="w-3.5 h-3.5" /> Meus Dados</TabsTrigger>
+                <TabsTrigger value="seguranca" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-md gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Segurança</TabsTrigger>
+                <TabsTrigger value="conta" className="text-xs sm:text-sm data-[state=active]:bg-white rounded-md gap-1.5"><Trash2 className="w-3.5 h-3.5" /> Conta</TabsTrigger>
             </TabsList>
 
             <TabsContent value="dados" className="mt-4">

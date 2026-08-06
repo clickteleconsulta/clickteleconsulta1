@@ -690,7 +690,7 @@ export function DoctorScheduleCard({
                     return <Tooltip key={time} disableHoverableContent={!isBooked}>
                                                               <TooltipTrigger asChild>
                                                                   <div className="w-full">
-                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-sm border-0 text-[15px] font-semibold transition-colors duration-150 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white")} aria-disabled={isBooked}>
+                                                                      <Button variant="outline" disabled={isBooked} onClick={() => handleBooking(daySchedule.date, time)} className={cn("w-full h-8 rounded-md border-0 text-[15px] font-semibold transition-colors duration-150 px-1", isBooked ? "bg-slate-50 text-slate-300 line-through decoration-2 cursor-not-allowed hover:bg-slate-50" : "bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white")} aria-disabled={isBooked}>
                                                                           {time}
                                                                       </Button>
                                                                   </div>

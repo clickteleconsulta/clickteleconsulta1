@@ -99,8 +99,15 @@
        Medprev      botões 8px, cards 10/16/24px
 
      Tínhamos a cara da Doctoralia. Descer para 8px nos jogaria em cima da
-     Medprev, então o token é 6px: cards saem em 6 e botões em 4, mais secos
-     que os dois. */
+     Medprev, então o token é 6px.
+
+     O que mudou depois: cards saíam em 6 e botões em 4, e a escala do shadcn
+     ainda derivava um terceiro degrau de 2px. Três valores separados por 2px
+     não se leem como decisão. Hoje os três nomes apontam para este mesmo
+     número — a interface inteira tem UM raio, e a única outra forma é a
+     pílula, reservada ao que é redondo por natureza. O porquê está por extenso
+     em tailwind.config.js. Mexer aqui move a interface toda de uma vez, que é
+     o ponto. */
   --radius: 0.375rem;
 
   /* Altura do cabeçalho fixo. Vive aqui porque QUEM GRUDA ABAIXO DELE precisa

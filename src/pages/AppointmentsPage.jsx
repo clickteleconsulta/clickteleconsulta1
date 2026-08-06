@@ -496,7 +496,7 @@ const AppointmentsPage = () => {
                     <Button
                       variant="outline"
                       onClick={() => setVisibleCount((c) => c + 5)}
-                      className="rounded-full h-11 px-7 bg-white border-slate-200 text-slate-700 hover:bg-brand-50 hover:border-brand-200 hover:text-brand-800 font-semibold shadow-sm"
+                      className="h-11 px-7 bg-white border-slate-200 text-slate-700 hover:bg-brand-50 hover:border-brand-200 hover:text-brand-800 font-semibold shadow-sm"
                     >
                       Carregar mais médicos
                       <span className="ml-2 text-xs font-normal text-slate-400">+{Math.min(5, filteredDoctors.length - visibleCount)}</span>

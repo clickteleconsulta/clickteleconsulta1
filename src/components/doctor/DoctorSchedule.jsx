@@ -30,13 +30,13 @@ const intervaloOptions = [
 ];
 
 const DoctorScheduleSkeleton = () => (
-    <Card className="dashboard-card rounded-sm shadow-sm border-gray-200">
+    <Card className="dashboard-card shadow-sm border-gray-200">
         <CardHeader className="p-6">
             <CardTitle><Skeleton className="h-6 w-1/3" /></CardTitle>
             <CardDescription><Skeleton className="h-4 w-2/3" /></CardDescription>
         </CardHeader>
         <CardContent className="p-6">
-            <Skeleton className="h-64 w-full rounded-sm" />
+            <Skeleton className="h-64 w-full rounded-md" />
         </CardContent>
     </Card>
 );
@@ -171,7 +171,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
     };
     
     if (status === 'pending' || status === 'idle' || doctorProfileStatus === 'pending') return <DoctorScheduleSkeleton />;
-    if (status === 'error' || doctorProfileStatus === 'error' || !doctorProfile) return <div className="text-center p-6 text-sm text-red-600 border border-red-200 rounded-sm bg-red-50">{loadError?.message || "Erro no perfil"}</div>;
+    if (status === 'error' || doctorProfileStatus === 'error' || !doctorProfile) return <div className="text-center p-6 text-sm text-red-600 border border-red-200 rounded-lg bg-red-50">{loadError?.message || "Erro no perfil"}</div>;
 
     return (
         <div className="space-y-4 max-w-2xl mx-auto">
@@ -218,7 +218,7 @@ const DoctorSchedule = ({ onScheduleSave }) => {
                                                         <Controller name={`schedule.${fieldIndex}.intervalo_em_minutos`} control={control} render={({ field }) => (
                                                             <Select onValueChange={(val) => field.onChange(parseInt(val))} value={String(field.value)}>
                                                                 <SelectTrigger className="bg-white border-gray-300 h-9 text-sm rounded-lg transition-all duration-200 focus:border-brand-400 focus-visible:ring-2 focus-visible:ring-brand-100"><SelectValue /></SelectTrigger>
-                                                                <SelectContent className="rounded-sm border-gray-200">{intervaloOptions.map(o => <SelectItem key={o.value} value={String(o.value)}>{o.label}</SelectItem>)}</SelectContent>
+                                                                <SelectContent className="rounded-lg border-gray-200">{intervaloOptions.map(o => <SelectItem key={o.value} value={String(o.value)}>{o.label}</SelectItem>)}</SelectContent>
                                                             </Select>
                                                         )}/>
                                                     </div>

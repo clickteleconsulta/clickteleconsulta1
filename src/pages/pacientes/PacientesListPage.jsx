@@ -169,7 +169,7 @@ const PacientesListPage = () => {
                                     <TableRow key={i}>
                                         <TableCell colSpan={5} className="h-16 text-center">
                                             <div className="w-full h-full flex items-center justify-center">
-                                                <div className="h-2 w-full bg-slate-100 rounded animate-pulse max-w-[200px]"></div>
+                                                <div className="h-2 w-full bg-slate-100 rounded-full animate-pulse max-w-[200px]"></div>
                                             </div>
                                         </TableCell>
                                     </TableRow>

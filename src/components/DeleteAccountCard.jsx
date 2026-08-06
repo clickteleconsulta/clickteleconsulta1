@@ -52,7 +52,7 @@ const DeleteAccountCard = () => {
     };
 
     return (
-        <Card className="rounded-sm border-red-200">
+        <Card className=" border-red-200">
             <CardHeader className="px-6 pt-6 pb-2">
                 <CardTitle className="text-lg flex items-center gap-2 text-red-700">
                     <AlertTriangle className="w-4 h-4" /> Excluir Conta
@@ -70,11 +70,11 @@ const DeleteAccountCard = () => {
                     }}
                 >
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive" className="gap-2 h-9 text-sm rounded-sm">
+                        <Button variant="destructive" className="gap-2 h-9 text-sm rounded-md">
                             <Trash2 className="w-4 h-4" /> Excluir minha conta
                         </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="rounded-sm">
+                    <AlertDialogContent className="rounded-lg">
                         <AlertDialogHeader>
                             <AlertDialogTitle className="flex items-center gap-2 text-red-700">
                                 <AlertTriangle className="w-5 h-5" /> Excluir conta definitivamente
@@ -96,18 +96,18 @@ const DeleteAccountCard = () => {
                                 onChange={(e) => setConfirmText(e.target.value)}
                                 placeholder={CONFIRM_WORD}
                                 autoComplete="off"
-                                className="rounded-sm"
+                                className="rounded-md"
                             />
                         </div>
                         <AlertDialogFooter>
-                            <AlertDialogCancel disabled={deleting} className="rounded-sm">Cancelar</AlertDialogCancel>
+                            <AlertDialogCancel disabled={deleting} className="rounded-md">Cancelar</AlertDialogCancel>
                             <AlertDialogAction
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleDelete();
                                 }}
                                 disabled={deleting || confirmText.trim().toUpperCase() !== CONFIRM_WORD}
-                                className="bg-red-600 hover:bg-red-700 rounded-sm"
+                                className="bg-red-600 hover:bg-red-700 rounded-md"
                             >
                                 {deleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                                 Excluir permanentemente

@@ -74,10 +74,38 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      /**
+       * UM raio só, e a pílula.
+       *
+       * A escala do shadcn deriva três degraus do token (6, 4 e 2px). Medido
+       * numa tela de /agendamentos, isso punha 2px em 29 elementos, 4px em 11
+       * e 6px em 9 — três valores a 2px de distância um do outro. Ninguém lê
+       * isso como hierarquia; lê como acabamento irregular. Um canto ou é reto
+       * e afirma, ou é arredondado e afirma; 2px é "quase reto", que é a única
+       * coisa que ele não pode ser.
+       *
+       * O caminho óbvio seria abrir a escala (8 / 6 / 4). Não dá: o token de
+       * 6px foi escolhido medindo concorrente (ver o comentário do --radius em
+       * index.css), e subir joga a interface em cima da Medprev. E um degrau de
+       * 2px continuaria sendo um degrau de 2px — o mesmo defeito, deslocado.
+       *
+       * Então os três nomes apontam para o MESMO valor. A hierarquia de forma
+       * passa a ser binária: tudo que tem canto tem 6px, e o que é redondo por
+       * natureza (foto, ponto de status, contador, barra) é `rounded-full`. Os
+       * nomes sobrevivem porque os primitivos do shadcn os têm escritos por
+       * dentro, e porque dizem a INTENÇÃO de quem escreveu — `lg` em
+       * superfície, `md` em controle. Se um dia os degraus voltarem a se
+       * separar, a semântica já está no lugar certo.
+       *
+       * `xl` e `2xl` continuam fora da escala de propósito: só a tela de
+       * chamada de vídeo os usa, nos balões de conversa, que são capsulares por
+       * convenção e não por descuido.
+       */
       borderRadius: {
+        DEFAULT: "var(--radius)",
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
       },
       keyframes: {
         "accordion-down": {

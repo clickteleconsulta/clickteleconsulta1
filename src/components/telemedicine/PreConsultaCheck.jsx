@@ -86,7 +86,7 @@ const AudioMeter = ({ stream }) => {
         return (
           <div
             key={i}
-            className={`w-2 rounded-sm transition-all duration-75 ${
+            className={`w-2 rounded-full transition-all duration-75 ${
               active
                 ? volume > 80 ? 'bg-red-500' : volume > 50 ? 'bg-amber-400' : 'bg-green-400'
                 : 'bg-slate-600'

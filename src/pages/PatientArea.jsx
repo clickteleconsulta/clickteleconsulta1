@@ -125,11 +125,11 @@ const NextAppointmentCard = ({ appointment }) => {
             {appointment.medicos?.specialty}
           </p>
           <div className="flex items-center gap-3 mt-3 text-sm text-slate-700">
-            <span className="flex items-center gap-1.5 bg-brand-50 rounded-full px-3 py-1 border border-brand-100">
+            <span className="flex items-center gap-1.5 bg-brand-50 rounded-md px-3 py-1 border border-brand-100">
               <Calendar className="w-3.5 h-3.5 text-primary" />
               {formattedDate}
             </span>
-            <span className="flex items-center gap-1.5 bg-brand-50 rounded-full px-3 py-1 border border-brand-100">
+            <span className="flex items-center gap-1.5 bg-brand-50 rounded-md px-3 py-1 border border-brand-100">
               <Clock className="w-3.5 h-3.5 text-primary" />
               {formattedTime}
             </span>
@@ -332,7 +332,7 @@ const PatientArea = () => {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `flex items-center gap-1.5 shrink-0 h-9 px-3 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                  `flex items-center gap-1.5 shrink-0 h-9 px-3 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
                     isActive ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-white border border-slate-200 text-slate-600'
                   }`
                 }
