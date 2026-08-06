@@ -21,7 +21,7 @@ const { BRAND } = await import('../src/config/brand.js');
 const { patientPriceFromRepasse } = await import('../src/lib/price.js');
 const { formatDoctorDisplayName } = await import('../src/lib/doctorName.js');
 const { gerarCartoesOg } = await import('./og-medicos.mjs');
-const { FAQ } = await import('../src/content/siteContent.js');
+const { FAQ, DOCUMENTOS } = await import('../src/content/siteContent.js');
 const BASE = BRAND.url;
 const MARCA = BRAND.name;
 
@@ -65,7 +65,56 @@ const corpoDoArtigo = (a) => `<article>
   <p>${esc(a.description)}</p>
   ${(a.body || []).map(bloco).join('\n  ')}
   <p><a href="/agendamentos">Ver médicos e horários disponíveis</a></p>
-</article>`;
+</article>
+${links('/blog')}`;
+
+/**
+ * Corpo genérico, derivado do que a própria rota já declara.
+ *
+ * Nas páginas cujo texto mora no JSX (home, quem somos, como funciona,
+ * suporte), copiar o conteúdo para cá criaria duas versões da mesma frase, e
+ * uma delas envelheceria calada. Então o corpo sai do `title` e da
+ * `description` que esta lista já mantém, mais os links internos — que é o que
+ * falta de verdade: sem eles o robô não tem caminho para percorrer o site sem
+ * executar JavaScript.
+ */
+const NAVEGACAO = [
+  ['/agendamentos', 'Agendar consulta'],
+  ['/como-funciona', 'Como funciona'],
+  ['/documentos-e-validade', 'Documentos e validade'],
+  ['/perguntas-frequentes', 'Perguntas frequentes'],
+  ['/quem-somos', 'Quem somos'],
+  ['/blog', 'Blog'],
+];
+
+const links = (exceto) =>
+  `<nav>${NAVEGACAO.filter(([u]) => u !== exceto).map(([u, t]) => `<a href="${u}">${esc(t)}</a>`).join(' · ')}</nav>`;
+
+const corpoPadrao = (r) => `<h1>${esc(r.title.replace(` · ${MARCA}`, ''))}</h1>
+  <p>${esc(r.description)}</p>
+  ${links(r.path)}`;
+
+/** A listagem, com os médicos que a pré-renderização já buscou. */
+const corpoDeAgendamentos = (fichas) => `<h1>Agendar consulta online</h1>
+  <p>Escolha um médico, veja preço e horários e agende sua teleconsulta. Pagamento por Pix ou cartão, sem mensalidade.</p>
+  <ul>${fichas.map((f) => `<li><a href="${f.caminho}">${esc(f.nomeExibicao)}</a> — ${esc(f.rotuloEspecialidade)}${f.rotuloPreco ? ` · ${esc(f.rotuloPreco)}` : ''}</li>`).join('')}</ul>
+  ${links('/agendamentos')}`;
+
+/** Documentos: aqui existe fonte estruturada, então vai o texto inteiro. */
+const corpoDeDocumentos = (D) => {
+  const secao = (x) => x ? `<h2>${esc(x.titulo)}</h2>` + (x.paragrafos || []).map((t) => `<p>${esc(t)}</p>`).join('') : '';
+  return `<h1>${esc(D.titulo)}</h1>
+  <p>${esc(D.chamada)}</p>
+  ${secao(D.validade)}
+  ${secao(D.emissao)}
+  <h2>${esc(D.conferencia.titulo)}</h2>
+  <p>${esc(D.conferencia.intro)}</p>
+  <ul>${D.conferencia.passos.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+  <h2>${esc(D.conferencia.qr.titulo)}</h2>
+  <p>${esc(D.conferencia.qr.texto)}</p>
+  ${secao(D.etica)}
+  ${links('/documentos-e-validade')}`;
+};
 
 function setCorpo(html, corpo) {
   return html.replace('<div id="root"></div>', `<div id="root">${corpo}</div>`);
@@ -190,12 +239,12 @@ async function main() {
 
   const routes = [
     { path: '/como-funciona', title: `Como funciona a teleconsulta · ${MARCA}`, description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
-    { path: '/quem-somos', title: `Quem somos · ${MARCA}`, description: `Nosso propósito é democratizar o acesso à saúde: para o que pode ser resolvido a distância, agilidade sem deslocamento, sem fila e com preço acessível. A ${MARCA} é um marketplace de agendamentos que conecta pacientes a médicos parceiros.` },
+    { path: '/quem-somos', title: `Quem somos · ${MARCA}`, description: `Democratizar o acesso à saúde: sem deslocamento, sem fila e com preço acessível. A ${MARCA} é um marketplace que conecta pacientes a médicos parceiros.` },
     {
       path: '/perguntas-frequentes',
       title: `Perguntas frequentes · ${MARCA}`,
       description: 'Tire suas dúvidas: como agendar, valores, pagamento, reembolso, receita/atestado e proteção de dados.',
-      corpo: `<h1>Perguntas frequentes</h1>` + FAQ.map((f) => `<h2>${esc(f.q)}</h2><p>${esc(f.a)}</p>`).join('\n'),
+      corpo: `<h1>Perguntas frequentes</h1>` + FAQ.map((f) => `<h2>${esc(f.q)}</h2><p>${esc(f.a)}</p>`).join('\n') + links('/perguntas-frequentes'),
       jsonLd: {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -208,7 +257,18 @@ async function main() {
       },
     },
     { path: '/blog', title: `Blog · ${MARCA} — Saúde e teleconsulta`, description: 'Artigos sobre teleconsulta, saúde online e como aproveitar melhor o atendimento à distância.' },
-    { path: '/agendamentos', title: `Agendar Consulta · ${MARCA}`, description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.' },
+    {
+      path: '/documentos-e-validade',
+      title: `Documentos e validade · ${MARCA}`,
+      description: 'Receita, atestado e pedido de exame emitidos em teleconsulta valem em todo o Brasil. Veja como conferir a autenticidade de cada um, de graça.',
+      corpo: corpoDeDocumentos(DOCUMENTOS),
+    },
+    {
+      path: '/agendamentos',
+      title: `Agendar Consulta · ${MARCA}`,
+      description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.',
+      corpo: corpoDeAgendamentos(fichas),
+    },
     { path: '/suporte', title: `Suporte · ${MARCA}`, description: `Central de ajuda da ${MARCA}: dúvidas sobre agendamento, pagamento, reembolso e atendimento.` },
     { path: '/legal', title: `Termos e Privacidade · ${MARCA}`, description: `Termos de Serviço e Política de Privacidade (LGPD) da ${MARCA}.` },
     ...articles.map((a) => ({
@@ -267,13 +327,28 @@ async function main() {
   let n = 0;
   for (const r of routes) {
     try {
-      const html = apply(base, r);
+      const html = apply(base, { ...r, corpo: r.corpo || corpoPadrao(r) });
       const dir = join(DIST, r.path);
       mkdirSync(dir, { recursive: true });
       writeFileSync(join(dir, 'index.html'), html, 'utf8');
       n++;
     } catch (e) { console.warn('[prerender] falhou', r.path, e.message); }
   }
+  // A home não passa pelo laço acima porque ela É o dist/index.html — o
+  // arquivo que serve de base para todos os outros. Tratada aqui, no fim, para
+  // que os demais tenham sido gerados a partir da versão sem corpo.
+  // O texto é o mesmo que está na tela: o título do herói e o subtítulo dele.
+  try {
+    const home = setCorpo(
+      base,
+      `<h1>Consulta marcada em minutos</h1>
+  <p>Veja preço e horários na hora, escolha o profissional e agende. Pix ou cartão, sem mensalidade.</p>
+  ${links('/')}`
+    );
+    writeFileSync(join(DIST, 'index.html'), home, 'utf8');
+    n++;
+  } catch (e) { console.warn('[prerender] home sem corpo:', e.message); }
+
   console.log(`[prerender] ${n} rotas pré-renderizadas`);
 }
 

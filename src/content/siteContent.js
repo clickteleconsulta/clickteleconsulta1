@@ -68,7 +68,7 @@ export const FAQ = [
 export const ARTICLES = [
   {
     slug: 'receita-e-atestado-digital-tem-validade',
-    title: 'Receita e atestado digital têm validade? Como conferir em 3 passos',
+    title: 'Receita e atestado digital têm validade?',
     description: 'Documento assinado digitalmente vale em todo o Brasil. Veja como qualquer pessoa confere a autenticidade de graça no validador oficial do Governo Federal.',
     date: '2026-08-06',
     readMin: 4,
@@ -91,7 +91,7 @@ export const ARTICLES = [
   },
   {
     slug: 'quanto-custa-uma-teleconsulta',
-    title: 'Quanto custa uma teleconsulta e como funciona o pagamento',
+    title: 'Quanto custa uma teleconsulta e como pagar',
     description: 'Preço visível antes de agendar, a partir de R$ 40, com Pix ou cartão. Sem mensalidade e sem convênio — veja como funciona.',
     date: '2026-08-06',
     readMin: 3,
@@ -132,7 +132,7 @@ export const ARTICLES = [
   },
   {
     slug: 'como-funciona-a-teleconsulta',
-    title: 'Como funciona a teleconsulta: guia completo para pacientes',
+    title: 'Como funciona a teleconsulta: guia para pacientes',
     description: 'Entenda o que é a teleconsulta, como agendar, o que esperar do atendimento online e como se preparar.',
     date: '2026-07-30',
     readMin: 5,
@@ -151,7 +151,7 @@ export const ARTICLES = [
   },
   {
     slug: 'renovacao-de-receita-por-teleconsulta',
-    title: 'Renovação de receita por teleconsulta: como funciona',
+    title: 'Renovação de receita por teleconsulta',
     description: 'Saiba como funciona a orientação médica online para continuidade de tratamento e o que o médico avalia.',
     date: '2026-07-30',
     readMin: 4,
