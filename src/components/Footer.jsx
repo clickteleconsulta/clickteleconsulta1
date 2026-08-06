@@ -61,8 +61,20 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  *    manual. Se alguém mexer na escala do site de novo, refaça esta conta.
  *  - pág. 15: proibido gradiente, contorno, sombra ou distorção no símbolo.
  *
- * A Mastercard, por sua vez, exige o símbolo SOMENTE em cores cheias — daí os
- * dois círculos e a lente, e não a silhueta monocromática.
+ * A MASTERCARD FICA EM COR CHEIA, e agora isso está verificado na fonte, não
+ * lembrado. O Brand Center deles diz as duas coisas:
+ *
+ *   "On white or light backgrounds, use the positive artwork. On black or dark
+ *    backgrounds, use the reverse artwork."
+ *   "The Mastercard Symbol must be used in full-color only. However, Mastercard
+ *    permits the grayscale and solid Mastercard Brand Mark to be used at
+ *    merchant locations to signal acceptance when full-color printing is not
+ *    available."
+ *
+ * A brecha do monocromático é para o BRAND MARK (símbolo + palavra "mastercard")
+ * e só quando não há impressão colorida disponível. O símbolo sozinho em branco,
+ * que é o que caberia aqui ao lado dos outros dois, fica justamente fora dela —
+ * no digital a cor cheia está sempre disponível.
  *
  * SEM PLACA BRANCA. As marcas ficam direto sobre o rodapé escuro, e é o próprio
  * manual que abre essa porta — pág. 13: "São permitidos os usos das versões em
@@ -72,11 +84,17 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
  * pasta: são os canônicos, e voltam a ser necessários se alguma tela clara
  * passar a listar as bandeiras.
  *
- * A Mastercard fica em cor cheia, e isso é escolha, não descuido: os dois
- * círculos já têm contraste de sobra no escuro, e a marca deles não tem versão
- * monocromática preferencial. É o único ponto em que o tratamento das três não
- * é idêntico — se um dia isso for questionado na leitura de "igualdade de
- * cores" da paridade, a saída é a Mastercard reversa, não colorir o Pix.
+ * Sobra uma tensão, e ela não tem saída limpa: a paridade do Pix pede
+ * "igualdade de cores" entre as marcas, e aqui duas são brancas e uma é
+ * colorida. Não é descuido — é o único arranjo em que nenhum dos dois manuais é
+ * contrariado.
+ *
+ * A MASTERCARD REVERSA BRANCA JÁ FOI TENTADA E DESCARTADA. Chegou a ser
+ * desenhada (dois círculos brancos com a lente vazada por fill-rule="evenodd",
+ * que dá o entrelaçamento certo) e testada a 46 px. Saiu ao ler a regra acima:
+ * resolveria a paridade quebrando a regra da outra marca, o que é trocar um
+ * problema por outro. Se alguém for tentar de novo, o caminho é este e ele já
+ * foi percorrido.
  *
  * NÃO TROQUE ESTES ARQUIVOS POR ÍCONES DE BIBLIOTECA. São marcas registradas com
  * manual próprio, e nenhuma biblioteca de ícones de interface entrega as três: a
