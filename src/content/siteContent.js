@@ -65,6 +65,54 @@ export const FAQ = [
   },
 ];
 
+// ─── Quando a consulta online resolve ───────────────────────────────────────────
+/**
+ * A pergunta que trava a decisão: "serve para o meu caso?".
+ *
+ * ⚠️ A LISTA DE SITUAÇÕES É CONTEÚDO CLÍNICO E PRECISA DO AVAL DE UM MÉDICO.
+ * Ela espelha a lista publicada pelo Einstein em telemedicina.einstein.br —
+ * hospital com governança clínica própria —, e não uma seleção nossa. Ainda
+ * assim, quem deve validá-la é um dos médicos parceiros ou o responsável
+ * técnico, porque a aviDoc é marketplace e não presta o atendimento.
+ *
+ * O QUE NOS SEPARA DA REFERÊNCIA. A página do Einstein lista os oito sintomas e
+ * para por aí: não diz quando NÃO usar, não fala de presencial nem de urgência.
+ * Aqui o contraponto vem junto, e não é só cuidado jurídico — é o que evita a
+ * pessoa agendar para um caso que a consulta a distância não resolve, pagar, e
+ * sair frustrada. Paciente mal encaminhado é reembolso, avaliação ruim e
+ * detrator.
+ *
+ * A moldura também é diferente da deles porque o negócio é outro: eles dizem
+ * "seja atendido por médicos Einstein"; aqui quem avalia é o médico que a
+ * pessoa escolher, e a conduta é dele.
+ */
+export const QUANDO_USAR = {
+  titulo: 'Quando a consulta online resolve',
+  chamada:
+    'Sintomas comuns, de baixa e média complexidade, costumam ser resolvidos a distância. Quem avalia o seu caso é o médico, durante a consulta.',
+  situacoes: [
+    'Dor de garganta',
+    'Resfriado e gripe',
+    'Febre',
+    'Dor de cabeça',
+    'Sinusite',
+    'Diarreia',
+    'Infecção urinária',
+    'Dor muscular',
+  ],
+  // Estes três não são sintoma, são motivo de consulta — e são exatamente o
+  // público que a plataforma quer alcançar. Texto reaproveitado do artigo
+  // "O que dá para resolver em teleconsulta".
+  tambem: 'Também se resolvem online: renovação de receita de uso contínuo, pedido de exame e interpretação de resultados.',
+  presencial: {
+    titulo: 'Quando é caso de atendimento presencial',
+    texto:
+      'Sempre que a conduta depender de exame físico, de procedimento ou de recursos que só existem no consultório. É direito do médico e do paciente interromper e indicar a continuidade presencial, sem cobrança adicional.',
+    urgencia:
+      'Situação de risco imediato é urgência: procure o pronto-socorro mais próximo ou ligue 192 (SAMU).',
+  },
+};
+
 export const ARTICLES = [
   {
     slug: 'consulta-medica-online-sem-convenio',
