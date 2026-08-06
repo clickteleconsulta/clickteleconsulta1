@@ -109,7 +109,11 @@ const PatientConsultations = () => {
             ['Especialidade', esc(appt.medicos?.specialty || 'Médico')],
             ['Data da consulta', esc(dataConsulta)],
             ['Valor', formatBRL(apptValue(appt))],
-            ['Forma de pagamento', 'Asaas (Pix / cartão)'],
+            ['Forma de pagamento', 'Pix / cartão'],
+            // A norma de transparência do BaaS exige a identificação da instituição
+            // no comprovante, e não só a bandeira. Linha própria, e não entre
+            // parênteses na anterior, para ser legível de fato.
+            ['Instituição de Pagamento', 'Asaas'],
             ['Data do pagamento', esc(dataPag)],
             ['ID da transação', esc(appt.checkout_session_id || '—')],
             ['Situação', estornado ? 'Estornada (valor devolvido)' : (pago ? 'Pagamento confirmado' : 'Pendente')],

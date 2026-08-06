@@ -17,7 +17,7 @@ export const FAQ = [
   },
   {
     q: 'Quais as formas de pagamento?',
-    a: 'Você pode pagar por Pix ou cartão de crédito, com processamento pela instituição de pagamento parceira. O agendamento é confirmado assim que o pagamento é aprovado.',
+    a: 'Você pode pagar por Pix ou cartão de crédito, processados pelo Asaas — Instituição de Pagamento. O agendamento é confirmado assim que o pagamento é aprovado.',
   },
   {
     q: 'Como funciona o atendimento por teleconsulta?',

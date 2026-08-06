@@ -149,11 +149,6 @@ const linkClasse = 'text-[15px] text-slate-400 hover:text-white transition-color
 const SELO_PROCESSADOR = {
   src: '/pagamento/asaas.svg',
   nome: 'Asaas',
-  // Ligar SÓ quando as duas coisas existirem: o arquivo oficial vindo do
-  // suporte do Asaas E a redação aprovada. Ligar com uma só das duas publica
-  // um selo improvisado ou uma frase legal escrita por engenharia.
-  aprovado: false,
-  texto: 'Pagamentos processados por',
 };
 
 const BANDEIRAS = [
@@ -242,26 +237,25 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* O selo some sozinho enquanto o arquivo não existir: o `onError`
-              esconde o bloco quando o /pagamento/asaas.svg dá 404. É o mesmo
-              princípio dos ícones de rede social — nada quebrado vai ao ar, e
-              basta salvar o arquivo para aparecer, sem tocar em código.
+          {/* O TEXTO É A OBRIGAÇÃO; a imagem é o acabamento. Por isso ele fica
+              sempre visível e só a imagem some quando o arquivo não existe — o
+              `onError` esconde apenas o <img>, e não o bloco inteiro. Numa
+              versão anterior o onError derrubava os dois juntos, o que teria
+              escondido justamente aquilo que a norma exige.
 
-              O TEXTO AO LADO AINDA NÃO ESTÁ APROVADO. Ele nomeia a instituição
-              que processa os pagamentos, que é o que a norma exige, mas é frase
-              de natureza legal e não se escreve por conta própria. */}
-          {SELO_PROCESSADOR.aprovado && (
-            <div className="flex items-center gap-2 sm:ml-auto">
-              <span className="text-[11px] text-slate-500">{SELO_PROCESSADOR.texto}</span>
-              <img
-                src={SELO_PROCESSADOR.src}
-                alt={SELO_PROCESSADOR.nome}
-                title={SELO_PROCESSADOR.nome}
-                className="h-[22px] w-auto"
-                onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
-              />
-            </div>
-          )}
+              Salve o selo oficial em public/pagamento/asaas.svg e ele aparece
+              ao lado do nome, sem tocar em código. */}
+          <div className="flex items-center gap-2 sm:ml-auto">
+            <span className="text-[11px] text-slate-500">
+              Processados por <span className="font-semibold text-slate-400">Asaas</span> — Instituição de Pagamento
+            </span>
+            <img
+              src={SELO_PROCESSADOR.src}
+              alt={SELO_PROCESSADOR.nome}
+              className="h-[22px] w-auto"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            />
+          </div>
         </div>
 
         {/* Aviso legal — o texto é o mesmo de antes, palavra por palavra. */}

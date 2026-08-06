@@ -418,8 +418,14 @@ const AppointmentConfirmationPage = () => {
                             {processingPayment ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
                             Pagar R$ {(price_in_cents / 100).toFixed(2).replace('.', ',')}
                         </Button>
+                        {/* NOMEAR O ASAAS AQUI É OBRIGAÇÃO, não cortesia. A regra de
+                            transparência do BaaS (Art. 14 e 20) exige "identificação
+                            legível do Asaas como Instituição Prestadora de Serviços de
+                            Pagamento" nas telas de pagamento. A frase anterior era
+                            "Pagamento processado com segurança" — dizia que era seguro e
+                            escondia por quem, que é exatamente o que a norma proíbe. */}
                         <p className="text-[11px] text-center text-gray-400 flex items-center justify-center gap-1">
-                            <Lock className="w-3 h-3" /> Pagamento processado com segurança.
+                            <Lock className="w-3 h-3" /> Pagamento processado por <strong className="font-semibold text-gray-500">Asaas</strong> — Instituição de Pagamento.
                         </p>
                         <div className="rounded-lg bg-gray-50 border border-gray-100 p-3 text-[11px] text-gray-500 leading-relaxed">
                             <strong className="text-gray-600">Política de cancelamento:</strong> cancelando com <strong>2 horas ou mais</strong> de antecedência, reembolso <strong>integral (100%)</strong>; com <strong>menos de 2 horas</strong>, reembolso de <strong>50%</strong> (retida a taxa por cancelamento tardio); em caso de <strong>não comparecimento, não há reembolso</strong>. No reembolso integral, a taxa de processamento do pagamento é retida. Ao pagar, você concorda com os{' '}
