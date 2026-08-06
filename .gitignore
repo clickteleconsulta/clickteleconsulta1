@@ -21,3 +21,7 @@ dist/
 # o PDF é produto, e produto de documento legal se publica por Admin -> Legal,
 # nao por commit.
 documentos-legais/saida/
+
+# Texto extraido dos PDFs legais vigentes. E insumo para o juridico, nao fonte
+# de verdade: a versao que vale e o PDF publicado em Admin -> Legal.
+documentos-legais/*.txt
