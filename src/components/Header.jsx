@@ -5,6 +5,7 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { LogOut, CalendarDays, LayoutDashboard } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { painelDoPapel } from '@/lib/painelDoPapel';
 import { BRAND } from '@/config/brand';
 
 const Header = () => {
@@ -15,8 +16,12 @@ const Header = () => {
     await signOut();
   };
 
+  // Leva à área DO PAPEL de quem está logado. Antes mandava todo mundo para
+  // /paciente/dashboard: médico e admin caíam em "Acesso Restrito", cuja única
+  // saída era sair da conta. Na prática, quem não era paciente não conseguia
+  // navegar pelo site público sem risco de ser expulso da sessão.
   const handleDashboardRedirect = () => {
-    navigate('/paciente/dashboard');
+    navigate(painelDoPapel(profile?.role));
   };
 
   // A caixa cinza é PERSISTENTE, não só no hover. Antes o fundo só aparecia ao

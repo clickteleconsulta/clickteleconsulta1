@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { painelDoPapel } from '@/lib/painelDoPapel';
+import { Navigate, useLocation , useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Loader2, Smartphone } from '@/components/ui/icones';
@@ -103,6 +104,7 @@ const TwoFactorGate = ({ children }) => {
 };
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
+  const navigate = useNavigate();
   const { session, loading, profile, signOut } = useAuth();
   const location = useLocation();
 
@@ -121,21 +123,34 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
+    // A ÚNICA SAÍDA DAQUI ERA SAIR DA CONTA. Quem chegasse por engano — e o
+    // caminho mais comum era o próprio "Minha conta" do cabeçalho, que mandava
+    // todo mundo para a área do paciente — só tinha o botão de encerrar a
+    // sessão. Perder o login por ter clicado no lugar errado é punição
+    // desproporcional, e fazia parecer que médico e admin não podiam navegar
+    // pelo site.
+    //
+    // Agora as duas saídas naturais vêm primeiro: a área certa da pessoa e o
+    // site público. Trocar de conta continua possível, mas deixou de ser a
+    // única opção — e virou o botão discreto, que é o peso que ela merece.
     return (
         <div className="w-full flex justify-center items-center py-12">
             <Card className="w-full max-w-md text-center">
                 <CardHeader>
-                    <CardTitle>Acesso Restrito</CardTitle>
+                    <CardTitle>Acesso restrito</CardTitle>
                     <CardDescription>
-                        Você não tem permissão para acessar esta página.
+                        Esta área é exclusiva para {allowedRoles.join(' ou ')}.
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                        Esta área é exclusiva para {allowedRoles.join(' ou ')}.
-                    </p>
-                    <Button variant="destructive" onClick={signOut} className="mt-4">
-                      Sair e tentar com outra conta
+                <CardContent className="flex flex-col gap-2">
+                    <Button onClick={() => navigate(painelDoPapel(profile.role))}>
+                      Ir para a minha área
+                    </Button>
+                    <Button variant="outline" onClick={() => navigate('/')}>
+                      Voltar ao site
+                    </Button>
+                    <Button variant="ghost" onClick={signOut} className="text-muted-foreground">
+                      Sair e entrar com outra conta
                     </Button>
                 </CardContent>
             </Card>

@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BRAND } from '@/config/brand';
+import { painelDoPapel } from '@/lib/painelDoPapel';
 import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
@@ -112,7 +113,7 @@ const AuthRedirect = ({ role }) => {
   }
 
   if (session && profile) {
-    if (profile.role === 'admin') return <Navigate to="/admin/dashboard/estrategia" replace />;
+    if (profile.role === 'admin') return <Navigate to={painelDoPapel('admin')} replace />;
 
     // Convidado que iniciou um agendamento e acabou de logar/cadastrar: retoma a revisão
     // do horário guardado em vez de cair no dashboard.
@@ -128,7 +129,7 @@ const AuthRedirect = ({ role }) => {
       } catch (_) { /* storage indisponível */ }
     }
 
-    const from = location.state?.from?.pathname || (profile.role === 'medico' ? '/medico/dashboard' : '/paciente/dashboard');
+    const from = location.state?.from?.pathname || painelDoPapel(profile.role);
     return <Navigate to={from} replace />;
   }
   

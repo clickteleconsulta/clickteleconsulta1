@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { painelDoPapel } from '@/lib/painelDoPapel';
 import { BRAND } from '@/config/brand';
 import { useForm } from 'react-hook-form';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -44,7 +45,7 @@ const ChangePasswordPage = () => {
                 description: isRequiredChange ? 'Seu acesso está liberado.' : '',
             });
             reset();
-            const redirectPath = profile?.role === 'medico' ? '/medico/dashboard' : '/paciente/dashboard';
+            const redirectPath = painelDoPapel(profile?.role);
             navigate(redirectPath, { replace: true });
         }
     };
