@@ -11,6 +11,7 @@ const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const ConfirmationPage = lazy(() => import('@/pages/ConfirmationPage'));
 const SupportPage = lazy(() => import('@/pages/SupportPage'));
 const ComoFuncionaPage = lazy(() => import('@/pages/ComoFuncionaPage'));
+const AtestadoReceitaPage = lazy(() => import('@/pages/AtestadoReceitaPage'));
 const FaqPage = lazy(() => import('@/pages/FaqPage'));
 const DocumentosPage = lazy(() => import('@/pages/DocumentosPage'));
 const QuemSomosPage = lazy(() => import('@/pages/QuemSomosPage'));
@@ -305,6 +306,7 @@ function App() {
             <Route path="/medicos" element={<Navigate to="/agendamentos" replace />} />
             <Route path="/suporte" element={<SupportPage />} />
             <Route path="/como-funciona" element={<ComoFuncionaPage />} />
+            <Route path="/atestado-e-receita-online" element={<AtestadoReceitaPage />} />
             <Route path="/quem-somos" element={<QuemSomosPage />} />
             <Route path="/perguntas-frequentes" element={<FaqPage />} />
             <Route path="/documentos-e-validade" element={<DocumentosPage />} />

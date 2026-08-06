@@ -37,6 +37,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://avidoc.com.br/atestado-e-receita-online</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://avidoc.com.br/blog</loc>
     <lastmod>2026-08-06</lastmod>
     <changefreq>weekly</changefreq>

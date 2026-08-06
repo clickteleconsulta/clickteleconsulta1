@@ -30,6 +30,7 @@ const STATIC = [
   { loc: '/quem-somos', priority: '0.7', changefreq: 'monthly' },
   { loc: '/perguntas-frequentes', priority: '0.7', changefreq: 'monthly' },
   { loc: '/documentos-e-validade', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/atestado-e-receita-online', priority: '0.8', changefreq: 'monthly' },
   { loc: '/blog', priority: '0.7', changefreq: 'weekly' },
   { loc: '/suporte', priority: '0.5', changefreq: 'monthly' },
   { loc: '/legal', priority: '0.3', changefreq: 'yearly' },

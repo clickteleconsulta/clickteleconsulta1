@@ -36,6 +36,7 @@ const LINKS_ACESSO = [
   { to: '/quem-somos', label: 'Quem somos' },
   { to: '/como-funciona', label: 'Como funciona' },
   { to: '/perguntas-frequentes', label: 'Perguntas frequentes' },
+  { to: '/atestado-e-receita-online', label: 'Atestado e receita online' },
   { to: '/documentos-e-validade', label: 'Documentos e validade' },
   { to: '/blog', label: 'Blog' },
   { to: '/acesso-cliente', label: 'Entrar' },
