@@ -43,24 +43,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://avidoc.com.br/blog/como-funciona-a-teleconsulta</loc>
-    <lastmod>2026-08-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://avidoc.com.br/blog/renovacao-de-receita-por-teleconsulta</loc>
-    <lastmod>2026-08-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://avidoc.com.br/blog/teleconsulta-e-confiavel-o-que-diz-o-cfm</loc>
-    <lastmod>2026-08-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://avidoc.com.br/suporte</loc>
     <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -71,6 +53,42 @@
     <lastmod>2026-08-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://avidoc.com.br/blog/receita-e-atestado-digital-tem-validade</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://avidoc.com.br/blog/quanto-custa-uma-teleconsulta</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://avidoc.com.br/blog/como-cancelar-ou-remarcar-uma-teleconsulta</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://avidoc.com.br/blog/como-funciona-a-teleconsulta</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://avidoc.com.br/blog/renovacao-de-receita-por-teleconsulta</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://avidoc.com.br/blog/teleconsulta-e-confiavel-o-que-diz-o-cfm</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://avidoc.com.br/medico/gustavo-r-ayres-generalista</loc>

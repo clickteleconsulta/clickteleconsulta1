@@ -2,8 +2,13 @@
 // ativos (/medico/{slug}), casando o slug canônico do DoctorPublicProfilePage.
 // Resiliente: qualquer falha mantém o sitemap atual e NÃO quebra o build.
 import { writeFileSync } from 'node:fs';
+import { register } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+
+// Ensina o Node a resolver o atalho `@/` do Vite — siteContent.js importa
+// `@/config/brand`. Precisa vir ANTES do import dele. Ver tools/alias-loader.mjs.
+register('./alias-loader.mjs', import.meta.url);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import { BRAND } from '../src/config/brand.js';
@@ -26,12 +31,22 @@ const STATIC = [
   { loc: '/perguntas-frequentes', priority: '0.7', changefreq: 'monthly' },
   { loc: '/documentos-e-validade', priority: '0.7', changefreq: 'monthly' },
   { loc: '/blog', priority: '0.7', changefreq: 'weekly' },
-  { loc: '/blog/como-funciona-a-teleconsulta', priority: '0.6', changefreq: 'monthly' },
-  { loc: '/blog/renovacao-de-receita-por-teleconsulta', priority: '0.6', changefreq: 'monthly' },
-  { loc: '/blog/teleconsulta-e-confiavel-o-que-diz-o-cfm', priority: '0.6', changefreq: 'monthly' },
   { loc: '/suporte', priority: '0.5', changefreq: 'monthly' },
   { loc: '/legal', priority: '0.3', changefreq: 'yearly' },
 ];
+
+// Os artigos vinham escritos à mão aqui, um por linha. Escrevi três novos e
+// nenhum entrou no sitemap: a lista paralela não sabia deles, e ninguém é
+// avisado disso — o sitemap simplesmente sai incompleto e o Google não descobre
+// as páginas. Agora vem da mesma fonte que a página do blog e a
+// pré-renderização usam.
+const { ARTICLES } = await import('../src/content/siteContent.js');
+const ARTIGOS = ARTICLES.map((a) => ({
+  loc: `/blog/${a.slug}`,
+  priority: '0.6',
+  changefreq: 'monthly',
+  lastmod: a.date,
+}));
 
 const today = new Date().toISOString().slice(0, 10);
 const urlTag = (loc, lastmod, changefreq, priority) =>
@@ -51,7 +66,7 @@ async function main() {
     return; // não sobrescreve o sitemap existente
   }
 
-  const urls = STATIC.map((s) => urlTag(s.loc, today, s.changefreq, s.priority));
+  const urls = [...STATIC, ...ARTIGOS].map((s) => urlTag(s.loc, s.lastmod || today, s.changefreq, s.priority));
   for (const d of doctors) {
     const slug = `${slugify(d.public_name || d.name || '')}-${slugify(d.specialty || '')}`.replace(/^-|-$/g, '');
     const loc = slug ? `/medico/${slug}` : `/medico/${d.id}`;
@@ -61,7 +76,7 @@ async function main() {
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
   writeFileSync(join(__dirname, '..', 'public', 'sitemap.xml'), xml, 'utf8');
-  console.log(`[sitemap] gerado: ${STATIC.length} rotas + ${doctors.length} médicos`);
+  console.log(`[sitemap] gerado: ${STATIC.length} rotas + ${ARTIGOS.length} artigos + ${doctors.length} médicos`);
 }
 
 main().catch((e) => { console.warn('[sitemap] erro:', e.message); process.exit(0); });
