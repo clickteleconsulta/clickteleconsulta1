@@ -18,7 +18,6 @@ const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogArticlePage = lazy(() => import('@/pages/BlogArticlePage'));
 import ProtectedRoute from '@/components/ProtectedRoute';
-import DoctorRouteGuard from '@/components/DoctorRouteGuard';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useMaintenance } from '@/hooks/useMaintenance';
 import MaintenancePage from '@/pages/MaintenancePage';
@@ -283,19 +282,23 @@ function App() {
             </ProtectedRoute>
           } />}
 
-          {/* HOTFIX-06: Protected with ProtectedRoute instead of DoctorRouteGuard (which only redirects, doesn't block) */}
+          {/* Protegida por ProtectedRoute, que BLOQUEIA. O DoctorRouteGuard que
+              havia aqui antes só redirecionava, e redirecionar não é proteger. */}
           {FEATURES.PRONTUARIO && <Route path="/prescricao/memed" element={
             <ProtectedRoute allowedRoles={['medico']}>
                <MemedPrescricaoPage />
             </ProtectedRoute>
           } />}
 
-          {/* 4. Public & Patient Routes */}
-          <Route element={
-            <DoctorRouteGuard>
-              <AppLayout />
-            </DoctorRouteGuard>
-          }>
+          {/* 4. Rotas públicas e do paciente.
+              SEM DoctorRouteGuard. Ele existia aqui e, nas palavras do próprio
+              comentário dele, redirecionava o médico logado para o painel
+              "regardless of which public route they are trying to access" — ou
+              seja, um médico não conseguia abrir a home, os documentos, o FAQ
+              nem o próprio perfil público. Não era proteção: as 8 rotas de
+              paciente que vivem neste bloco têm ProtectedRoute próprio, e
+              continuam tendo. O guard só barrava as 15 que são públicas mesmo. */}
+          <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/agendamentos" element={<AppointmentsPage />} />
             {/* Lista unificada em /agendamentos (evita conteúdo duplicado) */}
