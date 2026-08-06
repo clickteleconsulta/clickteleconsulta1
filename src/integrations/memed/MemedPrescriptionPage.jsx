@@ -109,7 +109,6 @@ const MemedPrescriptionPage = () => {
             if (patient) {
                 // Pre-fill patient logic would go here using Memed commands
                 // mdHub.command.send('plataforma.prescricao', 'setPaciente', { ... });
-                console.log("Setting patient in Memed:", patient.full_name);
                 
                 // Example structure for Memed patient object
                 /*

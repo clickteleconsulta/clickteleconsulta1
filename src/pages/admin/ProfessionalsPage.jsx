@@ -11,13 +11,12 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil, FileDown } from '@/components/ui/icones';
+import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil, FileDown , FileText } from '@/components/ui/icones';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
 import DoctorDocumentsReview from '@/components/admin/DoctorDocumentsReview';
-import { FileText } from '@/components/ui/icones';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 

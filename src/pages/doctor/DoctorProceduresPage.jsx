@@ -8,9 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Plus, Pencil, Trash2, Stethoscope, Star } from '@/components/ui/icones';
+import { Loader2, Plus, Pencil, Trash2, Stethoscope, Star , Lock } from '@/components/ui/icones';
 import { Badge } from '@/components/ui/badge';
-import { Lock } from '@/components/ui/icones';
 import DoctorPageHeader from '@/components/doctor/DoctorPageHeader';
 import { patientPriceFromRepasse } from '@/lib/price';
 

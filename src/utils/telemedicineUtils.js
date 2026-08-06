@@ -96,7 +96,6 @@ export const openJitsiRoom = async (roomName, displayName, isModerator = false) 
   const url = generateJaaSURL(appId, roomName, jwt, displayName);
   if (!url) return { ok: false, error: 'Falha ao gerar URL JaaS' };
 
-  console.log('Abrindo sala JaaS:', { roomName, isModerator, url: url.split('?')[0] });
 
   const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
 

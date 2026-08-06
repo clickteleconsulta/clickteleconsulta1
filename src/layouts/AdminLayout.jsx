@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -25,7 +25,6 @@ import {
   ScrollText
 } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
 import { useAdminPendingCounts } from '@/hooks/useAdminPendingCounts';
 
 const AdminLayout = () => {

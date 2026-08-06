@@ -36,14 +36,6 @@ const PatientTelemedicineButton = ({ appointment, onConsentStatusChange }) => {
   // --- LOGGING FOR DEBUGGING ---
   useEffect(() => {
     if (import.meta.env.DEV) {
-      console.log("PatientTelemedicineButton Mounted:", {
-        appointment_id: appointmentId,
-        status: appointment?.status,
-        pagamento_status: appointment?.pagamento_status,
-        is_paid: isPaid,
-        patient_id: appointment?.patient_id,
-        current_user_id: user?.id
-      });
     }
   }, [appointmentId, appointment, isPaid, user]);
 
@@ -142,7 +134,6 @@ const PatientTelemedicineButton = ({ appointment, onConsentStatusChange }) => {
       // 2. Determine Display Name
       const displayName = user?.user_metadata?.full_name || "Paciente";
 
-      console.log("Patient joining room:", { roomName, displayName });
 
       // 3. Non-blocking DB update
       const updatePromise = supabase

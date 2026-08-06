@@ -40,7 +40,6 @@ const DoctorTelemedicineButton = ({ appointment }) => {
       const displayName = `Dr(a). ${appointment.medico_nome || 'Médico'}`;
 
       if (import.meta.env.DEV) {
-        console.log("Doctor starting consultation:", { roomName, displayName, appointmentId: appointment.id });
       }
 
       // 3. Non-blocking DB update

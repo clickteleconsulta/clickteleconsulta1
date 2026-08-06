@@ -309,7 +309,6 @@ const DoctorDocuments = () => {
   };
 
   const handleMemedPrescription = () => {
-    console.log('[DoctorDocuments] Prescrever com Memed clicado');
     // Navigate even without patient selected, user can configure patient in next step if logic allowed
     // But better to pass selected patient if available
     navigate('/prescricao/memed', { 

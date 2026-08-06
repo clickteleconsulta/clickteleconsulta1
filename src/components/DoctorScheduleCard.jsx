@@ -389,7 +389,11 @@ export function DoctorScheduleCard({
         return;
       }
     }
-  }, [doctorAgenda, isFallback]);
+    // `perPage` entra na lista porque o cálculo do salto depende dele. Sem
+    // isso, girar o celular (3 dias por página) para paisagem (5) deixava o
+    // deslocamento num múltiplo de 3 dentro de uma grade de 5, e a janela de
+    // dias ficava desalinhada com a primeira vaga.
+  }, [doctorAgenda, isFallback, perPage]);
 
   const scheduleByDay = useMemo(() => {
     if (!doctorAgenda || isFallback) return visibleDays.map(day => ({

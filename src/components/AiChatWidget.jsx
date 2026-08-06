@@ -78,7 +78,6 @@ const AiChatWidget = () => {
         }
 
         if (isMounted && data) {
-          console.log(`✅ AI Knowledge base loaded: ${data.length} rules found.`);
           setKnowledgeBase(data);
         }
       } catch (err) {
@@ -99,7 +98,6 @@ const AiChatWidget = () => {
           table: 'ai_knowledge_base'
         },
         (payload) => {
-          console.log('⚡ Realtime update received for AI knowledge base:', payload);
           fetchKnowledgeBase();
         }
       )
