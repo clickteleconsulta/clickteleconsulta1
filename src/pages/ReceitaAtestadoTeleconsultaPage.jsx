@@ -6,23 +6,24 @@ import { Button } from '@/components/ui/button';
 import { FileCheck2, ShieldCheck, Clock, AlertTriangle, ArrowRight, Stethoscope } from '@/components/ui/icones';
 
 /**
- * Página de destino para quem procura "atestado médico online" e "receita
- * médica online".
+ * Página INFORMATIVA sobre como receita e atestado funcionam depois de uma
+ * teleconsulta.
  *
- * POR QUE ELA É ESCRITA ASSIM
- * Boa parte de quem digita esses termos não quer consultar: quer comprar o
- * documento. Uma página que sugerisse que o atestado sai junto com o pagamento
- * atrairia esse tráfego, não converteria, e nos colocaria em posição
- * insustentável perante o CFM — atestado e receita dependem de avaliação
- * clínica, e a decisão é do médico, não da plataforma.
+ * NÃO É PÁGINA DE OFERTA, E O TÍTULO IMPORTA.
+ * A primeira versão se chamava "Atestado e receita médica online" e vivia no
+ * rodapé com esse rótulo. Ficava parecendo vitrine de documento — e a aviDoc
+ * vende consulta, não documento. Num eventual questionamento, um título desses
+ * é a primeira coisa que se lê contra a plataforma, por mais que a letra miúda
+ * dissesse o contrário.
  *
- * Então a página assume isso no primeiro parágrafo, em vez de esconder na letra
- * miúda. Quem quer comprar atestado sai; quem tem um sintoma real e precisa de
- * um documento válido fica, e essa é a pessoa que agenda.
+ * Agora o nome descreve o assunto ("como funcionam"), não um produto, e o
+ * primeiro bloco da página diz o que o serviço é. O aviso de que documento
+ * depende de avaliação clínica continua onde estava, antes de qualquer botão:
+ * ele deixou de ser a ressalva de uma oferta e passou a ser a explicação
+ * principal, que é o que ele sempre deveria ter sido.
  *
- * NADA AQUI FOI ESCRITO DE CABEÇA PRÓPRIA: as normas citadas e a explicação da
- * conferência vêm de DOCUMENTOS em siteContent.js, que já estava publicado na
- * página /documentos-e-validade.
+ * NADA AQUI FOI ESCRITO DE CABEÇA PRÓPRIA: as normas citadas vêm de DOCUMENTOS
+ * em siteContent.js, já publicado em /documentos-e-validade.
  */
 const CASOS = [
   {
@@ -42,24 +43,24 @@ const CASOS = [
   },
 ];
 
-const AtestadoReceitaPage = () => {
-  const url = `${BRAND.url}/atestado-e-receita-online`;
+const ReceitaAtestadoTeleconsultaPage = () => {
+  const url = `${BRAND.url}/receita-e-atestado-na-teleconsulta`;
   return (
     <>
       <Helmet>
-        <title>{`Atestado e receita médica online · ${BRAND.name}`}</title>
+        <title>{`Como funcionam receita e atestado na teleconsulta · ${BRAND.name}`}</title>
         <meta
           name="description"
-          content="Receita, atestado e pedido de exame emitidos em teleconsulta valem em todo o Brasil. Dependem de avaliação do médico — agende a partir de R$ 40."
+          content="Como receita, atestado e pedido de exame funcionam depois de uma consulta online: quem emite, de que depende e por que valem em todo o Brasil."
         />
         <link rel="canonical" href={url} />
-        <meta property="og:title" content={`Atestado e receita médica online · ${BRAND.name}`} />
+        <meta property="og:title" content={`Como funcionam receita e atestado na teleconsulta · ${BRAND.name}`} />
         <meta property="og:url" content={url} />
       </Helmet>
 
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-3xl">
         <h1 className="font-display text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
-          Atestado e receita médica online
+          Como funcionam receita e atestado na teleconsulta
         </h1>
         <p className="text-lg text-slate-600 mt-4 leading-relaxed">
           Documentos emitidos em teleconsulta têm o mesmo valor dos de uma consulta presencial e
@@ -71,16 +72,17 @@ const AtestadoReceitaPage = () => {
         <div className="mt-8 flex items-start gap-3 rounded-md border border-amber-200 bg-amber-50 p-5">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold text-slate-900">Não vendemos atestado nem receita</p>
+            <p className="font-semibold text-slate-900">O que você contrata é a consulta</p>
             <p className="text-sm text-slate-700 mt-1 leading-relaxed">
-              O que você agenda aqui é uma consulta. Emitir receita, atestado ou pedido de exame é
-              decisão do médico, depois de avaliar o seu caso — e ele pode concluir que não é
-              indicado. O pagamento é da consulta, e não do documento.
+              A aviDoc é um marketplace de agendamentos: o que você contrata e paga é o
+              atendimento com o médico. Emitir receita, atestado ou pedido de exame é decisão
+              exclusiva do profissional, depois de avaliar o seu caso, e ele pode concluir que não é
+              indicado. Nenhum documento é vendido, prometido ou garantido aqui.
             </p>
           </div>
         </div>
 
-        <h2 className="font-display text-xl font-bold text-slate-900 mt-12">Quando a teleconsulta resolve</h2>
+        <h2 className="font-display text-xl font-bold text-slate-900 mt-12">Situações em que o documento costuma surgir</h2>
         <div className="mt-5 grid sm:grid-cols-3 gap-4">
           {CASOS.map((c) => (
             <div key={c.titulo} className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
@@ -131,4 +133,4 @@ const AtestadoReceitaPage = () => {
   );
 };
 
-export default AtestadoReceitaPage;
+export default ReceitaAtestadoTeleconsultaPage;

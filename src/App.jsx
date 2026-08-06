@@ -11,7 +11,7 @@ const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const ConfirmationPage = lazy(() => import('@/pages/ConfirmationPage'));
 const SupportPage = lazy(() => import('@/pages/SupportPage'));
 const ComoFuncionaPage = lazy(() => import('@/pages/ComoFuncionaPage'));
-const AtestadoReceitaPage = lazy(() => import('@/pages/AtestadoReceitaPage'));
+const ReceitaAtestadoTeleconsultaPage = lazy(() => import('@/pages/ReceitaAtestadoTeleconsultaPage'));
 const FaqPage = lazy(() => import('@/pages/FaqPage'));
 const DocumentosPage = lazy(() => import('@/pages/DocumentosPage'));
 const QuemSomosPage = lazy(() => import('@/pages/QuemSomosPage'));
@@ -306,7 +306,11 @@ function App() {
             <Route path="/medicos" element={<Navigate to="/agendamentos" replace />} />
             <Route path="/suporte" element={<SupportPage />} />
             <Route path="/como-funciona" element={<ComoFuncionaPage />} />
-            <Route path="/atestado-e-receita-online" element={<AtestadoReceitaPage />} />
+            <Route path="/receita-e-atestado-na-teleconsulta" element={<ReceitaAtestadoTeleconsultaPage />} />
+            {/* O endereço antigo chegou a ser publicado e enviado no sitemap.
+                Redireciona em vez de 404: quem já tiver o link não cai no vazio,
+                e o buscador transfere para o novo o pouco que tenha registrado. */}
+            <Route path="/atestado-e-receita-online" element={<Navigate to="/receita-e-atestado-na-teleconsulta" replace />} />
             <Route path="/quem-somos" element={<QuemSomosPage />} />
             <Route path="/perguntas-frequentes" element={<FaqPage />} />
             <Route path="/documentos-e-validade" element={<DocumentosPage />} />

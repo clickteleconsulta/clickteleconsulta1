@@ -163,8 +163,16 @@ const DocumentosPage = () => {
           </Button>
         </div>
 
+        {/* A página sobre receita e atestado saiu do rodapé de propósito — o
+            rótulo dela ali parecia vitrine de documento. O lugar dela é aqui,
+            no contexto de validade, alcançável por quem já está lendo sobre o
+            assunto. */}
         <p className="text-center text-sm text-slate-500 mt-10">
-          Ficou com dúvidas? Veja as{' '}
+          Veja também{' '}
+          <Link to="/receita-e-atestado-na-teleconsulta" className="text-brand-600 font-medium hover:underline">
+            como funcionam receita e atestado na teleconsulta
+          </Link>{' '}
+          ou as{' '}
           <Link to="/perguntas-frequentes" className="text-brand-600 font-medium hover:underline">perguntas frequentes</Link>.
         </p>
       </div>
