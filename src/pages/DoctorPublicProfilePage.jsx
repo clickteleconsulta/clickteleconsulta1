@@ -12,6 +12,7 @@ import { patientPriceFromRepasse } from '@/lib/price';
 const COLUNAS_COM_PRECO = `${PUBLIC_DOCTOR_COLUMNS}, procedimentos(principal, preco)`;
 import { supabase } from '@/lib/customSupabaseClient';
 import { toSiteUrl } from '@/lib/storageUrl';
+import { marcarEtapa, ETAPAS } from '@/lib/funil';
 import { Loader2, Frown, Star, MapPin, Shield, Pencil, Save, Info, MessageCircle, CheckCircle2, Phone, Calendar, ChevronDown } from '@/components/ui/icones';
 import useAsync from '@/hooks/useAsync';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -177,6 +178,11 @@ const ReviewsSection = ({ reviews }) => {
  * /agendamentos — mesma checagem de horário ocupado em tempo real, mesmo
  * checkout, mesmo tratamento de visitante não logado.
  */
+// Um formatador só para as duas caixas e para a grade de horários dentro delas.
+// Sem ele, a caixa dizia "R$ 65,00" e o cartão logo abaixo dizia "Consultar" —
+// o mesmo preço, na mesma tela, com duas respostas diferentes.
+const formatarBRL = (v) => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
 const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
   // Mesma conta e mesma cor de /agendamentos: o jade da marca, que é a única
   // aparição dele fora do logo e marca o dado que decide a escolha. Sem
@@ -202,7 +208,7 @@ const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
           Valor da consulta
         </span>
         <span className="text-2xl font-extrabold tabular-nums leading-none" style={{ color: BRAND.acento }}>
-          {valorPaciente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+          {formatarBRL(valorPaciente)}
         </span>
       </div>
     )}
@@ -233,6 +239,7 @@ const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
               initialDoctor={doctor}
               somenteAgenda
               patientPrice={valorPaciente > 0 ? valorPaciente : undefined}
+              formattedPatientPrice={valorPaciente > 0 ? formatarBRL(valorPaciente) : undefined}
             />
           </div>
         )}
@@ -367,6 +374,11 @@ const DoctorPublicProfilePage = () => {
   useEffect(() => {
     if (status === 'success') fetchReviews();
   }, [status, fetchReviews]);
+
+  // Passo 3 do funil (ver src/lib/funil.js).
+  useEffect(() => {
+    if (status === 'success') marcarEtapa(ETAPAS.PERFIL_MEDICO);
+  }, [status]);
 
   // Rola até a seção de Avaliações quando acessado via #avaliacoes (ex.: estrelas do card)
   useEffect(() => {

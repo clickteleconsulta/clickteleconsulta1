@@ -19,7 +19,7 @@ import { trackPurchase } from '@/lib/analytics';
 import Logo from '@/components/Logo';
 
 
-const APPT_SELECT = '*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
+const APPT_SELECT = '*, medico:medicos(public_name, specialty, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)';
 
 const AppointmentConfirmationPage = () => {
   const location = useLocation();
@@ -108,7 +108,7 @@ const AppointmentConfirmationPage = () => {
             .from('agendamentos')
             .select(`
             *,
-            medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions),
+            medico:medicos(public_name, specialty, clinic_logo_url, crm, uf, name, phone_number, instructions),
             guia:guia_id(*),
             patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)
             `)
@@ -141,7 +141,7 @@ const AppointmentConfirmationPage = () => {
       }, async (payload) => {
           const { data } = await supabase
             .from('agendamentos')
-            .select('*, medico:medicos(public_name, specialty, price_in_cents, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)')
+            .select('*, medico:medicos(public_name, specialty, clinic_logo_url, crm, uf, name, phone_number, instructions), guia:guia_id(*), patient:perfis_usuarios!agendamentos_patient_perfis_fkey(full_name, cpf, data_nasc, whatsapp, email)')
             .eq('id', appointmentId)
             .single();
           if (data) setAppointment(data);

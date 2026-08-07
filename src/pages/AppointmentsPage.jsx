@@ -4,6 +4,7 @@ import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/customSupabaseClient';
+import { marcarEtapa, ETAPAS } from '@/lib/funil';
 import { patientPriceFromRepasse } from '@/lib/price';
 import { PUBLIC_DOCTOR_COLUMNS } from '@/lib/publicDoctorColumns';
 import { nextAvailableSlotMs, temHorarioLivreNoDia } from '@/lib/doctorAvailability';
@@ -391,6 +392,28 @@ const AppointmentsPage = () => {
 
     return result;
   }, [doctors, activeFilters, doctorPrices, searchName]);
+
+  // Passo 2 do funil — e a pergunta mais importante do negócio: a pessoa achou
+  // vaga? Falta de oferta não se conserta mexendo em página, e sem esta contagem
+  // ela é invisível: quem não acha horário some sem reclamar. `nextSlotMs` já
+  // está calculado aqui, então dá para separar "apareceu alguém na lista" de
+  // "existe horário livre nas próximas duas horas", que é a métrica-norte.
+  // Marcação única por sessão (ver src/lib/funil.js): filtrar não conta de novo.
+  useEffect(() => {
+    if (status !== 'success') return;
+
+    marcarEtapa(ETAPAS.BUSCA);
+    marcarEtapa(
+      filteredDoctors.length > 0
+        ? ETAPAS.BUSCA_COM_RESULTADO
+        : ETAPAS.BUSCA_SEM_RESULTADO
+    );
+
+    const limite = Date.now() + 2 * 60 * 60 * 1000;
+    if (filteredDoctors.some((d) => d.nextSlotMs != null && d.nextSlotMs <= limite)) {
+      marcarEtapa(ETAPAS.VAGA_EM_2H);
+    }
+  }, [status, filteredDoctors]);
 
   /**
    * A listagem descrita para o buscador: quem está na lista, em que ordem e

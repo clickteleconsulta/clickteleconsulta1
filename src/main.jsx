@@ -7,7 +7,6 @@ import { AuthProvider } from '@/contexts/SupabaseAuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import { AppointmentsProvider } from '@/contexts/AppointmentsContext';
 import { LoaderProvider } from '@/contexts/LoaderContext';
-import { CartProvider } from '@/hooks/useCart';
 import { ligarCapturaGlobal } from '@/lib/relatarErro';
 
 // Antes de montar: erro durante a montagem também precisa ser visto.
@@ -33,10 +32,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <AuthProvider>
           <AppointmentsProvider>
-            <CartProvider>
-              <App />
-              <Toaster />
-            </CartProvider>
+            {/* Havia um CartProvider aqui, do modelo de loja que originou o
+                projeto. Nenhuma tela chamava useCart(): era um contexto vivo,
+                no pacote de entrada, servindo a ninguém. */}
+            <App />
+            <Toaster />
           </AppointmentsProvider>
         </AuthProvider>
       </BrowserRouter>

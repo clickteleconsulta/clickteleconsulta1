@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
+import { patientPriceFromRepasse } from '@/lib/price';
 import { Loader2, Save, SlidersHorizontal, Percent, Wallet, CalendarClock, Info, CreditCard, FileText, ShieldCheck, Bot, Stethoscope, ShieldAlert } from '@/components/ui/icones';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -124,10 +125,12 @@ const PlatformRules = () => {
 
     if (loading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-primary w-8 h-8" /></div>;
 
-    // Prévia do preço ao paciente com a taxa e repasse padrão
-    const previewPaciente = r.default_fee_percent < 100
-        ? (Math.ceil((Number(r.default_repasse) / (1 - Number(r.default_fee_percent) / 100)) * 2) / 2)
-        : 0;
+    // Prévia do preço ao paciente com a taxa e repasse padrão.
+    // A conta vem da biblioteca, e não repetida aqui: esta cópia arredondava sem
+    // a folga contra erro de ponto flutuante, então um repasse que resultasse em
+    // R$ 53,50 exatos podia virar R$ 54,00 só nesta tela — a plataforma
+    // mostrando dois preços diferentes para o mesmo médico.
+    const previewPaciente = patientPriceFromRepasse(r.default_repasse, r.default_fee_percent);
 
     return (
         <div className="space-y-6 max-w-4xl">

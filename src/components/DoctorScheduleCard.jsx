@@ -15,6 +15,7 @@ import { format, addDays, startOfToday, isToday, isTomorrow, addMinutes } from '
 import { ptBR } from 'date-fns/locale';
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { supabase } from '@/lib/customSupabaseClient';
+import { marcarEtapa, ETAPAS } from '@/lib/funil';
 import { toSiteUrl } from '@/lib/storageUrl';
 import { formatDoctorDisplayName } from '@/lib/doctorName';
 import { isInstantBlocked } from '@/lib/doctorAvailability';
@@ -492,6 +493,10 @@ export function DoctorScheduleCard({
       return;
     }
     const priceToUse = Math.round(patientPrice * 100);
+
+    // Passo 3b do funil: escolheu um horário. É a partir daqui que a exigência
+    // de cadastro entra na frente do pagamento — a maior queda medida do funil.
+    marcarEtapa(ETAPAS.HORARIO_ESCOLHIDO);
 
     const appointmentDetails = {
       medico_id: doctor.id,

@@ -12,6 +12,7 @@ import AuthLayout from '@/components/auth/AuthLayout';
 import { cn } from "@/lib/utils";
 import { IMaskInput } from 'react-imask';
 import { trackSignup } from '@/lib/analytics';
+import { marcarEtapa, ETAPAS } from '@/lib/funil';
 import { useLoader } from '@/contexts/LoaderContext';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -103,6 +104,12 @@ const AuthPage = ({
       setIsLogin(true);
     }
   }, [isDoctor]);
+
+  // Passo 4 do funil: o formulário de criar conta apareceu. Só do lado do
+  // paciente — cadastro de médico é outro fluxo, com outro objetivo.
+  useEffect(() => {
+    if (!isDoctor && !isLogin) marcarEtapa(ETAPAS.CADASTRO_INICIADO);
+  }, [isDoctor, isLogin]);
   
   // Helper to handle post-login redirects.
   // NÃO navegar imperativamente aqui: o componente AuthRedirect (que renderiza esta página em
@@ -154,8 +161,24 @@ const AuthPage = ({
       } else {
         // Validation for Patient Signup
         if (!isDoctor) {
-             if (!fullName?.trim() || !cpf || !whatsapp || !birthDate || !sexo || !email?.trim() || !password) {
-                throw new Error("Preencha todos os campos obrigatórios.");
+             // Dizer QUAL campo falta, e não "preencha os campos": a pessoa não
+             // volta procurando qual dos sete ficou vazio, ela fecha a aba.
+             const faltando = [
+               [!fullName?.trim(), 'Nome completo'],
+               [!cpf, 'CPF'],
+               [!birthDate, 'Data de nascimento'],
+               [!whatsapp, 'WhatsApp'],
+               [!sexo, 'Sexo'],
+               [!email?.trim(), 'E-mail'],
+               [!password, 'Senha'],
+             ].filter(([vazio]) => vazio).map(([, nome]) => nome);
+
+             if (faltando.length) {
+                throw new Error(
+                  faltando.length === 1
+                    ? `Falta preencher: ${faltando[0]}.`
+                    : `Faltam preencher: ${faltando.join(', ')}.`
+                );
              }
 
              // BONUS-01: CPF digit validation
@@ -216,6 +239,7 @@ const AuthPage = ({
             // Complementa o registro de aceite (versão/data já gravados no cadastro) com IP e user agent.
             supabase.functions.invoke('record-legal-consent', { body: { email } }).catch(() => {});
             trackSignup(isDoctor ? 'medico' : 'paciente');
+            if (!isDoctor) marcarEtapa(ETAPAS.CADASTRO_CONCLUIDO);
             navigate('/cadastro-sucesso', { state: { email } });
             setTimeout(() => {
               hideLoader();
@@ -288,6 +312,12 @@ const AuthPage = ({
                                 placeholder="Nome completo"
                                 aria-label="Nome completo"
                                 autoComplete="name"
+                                // Era o único campo do bloco sem `required`. A
+                                // validação no submit já barrava, mas só depois
+                                // do Turnstile e com um aviso genérico de
+                                // "preencha os campos" — e é justamente o nome
+                                // que o checkout cobra lá na frente.
+                                required
                                 className="h-11 pl-4 rounded-md border-gray-300 focus:border-brand-500 focus:ring-brand-100"
                            />
                         </div>

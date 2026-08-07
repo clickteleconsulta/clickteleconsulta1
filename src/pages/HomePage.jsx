@@ -13,6 +13,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { supabase } from '@/lib/customSupabaseClient';
+import { marcarEtapa, ETAPAS } from '@/lib/funil';
 
 // ─── Cycling Words ──────────────────────────────────────────────────────────────
 /**
@@ -160,6 +161,9 @@ const HomePage = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Passo 1 do funil (ver src/lib/funil.js).
+  useEffect(() => { marcarEtapa(ETAPAS.HOME); }, []);
 
 
   const handleSearch = (e) => {

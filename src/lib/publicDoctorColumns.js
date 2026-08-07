@@ -1,3 +1,13 @@
+// NENHUMA COLUNA DE PREÇO AQUI, DE PROPÓSITO.
+// `medicos` tem três resquícios de preço — preco, price_in_cents e
+// consulta_preco — de quando o valor morava no cadastro do médico. Hoje o preço
+// vem de `procedimentos.preco` com a taxa por cima (src/lib/price.js), e as três
+// colunas guardam números velhos: num dos cadastros, R$ 129,00 contra R$ 65,00
+// de preço real. Enquanto elas viajavam junto na consulta, bastava alguém
+// escrever `doctor.price_in_cents` para o site cobrar o valor errado — e foi
+// exatamente o que aconteceu na grade de horários do perfil público.
+// Não devolva nenhuma das três a esta lista.
+//
 // Colunas PÚBLICAS seguras da tabela `medicos` — usadas nas consultas anônimas
 // (agendamentos, perfil público). NÃO inclui dados sensíveis (dados bancários /
 // withdrawal_*, token, telefone privado, documentos, assinatura), que ficam
@@ -5,7 +15,7 @@
 export const PUBLIC_DOCTOR_COLUMNS = [
   'id', 'user_id', 'name', 'public_name', 'nome', 'specialty', 'especialidade',
   'crm', 'crm_number', 'crm_uf', 'uf', 'image_url', 'clinic_logo_url',
-  'bio', 'description', 'preco', 'price_in_cents', 'consulta_preco', 'payment_settings',
+  'bio', 'description', 'payment_settings',
   'status', 'is_public', 'is_active', 'sexo', 'formacao', 'principal',
   'display_duration', 'slot_duration', 'interval_between', 'max_per_day',
   'accept_new_patients', 'available_for_new_patients', 'espelhar_google',

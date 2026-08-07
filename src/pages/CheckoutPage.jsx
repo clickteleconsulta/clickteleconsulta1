@@ -26,8 +26,14 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { IMaskInput } from 'react-imask';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { supabase } from '@/lib/customSupabaseClient';
+import { isValidCPF } from '@/lib/cpf';
+import { marcarEtapa, ETAPAS } from '@/lib/funil';
 import { cn } from '@/lib/utils';
 
 // ─── Progress Bar ─────────────────────────────────────────────────────────────
@@ -196,13 +202,144 @@ const PatientDataReview = ({ profile, user }) => (
   </Card>
 );
 
+// ─── Completar cadastro sem sair do checkout ──────────────────────────────────
+// Antes, faltando um dado, o botão mandava a pessoa para /paciente/dashboard/dados
+// — uma tela de configuração de conta, no meio do pagamento, levando o
+// agendamento só no `state` da rota. Ninguém volta de um painel para terminar de
+// pagar: quem chegou até aqui já escolheu médico e horário, e sair da tela
+// desfaz esse trabalho todo. Agora o que falta é pedido aqui mesmo.
+const CAMPOS = [
+  { chave: 'full_name', rotulo: 'Nome completo', tipo: 'texto', autoComplete: 'name' },
+  { chave: 'cpf', rotulo: 'CPF', tipo: 'mascara', mask: '000.000.000-00', inputMode: 'numeric' },
+  { chave: 'data_nasc', rotulo: 'Data de nascimento', tipo: 'data', autoComplete: 'bday' },
+  { chave: 'whatsapp', rotulo: 'WhatsApp', tipo: 'mascara', mask: '(00) 00000-0000', inputMode: 'numeric' },
+];
+
+const CompletarCadastro = ({ profile, user, onSalvo }) => {
+  const { toast } = useToast();
+  const [valores, setValores] = useState({});
+  const [salvando, setSalvando] = useState(false);
+
+  const faltando = CAMPOS.filter(({ chave }) => !profile?.[chave]);
+
+  const definir = (chave, valor) => setValores((v) => ({ ...v, [chave]: valor }));
+
+  const salvar = async (e) => {
+    e.preventDefault();
+
+    const vazio = faltando.find(({ chave }) => !String(valores[chave] || '').trim());
+    if (vazio) {
+      toast({ variant: 'destructive', title: `Falta preencher: ${vazio.rotulo}.` });
+      return;
+    }
+
+    if (faltando.some((c) => c.chave === 'cpf') && !isValidCPF(valores.cpf)) {
+      toast({
+        variant: 'destructive',
+        title: 'CPF inválido',
+        description: 'Confira os dígitos: ele é usado para emitir a cobrança.',
+      });
+      return;
+    }
+
+    setSalvando(true);
+    const updates = Object.fromEntries(
+      faltando.map(({ chave }) => [chave, String(valores[chave]).trim()])
+    );
+
+    const { error } = await supabase
+      .from('perfis_usuarios')
+      .update(updates)
+      .eq('id', user.id);
+
+    if (error) {
+      setSalvando(false);
+      toast({
+        variant: 'destructive',
+        title: 'Não foi possível salvar',
+        description: error.message,
+      });
+      return;
+    }
+
+    await onSalvo();
+    setSalvando(false);
+    toast({ title: 'Dados salvos', description: 'Pode confirmar o agendamento.' });
+  };
+
+  return (
+    <Card className="mb-6 border-amber-200 bg-amber-50/60">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-base text-amber-900">
+          <AlertTriangle className="w-5 h-5 text-amber-500" />
+          {faltando.length === 1 ? 'Falta um dado' : `Faltam ${faltando.length} dados`}
+        </CardTitle>
+        <CardDescription className="text-amber-800">
+          Precisamos disto para emitir a guia de pagamento. Seu horário continua
+          reservado.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={salvar} className="space-y-4">
+          <div className="grid sm:grid-cols-2 gap-4">
+            {faltando.map((campo) => (
+              <div key={campo.chave} className="space-y-1">
+                <Label htmlFor={`checkout-${campo.chave}`}>{campo.rotulo}</Label>
+                {campo.tipo === 'mascara' ? (
+                  <IMaskInput
+                    id={`checkout-${campo.chave}`}
+                    mask={campo.mask}
+                    value={valores[campo.chave] || ''}
+                    onAccept={(valor) => definir(campo.chave, valor)}
+                    overwrite
+                    inputMode={campo.inputMode}
+                    placeholder={campo.rotulo}
+                    className="flex h-11 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-100 focus-visible:border-brand-500 text-gray-900"
+                  />
+                ) : (
+                  <Input
+                    id={`checkout-${campo.chave}`}
+                    type={campo.tipo === 'data' ? 'date' : 'text'}
+                    value={valores[campo.chave] || ''}
+                    onChange={(e) => definir(campo.chave, e.target.value)}
+                    autoComplete={campo.autoComplete}
+                    placeholder={campo.tipo === 'data' ? undefined : campo.rotulo}
+                    max={
+                      campo.tipo === 'data'
+                        ? new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+                            .toISOString()
+                            .split('T')[0]
+                        : undefined
+                    }
+                    className="h-11 rounded-md border-gray-300"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          <Button type="submit" disabled={salvando} className="w-full sm:w-auto">
+            {salvando ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Salvando...
+              </>
+            ) : (
+              'Salvar e continuar'
+            )}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
+
 // ─── CheckoutPage ─────────────────────────────────────────────────────────────
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { createConfirmedAppointment, refetchAppointments } = useAppointments();
-  const { profile, user } = useAuth();
+  const { profile, user, reloadProfile } = useAuth();
   const [isConfirming, setIsConfirming] = useState(false);
 
   const appointmentDetails = location.state?.appointmentDetails;
@@ -221,11 +358,10 @@ const CheckoutPage = () => {
     }
   }, [appointmentDetails, navigate, toast]);
 
-  const handleGoToCompleteProfile = () => {
-    navigate('/paciente/dashboard/dados', {
-      state: { from: 'checkout', appointmentDetails },
-    });
-  };
+  // Passo 5 do funil: chegou na tela de confirmar.
+  useEffect(() => {
+    if (appointmentDetails) marcarEtapa(ETAPAS.CHECKOUT);
+  }, [appointmentDetails]);
 
   const handleConfirmAppointment = async () => {
     if (!isProfileComplete || !user || !appointmentDetails?.medico_id) {
@@ -233,7 +369,7 @@ const CheckoutPage = () => {
         variant: 'destructive',
         title: 'Dados incompletos',
         description:
-          'Por favor, complete seu cadastro e selecione um horário válido.',
+          'Preencha os campos que faltam acima para gerar a guia.',
       });
       return;
     }
@@ -280,6 +416,7 @@ const CheckoutPage = () => {
         description: 'Falta só o pagamento para confirmar seu horário.',
         duration: 4000,
       });
+      marcarEtapa(ETAPAS.GUIA_CRIADA);
       await refetchAppointments();
       // Segue para o pagamento (Asaas), em vez de uma tela de sucesso sem cobrança.
       navigate('/agendamento/confirmado', {
@@ -316,27 +453,13 @@ const CheckoutPage = () => {
           </p>
         </div>
 
-        {/* Dados incompletos */}
+        {/* Dados incompletos — resolvidos aqui, sem tirar ninguém do fluxo */}
         {!isProfileComplete && (
-          <Card className="mb-6 bg-amber-50 border-amber-200">
-            <CardContent className="p-4 flex items-center gap-4 flex-wrap">
-              <AlertTriangle className="w-8 h-8 text-amber-500 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-amber-900">
-                  Cadastro Incompleto
-                </h4>
-                <p className="text-sm text-amber-800">
-                  Complete seu cadastro para continuar com o agendamento.
-                </p>
-              </div>
-              <Button
-                onClick={handleGoToCompleteProfile}
-                className="flex-shrink-0"
-              >
-                Completar Cadastro
-              </Button>
-            </CardContent>
-          </Card>
+          <CompletarCadastro
+            profile={profile}
+            user={user}
+            onSalvo={reloadProfile}
+          />
         )}
 
         <div className="grid lg:grid-cols-3 gap-6">
