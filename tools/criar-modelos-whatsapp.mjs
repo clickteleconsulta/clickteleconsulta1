@@ -143,9 +143,18 @@ for (const modelo of MODELOS) {
   if (!r.ok) falhou = true;
 }
 
-console.log(
-  falhou
-    ? '\nAlgum modelo não passou. O motivo acima costuma ser de redação — me mande o texto do erro.'
-    : '\nOs três estão na fila de análise da Meta. Costuma sair em minutos; até lá nada é entregue.',
-);
+if (falhou) {
+  console.log('\nAlgum modelo não passou. Como ler o motivo acima:\n');
+  console.log('  "não tem permissão para criar um modelo"');
+  console.log('      Estado da CONTA, não do texto. A categoria Autenticação exige');
+  console.log('      empresa verificada — Gerenciador de Negócios → Central de Verificações.\n');
+  console.log('  "Object with ID ... does not exist ... missing permissions"');
+  console.log('      O token não enxerga a conta. Atribua a conta do WhatsApp ao usuário');
+  console.log('      do sistema (Ativos → Contas do WhatsApp → controle total) e GERE UM');
+  console.log('      TOKEN NOVO: o antigo não ganha o acesso retroativamente.\n');
+  console.log('  Qualquer outra coisa costuma ser redação. Me mande o texto.');
+} else {
+  console.log('\nOs três estão na fila de análise da Meta. Costuma sair em minutos;');
+  console.log('até lá nada é entregue.');
+}
 process.exit(falhou ? 1 : 0);

@@ -466,14 +466,34 @@ sobre a plataforma é consistente em que modelo da categoria **Autenticação ex
 verificação da empresa**. É o caminho a seguir: Gerenciador de Negócios →
 Central de Verificações. Leva dias.
 
+> ✅ **CONFIRMADO em 7 de agosto de 2026.** Pela API, com o ativo atribuído e
+> token novo, os dois modelos de **Utilidade** entraram como `PENDING` e só o
+> `codigo_verificacao` repetiu a recusa. Ou seja: o bloqueio é da categoria
+> Autenticação, e não da conta inteira nem do texto.
+
 **Consequência prática:** enquanto a verificação não sair, a verificação por
 código no WhatsApp não sobe. É exatamente o caso em que o canal `email` serve de
 ponte — ver VERIFICACAO-TELEFONE.md.
 
 Os dois modelos de **Utilidade** (aviso ao médico e confirmação ao paciente)
-provavelmente passam, já que a restrição documentada é da categoria
-Autenticação. Vale tentar por último, não primeiro, para não confundir os
-resultados.
+passam normalmente — foi o que aconteceu.
+
+## O outro tropeço: o ativo não atribuído ao usuário do sistema
+
+Antes disso, a API recusava os TRÊS com:
+
+> Object with ID '1407190781284781' does not exist, cannot be loaded due to
+> missing permissions, or does not support this operation
+
+Não era o ID. O usuário do sistema tinha o **App** atribuído, mas **não a conta
+do WhatsApp** — são atribuições separadas no painel, e é o passo que quase todo
+mundo pula. O conserto:
+
+**Configurações do negócio → Usuários do sistema → ⋯ → Atribuir ativos →
+Contas do WhatsApp → aviDoc → controle total.**
+
+E então **gerar um token novo**: o token emitido antes da atribuição não ganha o
+acesso retroativamente. Foi isso que destravou os dois de Utilidade.
 
 ## O editor do painel corrompe `{{n}}` quando preenchido por automação
 
