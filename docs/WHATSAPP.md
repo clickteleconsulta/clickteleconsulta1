@@ -439,3 +439,48 @@ aconteceu uma vez.
   caminho para passar de 2.000 conversas. Para o volume de agora sobra; antes do
   primeiro mês de anúncio, não — e a verificação leva dias, então vale iniciar
   cedo.
+
+---
+
+# O que travou na primeira tentativa (7 de agosto de 2026)
+
+Tentei criar os três modelos pelo Gerenciador do WhatsApp. Vale registrar o
+resultado, porque duas coisas custam tempo se descobertas de novo.
+
+## O modelo de Autenticação foi RECUSADO
+
+> **Não é possível criar o modelo de mensagem**
+> Esta conta do WhatsApp Business não tem permissão para criar um modelo de
+> mensagem
+
+Não é erro de formulário: o modelo estava correto — nome, `pt_BR`, copiar
+código, aviso de segurança, expiração de 10 minutos, tudo conferido na prévia.
+É permissão de conta.
+
+**O que foi descartado como causa:** forma de pagamento. A conta `aviDoc` tem
+cartão cadastrado (a *Test WhatsApp Business Account* é que não tem — não
+confunda as duas no painel de cobrança).
+
+**O que sobra:** a empresa **não está verificada**, e a documentação de terceiros
+sobre a plataforma é consistente em que modelo da categoria **Autenticação exige
+verificação da empresa**. É o caminho a seguir: Gerenciador de Negócios →
+Central de Verificações. Leva dias.
+
+**Consequência prática:** enquanto a verificação não sair, a verificação por
+código no WhatsApp não sobe. É exatamente o caso em que o canal `email` serve de
+ponte — ver VERIFICACAO-TELEFONE.md.
+
+Os dois modelos de **Utilidade** (aviso ao médico e confirmação ao paciente)
+provavelmente passam, já que a restrição documentada é da categoria
+Autenticação. Vale tentar por último, não primeiro, para não confundir os
+resultados.
+
+## O editor do painel corrompe `{{n}}` quando preenchido por automação
+
+Ao digitar `{{`, o editor fecha as chaves sozinho. `{{1}}` vira `{{1}}1}}` e
+`{{1` vira `{{1}}1`. Na prévia dá para ver o estrago.
+
+Isso não acontece pela API. **É a razão prática para preferir
+`tools/criar-modelos-whatsapp.mjs`** ao formulário: o JSON vai exato, sem editor
+no meio. Se for preencher à mão, digite o texto sem as variáveis e use o botão
+"Adicionar variável" para cada uma.
