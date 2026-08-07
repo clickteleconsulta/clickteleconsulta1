@@ -26,32 +26,65 @@ Conferido pela API: as colunas novas de `avaliacoes` respondem, a
 
 </details>
 
-## 2. Publicar as duas funções
+## ✅ 2. Publicar as duas funções — FEITO em 7 de agosto de 2026
 
-```bash
-supabase functions deploy verificar-telefone
-supabase functions deploy avaliacao-publica
-```
+`verificar-telefone` e `avaliacao-publica` estão publicadas e testadas contra o
+projeto:
 
-## 3. As variáveis de ambiente
+- número inválido → recusa com mensagem em português;
+- número válido → gera o código e responde `enviado: false` (sem provedor, e
+  dizendo isso em vez de fingir);
+- código errado → recusa;
+- comprovante forjado na `avaliacao-publica` → recusa.
+
+## 3. O provedor — ESTE É O QUE FALTA
+
+Sem provedor nenhum, o código é gerado e fica só no log da função. É o único
+passo entre o que está pronto e o que funciona de verdade.
+
+**Não existe caminho sem conta paga.** SMS e WhatsApp cobram por mensagem; a
+diferença é o preço, e no Brasil o SMS costuma custar mais que a conversa de
+autenticação do WhatsApp. Escolha um e configure.
+
+### Variável obrigatória, qualquer que seja o canal
 
 | Variável | Para quê |
 |---|---|
 | `TELEFONE_PEPPER` | Sal do hash do telefone. **Escolha uma vez e nunca troque** — trocar invalida todos os hashes existentes, e com eles a regra de "um número, uma avaliação". |
-| `META_WA_TOKEN` | Token da Meta. Já usado pela `notify-doctor-new-appointment`. |
-| `META_WA_PHONE_ID` | Número remetente no WhatsApp Cloud API. Idem. |
-| `META_WA_TEMPLATE_OTP` | Nome do modelo de autenticação. Padrão: `codigo_verificacao`. |
+| `CANAL_VERIFICACAO` | `sms`, `whatsapp` ou `auto`. Em `auto`, usa o primeiro configurado (SMS primeiro). |
 
-### O modelo precisa ser aprovado antes
+### Caminho A — SMS (Twilio)
 
-Mensagem iniciada pela empresa no WhatsApp Cloud API **só sai por modelo
-aprovado**. Para código, a Meta exige a categoria **AUTENTICAÇÃO**, que tem
-formato próprio: corpo com a variável do código e um botão de copiar. Cadastre no
-Gerenciador do WhatsApp, em português (`pt_BR`), e espere a aprovação — costuma
-levar de minutos a algumas horas.
+| Variável | Onde achar |
+|---|---|
+| `TWILIO_ACCOUNT_SID` | Console da Twilio |
+| `TWILIO_AUTH_TOKEN` | Console da Twilio |
+| `TWILIO_FROM` | Número comprado, em E.164 (`+55…`) |
 
-Sem o modelo aprovado, a Meta recusa o envio e a função registra o motivo no log.
-Ela **não finge que enviou**.
+Mais rápido de ligar: cria a conta, compra o número, cola as três variáveis.
+Não precisa de aprovação de modelo. O texto enviado cabe em um segmento de 160
+caracteres de propósito — passar disso dobra o custo de cada verificação.
+
+### Caminho B — WhatsApp (Meta)
+
+| Variável | Onde achar |
+|---|---|
+| `META_WA_TOKEN` | Já usado pela `notify-doctor-new-appointment` |
+| `META_WA_PHONE_ID` | Idem |
+| `META_WA_TEMPLATE_OTP` | Nome do modelo. Padrão: `codigo_verificacao` |
+
+Mais barato por mensagem, mas **exige modelo aprovado antes**: mensagem iniciada
+pela empresa só sai por modelo, e para código a Meta exige a categoria
+**AUTENTICAÇÃO**, com corpo de variável e botão de copiar. Cadastre no
+Gerenciador do WhatsApp em `pt_BR` e aguarde a aprovação.
+
+## 4. Ligar a flag — POR ÚLTIMO
+
+`FEATURES.VERIFICACAO_TELEFONE` em `src/config/features.js` nasce `false`.
+
+**Não ligue antes de um código chegar de verdade no seu celular.** Com ela
+ligada e sem provedor, a tela de revisão exige um código que ninguém recebe e o
+agendamento para. Foi exatamente o que aconteceu uma vez.
 
 ## Custo, que é o que decide se isso escala
 

@@ -40,6 +40,17 @@ const json = (body: unknown, status = 200) =>
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const PEPPER = Deno.env.get("TELEFONE_PEPPER") ?? "";
+// Canal de envio. 'auto' usa o primeiro que estiver configurado, na ordem
+// SMS → WhatsApp. Deixar explícito ('sms' ou 'whatsapp') evita a surpresa de o
+// canal mudar sozinho no dia em que a outra credencial for preenchida.
+const CANAL = (Deno.env.get("CANAL_VERIFICACAO") ?? "auto").toLowerCase();
+
+// Twilio (SMS). Serve qualquer provedor com API parecida; trocar significa
+// mexer só na função enviarSms.
+const SMS_SID = Deno.env.get("TWILIO_ACCOUNT_SID") ?? "";
+const SMS_TOKEN = Deno.env.get("TWILIO_AUTH_TOKEN") ?? "";
+const SMS_FROM = Deno.env.get("TWILIO_FROM") ?? "";
+
 const WA_TOKEN = Deno.env.get("META_WA_TOKEN") ?? "";
 const WA_PHONE_ID = Deno.env.get("META_WA_PHONE_ID") ?? "";
 const WA_TEMPLATE = Deno.env.get("META_WA_TEMPLATE_OTP") ?? "codigo_verificacao";
@@ -77,7 +88,6 @@ function normalizar(bruto: string): string | null {
 
 async function enviarWhatsapp(para: string, codigo: string) {
   if (!WA_TOKEN || !WA_PHONE_ID) {
-    console.log("[verificar-telefone] Meta não configurada. Código de", para, "seria", codigo);
     return { enviado: false, detalhe: "META_WA_TOKEN/META_WA_PHONE_ID ausentes" };
   }
   const resp = await fetch(`https://graph.facebook.com/${API_VERSION}/${WA_PHONE_ID}/messages`, {
@@ -105,6 +115,54 @@ async function enviarWhatsapp(para: string, codigo: string) {
     return { enviado: false, detalhe: corpo?.error?.message ?? `HTTP ${resp.status}` };
   }
   return { enviado: true, detalhe: "ok" };
+}
+
+async function enviarSms(para: string, codigo: string) {
+  if (!SMS_SID || !SMS_TOKEN || !SMS_FROM) {
+    return { enviado: false, detalhe: "TWILIO_* ausentes" };
+  }
+  // Texto curto de propósito: SMS é cobrado por segmento de 160 caracteres, e
+  // um texto que passa disso dobra o custo de cada verificação.
+  const corpo = `aviDoc: seu codigo e ${codigo}. Vale 10 minutos. Nao compartilhe.`;
+  const resp = await fetch(
+    `https://api.twilio.com/2010-04-01/Accounts/${SMS_SID}/Messages.json`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${btoa(`${SMS_SID}:${SMS_TOKEN}`)}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({ To: `+${para}`, From: SMS_FROM, Body: corpo }),
+    },
+  );
+  if (!resp.ok) {
+    const erro = await resp.text();
+    console.error("[verificar-telefone] SMS recusado:", erro.slice(0, 300));
+    return { enviado: false, detalhe: `SMS HTTP ${resp.status}` };
+  }
+  return { enviado: true, detalhe: "sms" };
+}
+
+/**
+ * Escolhe o canal e envia.
+ *
+ * Nenhum canal configurado NÃO é erro: o código fica no log e o fluxo continua
+ * testável. O que seria erro é responder "enviamos" para uma mensagem que nunca
+ * saiu — a pessoa ficaria esperando, e ninguém saberia por quê.
+ */
+async function enviarCodigo(para: string, codigo: string) {
+  const temSms = Boolean(SMS_SID && SMS_TOKEN && SMS_FROM);
+  const temWa = Boolean(WA_TOKEN && WA_PHONE_ID);
+
+  if (CANAL === "sms" || (CANAL === "auto" && temSms)) {
+    const r = await enviarSms(para, codigo);
+    if (r.enviado || CANAL === "sms") return r;
+  }
+  if (CANAL === "whatsapp" || (CANAL === "auto" && temWa)) {
+    return await enviarWhatsapp(para, codigo);
+  }
+  console.log("[verificar-telefone] Nenhum canal configurado. Código de", para, "seria", codigo);
+  return { enviado: false, detalhe: "nenhum canal configurado" };
 }
 
 serve(async (req) => {
@@ -154,7 +212,7 @@ serve(async (req) => {
       });
       if (error) throw error;
 
-      const envio = await enviarWhatsapp(numero, gerado);
+      const envio = await enviarCodigo(numero, gerado);
       // `enviado: false` não vira erro de propósito: em ambiente sem a Meta
       // configurada o fluxo continua testável, e o código aparece no log da
       // função. Em produção, com a Meta ligada, o false é o que denuncia
