@@ -53,7 +53,19 @@ autenticação do WhatsApp. Escolha um e configure.
 | `TELEFONE_PEPPER` | Sal do hash do telefone. **Escolha uma vez e nunca troque** — trocar invalida todos os hashes existentes, e com eles a regra de "um número, uma avaliação". |
 | `CANAL_VERIFICACAO` | `sms`, `whatsapp` ou `auto`. Em `auto`, usa o primeiro configurado (SMS primeiro). |
 
-### Caminho A — SMS (Twilio)
+### Caminho A — E-mail (Resend) · funciona hoje
+
+`CANAL_VERIFICACAO=email` mais `TELEFONE_PEPPER`. O `RESEND_API_KEY` já existe
+no projeto, usado pelos avisos de agendamento — nenhuma conta nova.
+
+**O que ele resolve e o que não resolve.** Confirma que a pessoa controla aquela
+caixa de e-mail. Não confirma que o telefone digitado está certo, que é o motivo
+de tudo isto existir: é para esse número que o médico liga. Serve de ponte até o
+WhatsApp entrar, e serve só no cadastro — na avaliação pública ninguém informa
+e-mail, e conta de e-mail é gratuita e infinita, o que faria dela uma barreira de
+mentira contra avaliação falsa.
+
+### Caminho B — SMS (Twilio)
 
 | Variável | Onde achar |
 |---|---|
@@ -65,12 +77,12 @@ Mais rápido de ligar: cria a conta, compra o número, cola as três variáveis.
 Não precisa de aprovação de modelo. O texto enviado cabe em um segmento de 160
 caracteres de propósito — passar disso dobra o custo de cada verificação.
 
-### Caminho B — WhatsApp (Meta)
+### Caminho C — WhatsApp (Meta)
 
 | Variável | Onde achar |
 |---|---|
 | `META_WA_TOKEN` | Já usado pela `notify-doctor-new-appointment` |
-| `META_WA_PHONE_ID` | Idem |
+| `META_WA_PHONE_ID` | **O mesmo número que avisa os médicos serve.** Um número envia quantos modelos diferentes existirem; o que não se reaproveita é o modelo em si |
 | `META_WA_TEMPLATE_OTP` | Nome do modelo. Padrão: `codigo_verificacao` |
 
 Mais barato por mensagem, mas **exige modelo aprovado antes**: mensagem iniciada

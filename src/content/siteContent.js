@@ -382,3 +382,79 @@ export const DOCUMENTOS = {
     { n: 'Lei nº 13.709/2018 (LGPD)', d: 'Regula o tratamento de dados pessoais, inclusive os dados de saúde.' },
   ],
 };
+
+// ─── Diretrizes de Avaliação ────────────────────────────────────────────────
+//
+// Escritas para o leitor, não para o jurídico. Quem chega aqui está com uma
+// dúvida concreta — "posso escrever?", "por que a minha não apareceu?", "posso
+// tirar?" — e o texto responde na ordem em que essas perguntas surgem.
+//
+// O conteúdo nasceu do rascunho em documentos-legais/, que ainda vai a
+// advogado. O que está publicado aqui é a versão legível; se o parecer mudar
+// alguma regra, muda nos dois lugares.
+export const DIRETRIZES_AVALIACAO = {
+  titulo: 'Diretrizes de Avaliação',
+  chamada:
+    'Avaliação serve para quem ainda está escolhendo. Estas são as regras que a mantêm útil — e o que fazemos quando alguém tenta burlá-las.',
+  atualizado: '7 de agosto de 2026',
+  secoes: [
+    {
+      titulo: 'Quem pode avaliar',
+      paragrafos: [
+        'Qualquer pessoa maior de 18 anos que tenha sido atendida pelo profissional, ou que tenha marcado uma consulta que ele desmarcou, remarcou ou não atendeu.',
+        `O atendimento não precisa ter sido marcado pela ${BRAND.name}. A avaliação é sobre o profissional, e não sobre o caminho pelo qual você chegou até ele: se a consulta foi no consultório ou por outra plataforma, você pode contar aqui como foi.`,
+        'Se você acompanhou o atendimento de outra pessoa, pode escrever desde que estivesse presente e tenha autorização dela — sem citar nada que a identifique. No caso de criança ou adolescente, só o adulto responsável que acompanhou.',
+      ],
+    },
+    {
+      titulo: 'Como sua avaliação chega ao site',
+      paragrafos: [
+        'Você escreve, confirma que é você por um código, e a avaliação entra na fila. Uma pessoa da nossa equipe lê antes de publicar — normalmente em até dois dias úteis.',
+        'Nota alta e nota baixa passam pelo mesmo crivo. Não deixamos de publicar uma avaliação por ela ser dura com o profissional.',
+        'Se decidirmos não publicar, você recebe o motivo por escrito e o caminho para discordar.',
+      ],
+    },
+    {
+      titulo: 'O que ajuda quem vai ler',
+      paragrafos: [
+        'Conte o que aconteceu com você: se o horário foi respeitado, se a explicação foi clara, se você saiu sabendo o que fazer. "Foi bom" não ajuda ninguém a decidir.',
+        'Fale do atendimento recente. Uma experiência de anos atrás diz pouco sobre como o profissional atende hoje.',
+        'Dá para relatar uma consulta ruim sem ofender. O que descreve o que houve é publicado; o que ataca a pessoa, não.',
+      ],
+    },
+    {
+      titulo: 'O que não publicamos',
+      paragrafos: [
+        'Dados que identifiquem você ou terceiros — telefone, e-mail, CPF, endereço, resultado de exame. A avaliação é pública, e não dá para desfazer o que já foi lido.',
+        'Acusação de crime, erro médico ou negligência sem decisão de autoridade competente. Não temos como apurar isso, e publicar acusação não apurada prejudica os dois lados. O caminho para esses casos é o Conselho Regional de Medicina.',
+        'Texto escrito por parente, amigo, colega ou funcionário do profissional; texto escrito pelo próprio profissional; texto encomendado ou pago; e texto gerado por inteligência artificial. Nada disso é experiência de paciente, que é a única coisa que a avaliação deveria informar.',
+        'Propaganda, assunto alheio ao atendimento e linguagem de ódio, ameaça ou assédio.',
+      ],
+    },
+    {
+      titulo: 'Como sabemos que é você',
+      paragrafos: [
+        'Toda avaliação exige confirmar um código enviado para você. É o que torna caro fabricar avaliação em série — cada uma passa a exigir um contato real e diferente.',
+        `Quando a avaliação nasce de uma consulta marcada e paga aqui, o vínculo já está registrado, e ela aparece marcada como consulta confirmada pela ${BRAND.name}. Quando vem do formulário aberto, o que confirmamos foi o contato, e é isso que o selo diz — nada além.`,
+        'Havendo indício de avaliação falsa, podemos pedir um comprovante do atendimento, com 30 dias de prazo, e segurar a publicação até isso ficar claro. Insistir em avaliação falsa leva a bloqueio e, havendo ilícito, às medidas cabíveis.',
+      ],
+    },
+    {
+      titulo: 'O que o profissional pode fazer',
+      paragrafos: [
+        'Responder publicamente, uma vez, a qualquer avaliação sobre ele.',
+        'Denunciar avaliação que viole estas diretrizes — e nós analisamos.',
+        'O que ele não pode: editar, apagar ou pedir a remoção de uma avaliação por não ter gostado dela. Nem oferecer desconto, brinde ou qualquer vantagem em troca de avaliação — além de violar estas regras, a Resolução CFM nº 2.336/2023 veda conduta equivalente ao médico. Se isso lhe for oferecido, nos avise.',
+      ],
+    },
+    {
+      titulo: 'Mudar de ideia, corrigir ou apagar',
+      paragrafos: [
+        'A avaliação é sua. Você pode corrigi-la ou pedir a exclusão quando quiser.',
+        'Ao pedir a exclusão, retiramos o que liga aquele texto a você. O comentário pode continuar no ar sem qualquer vínculo com a sua pessoa — é o que impede que a base de avaliações vire instrumento de pressão sobre quem escreveu.',
+        'Não mexemos no sentido do que você escreveu. Podemos ocultar um dado pessoal que tenha escapado, e nada além disso.',
+      ],
+    },
+  ],
+  contato: 'Para denunciar uma avaliação, discordar de uma recusa ou pedir a exclusão da sua, fale com o nosso suporte.',
+};

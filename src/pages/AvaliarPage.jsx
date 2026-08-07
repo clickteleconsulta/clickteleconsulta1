@@ -48,6 +48,7 @@ const AvaliarPage = () => {
   const [nota, setNota] = useState(0);
   const [texto, setTexto] = useState('');
   const [nome, setNome] = useState('');
+  const [local, setLocal] = useState('');
   const [aceito, setAceito] = useState(false);
   const [comprovante, setComprovante] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -81,6 +82,7 @@ const AvaliarPage = () => {
           rating: nota,
           comentario: texto.trim(),
           autor_nome: nome.trim(),
+          local_atendimento: local,
           aceite_versao: VERSAO_DIRETRIZES,
         },
       });
@@ -117,8 +119,8 @@ const AvaliarPage = () => {
         <CheckCircle2 className="w-12 h-12 mx-auto text-green-600" />
         <h1 className="text-2xl font-bold mt-4">Avaliação enviada</h1>
         <p className="text-muted-foreground mt-2">
-          Ela passa por revisão antes de aparecer no perfil — normalmente em até 2 dias úteis.
-          Obrigado por ajudar quem ainda está escolhendo.
+          Uma pessoa da nossa equipe lê antes de publicar, normalmente em até dois dias úteis.
+          Se não puder ir ao ar, você recebe o motivo.
         </p>
         <Button asChild className="mt-6">
           <Link to={doctorPath(medico)}>Ver o perfil de {nomeExibicao}</Link>
@@ -128,7 +130,7 @@ const AvaliarPage = () => {
   }
 
   const textoOk = texto.trim().length >= MIN_TEXTO;
-  const podeVerificar = nota > 0 && textoOk && nome.trim() && aceito;
+  const podeVerificar = nota > 0 && textoOk && nome.trim() && local && aceito;
 
   return (
     <>
@@ -145,15 +147,15 @@ const AvaliarPage = () => {
             <AvatarFallback><User className="w-5 h-5" /></AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="font-bold text-lg leading-tight">Como foi sua experiência com {nomeExibicao}?</h1>
-            <p className="text-sm text-muted-foreground">{medico.specialty}</p>
+            <h1 className="font-bold text-lg leading-tight">Você foi atendido por {nomeExibicao}?</h1>
+            <p className="text-sm text-muted-foreground">{medico.specialty} · seu relato ajuda quem está escolhendo agora</p>
           </div>
         </div>
 
         <div className="bg-card border border-border rounded-lg p-5 space-y-6">
           {/* 1 — nota */}
           <div>
-            <Label className="mb-2 block">Sua nota</Label>
+            <Label className="mb-2 block">Que nota você dá ao atendimento?</Label>
             <div className="flex gap-1" role="radiogroup" aria-label="Nota de 1 a 5 estrelas">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
@@ -173,40 +175,72 @@ const AvaliarPage = () => {
 
           {/* 2 — texto */}
           <div>
-            <Label htmlFor="av-texto">Conte o que aconteceu</Label>
+            <Label htmlFor="av-texto">O que alguém precisa saber antes de marcar com ele?</Label>
             <Textarea
               id="av-texto"
               rows={5}
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
-              placeholder="O horário foi respeitado? A explicação foi clara? Você saiu com a dúvida resolvida?"
+              placeholder="Ele respeitou o horário? Explicou de um jeito que deu para entender? Você saiu sabendo o que fazer?"
               className="mt-1.5"
             />
             <p className={cn('text-xs mt-1', textoOk ? 'text-muted-foreground' : 'text-amber-700')}>
               {textoOk
                 ? `${texto.trim().length} caracteres`
-                : `Faltam ${MIN_TEXTO - texto.trim().length} caracteres — relatos curtos demais não ajudam quem vai escolher.`}
+                : `Escreva mais ${MIN_TEXTO - texto.trim().length} caracteres. Relato de uma linha não ajuda ninguém a decidir.`}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Não escreva telefone, e-mail, CPF ou resultado de exame: a avaliação é pública.
+              Isto fica visível para qualquer pessoa na internet. Não coloque telefone, e-mail, CPF nem resultado de exame.
             </p>
           </div>
 
           {/* 3 — identificação */}
           <div>
-            <Label htmlFor="av-nome">Seu nome ou iniciais</Label>
+            <Label htmlFor="av-nome">Como você quer assinar</Label>
             <Input
               id="av-nome"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              placeholder="Ex.: Maria S. ou M.S."
+              placeholder="Maria S."
               maxLength={60}
               className="mt-1.5"
             />
-            <p className="text-xs text-muted-foreground mt-1">Aparece ao lado da avaliação. Não precisa ser o nome completo.</p>
+            <p className="text-xs text-muted-foreground mt-1">É o que aparece junto do seu relato. Primeiro nome e a inicial do sobrenome bastam.</p>
           </div>
 
-          {/* 4 — a declaração */}
+          {/* 4 — onde foi */}
+          <div>
+            <Label className="mb-2 block">Onde esse atendimento aconteceu?</Label>
+            <div className="grid sm:grid-cols-2 gap-2" role="radiogroup" aria-label="Onde o atendimento aconteceu">
+              {[
+                { valor: 'teleconsulta', rotulo: 'Teleconsulta', ajuda: 'Foi à distância, por vídeo, telefone ou mensagem' },
+                { valor: 'presencial', rotulo: 'Presencial com o profissional', ajuda: 'Você esteve com ele pessoalmente' },
+              ].map((opcao) => (
+                <button
+                  key={opcao.valor}
+                  type="button"
+                  role="radio"
+                  aria-checked={local === opcao.valor}
+                  onClick={() => setLocal(opcao.valor)}
+                  className={cn(
+                    'text-left rounded-md border p-3 transition-colors',
+                    local === opcao.valor
+                      ? 'border-primary bg-primary/5 ring-1 ring-primary'
+                      : 'border-border hover:bg-muted/40',
+                  )}
+                >
+                  <span className="block text-sm font-medium text-foreground">{opcao.rotulo}</span>
+                  <span className="block text-xs text-muted-foreground mt-0.5">{opcao.ajuda}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Quem lê merece saber de que tipo de atendimento você está falando — as duas coisas são diferentes,
+              e a nota faz sentidos diferentes em cada uma.
+            </p>
+          </div>
+
+          {/* 5 — a declaração */}
           <label className="flex gap-3 items-start cursor-pointer rounded-md border border-border p-3 hover:bg-muted/40">
             <input
               type="checkbox"
@@ -215,19 +249,23 @@ const AvaliarPage = () => {
               className="mt-1 h-4 w-4 shrink-0 accent-[color:var(--primary)]"
             />
             <span className="text-xs text-muted-foreground leading-relaxed">
-              Aceito o tratamento dos meus dados pessoais com o propósito de deixar esta avaliação.
-              Ao aceitar, confirmo que <strong className="text-foreground">(i)</strong> a avaliação é sobre a minha
-              própria experiência com este profissional, <strong className="text-foreground">(ii)</strong> não recebi
-              nenhum incentivo ou pagamento para escrevê-la e <strong className="text-foreground">(iii)</strong> estou
-              autorizado a escrevê-la. Veja as{' '}
-              <Link to="/legal" className="underline">Diretrizes de Avaliação</Link> e a{' '}
-              <Link to="/legal" className="underline">Política de Privacidade</Link>.
+              <strong className="text-foreground">Declaro que fui atendido por este profissional</strong> e que o
+              relato acima é meu, escrito por mim. Ninguém me pagou nem me ofereceu desconto, brinde ou qualquer
+              vantagem por ele. Autorizo a {BRAND.name} a publicar este texto e a tratar meus dados para essa
+              finalidade, conforme as{' '}
+              <Link to="/diretrizes-de-avaliacao" className="underline" target="_blank" rel="noopener noreferrer">
+                Diretrizes de Avaliação
+              </Link>{' '}
+              e a{' '}
+              <Link to="/legal?doc=privacy_policy" className="underline" target="_blank" rel="noopener noreferrer">
+                Política de Privacidade
+              </Link>.
             </span>
           </label>
 
           <p className="text-xs text-muted-foreground border-t border-border pt-4">
-            A consulta não precisa ter sido agendada pela {BRAND.name}. Se você se consultou com este
-            profissional por outro caminho, pode avaliar aqui a experiência que teve com ele.
+            Você não precisa ter marcado por aqui. A avaliação é sobre o profissional — se o atendimento
+            veio por outro caminho, ele conta do mesmo jeito.
           </p>
 
           {/* 5 — telefone, por último de propósito */}
@@ -246,13 +284,14 @@ const AvaliarPage = () => {
                 <VerificacaoTelefone
                   finalidade="avaliacao"
                   aoConfirmar={setComprovante}
-                  explicacao="Para que outras pessoas possam confiar no que leem, confirmamos que existe alguém de verdade por trás de cada avaliação."
+                  titulo="Falta confirmar que é você"
+                  explicacao="Um código rápido, e a avaliação segue para revisão. É o que impede alguém de inventar dez relatos sobre o mesmo profissional."
                 />
               </div>
             )
           ) : (
             <p className="text-sm text-muted-foreground border-t border-border pt-4">
-              Preencha a nota, o relato, seu nome e o aceite para continuar.
+              Falta completar os campos acima para seguir.
             </p>
           )}
 

@@ -37,6 +37,7 @@ const LINKS_ACESSO = [
   { to: '/como-funciona', label: 'Como funciona' },
   { to: '/perguntas-frequentes', label: 'Perguntas frequentes' },
   { to: '/documentos-e-validade', label: 'Documentos e validade' },
+  { to: '/diretrizes-de-avaliacao', label: 'Diretrizes de avaliação' },
   { to: '/blog', label: 'Blog' },
   { to: '/acesso-cliente', label: 'Entrar' },
 ];

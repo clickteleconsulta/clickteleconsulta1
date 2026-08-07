@@ -22,7 +22,7 @@ const { precoAPartirDe } = await import('../src/config/preco.js');
 const { patientPriceFromRepasse } = await import('../src/lib/price.js');
 const { formatDoctorDisplayName } = await import('../src/lib/doctorName.js');
 const { gerarCartoesOg } = await import('./og-medicos.mjs');
-const { FAQ, DOCUMENTOS, QUANDO_USAR } = await import('../src/content/siteContent.js');
+const { FAQ, DOCUMENTOS, QUANDO_USAR, DIRETRIZES_AVALIACAO } = await import('../src/content/siteContent.js');
 const BASE = BRAND.url;
 const MARCA = BRAND.name;
 
@@ -83,6 +83,7 @@ const NAVEGACAO = [
   ['/agendamentos', 'Agendar consulta'],
   ['/como-funciona', 'Como funciona'],
   ['/documentos-e-validade', 'Documentos e validade'],
+  ['/diretrizes-de-avaliacao', 'Diretrizes de avaliação'],
   ['/perguntas-frequentes', 'Perguntas frequentes'],
   ['/quem-somos', 'Quem somos'],
   ['/blog', 'Blog'],
@@ -280,6 +281,17 @@ async function main() {
       title: `Documentos e validade · ${MARCA}`,
       description: 'Receita, atestado e pedido de exame emitidos em teleconsulta valem em todo o Brasil. Veja como conferir a autenticidade de cada um, de graça.',
       corpo: corpoDeDocumentos(DOCUMENTOS),
+    },
+    {
+      path: '/diretrizes-de-avaliacao',
+      title: `${esc(DIRETRIZES_AVALIACAO.titulo)} · ${MARCA}`,
+      description: DIRETRIZES_AVALIACAO.chamada,
+      corpo: `<h1>${esc(DIRETRIZES_AVALIACAO.titulo)}</h1>
+  <p>${esc(DIRETRIZES_AVALIACAO.chamada)}</p>
+  ${DIRETRIZES_AVALIACAO.secoes
+    .map((sec) => `<h2>${esc(sec.titulo)}</h2>${sec.paragrafos.map((t) => `<p>${esc(t)}</p>`).join('')}`)
+    .join('')}
+  ${links('/diretrizes-de-avaliacao')}`,
     },
     {
       path: '/agendamentos',

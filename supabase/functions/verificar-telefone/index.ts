@@ -47,6 +47,11 @@ const CANAL = (Deno.env.get("CANAL_VERIFICACAO") ?? "auto").toLowerCase();
 
 // Twilio (SMS). Serve qualquer provedor com API parecida; trocar significa
 // mexer só na função enviarSms.
+// E-mail (Resend) — o único canal que já está configurado no projeto, usado
+// pelos avisos de agendamento. Serve de ponte até o WhatsApp entrar.
+const RESEND_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
+const EMAIL_FROM = Deno.env.get("INVITE_FROM") || "aviDoc <noreply@avidoc.com.br>";
+
 const SMS_SID = Deno.env.get("TWILIO_ACCOUNT_SID") ?? "";
 const SMS_TOKEN = Deno.env.get("TWILIO_AUTH_TOKEN") ?? "";
 const SMS_FROM = Deno.env.get("TWILIO_FROM") ?? "";
@@ -117,6 +122,29 @@ async function enviarWhatsapp(para: string, codigo: string) {
   return { enviado: true, detalhe: "ok" };
 }
 
+async function enviarEmail(destino: string, codigo: string) {
+  if (!RESEND_KEY || !destino) return { enviado: false, detalhe: "RESEND_API_KEY ou e-mail ausente" };
+  const resp = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: EMAIL_FROM,
+      to: [destino],
+      subject: `${codigo} é o seu código de confirmação`,
+      html: `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;padding:24px">
+        <p style="color:#3E4756;font-size:15px">Use o código abaixo para confirmar seu cadastro na aviDoc.</p>
+        <p style="font-size:32px;font-weight:700;letter-spacing:8px;color:#141922;margin:24px 0">${codigo}</p>
+        <p style="color:#6B7484;font-size:13px">Ele vale por 10 minutos. Se não foi você quem pediu, ignore esta mensagem.</p>
+      </div>`,
+    }),
+  });
+  if (!resp.ok) {
+    console.error("[verificar-telefone] Resend recusou:", (await resp.text()).slice(0, 300));
+    return { enviado: false, detalhe: `e-mail HTTP ${resp.status}` };
+  }
+  return { enviado: true, detalhe: "email" };
+}
+
 async function enviarSms(para: string, codigo: string) {
   if (!SMS_SID || !SMS_TOKEN || !SMS_FROM) {
     return { enviado: false, detalhe: "TWILIO_* ausentes" };
@@ -150,9 +178,21 @@ async function enviarSms(para: string, codigo: string) {
  * testável. O que seria erro é responder "enviamos" para uma mensagem que nunca
  * saiu — a pessoa ficaria esperando, e ninguém saberia por quê.
  */
-async function enviarCodigo(para: string, codigo: string) {
+async function enviarCodigo(para: string, codigo: string, destinoEmail?: string) {
   const temSms = Boolean(SMS_SID && SMS_TOKEN && SMS_FROM);
   const temWa = Boolean(WA_TOKEN && WA_PHONE_ID);
+
+  // E-MAIL É PONTE, NÃO DESTINO.
+  // Ele confirma que a pessoa controla aquela caixa — não que o telefone
+  // digitado está certo, que é o que o médico precisa para ligar. Serve
+  // enquanto o WhatsApp não entra, e só onde há e-mail: no cadastro. Na
+  // avaliação pública ninguém informa e-mail, e conta de e-mail é gratuita e
+  // infinita, o que a tornaria uma barreira de mentira contra avaliação falsa.
+  if (CANAL === "email") {
+    return destinoEmail
+      ? await enviarEmail(destinoEmail, codigo)
+      : { enviado: false, detalhe: "canal e-mail sem endereço (avaliação pública não informa e-mail)" };
+  }
 
   if (CANAL === "sms" || (CANAL === "auto" && temSms)) {
     const r = await enviarSms(para, codigo);
@@ -212,7 +252,7 @@ serve(async (req) => {
       });
       if (error) throw error;
 
-      const envio = await enviarCodigo(numero, gerado);
+      const envio = await enviarCodigo(numero, gerado, String(email ?? '').trim() || undefined);
       // `enviado: false` não vira erro de propósito: em ambiente sem a Meta
       // configurada o fluxo continua testável, e o código aparece no log da
       // função. Em produção, com a Meta ligada, o false é o que denuncia

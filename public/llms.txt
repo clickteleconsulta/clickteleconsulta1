@@ -20,6 +20,7 @@ Contato: undefined
 - [Quem somos](https://avidoc.com.br/quem-somos): O propósito de democratizar o acesso à saúde e o que a aviDoc é — e o que não é — como marketplace de agendamentos.
 - [Perguntas frequentes](https://avidoc.com.br/perguntas-frequentes): Dúvidas sobre como agendar, valores, pagamento, reembolso, receita e atestado, e proteção de dados.
 - [Documentos e validade](https://avidoc.com.br/documentos-e-validade): A validade legal da teleconsulta no Brasil, os documentos que o médico pode emitir (prescrição, pedido de exames e atestado) e como conferir a autenticidade em validar.iti.gov.br.
+- [Diretrizes de avaliação](https://avidoc.com.br/diretrizes-de-avaliacao): Quem pode avaliar um profissional, o que é publicado, como verificamos e o que fazemos com avaliação falsa.
 - [Suporte](https://avidoc.com.br/suporte): Canais de atendimento e ajuda para pacientes e médicos parceiros.
 - [Documentos legais](https://avidoc.com.br/legal): Termos de Serviço e Política de Privacidade em vigor.
 

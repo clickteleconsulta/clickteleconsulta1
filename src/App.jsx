@@ -36,6 +36,7 @@ const DoctorInviteSignupPage = lazy(() => import('@/pages/DoctorInviteSignupPage
 const AuthConfirmPage = lazy(() => import('@/pages/AuthConfirmPage'));
 const DoctorPublicProfilePage = lazy(() => import('@/pages/DoctorPublicProfilePage'));
 const AvaliarPage = lazy(() => import('@/pages/AvaliarPage'));
+const DiretrizesAvaliacaoPage = lazy(() => import('@/pages/DiretrizesAvaliacaoPage'));
 const AppointmentReviewPage = lazy(() => import('@/pages/AppointmentReviewPage'));
 const AppointmentConfirmationPage = lazy(() => import('@/pages/AppointmentConfirmationPage'));
 const LegalPage = lazy(() => import('@/pages/LegalPage'));
@@ -346,6 +347,7 @@ function App() {
             {/* Avaliação pública, sem conta. Fora do painel do paciente de
                 propósito: o link é enviado por WhatsApp e precisa abrir sem login. */}
             <Route path="/avaliar/:id" element={<AvaliarPage />} />
+            <Route path="/diretrizes-de-avaliacao" element={<DiretrizesAvaliacaoPage />} />
             
             <Route path="*" element={<NotFoundPage />} />
           </Route>

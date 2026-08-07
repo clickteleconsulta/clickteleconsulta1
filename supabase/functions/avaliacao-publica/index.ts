@@ -45,7 +45,7 @@ serve(async (req) => {
   if (req.method !== "POST") return json({ error: "Método não permitido" }, 405);
 
   try {
-    const { comprovante, medico_id, rating, comentario, autor_nome, aceite_versao } = await req.json();
+    const { comprovante, medico_id, rating, comentario, autor_nome, local_atendimento, aceite_versao } = await req.json();
 
     if (!comprovante || !medico_id) return json({ error: "Dados incompletos." }, 400);
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
@@ -58,7 +58,14 @@ serve(async (req) => {
     if (texto.length > MAX_TEXTO) return json({ error: "Texto muito longo." }, 400);
 
     const nome = String(autor_nome ?? "").trim().slice(0, 60);
-    if (!nome) return json({ error: "Informe seu nome ou iniciais." }, 400);
+    if (!nome) return json({ error: "Informe como você quer assinar." }, 400);
+
+    // Validado aqui e não só no navegador: a função é um endereço público, e
+    // qualquer valor chegaria se dependesse da tela.
+    const LOCAIS = ["teleconsulta", "presencial"];
+    if (!LOCAIS.includes(String(local_atendimento))) {
+      return json({ error: "Escolha onde o atendimento aconteceu." }, 400);
+    }
 
     // ── O comprovante ─────────────────────────────────────────────────────
     const { data: verificacoes } = await banco
@@ -83,6 +90,7 @@ serve(async (req) => {
       rating,
       comentario: texto,
       autor_nome: nome,
+      local_atendimento,
       telefone_hash: verificacao.telefone_hash,
       origem: "aberta",
       status: "pendente",
