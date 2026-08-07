@@ -385,14 +385,18 @@ const HomePage = () => {
                 proporção do arquivo.
 
                 O ALINHAMENTO É ANCORADO, NÃO CALCULADO EM PIXEL.
-                A coluna alinha pela base (`items-end`), então a base da arte
-                encostaria na base do botão. Mas o que precisa coincidir com o
-                botão é a BASE DO CALENDÁRIO, e no arquivo ela está a 83,7% da
-                altura da imagem — os 16,3% restantes são as pernas e os pés.
-                Daí o `translate-y-[16.3%]`: a porcentagem no translate resolve
-                contra a ALTURA DO PRÓPRIO ELEMENTO, então a conta se refaz
-                sozinha se a arte mudar de tamanho, e o que sobra para baixo é
-                exatamente o trecho das pernas.
+                A coluna alinha pela base (`items-end`), então é a base do
+                ARQUIVO que encosta na base do botão — e o arquivo tem moldura
+                vazia embaixo. O `translate-y` desce a imagem exatamente essa
+                sobra, e quem encosta no botão passa a ser o desenho.
+                A porcentagem resolve contra a ALTURA DO PRÓPRIO ELEMENTO, então
+                a conta se refaz sozinha quando a arte muda de tamanho.
+
+                O NÚMERO SAI DO ARQUIVO, e muda quando a arte muda. Hoje são
+                4,8%: medido rasterizando o SVG e procurando a primeira linha
+                com pixel opaco de baixo para cima. A arte anterior pedia 16,3%,
+                e é por isso que este comentário existe — herdar o número velho
+                cortava os pés dos personagens fora da seção.
                 Como é `transform`, não mexe no layout: a altura da seção
                 continua vindo da coluna de texto.
 
@@ -432,7 +436,7 @@ const HomePage = () => {
                 src={HERO_ARTE}
                 alt=""
                 aria-hidden="true"
-                className="hidden lg:block h-[260px] xl:h-[320px] min-[1400px]:h-[330px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[16.3%]"
+                className="hidden lg:block h-[260px] xl:h-[320px] min-[1400px]:h-[330px] w-auto max-w-none select-none pointer-events-none lg:absolute lg:bottom-0 lg:right-0 lg:translate-y-[4.8%]"
               />
             </motion.div>
           </div>
