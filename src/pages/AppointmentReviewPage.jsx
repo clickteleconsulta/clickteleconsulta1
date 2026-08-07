@@ -8,6 +8,7 @@ import { Calendar, Clock, User, ArrowLeft, CheckCircle2, AlertCircle, Video , Lo
 import { Button } from '@/components/ui/button';
 import VerificacaoTelefone from '@/components/VerificacaoTelefone';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { FEATURES } from '@/config/features';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { trackBooking } from '@/lib/analytics';
@@ -30,7 +31,8 @@ const AppointmentReviewPage = () => {
   // o horário ser reservado.
   // Contas criadas depois da verificação já chegam confirmadas; esta tela pega
   // as antigas e quem trocou de número.
-  const telefoneConfirmado = Boolean(profile?.whatsapp_verificado_em) || confirmadoAgora;
+  const telefoneConfirmado =
+    !FEATURES.VERIFICACAO_TELEFONE || Boolean(profile?.whatsapp_verificado_em) || confirmadoAgora;
 
   // Aceita os detalhes vindos da navegação OU do agendamento guardado (fluxo do convidado que
   // logou/cadastrou depois de escolher o horário). Consome o guardado uma única vez.

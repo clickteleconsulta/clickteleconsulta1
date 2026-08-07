@@ -3,6 +3,7 @@ import { BRAND } from '@/config/brand';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import VerificacaoTelefone from '@/components/VerificacaoTelefone';
+import { FEATURES } from '@/config/features';
 import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -176,7 +177,7 @@ const AuthPage = ({
                [!sexo, 'Sexo'],
                [!email?.trim(), 'E-mail'],
                [!password, 'Senha'],
-               [whatsapp.replace(/\D/g, '') !== telefoneConfirmado, 'Confirmação do WhatsApp'],
+               [FEATURES.VERIFICACAO_TELEFONE && whatsapp.replace(/\D/g, '') !== telefoneConfirmado, 'Confirmação do WhatsApp'],
              ].filter(([vazio]) => vazio).map(([, nome]) => nome);
 
              if (faltando.length) {
@@ -485,7 +486,7 @@ const AuthPage = ({
                         O custo é real: é um passo a mais no funil, no momento
                         em que a pessoa está tentando agendar. Vale acompanhar
                         a taxa de conclusão do cadastro depois de ligar. */}
-                    {!isLogin && !isDoctor && (
+                    {FEATURES.VERIFICACAO_TELEFONE && !isLogin && !isDoctor && (
                       (() => {
                         const digitos = (whatsapp || '').replace(/\D/g, '');
                         if (digitos.length !== 11 || !email?.trim()) return null;
