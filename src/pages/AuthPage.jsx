@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BRAND } from '@/config/brand';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import VerificacaoTelefone from '@/components/VerificacaoTelefone';
 import TurnstileWidget, { TURNSTILE_ENABLED } from '@/components/auth/TurnstileWidget';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -96,6 +97,10 @@ const AuthPage = ({
   // LGPD consent (HOTFIX-05)
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [captchaToken, setCaptchaToken] = useState('');
+  // Telefone confirmado por código. Guarda o número que foi confirmado, e não
+  // um booleano: assim, se a pessoa editar o WhatsApp depois de confirmar, a
+  // confirmação deixa de valer sozinha — que é o comportamento certo.
+  const [telefoneConfirmado, setTelefoneConfirmado] = useState('');
   const turnstileRef = useRef(null);
   const handleCaptcha = useCallback((token) => setCaptchaToken(token), []);
 
@@ -171,6 +176,7 @@ const AuthPage = ({
                [!sexo, 'Sexo'],
                [!email?.trim(), 'E-mail'],
                [!password, 'Senha'],
+               [whatsapp.replace(/\D/g, '') !== telefoneConfirmado, 'Confirmação do WhatsApp'],
              ].filter(([vazio]) => vazio).map(([, nome]) => nome);
 
              if (faltando.length) {
@@ -463,6 +469,46 @@ const AuthPage = ({
                           conforme a LGPD (Lei 13.709/2018).
                         </label>
                       </div>
+                    )}
+
+                    {/* CONFIRMAÇÃO DO WHATSAPP, ANTES DE CRIAR A CONTA.
+                        Fica aqui, e não junto do campo de WhatsApp, porque
+                        precisa do e-mail: é ele que amarra a verificação ao
+                        perfil que ainda vai nascer.
+
+                        Podia ser depois do cadastro, na tela de sucesso — e
+                        seria mais confortável. Mas ali a pessoa ainda não
+                        confirmou o e-mail, então não há sessão, e a marcação
+                        teria que acreditar no navegador. Antes do cadastro,
+                        quem decide é o gatilho no banco.
+
+                        O custo é real: é um passo a mais no funil, no momento
+                        em que a pessoa está tentando agendar. Vale acompanhar
+                        a taxa de conclusão do cadastro depois de ligar. */}
+                    {!isLogin && !isDoctor && (
+                      (() => {
+                        const digitos = (whatsapp || '').replace(/\D/g, '');
+                        if (digitos.length !== 11 || !email?.trim()) return null;
+                        if (digitos === telefoneConfirmado) {
+                          return (
+                            <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-md p-2.5">
+                              WhatsApp confirmado.
+                            </p>
+                          );
+                        }
+                        return (
+                          <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+                            <VerificacaoTelefone
+                              finalidade="cadastro"
+                              telefoneInicial={whatsapp}
+                              email={email}
+                              titulo="Confirme seu WhatsApp"
+                              explicacao="Enviamos um código para o número informado acima. É por ele que chegam a confirmação e os lembretes da sua consulta."
+                              aoConfirmar={() => setTelefoneConfirmado(digitos)}
+                            />
+                          </div>
+                        );
+                      })()
                     )}
 
                     {/* Anti-bot (Cloudflare Turnstile) — invisível/no-op até a chave ser configurada */}

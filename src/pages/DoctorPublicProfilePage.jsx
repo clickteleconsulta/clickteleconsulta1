@@ -81,7 +81,7 @@ const StarDistribution = ({ reviews }) => {
 };
 
 // ─── Reviews Section ───────────────────────────────────────────────────────────
-const ReviewsSection = ({ reviews }) => {
+const ReviewsSection = ({ reviews, medicoParaAvaliar }) => {
   const averageRating = reviews?.length
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
     : null;
@@ -107,13 +107,37 @@ const ReviewsSection = ({ reviews }) => {
 
       {reviews?.length > 0 && <StarDistribution reviews={reviews} />}
 
+      {/* O convite fica no fim da lista, onde a pergunta "posso avaliar
+          também?" aparece — e não no topo, competindo com o que já foi
+          escrito. */}
+      {medicoParaAvaliar && (
+        <Link
+          to={`/avaliar/${medicoParaAvaliar}`}
+          className="block text-center text-sm text-primary hover:underline font-medium border border-dashed border-border rounded-md py-2.5"
+        >
+          Já se consultou com este profissional? Deixe sua avaliação
+        </Link>
+      )}
+
       {reviews && reviews.length > 0 ? (
         <div className="grid gap-3">
           {reviews.map(review => (
             <div key={review.id} className="bg-muted/30 p-3 rounded-md border border-border/50">
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-1.5">
-                  <div className="font-medium text-xs">Paciente Verificado</div>
+                  {/* O SELO SÓ PARA QUEM VEIO DE UM AGENDAMENTO.
+                      Com a avaliação aberta, chamar todo mundo de verificado
+                      seria dizer que conferimos algo que não conferimos. Quem
+                      escreveu pelo formulário público aparece com o nome que
+                      informou — o telefone foi confirmado, o atendimento não. */}
+                  {review.origem === 'aberta' ? (
+                    <div className="font-medium text-xs">{review.autor_nome || 'Paciente'}</div>
+                  ) : (
+                    <div className="font-medium text-xs flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 text-green-600" />
+                      Paciente verificado
+                    </div>
+                  )}
                   <span className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(review.created_at), { addSuffix: true, locale: ptBR })}
                   </span>
@@ -525,7 +549,7 @@ const DoctorPublicProfilePage = () => {
               </div>
             </div>
 
-            <ReviewsSection reviews={reviews} />
+            <ReviewsSection reviews={reviews} medicoParaAvaliar={doctor ? slugify(doctor.public_name || doctor.name) + '-' + slugify(doctor.specialty || '') : null} />
           </div>
 
           {/* Right column */}
