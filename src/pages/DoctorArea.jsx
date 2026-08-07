@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,9 @@ import {
     Star,
     ChevronsLeft,
     ChevronsRight,
-    LayoutDashboard
+    LayoutDashboard,
+    Menu,
+    X
 } from '@/components/ui/icones';
 import DoctorConsultations from '@/components/doctor/DoctorConsultations';
 import DoctorProfile from '@/components/doctor/DoctorProfile';
@@ -47,6 +49,8 @@ const DoctorArea = () => {
     const [doctorImageUrl, setDoctorImageUrl] = useState(null);
     const [medicoInfo, setMedicoInfo] = useState(null);
     const [expanded, setExpanded] = useState(false);
+    // Painel do botão "Mais" da barra inferior — só existe no celular.
+    const [menuMovel, setMenuMovel] = useState(false);
     const badges = useDoctorBadges(location.pathname);
 
     useEffect(() => {
@@ -109,6 +113,14 @@ const DoctorArea = () => {
         }),
     })).filter((section) => section.items.length > 0);
 
+    // Os quatro da barra inferior, na ordem de uso. `menuSections` continua
+    // sendo a fonte: aqui só se escolhe quais vêm para a frente.
+    const NA_BARRA = ['consultas', 'agenda', 'financeiro', 'avaliacoes'];
+    const todosOsItens = menuSections.flatMap((s) => s.items);
+    const barraInferior = NA_BARRA
+        .map((id) => todosOsItens.find((i) => i.id === id))
+        .filter(Boolean);
+
     if (loading) {
         return (
             <div className="w-full h-screen flex items-center justify-center bg-gray-100">
@@ -136,9 +148,9 @@ const DoctorArea = () => {
     }
 
     return (
-        <div className="flex h-screen bg-gray-100 font-sans overflow-hidden">
+        <div className="flex min-h-[100dvh] md:h-screen bg-gray-100 font-sans md:overflow-hidden">
             {/* Sidebar: modo reduzido (padrão) ou expandido */}
-            <aside className={`${expanded ? 'w-60' : 'w-[88px]'} bg-white border-r border-gray-200 flex flex-col py-8 gap-6 z-20 flex-shrink-0 transition-all duration-300 ease-in-out`}>
+            <aside className={`${expanded ? 'w-60' : 'w-[88px]'} bg-white border-r border-gray-200 hidden md:flex flex-col py-8 gap-6 z-20 flex-shrink-0 transition-all duration-300 ease-in-out`}>
                 {/* Perfil + botão de expandir/recolher */}
                 <div className={`flex items-center gap-3 px-4 ${expanded ? 'justify-between' : 'flex-col justify-center'}`}>
                     <div className={`flex items-center gap-3 min-w-0 ${expanded ? '' : 'flex-col'}`}>
@@ -275,13 +287,105 @@ const DoctorArea = () => {
                 </div>
             </aside>
 
+            {/* ══════════════════════════════════════════════════════════════
+                NAVEGAÇÃO DE CELULAR
+                O trilho lateral some abaixo de md, e ela toma o lugar dele.
+                Não é enfeite de aplicativo: o trilho ocupava 88px fixos de uma
+                tela de 375 — 24% —, e expandido ocupava 240, deixando 87px para
+                o conteúdo. Era isso que quebrava o painel.
+
+                Quatro destinos na barra e o resto atrás de "Mais". A lista sai
+                de `menuSections`, a mesma do trilho, então um item novo aparece
+                nos dois lugares sem ninguém lembrar de atualizar aqui.
+            ══════════════════════════════════════════════════════════════ */}
+            {menuMovel && (
+                <div
+                    className="md:hidden fixed inset-0 z-40 bg-slate-900/40"
+                    onClick={() => setMenuMovel(false)}
+                    aria-hidden="true"
+                />
+            )}
+            <div
+                className={`md:hidden fixed left-0 right-0 bottom-[68px] z-40 bg-white border-t border-gray-200 shadow-2xl transition-transform duration-200 ${
+                    menuMovel ? 'translate-y-0' : 'translate-y-[calc(100%+68px)] pointer-events-none'
+                }`}
+            >
+                <nav className="p-3 max-h-[60vh] overflow-auto">
+                    {menuSections.map((section) => (
+                        <div key={section.title} className="mb-2 last:mb-0">
+                            <p className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                {section.title}
+                            </p>
+                            {section.items.map((item) => (
+                                <NavLink
+                                    key={item.id}
+                                    to={item.href}
+                                    onClick={() => setMenuMovel(false)}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-3 h-11 rounded-md text-sm font-medium ${
+                                            isActive ? 'bg-primary text-primary-foreground' : 'text-gray-700'
+                                        }`
+                                    }
+                                >
+                                    <item.icon className="w-5 h-5 shrink-0" />
+                                    <span className="flex-1">{item.label}</span>
+                                    {item.badge > 0 && (
+                                        <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-amber-500 text-white text-[11px] font-bold">
+                                            {item.badge > 99 ? '99+' : item.badge}
+                                        </span>
+                                    )}
+                                </NavLink>
+                            ))}
+                        </div>
+                    ))}
+                </nav>
+            </div>
+
+            <nav
+                className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex items-stretch pb-[env(safe-area-inset-bottom)]"
+                aria-label="Navegação do painel"
+            >
+                {barraInferior.map((item) => (
+                    <NavLink
+                        key={item.id}
+                        to={item.href}
+                        onClick={() => setMenuMovel(false)}
+                        className={({ isActive }) =>
+                            `relative flex-1 flex flex-col items-center justify-center gap-1 h-[68px] text-[11px] font-medium ${
+                                isActive ? 'text-primary' : 'text-gray-500'
+                            }`
+                        }
+                    >
+                        <item.icon className="w-[22px] h-[22px]" />
+                        {item.label}
+                        {item.badge > 0 && (
+                            <span className="absolute top-2 right-1/2 translate-x-4 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold">
+                                {item.badge > 9 ? '9+' : item.badge}
+                            </span>
+                        )}
+                    </NavLink>
+                ))}
+                <button
+                    type="button"
+                    onClick={() => setMenuMovel((v) => !v)}
+                    aria-expanded={menuMovel}
+                    aria-label={menuMovel ? 'Fechar menu' : 'Abrir menu'}
+                    className={`flex-1 flex flex-col items-center justify-center gap-1 h-[68px] text-[11px] font-medium ${
+                        menuMovel ? 'text-primary' : 'text-gray-500'
+                    }`}
+                >
+                    {menuMovel ? <X className="w-[22px] h-[22px]" /> : <Menu className="w-[22px] h-[22px]" />}
+                    Mais
+                </button>
+            </nav>
+
             {/* Main content area */}
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0 md:overflow-hidden">
                 {/* Top navigation positioned relatively, always visible */}
                 <DoctorAreaHeader />
 
                 {/* Page content with Outlet/Routes */}
-                <main className="flex-1 overflow-auto p-6 bg-gray-100">
+                <main className="flex-1 md:overflow-auto p-4 md:p-6 pb-28 md:pb-6 bg-gray-100">
                     <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
                         <ComunicadosBanner audience="medico" />
                         {medicoInfo && medicoInfo.is_active !== false && medicoInfo.is_public === false && (

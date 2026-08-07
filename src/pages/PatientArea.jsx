@@ -323,23 +323,36 @@ const PatientArea = () => {
 
         {/* Conteúdo */}
         <main>
-          {/* Navegação mobile (a sidebar fica oculta no mobile) */}
-          <nav className="md:hidden -mx-1 mb-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+          {/* NAVEGAÇÃO DE CELULAR — BARRA FIXA EMBAIXO.
+              Era uma fileira de pílulas que rolava na horizontal, logo abaixo
+              do cabeçalho. Duas coisas erradas nisso: rolagem horizontal
+              esconde destino — a pessoa não vê o que não cabe, e nada indica
+              que há mais —, e a navegação subia junto com o conteúdo, sumindo
+              assim que se rolava a lista de consultas.
+              Fixa embaixo, os destinos ficam sempre visíveis e ao alcance do
+              polegar. É o mesmo padrão do painel do médico, então quem opera os
+              dois não reaprende nada.
+              O rodapé do site é escondido nestas rotas (ver AppLayout em
+              App.jsx): os dois brigariam pelo mesmo canto da tela. */}
+          <nav
+            className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 flex items-stretch pb-[env(safe-area-inset-bottom)]"
+            aria-label="Navegação da minha conta"
+          >
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `flex items-center gap-1.5 shrink-0 h-9 px-3 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
-                    isActive ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-white border border-slate-200 text-slate-600'
+                  `relative flex-1 flex flex-col items-center justify-center gap-1 h-[68px] text-[11px] font-medium transition-colors ${
+                    isActive ? 'text-primary' : 'text-slate-500'
                   }`
                 }
               >
-                <item.icon className="w-4 h-4" />
+                <item.icon className="w-[22px] h-[22px]" />
                 {item.short}
                 {item.badge > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold leading-none">
-                    {item.badge}
+                  <span className="absolute top-2 right-1/2 translate-x-4 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold">
+                    {item.badge > 9 ? '9+' : item.badge}
                   </span>
                 )}
               </NavLink>

@@ -74,13 +74,24 @@ import ConsentBanner from '@/components/ConsentBanner';
 
 // Public Layout Component
 const AppLayout = () => {
+  const { pathname } = useLocation();
+  // O painel do paciente mora dentro deste layout, mas no celular ele ganha
+  // barra de navegação fixa embaixo (ver PatientArea). Com o rodapé do site
+  // logo abaixo, os dois disputariam o mesmo canto da tela — e um rodapé de
+  // marketing, com bandeiras de pagamento e texto legal, embaixo de "minhas
+  // consultas" também não é o que se espera de um aplicativo.
+  // No desktop o rodapé continua: lá não há barra fixa e a página é longa.
+  const noPainel = pathname.startsWith('/paciente/dashboard');
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 font-sans relative">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className={`flex-grow container mx-auto px-4 py-8 ${noPainel ? 'pb-28 md:pb-8' : ''}`}>
         <Outlet />
       </main>
-      <Footer />
+      <div className={noPainel ? 'hidden md:block' : ''}>
+        <Footer />
+      </div>
       <AssistenteFlutuante />
     </div>
   );
