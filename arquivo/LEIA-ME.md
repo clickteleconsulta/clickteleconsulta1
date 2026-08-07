@@ -18,6 +18,27 @@ guardadas inteiras para voltarem quando fizerem sentido.
 Removidos do `src/` em 6 de agosto de 2026, com as flags `PRONTUARIO` e
 `VIDEO_CALL` em `false` desde antes disso.
 
+## Assistente de IA (balão do canto)
+
+Removido em 6 de agosto de 2026, a pedido. Eram dois arquivos:
+`components/AssistenteFlutuante.jsx` (o botão) e `components/AiChatWidget.jsx`
+(a conversa). Não estão neste pacote porque o histórico do Git já os guarda
+inteiros:
+
+```bash
+git show <commit>:src/components/AiChatWidget.jsx > src/components/AiChatWidget.jsx
+```
+
+O commit que os removeu é o mesmo que trocou as barras de navegação do celular
+por trilhos laterais. Para religar, basta importar `AssistenteFlutuante` no
+`AppLayout` de `src/App.jsx` e montá-lo depois do rodapé.
+
+**O que ficou órfão:** a tela `/admin/ai-training` e a tabela da base de
+conhecimento continuam existindo, com o conteúdo intacto. Ela já não tinha link
+no menu do admin antes disso — só se chega por URL —, e agora treina um
+assistente que ninguém vê. Os dados estão preservados justamente para o caso de
+o balão voltar.
+
 ## Como voltar
 
 ```bash

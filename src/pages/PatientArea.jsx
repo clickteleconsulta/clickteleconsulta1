@@ -261,7 +261,60 @@ const PatientArea = () => {
       <Helmet>
         <title>Minha conta — {BRAND.name}</title>
       </Helmet>
-      <div className="grid md:grid-cols-[280px_1fr] gap-8 items-start">
+      <div className="grid grid-cols-[60px_1fr] md:grid-cols-[280px_1fr] gap-3 md:gap-8 items-start">
+        {/* ══════════════════════════════════════════════════════════════
+            TRILHO DE ÍCONES — CELULAR
+            A coluna de 280px não cabe numa tela de 375, então aqui ela vira
+            um trilho de 60px com os mesmos destinos, só que sem rótulo.
+            Fica colado logo abaixo do cabeçalho enquanto a lista de consultas
+            rola, então a navegação nunca sai da tela.
+            Sai de `navSections`, a mesma lista da coluna do desktop: item novo
+            aparece nos dois sem ninguém lembrar de atualizar aqui.
+        ══════════════════════════════════════════════════════════════ */}
+        <nav
+          className="md:hidden sticky top-[calc(var(--altura-cabecalho)+0.5rem)] flex flex-col items-center gap-1 p-1.5 bg-card border border-border rounded-lg shadow-sm"
+          aria-label="Navegação da minha conta"
+        >
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              title={item.label}
+              aria-label={item.label}
+              className={({ isActive }) =>
+                `relative flex items-center justify-center w-11 h-11 rounded-md transition-colors ${
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                }`
+              }
+            >
+              <item.icon className="w-[22px] h-[22px]" />
+              {item.badge > 0 && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-card" />
+              )}
+            </NavLink>
+          ))}
+          <span className="w-7 h-px bg-border my-1" />
+          <NavLink
+            to="/"
+            title="Página inicial"
+            aria-label="Página inicial"
+            className="flex items-center justify-center w-11 h-11 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            <Home className="w-[22px] h-[22px]" />
+          </NavLink>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            title="Sair"
+            aria-label="Sair da conta"
+            className="flex items-center justify-center w-11 h-11 rounded-md text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <LogOut className="w-[22px] h-[22px]" />
+          </button>
+        </nav>
+
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col gap-4 sticky top-24">
           <div className="flex flex-col items-center text-center p-5 border border-border rounded-lg bg-card shadow-sm">
@@ -322,42 +375,7 @@ const PatientArea = () => {
         </aside>
 
         {/* Conteúdo */}
-        <main>
-          {/* NAVEGAÇÃO DE CELULAR — BARRA FIXA EMBAIXO.
-              Era uma fileira de pílulas que rolava na horizontal, logo abaixo
-              do cabeçalho. Duas coisas erradas nisso: rolagem horizontal
-              esconde destino — a pessoa não vê o que não cabe, e nada indica
-              que há mais —, e a navegação subia junto com o conteúdo, sumindo
-              assim que se rolava a lista de consultas.
-              Fixa embaixo, os destinos ficam sempre visíveis e ao alcance do
-              polegar. É o mesmo padrão do painel do médico, então quem opera os
-              dois não reaprende nada.
-              O rodapé do site é escondido nestas rotas (ver AppLayout em
-              App.jsx): os dois brigariam pelo mesmo canto da tela. */}
-          <nav
-            className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 flex items-stretch pb-[env(safe-area-inset-bottom)]"
-            aria-label="Navegação da minha conta"
-          >
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  `relative flex-1 flex flex-col items-center justify-center gap-1 h-[68px] text-[11px] font-medium transition-colors ${
-                    isActive ? 'text-primary' : 'text-slate-500'
-                  }`
-                }
-              >
-                <item.icon className="w-[22px] h-[22px]" />
-                {item.short}
-                {item.badge > 0 && (
-                  <span className="absolute top-2 right-1/2 translate-x-4 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold">
-                    {item.badge > 9 ? '9+' : item.badge}
-                  </span>
-                )}
-              </NavLink>
-            ))}
-          </nav>
+        <main className="min-w-0">
           <ComunicadosBanner audience="paciente" />
           <Routes>
             <Route path="/" element={<Navigate to="consultas" replace />} />

@@ -67,7 +67,6 @@ const AdminPatientsPage = lazy(() => import('@/pages/admin/AdminPatientsPage'));
 // New Sprint Pages (21/03)
 
 // Components
-import AssistenteFlutuante from '@/components/AssistenteFlutuante';
 import Preloader from '@/components/Preloader';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ConsentBanner from '@/components/ConsentBanner';
@@ -75,24 +74,23 @@ import ConsentBanner from '@/components/ConsentBanner';
 // Public Layout Component
 const AppLayout = () => {
   const { pathname } = useLocation();
-  // O painel do paciente mora dentro deste layout, mas no celular ele ganha
-  // barra de navegação fixa embaixo (ver PatientArea). Com o rodapé do site
-  // logo abaixo, os dois disputariam o mesmo canto da tela — e um rodapé de
-  // marketing, com bandeiras de pagamento e texto legal, embaixo de "minhas
-  // consultas" também não é o que se espera de um aplicativo.
-  // No desktop o rodapé continua: lá não há barra fixa e a página é longa.
+  // O painel do paciente mora dentro deste layout, mas no celular o rodapé do
+  // site fica de fora: um rodapé de marketing, com bandeiras de pagamento e
+  // texto legal, embaixo de "minhas consultas" não é o que se espera de um
+  // aplicativo — e ele é longo o bastante para empurrar o conteúdo útil para
+  // fora da tela.
+  // No desktop continua: lá a página é larga e o rodapé fecha a leitura.
   const noPainel = pathname.startsWith('/paciente/dashboard');
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-100 font-sans relative">
       <Header />
-      <main className={`flex-grow container mx-auto px-4 py-8 ${noPainel ? 'pb-28 md:pb-8' : ''}`}>
+      <main className="flex-grow container mx-auto px-4 py-8">
         <Outlet />
       </main>
       <div className={noPainel ? 'hidden md:block' : ''}>
         <Footer />
       </div>
-      <AssistenteFlutuante />
     </div>
   );
 };
