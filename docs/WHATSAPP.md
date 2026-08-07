@@ -13,6 +13,35 @@ Os três modelos estão escritos abaixo, prontos para copiar. **Cadastre os trê
 antes de ligar qualquer coisa** — a Meta aprova cada um separadamente, e o
 código não entrega nada enquanto o modelo correspondente não existir.
 
+### Atalho: criar os três por API
+
+Em vez de preencher os formulários, um comando faz os três com o texto exato
+que o código envia:
+
+```bash
+export META_WA_TOKEN='...'   # token de usuário do sistema
+export META_WABA_ID='...'    # ID da CONTA comercial, não o do número
+node tools/criar-modelos-whatsapp.mjs
+```
+
+O script não guarda credencial em lugar nenhum e pode ser rodado de novo:
+modelo que já existe volta como "já existia" e ele segue para o próximo.
+
+⚠️ `META_WABA_ID` é o ID da **conta**; `META_WA_PHONE_ID` (o que vai no
+Supabase) é o do **número**. Trocar um pelo outro dá erro 100 sem dizer qual
+campo está errado.
+
+### Sobre o MCP de ferramentas da Meta
+
+O servidor MCP de ferramentas para desenvolvedores (`mcp.facebook.com/devtools`)
+**não cria modelos de mensagem**. A documentação é explícita: o único recurso de
+escrita é assinatura de webhook; todo o resto é somente leitura — configuração
+do app, status de análise, integridade da API, conformidade.
+
+Vale conectar por outro motivo: acompanhar o status da análise do app e a saúde
+da API sem abrir o painel. Para os modelos, o caminho é o script acima ou o
+WhatsApp Manager.
+
 > Uma conta de WhatsApp Business nova começa com limite de 250 conversas
 > iniciadas por 24h. Para o volume atual sobra; vale saber que o limite existe
 > e sobe sozinho conforme a qualidade do número.
