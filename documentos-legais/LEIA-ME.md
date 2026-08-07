@@ -51,11 +51,52 @@ plataforma, com texto livre onde ela pode descrever sintoma, diagnóstico e
 tratamento — ou seja, **dado sensível de saúde, que na LGPD tem base legal
 própria** (art. 11) e não se resolve com o consentimento genérico do cadastro.
 
+## O caminho legítimo para as primeiras avaliações
+
+Este é o achado mais útil de todo o estudo, e está na cláusula 8.1 dos Termos e
+Condições da Doctoralia:
+
+> "Em alguns casos, as opiniões refletem uma consulta com um Profissional que foi
+> concluída por meio do nosso Site. **Em outros casos, no entanto, as opiniões são
+> deixadas por Usuários que fizeram um agendamento ou realizaram uma consulta com
+> um Profissional fora da plataforma da Doctoralia.**"
+
+Ou seja: a avaliação é sobre **o profissional**, não sobre o canal por onde a
+consulta foi marcada. Quem se consultou no consultório, por outra plataforma ou
+por encaminhamento pode avaliar aquele médico ali.
+
+Isso muda tudo para o problema de partida. A aviDoc não tem avaliação porque
+ainda não teve consulta — mas **os profissionais têm pacientes**: centenas pela
+MedPrev, dezenas pela Doctoralia. São pessoas reais, que foram realmente
+atendidas por eles, e que podem legitimamente escrever sobre a experiência que
+tiveram.
+
+Não é o mesmo que pedir avaliação a amigo ou parente, que continua vedado nas
+diretrizes e é o que gera risco. É pedir a quem foi paciente de verdade — e o
+que torna isso defensável é a declaração no envio somada à confirmação do
+telefone, não uma regra interna que ninguém vê.
+
+Duas condições para que funcione sem virar problema:
+
+1. **Declarar nos Termos**, como eles fazem, que a avaliação pode se referir a
+   atendimento realizado fora da plataforma. Sem essa cláusula, a mesma prática
+   fica sem respaldo.
+2. **Não chamar de verificado** o que não foi. Ver a seção seguinte.
+
 ## A decisão de produto que os documentos assumem
 
-Avaliação aberta, sem login, com declaração vinculante no envio e moderação
-antes de publicar — o modelo da Doctoralia. Ver o rascunho de diretrizes para o
-detalhe.
+Avaliação aberta, sem login, com **confirmação do telefone por código no
+WhatsApp ou SMS**, declaração vinculante no envio e moderação antes de publicar
+— o modelo da Doctoralia, cujo passo 4 é exatamente essa confirmação.
+
+A confirmação por telefone é a peça que faltava no meu primeiro estudo, e é ela
+que sustenta o modelo: fabricar avaliação em série passa a exigir uma linha
+telefônica por avaliação. Não impede fraude determinada; encarece o suficiente
+para não valer a pena.
+
+**Do nosso lado isso é barato de construir:** o Supabase Auth, que já
+autentica a plataforma, tem verificação por telefone com código nativa. Não
+precisa de serviço novo nem de tabela de token.
 
 **Uma consequência a resolver antes de ligar:** o perfil público hoje mostra
 "Paciente Verificado" ao lado de toda avaliação

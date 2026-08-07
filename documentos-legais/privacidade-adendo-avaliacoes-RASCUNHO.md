@@ -45,6 +45,7 @@ a base de avaliações não vira instrumento de pressão.
 |---|---|
 | Receber, moderar e publicar avaliação sobre profissional | Consentimento (art. 7º, I), revogável a qualquer tempo |
 | Conteúdo de saúde eventualmente incluído pelo titular no texto da avaliação | Consentimento específico e destacado (art. 11, I) |
+| Confirmar o telefone de quem avalia, por código enviado por WhatsApp ou SMS | Legítimo interesse (art. 7º, IX) — prevenção a fraude |
 | Verificar a autenticidade da avaliação e prevenir avaliação falsa | Legítimo interesse (art. 7º, IX) |
 | Manter o conteúdo da avaliação após pedido de exclusão, de forma dissociada | Legítimo interesse (art. 7º, IX) e art. 12 (dado anonimizado) |
 | Defesa em processo judicial ou administrativo envolvendo a avaliação | Exercício regular de direitos (art. 7º, VI) |
@@ -57,9 +58,17 @@ a base de avaliações não vira instrumento de pressão.
 com que nome aparece.
 
 **O que coletamos ao avaliar:** a nota, o texto, o nome ou as iniciais que você
-informar e, quando o envio vem pelo link do seu agendamento, o vínculo com aquela
-consulta. Registramos também endereço IP e informações do dispositivo, usados
-apenas para detectar avaliação falsa.
+informar, o **número de telefone** usado na confirmação e, quando o envio vem
+pelo link do seu agendamento, o vínculo com aquela consulta. Registramos também
+endereço IP e informações do dispositivo, usados apenas para detectar avaliação
+falsa.
+
+**O telefone.** Enviamos um código de 6 dígitos por WhatsApp ou SMS para
+confirmar que existe uma pessoa real por trás da avaliação. O número **não é
+publicado**, não é entregue ao profissional avaliado e não é usado para
+propaganda. Guardamos apenas o registro de que aquele número confirmou aquela
+avaliação, pelo tempo necessário para apurar denúncia de fraude — ver o prazo
+abaixo.
 
 **Dados de saúde no texto livre.** O campo é livre e você pode acabar
 descrevendo sintomas, diagnóstico ou tratamento — informação sensível. Só
@@ -102,6 +111,14 @@ revogação não afeta o tratamento feito antes dela.
    Se o pedido de comprovante entrar nas Diretrizes, precisa entrar aqui também.
 6. **Menor de idade** — a v1.1 tem seção 4 sobre menores e dependentes. Verificar
    se a regra das Diretrizes (só o adulto responsável avalia) conversa com ela.
-7. **Avaliação sem vínculo com agendamento** — decisão de produto que precisa
+7. **Telefone** — definir o prazo de retenção do número e se ele fica guardado
+   em texto claro ou como impressão digital criptográfica (*hash*). O *hash*
+   permite bloquear reincidente e impedir avaliação duplicada sem manter o
+   número em si, e reduz o dano de um vazamento. Recomendo o *hash*, mas quem
+   decide o que a apuração de fraude exige é a assessoria.
+8. **Avaliação sobre atendimento fora da plataforma** — a referência declara
+   isso nos Termos (cláusula 8.1) e não na política. Verificar se, do nosso
+   lado, precisa aparecer nos dois.
+9. **Avaliação sem vínculo com agendamento** — decisão de produto que precisa
    estar refletida no texto: hoje a v1.1 descreve uma plataforma onde todo dado
    de paciente nasce de um agendamento. Deixa de ser verdade.

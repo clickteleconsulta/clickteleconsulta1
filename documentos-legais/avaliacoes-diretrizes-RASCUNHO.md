@@ -20,8 +20,12 @@ decidimos — para o paciente que escreve e para o profissional que é avaliado.
 ## 2. Quem pode avaliar
 
 - Ter 18 anos ou mais.
-- Ter tido contato direto com o profissional pela aviDoc: consulta realizada,
-  ou agendamento que o profissional cancelou, remarcou ou não atendeu.
+- Ter tido contato direto com o profissional: consulta realizada, ou
+  agendamento que ele cancelou, remarcou ou não atendeu.
+- **O atendimento não precisa ter sido agendado pela aviDoc.** Se você se
+  consultou com o profissional por outro caminho — consultório, outra
+  plataforma, encaminhamento —, pode avaliar aqui a experiência que teve com
+  ele. O que não vale é avaliar quem você não atendeu.
 - Escrever sobre a **própria experiência**. Quem acompanhou o atendimento de
   outra pessoa pode avaliar se estava presente e tem autorização de quem foi
   atendido, sem incluir dados que identifiquem o paciente.
@@ -34,12 +38,16 @@ mudar de opinião, edite a que já existe em vez de escrever outra.
 ## 3. Como a avaliação é publicada
 
 1. Você envia pelo link que recebe após a consulta ou pelo perfil do
-   profissional.
-2. A avaliação passa por **moderação antes de aparecer no site**. Não é
+   profissional. Não é preciso ter conta.
+2. **Confirmamos seu telefone** por um código de 6 dígitos enviado por WhatsApp
+   ou SMS. O número serve só para essa confirmação e para evitar avaliação
+   falsa — não é publicado, não vai para o profissional e não é usado para
+   propaganda.
+3. A avaliação passa por **moderação antes de aparecer no site**. Não é
    automático.
-3. Prazo normal: até 2 dias úteis. Pode demorar mais se precisarmos confirmar
+4. Prazo normal: até 2 dias úteis. Pode demorar mais se precisarmos confirmar
    alguma informação.
-4. Publicamos avaliações positivas e negativas com o mesmo critério. Nota baixa
+5. Publicamos avaliações positivas e negativas com o mesmo critério. Nota baixa
    não é motivo de recusa.
 
 ## 4. Somos uma plataforma de agendamento, não um árbitro clínico
@@ -112,11 +120,21 @@ agressivo, discriminatório, difamatório ou obsceno não é publicado.
 
 ## 8. Como verificamos
 
-Toda avaliação passa por revisão humana antes de ir ao ar. Quando o envio vem
-pelo link do próprio agendamento, o vínculo com uma consulta realizada e paga
-já está comprovado pelo sistema — e a avaliação aparece marcada como de
-**paciente verificado**. Quando vem pelo formulário aberto, esse vínculo não
-existe, e a avaliação é publicada **sem essa marcação**.
+**Telefone confirmado, sempre.** Nenhuma avaliação é publicada sem que o número
+tenha respondido ao código. É o que torna caro fabricar avaliação em série: cada
+uma exige uma linha telefônica de verdade. Um número, uma avaliação por
+profissional.
+
+**Revisão humana, sempre.** Depois da confirmação, uma pessoa lê a avaliação
+antes de ela ir ao ar.
+
+**Dois níveis de origem, e a diferença fica visível.** Quando o envio vem pelo
+link do próprio agendamento, o vínculo com uma consulta realizada e paga já está
+comprovado pelo sistema, e a avaliação aparece marcada como de **paciente
+verificado**. Quando vem pelo formulário aberto — inclusive nos casos de
+atendimento fora da plataforma —, esse vínculo não existe, e a avaliação é
+publicada **sem essa marcação**. Nunca chamamos de verificado o que não
+verificamos.
 
 Se houver indício de que a avaliação não é verdadeira, podemos pedir a quem
 escreveu um comprovante do atendimento — recibo, comprovante de pagamento ou
@@ -129,8 +147,10 @@ houver ilícito, a medidas legais.
 
 ## 9. Recusa, contestação e denúncia
 
-**Se a sua avaliação foi recusada** e você discorda, escreva para o nosso canal
-de contato. A decisão é reavaliada por outra pessoa.
+**Se a sua avaliação foi recusada**, você recebe o motivo — por escrito, de
+forma clara, e não um aviso genérico —, junto com o passo a passo para
+contestar. Se discordar, escreva para o nosso canal de contato: a decisão é
+reavaliada por outra pessoa.
 
 **Se você é profissional e considera uma avaliação falsa**, denuncie pelo mesmo
 canal. Analisamos. Não removemos avaliação apenas por ser negativa — só por
@@ -152,7 +172,21 @@ podemos ocultar dado pessoal que tenha escapado.
   estas diretrizes, a Resolução CFM nº 2.336/2023 veda ao médico prática
   equivalente. Se alguém lhe oferecer algo em troca de uma avaliação, avise-nos.
 
-## 11. Seus dados na avaliação
+## 11. O que fazemos diante de uso indevido
+
+Conforme a gravidade e a reincidência, podemos: recusar a publicação, remover
+conteúdo já publicado, bloquear novos envios do número de telefone envolvido,
+suspender ou encerrar a conta, e compartilhar informações com autoridades quando
+formos obrigados ou quando houver risco à segurança de alguém.
+
+Encerrar uma conta é medida séria e não é tomada de forma automática.
+
+Fabricar avaliação — escrever como se fosse outra pessoa, pagar por avaliação,
+avaliar quem não atendeu você — é uso indevido da plataforma e pode configurar
+ilícito civil e penal, além de expor o profissional avaliado a responsabilização
+perante o Conselho Regional de Medicina.
+
+## 12. Seus dados na avaliação
 
 A avaliação é **pública por natureza** — é para isso que ela existe. Publicamos
 o nome ou as iniciais que você informar; recomendamos não usar o nome completo.
@@ -165,7 +199,7 @@ mantido de forma dissociada, sem qualquer vínculo com a sua pessoa.
 
 O tratamento desses dados está descrito na Política de Privacidade.
 
-## 12. Contato
+## 13. Contato
 
 _[Definir o canal — hoje o suporte da plataforma. Avaliar se vale um endereço
 dedicado, como a Doctoralia usa.]_
