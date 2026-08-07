@@ -79,36 +79,11 @@ CORES_EXTRA = {
     'sem-avaliacoes.svg': {'character-1': (AMBAR, 'polygon')},
 }
 
-# Não recebem cor de objeto (folha verde, coração vermelho, estrela amarela).
+# Ficam inteiramente em cobalto, mesmo que tenham camada colorível.
 #
 # O herói é a primeira coisa que a pessoa vê e a mesma arte da peça de anúncio
 # principal. Ali a marca precisa falar sozinha, sem concorrência de cor.
 SEM_COR = {'heroi.svg'}
-
-# ── Cobalto só em algumas formas ─────────────────────────────────────────────
-#
-# O normal é o acento amarelo INTEIRO virar cobalto. Aqui é o contrário: o
-# desenho mantém o amarelo do Storyset e o cobalto entra só onde está listado.
-#
-# Por que a exceção existe: no herói de hoje o acento amarelo é o cérebro
-# gigante, que ocupa metade da arte. Pintar tudo de cobalto daria uma mancha
-# azul do tamanho do banner; deixar tudo amarelo tiraria a marca do desenho. A
-# camisa dos dois personagens resolve os dois lados.
-#
-# O valor é o seletor dentro da camada:
-#   None                -> todo o acento da camada
-#   ('path', y_maximo)  -> só as formas dessa tag que COMEÇAM acima de y_maximo
-#
-# O corte por altura é o que separa camisa de sapato sem depender da ordem das
-# formas dentro do arquivo — ordem que muda sem aviso quando o Storyset
-# republica a arte. A camisa do personagem 2 começa em y≈68 e os sapatos em
-# y≈415; a prancheta que ele segura é <rect>, e fica de fora pela tag.
-ACENTO_SO_EM = {
-    'heroi.svg': {
-        'character-1': None,            # o único acento dela é a blusa
-        'character-2': ('path', 200),   # camisa e gola
-    },
-}
 
 API = 'https://stories.freepiklabs.com/api/vectors/{slug}/cuate'
 
@@ -118,7 +93,7 @@ API = 'https://stories.freepiklabs.com/api/vectors/{slug}/cuate'
 # trocar o caminho evita mexer em 13 componentes para uma mudança que é só visual.
 MAPA = {
     # ── Home e páginas públicas ───────────────────────────────────────────────
-    'heroi.svg':             ('brain-chemistry', 'topo da home — a MESMA do anúncio de preço'),
+    'heroi.svg':             ('online-doctor', 'topo da home — a MESMA do anúncio de preço'),
     'secao-escolher.svg':    ('doctors',       'home: escolha o médico — a MESMA do anúncio de escolha'),
     'secao-avaliacoes.svg':  ('online-review', 'home: avaliação de quem já foi atendido'),
     'secao-documentos.svg':  ('documents',     'home: documentos com validade'),
@@ -161,12 +136,9 @@ FUNDO = ['background-complete', 'background-simple']
 
 # Sai só de onde está listado, e o motivo fica junto.
 SOBRA = {
-    # Do desenho de origem ficam SÓ os dois profissionais. O resto é cenário de
-    # laboratório — cérebro gigante, frasco, tubos de ensaio, balão de fala com
-    # DNA — e laboratório não é o que a aviDoc faz: quem chega no site vem
-    # marcar consulta, não pesquisar. O chão sai junto porque, sem o cenário,
-    # ele vira um risco solto embaixo dos dois.
-    'heroi.svg': ['Floor', 'Brain', 'Flask', 'test-tubes', 'speech-bubble'],
+    # Comprimidos sugerem venda de medicamento, que não é o que a aviDoc faz; a
+    # prancheta repete o que o texto ao lado já diz.
+    'heroi.svg': ['Pills', 'Clipboard'],
 }
 
 
@@ -230,70 +202,20 @@ def pintar_grupo(svg, id_grupo, cor, so_tag=None):
     return svg[:corpo] + novo_bloco + svg[fim:], quantas
 
 
-def _primeiro_y(forma):
-    """O y do primeiro ponto da forma, ou None se não der para ler.
-
-    Serve para dizer em que altura do desenho a forma está sem precisar de um
-    interpretador de SVG: o `d` de todo caminho do Storyset começa com um
-    `M x,y` absoluto.
-    """
-    ponto = re.search(r'\sd="M\s*(-?[\d.]+)[,\s]+(-?[\d.]+)', forma)
-    return float(ponto.group(2)) if ponto else None
-
-
-def pintar_formas(svg, id_grupo, seletor):
-    """Leva o acento a cobalto só nas formas escolhidas dentro da camada."""
-    lugar = _span(svg, id_grupo)
-    if not lugar:
-        return svg, 0
-    _, corpo, fim = lugar
-    bloco = svg[corpo:fim]
-
-    if seletor is None:
-        novo, quantas = re.subn(re.escape(AMARELO_STORYSET), COBALTO_MARCA, bloco, flags=re.I)
-        return svg[:corpo] + novo + svg[fim:], quantas
-
-    tag, y_maximo = seletor
-    quantas = 0
-
-    def trocar(achado):
-        nonlocal quantas
-        forma = achado.group(0)
-        if not re.search(re.escape(AMARELO_STORYSET), forma, re.I):
-            return forma
-        y = _primeiro_y(forma)
-        if y is None or y > y_maximo:
-            return forma
-        quantas += 1
-        return re.sub(re.escape(AMARELO_STORYSET), COBALTO_MARCA, forma, flags=re.I)
-
-    novo = re.sub(rf'<{tag}\b[^>]*?>', trocar, bloco)
-    return svg[:corpo] + novo + svg[fim:], quantas
-
-
 def preparar(nome, slug):
     """Baixa o SVG do Storyset e devolve já recolorido e sem as camadas de fundo."""
     dados = json.load(urllib.request.urlopen(API.format(slug=slug), timeout=30))['data']
     svg = urllib.request.urlopen(dados['src'], timeout=30).read().decode('utf-8')
     bruto = len(svg)
 
-    restrito = ACENTO_SO_EM.get(nome)
-    if not restrito:
-        svg = re.sub(re.escape(AMARELO_STORYSET), COBALTO_MARCA, svg, flags=re.I)
+    svg = re.sub(re.escape(AMARELO_STORYSET), COBALTO_MARCA, svg, flags=re.I)
     for id_grupo in FUNDO + SOBRA.get(nome, []):
         svg, _ = remover_grupo(svg, id_grupo)
-
-    # Depois de tirar o fundo, para não pintar camada que vai embora — e porque
-    # o fundo decorativo do Storyset também tem acento.
-    pintadas = {}
-    if restrito:
-        for id_grupo, seletor in restrito.items():
-            svg, quantas = pintar_formas(svg, id_grupo, seletor)
-            pintadas[id_grupo] = quantas
 
     # A limpeza vem ANTES da pintura de propósito: pintar primeiro gastaria
     # trabalho em camada que vai ser jogada fora, e o fundo decorativo tem folha
     # também — folha que sairia verde num desenho onde ela nem aparece.
+    pintadas = {}
     if nome not in SEM_COR:
         regras = {**CORES_POR_CAMADA, **CORES_EXTRA.get(nome, {})}
         for id_grupo, regra in regras.items():
