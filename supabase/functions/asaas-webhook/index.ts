@@ -54,6 +54,19 @@ async function avisarMedico(apptId: string) {
     });
   } catch (_) { /* ver comentário acima */ }
 }
+
+// Avisa o PACIENTE que a consulta está confirmada. Chamada em separado, e não
+// dentro de avisarMedico: as duas falham por motivos diferentes — médico sem
+// telefone, modelo do paciente reprovado — e uma não pode calar a outra.
+async function avisarPaciente(apptId: string) {
+  try {
+    await fetch(`${SUPABASE_URL}/functions/v1/notify-patient-appointment`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${SERVICE_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ appointmentId: apptId }),
+    });
+  } catch (_) { /* mesmo motivo do aviso ao médico */ }
+}
 // Conta a venda para o TikTok, pelo SERVIDOR.
 //
 // POR QUE NÃO BASTA O PIXEL DO NAVEGADOR: o pagamento acontece fora do site, no
@@ -218,6 +231,7 @@ Deno.serve(async (req: Request) => {
       // separa "acabou de ser pago" de "já estava pago".
       if (confirmou > 0) {
         await avisarMedico(apptId);
+        await avisarPaciente(apptId);
         // Mesma trava do aviso ao médico, e pelo mesmo motivo: reenvio do Asaas
         // não pode virar conversão contada duas vezes.
         await reportarTikTok(apptId);

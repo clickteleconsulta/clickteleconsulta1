@@ -42,16 +42,16 @@ projeto:
 Sem provedor nenhum, o código é gerado e fica só no log da função. É o único
 passo entre o que está pronto e o que funciona de verdade.
 
-**Não existe caminho sem conta paga.** SMS e WhatsApp cobram por mensagem; a
-diferença é o preço, e no Brasil o SMS costuma custar mais que a conversa de
-autenticação do WhatsApp. Escolha um e configure.
+SMS foi avaliado e **descartado**: exigiria mais uma conta de provedor e, no
+Brasil, custa mais que a conversa de autenticação do WhatsApp. O caminho é
+WhatsApp, com o e-mail servindo de ponte até o modelo ser aprovado.
 
 ### Variável obrigatória, qualquer que seja o canal
 
 | Variável | Para quê |
 |---|---|
 | `TELEFONE_PEPPER` | Sal do hash do telefone. **Escolha uma vez e nunca troque** — trocar invalida todos os hashes existentes, e com eles a regra de "um número, uma avaliação". |
-| `CANAL_VERIFICACAO` | `sms`, `whatsapp` ou `auto`. Em `auto`, usa o primeiro configurado (SMS primeiro). |
+| `CANAL_VERIFICACAO` | `whatsapp` (padrão) ou `email`. |
 
 ### Caminho A — E-mail (Resend) · funciona hoje
 
@@ -65,19 +65,7 @@ WhatsApp entrar, e serve só no cadastro — na avaliação pública ninguém in
 e-mail, e conta de e-mail é gratuita e infinita, o que faria dela uma barreira de
 mentira contra avaliação falsa.
 
-### Caminho B — SMS (Twilio)
-
-| Variável | Onde achar |
-|---|---|
-| `TWILIO_ACCOUNT_SID` | Console da Twilio |
-| `TWILIO_AUTH_TOKEN` | Console da Twilio |
-| `TWILIO_FROM` | Número comprado, em E.164 (`+55…`) |
-
-Mais rápido de ligar: cria a conta, compra o número, cola as três variáveis.
-Não precisa de aprovação de modelo. O texto enviado cabe em um segmento de 160
-caracteres de propósito — passar disso dobra o custo de cada verificação.
-
-### Caminho C — WhatsApp (Meta)
+### Caminho B — WhatsApp (Meta) · o destino
 
 | Variável | Onde achar |
 |---|---|
@@ -85,10 +73,9 @@ caracteres de propósito — passar disso dobra o custo de cada verificação.
 | `META_WA_PHONE_ID` | **O mesmo número que avisa os médicos serve.** Um número envia quantos modelos diferentes existirem; o que não se reaproveita é o modelo em si |
 | `META_WA_TEMPLATE_OTP` | Nome do modelo. Padrão: `codigo_verificacao` |
 
-Mais barato por mensagem, mas **exige modelo aprovado antes**: mensagem iniciada
-pela empresa só sai por modelo, e para código a Meta exige a categoria
-**AUTENTICAÇÃO**, com corpo de variável e botão de copiar. Cadastre no
-Gerenciador do WhatsApp em `pt_BR` e aguarde a aprovação.
+**Exige modelo aprovado antes.** O passo a passo do cadastro, com as opções a
+marcar, está em `docs/WHATSAPP.md` — que agora cobre os três disparos do
+número: código de verificação, aviso ao médico e confirmação ao paciente.
 
 ## 4. Ligar a flag — POR ÚLTIMO
 

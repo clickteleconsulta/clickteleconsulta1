@@ -1,4 +1,96 @@
-# Aviso ao médico por WhatsApp
+# WhatsApp da aviDoc — os três disparos
+
+Um número, três funções. Todas saem do mesmo remetente na Cloud API da Meta e
+todas exigem **modelo aprovado**, cada uma o seu.
+
+| # | Quando dispara | Para quem | Modelo | Categoria |
+|---|---|---|---|---|
+| 1 | Cadastro ou agendamento, ao confirmar identidade | Paciente | `codigo_verificacao` | **Autenticação** |
+| 2 | Pagamento aprovado | Médico | `novo_agendamento_medico` | Utilidade |
+| 3 | Pagamento aprovado | Paciente | `agendamento_confirmado_paciente` | Utilidade |
+
+Os três modelos estão escritos abaixo, prontos para copiar. **Cadastre os três
+antes de ligar qualquer coisa** — a Meta aprova cada um separadamente, e o
+código não entrega nada enquanto o modelo correspondente não existir.
+
+> Uma conta de WhatsApp Business nova começa com limite de 250 conversas
+> iniciadas por 24h. Para o volume atual sobra; vale saber que o limite existe
+> e sobe sozinho conforme a qualidade do número.
+
+---
+
+## Modelo 1 — código de verificação
+
+**Categoria Autenticação**, que é diferente das outras duas: a Meta impõe o
+formato, não deixa escrever o corpo livremente e entrega com o botão de copiar
+o código. É também a categoria mais barata e a que aprova mais rápido, porque
+o texto é padronizado por eles.
+
+No **WhatsApp Manager → Modelos de mensagem → Criar modelo**:
+
+| campo | valor |
+|---|---|
+| Nome | `codigo_verificacao` |
+| Categoria | **Autenticação** |
+| Idioma | Português (BR) |
+
+Nas opções do modelo de autenticação, marque:
+
+- **Adicionar botão de copiar código** — é ele que faz o código virar um toque
+  em vez de digitação;
+- **Aviso de segurança** ("Não compartilhe este código") — opcional na Meta,
+  recomendado aqui: é uma mensagem sobre identidade, e o golpe mais comum no
+  Brasil é justamente pedir o código por telefone;
+- **Validade do código: 10 minutos**, para bater com o que a função aplica.
+
+O corpo é gerado pela Meta. A função envia **uma variável** — o código — no
+corpo e a mesma no botão. Se você mudar a validade no modelo, mude também
+`MINUTOS_CODIGO` em `verificar-telefone`, senão a mensagem promete um prazo e o
+servidor pratica outro.
+
+---
+
+## Modelo 3 — confirmação para o paciente
+
+| campo | valor |
+|---|---|
+| Nome | `agendamento_confirmado_paciente` |
+| Categoria | **Utilidade** |
+| Idioma | Português (BR) |
+
+Corpo, exatamente assim:
+
+```
+Oi, {{1}}! Sua consulta está confirmada.
+
+Profissional: {{2}}
+Data: {{3}} às {{4}}
+Protocolo: {{5}}
+
+O profissional entra em contato por este WhatsApp no horário marcado. Guarde esta mensagem.
+```
+
+Ordem das variáveis, igual à do array `variaveis` em
+`notify-patient-appointment`:
+
+| variável | conteúdo | exemplo para a revisão |
+|---|---|---|
+| `{{1}}` | primeiro nome do paciente | `Maria` |
+| `{{2}}` | nome público do profissional | `Dr. Ryan de Brito` |
+| `{{3}}` | data | `12/08/2026` |
+| `{{4}}` | hora | `14:30` |
+| `{{5}}` | protocolo | `AVD-2026-0812-0001` |
+
+**Por que esta é a mensagem que mais importa das três:** é a única que a pessoa
+está esperando. Ela acabou de pagar e quer saber que o horário é dela. Se não
+chegar, ela liga no suporte — ou paga de novo achando que não deu certo.
+
+A última linha não é enfeite: ela diz por onde o atendimento vem. Sem isso, o
+paciente fica esperando um link que não existe.
+
+---
+
+## Modelo 2 — aviso ao médico
 
 Quando um agendamento é **pago**, o médico recebe um WhatsApp com paciente, data,
 hora e protocolo.
@@ -79,7 +171,11 @@ Em **Project Settings → Edge Functions → Secrets**:
 |---|---|---|
 | `META_WA_TOKEN` | token de acesso permanente do usuário do sistema | sim |
 | `META_WA_PHONE_ID` | WhatsApp Manager → o **ID do número**, não o número | sim |
-| `META_WA_TEMPLATE` | nome do modelo | não (padrão `novo_agendamento_medico`) |
+| `META_WA_TEMPLATE` | modelo do aviso ao médico | não (padrão `novo_agendamento_medico`) |
+| `META_WA_TEMPLATE_PACIENTE` | modelo da confirmação ao paciente | não (padrão `agendamento_confirmado_paciente`) |
+| `META_WA_TEMPLATE_OTP` | modelo do código de verificação | não (padrão `codigo_verificacao`) |
+| `TELEFONE_PEPPER` | sal do hash de telefone (ver VERIFICACAO-TELEFONE.md) | sim, para a verificação |
+| `CANAL_VERIFICACAO` | `whatsapp` ou `email` | não (padrão `whatsapp`) |
 | `META_WA_LANG` | código do idioma | não (padrão `pt_BR`) |
 | `META_WA_API_VERSION` | versão da Graph API | não (padrão `v21.0`) |
 
@@ -117,10 +213,13 @@ segundo pode mandar a mesma consulta duas vezes.
 
 ```bash
 supabase functions deploy notify-doctor-new-appointment
+supabase functions deploy notify-patient-appointment
+supabase functions deploy verificar-telefone
 supabase functions deploy asaas-webhook
 ```
 
-As duas: o webhook mudou junto, porque é ele quem dispara o aviso.
+O webhook entra na lista porque é ele quem dispara os dois avisos de
+agendamento — e agora chama duas funções, não uma.
 
 ---
 
