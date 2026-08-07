@@ -14,6 +14,17 @@
       worker-src 'self' blob:;
     ">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- APLICATIVO INSTALÁVEL (PWA)
+         O manifesto é o que faz o navegador oferecer "adicionar à tela inicial"
+         e abrir sem a barra de endereço. O iOS ignora parte do manifesto e
+         ainda lê estas três meta tags — por isso a duplicação abaixo não é
+         redundância, é o iOS. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/app/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="aviDoc" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- A fonte da marca é servida do próprio domínio (ver src/index.css). Sem
          preconnect ao Google: não há mais o que buscar lá. O preload evita que o

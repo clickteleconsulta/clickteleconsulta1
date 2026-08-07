@@ -1,0 +1,33 @@
+{
+  "name": "aviDoc — Agende sua teleconsulta",
+  "short_name": "aviDoc",
+  "description": "Escolha um médico, veja preço e horários e agende sua consulta online. A partir de R$ 40, com Pix ou cartão.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#3B5BA5",
+  "categories": ["medical", "health", "lifestyle"],
+  "icons": [
+    { "src": "/app/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icone-mascaravel-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Agendar consulta",
+      "short_name": "Agendar",
+      "url": "/agendamentos?utm_source=pwa",
+      "icons": [{ "src": "/app/icone-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Minhas consultas",
+      "short_name": "Consultas",
+      "url": "/paciente/dashboard/consultas?utm_source=pwa",
+      "icons": [{ "src": "/app/icone-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
