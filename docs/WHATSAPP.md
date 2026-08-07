@@ -299,3 +299,132 @@ Códigos da Meta que aparecem com mais frequência:
 - Lembrete antes da consulta.
 - Reenvio manual pelo admin quando o log mostra falha.
 - Recebimento de respostas (o médico responder ao aviso não faz nada hoje).
+
+---
+
+# Do token ao primeiro disparo — na ordem
+
+Cada etapa depende da anterior. Pular uma faz a seguinte falhar em silêncio,
+que é o modo de falha mais caro aqui.
+
+## Etapa 0 — o token é o permanente?
+
+**É a causa nº 1 de "funcionou ontem e hoje não".** O token que aparece na tela
+*Configuração da API* do app é temporário: vale **24 horas**. Quem usa ele vê
+tudo funcionar no dia do teste e descobre no dia seguinte, com um paciente sem
+confirmação.
+
+O que serve é o token de **usuário do sistema**:
+
+1. **Gerenciador de Negócios → Configurações do negócio → Usuários → Usuários do sistema**
+2. Criar (ou usar) um usuário do sistema com função de administrador
+3. **Adicionar ativos** → o app e a conta do WhatsApp, com controle total
+4. **Gerar novo token** → escolher o app → marcar as permissões:
+   - `whatsapp_business_messaging` (enviar mensagem)
+   - `whatsapp_business_management` (criar modelo)
+5. Em validade, escolher **Nunca expira**
+
+Se o seu token veio da tela de Configuração da API, refaça por aqui antes de
+seguir. Os dois parecem iguais e só um sobrevive à semana.
+
+## Etapa 1 — os dois IDs, que não são a mesma coisa
+
+| valor | onde acha | para que serve |
+|---|---|---|
+| **WABA ID** (conta) | WhatsApp Manager → Configurações da conta | criar os modelos |
+| **Phone Number ID** (número) | Painel do app → WhatsApp → Configuração da API | enviar as mensagens |
+
+Nenhum dos dois é o número de telefone. Trocar um pelo outro devolve erro 100
+sem dizer qual campo está errado — é o erro que mais custa tempo aqui.
+
+## Etapa 2 — criar os três modelos
+
+```bash
+export META_WA_TOKEN='o token do usuário do sistema'
+export META_WABA_ID='o ID da conta'
+node tools/criar-modelos-whatsapp.mjs
+```
+
+Saída esperada: três linhas com ✓. Se alguma vier ✗, o texto do erro diz o
+motivo — quase sempre redação.
+
+## Etapa 3 — esperar a aprovação
+
+WhatsApp Manager → Modelos de mensagem. Os três precisam estar **Ativo**.
+Costuma sair em minutos; autenticação costuma ser o mais rápido, por ser
+formato padronizado da Meta.
+
+**Enquanto um modelo estiver em análise, ele não entrega nada.** A função
+registra a recusa no log e devolve `enviado: false` — não trava, mas também não
+chega.
+
+## Etapa 4 — os segredos no Supabase
+
+**Project Settings → Edge Functions → Secrets**:
+
+| segredo | valor |
+|---|---|
+| `META_WA_TOKEN` | o token do usuário do sistema |
+| `META_WA_PHONE_ID` | o Phone Number ID (não o WABA) |
+| `TELEFONE_PEPPER` | qualquer texto longo e aleatório — **escolha uma vez e nunca troque** |
+| `CANAL_VERIFICACAO` | `whatsapp` |
+
+O `TELEFONE_PEPPER` é o sal do hash de telefone. Trocá-lo depois invalida todos
+os hashes existentes, e com eles a regra de "um número, uma avaliação".
+
+Segredo novo só vale para invocação nova — não precisa republicar função.
+
+## Etapa 5 — o primeiro disparo de verdade
+
+**Use `/avaliar`, não o agendamento.** Essa tela não depende da flag, não
+envolve dinheiro e exercita o caminho inteiro: gerar código → Meta → seu
+celular → conferir.
+
+1. Abra `https://avidoc.com.br/avaliar/<slug-do-medico>`
+2. Preencha nota, texto (50+ caracteres), nome e local
+3. No fim, digite **o seu próprio celular** e peça o código
+4. O WhatsApp deve chegar em segundos, com botão de copiar
+
+Não chegou? O log diz por quê:
+
+```bash
+npx supabase@latest functions logs verificar-telefone --project-ref fnzvopspcoefzybtmwlg
+```
+
+| o que o log diz | o que é |
+|---|---|
+| `META_WA_TOKEN/META_WA_PHONE_ID ausentes` | segredo não salvo |
+| `template name does not exist` | modelo ainda em análise, ou nome diferente |
+| `(#131030) recipient not in allowed list` | conta ainda em modo de teste; cadastre o número em destinatários |
+| `(#100)` | provavelmente WABA ID no lugar do Phone Number ID |
+
+Se você concluir o envio, a avaliação entra na fila de moderação — apague depois
+pelo painel de Avaliações para não deixar teste no ar.
+
+## Etapa 6 — os dois avisos de agendamento
+
+Esses só disparam quando um pagamento é confirmado de verdade, pelo webhook do
+Asaas. O teste honesto é **um agendamento real seu**: marque com um dos
+profissionais, pague o Pix e confira se chegam as duas mensagens — a sua, de
+confirmação, e a do médico.
+
+Custa o valor de uma consulta e testa a corrente inteira: Asaas → webhook →
+médico + paciente + e-mail. Nenhum simulacro cobre isso, porque o gatilho é o
+pagamento.
+
+## Etapa 7 — só então, a flag
+
+Com o código chegando, ligue `VERIFICACAO_TELEFONE` em `src/config/features.js`
+e publique. A partir daí o cadastro e a revisão do agendamento passam a exigir
+a confirmação.
+
+**Nessa ordem.** Ligar antes de o código chegar trava o agendamento — já
+aconteceu uma vez.
+
+## Dois limites de conta nova
+
+- **250 conversas iniciadas por 24 h**, até a Meta subir o nível sozinha
+  conforme a qualidade do número.
+- Enquanto o negócio não estiver **verificado**, o alcance é limitado a poucos
+  destinatários distintos por dia. Para o volume de agora sobra; para o primeiro
+  mês de anúncio, não.
