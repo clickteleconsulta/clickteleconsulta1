@@ -471,10 +471,27 @@ export function DoctorScheduleCard({
     const startUtc = zonedTimeToUtc(`${dayStr} ${time}:00`, timeZone);
     const endUtc = addMinutes(startUtc, 30);
 
-    // Ensure we use the exact patient price calculated in the parent component
-    const priceToUse = typeof patientPrice === 'number'
-      ? Math.round(patientPrice * 100)
-      : (doctor.price_in_cents || 0);
+    // O VALOR VEM DE QUEM CALCULOU, OU NÃO VEM.
+    //
+    // Aqui existia uma volta para `doctor.price_in_cents` quando a prop não
+    // chegava. Parecia inofensiva e não era: aquela coluna é legado — o preço de
+    // verdade sai de `procedimentos.preco` com a taxa por cima (src/lib/price.js)
+    // — e ninguém a atualiza há tempos. O perfil público não passava a prop, então
+    // a tela EXIBIA o preço certo e AGENDAVA pelo valor velho. O paciente
+    // descobria a diferença no checkout, que é o pior lugar possível.
+    //
+    // Sem preço calculado, agora o agendamento não acontece. Uma consulta que não
+    // se marca é um problema visível; uma consulta marcada pelo valor errado é um
+    // problema que só aparece na fatura.
+    if (typeof patientPrice !== 'number' || !(patientPrice > 0)) {
+      toast({
+        variant: 'destructive',
+        title: 'Não é possível agendar',
+        description: 'O valor desta consulta não pôde ser confirmado. Recarregue a página; se continuar, avise o suporte.',
+      });
+      return;
+    }
+    const priceToUse = Math.round(patientPrice * 100);
 
     const appointmentDetails = {
       medico_id: doctor.id,

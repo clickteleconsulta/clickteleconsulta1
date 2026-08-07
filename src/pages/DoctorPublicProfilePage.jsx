@@ -225,7 +225,15 @@ const EmbeddedAppointmentForm = ({ doctor, comAgenda = false }) => {
             trabalho na mesma página. */}
         {agendaAberta && (
           <div id={`agenda-perfil-${doctor?.id}`} className="border-t border-border pt-4">
-            <DoctorScheduleCard initialDoctor={doctor} somenteAgenda />
+            {/* O PREÇO PRECISA DESCER JUNTO.
+                Sem esta prop, o card cai no `medicos.price_in_cents` — a coluna
+                legada que ninguém atualiza — e o paciente é COBRADO um valor
+                diferente do que esta mesma caixa acabou de exibir acima. */}
+            <DoctorScheduleCard
+              initialDoctor={doctor}
+              somenteAgenda
+              patientPrice={valorPaciente > 0 ? valorPaciente : undefined}
+            />
           </div>
         )}
       </>
