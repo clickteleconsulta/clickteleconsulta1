@@ -21,7 +21,7 @@ export const FAQ = [
   },
   {
     q: 'Como funciona o atendimento por teleconsulta?',
-    a: 'Depois do pagamento confirmado, o médico entra em contato até 15 minutos antes do horário para conduzir a teleconsulta pelos meios próprios dele (por vídeo). Fique atento ao seu WhatsApp e e-mail cadastrados.',
+    a: 'Depois do pagamento confirmado, o médico entra em contato até 15 minutos antes do horário para conduzir a teleconsulta pelos meios próprios dele. Fique atento ao seu WhatsApp e e-mail cadastrados.',
   },
   {
     q: 'A teleconsulta tem validade legal no Brasil?',
