@@ -384,6 +384,29 @@ os hashes existentes, e com eles a regra de "um número, uma avaliação".
 
 Segredo novo só vale para invocação nova — não precisa republicar função.
 
+## Etapa 4.5 — o disparo de ensaio, sem sujar o banco
+
+Antes de mexer em agendamento, prove que a mensagem chega:
+
+```bash
+export META_WA_TOKEN='...'
+export META_WA_PHONE_ID='1229716980229241'
+export DESTINO='SEU_CELULAR_COM_DDD'
+node tools/testar-disparo-whatsapp.mjs
+```
+
+Envia as duas mensagens de agendamento para o seu número, com os mesmos
+exemplos que foram para a análise da Meta. **Não cria agendamento nenhum.**
+
+Dava para simular inserindo um agendamento falso marcado como pago e deixando o
+webhook agir — seria mais completo e faria um estrago: agendamento e log são
+imutáveis por decisão de produto, então o registro falso ficaria para sempre,
+contaminando receita, funil e auditoria. Teste não pode sujar o que ele existe
+para proteger.
+
+O que este ensaio **não** cobre é o gatilho — se o webhook do Asaas chama as
+funções na hora certa. Isso só um pagamento real prova.
+
 ## Etapa 5 — o primeiro disparo de verdade
 
 **Use `/avaliar`, não o agendamento.** Essa tela não depende da flag, não
