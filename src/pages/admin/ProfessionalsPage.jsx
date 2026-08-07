@@ -11,8 +11,9 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil, FileDown , FileText } from '@/components/ui/icones';
+import { Loader2, User, Users, MoreHorizontal, Plus, Ban, PauseCircle, PlayCircle, Percent, Search, Trash2, Pencil, FileDown , FileText, DollarSign } from '@/components/ui/icones';
 import { downloadCsv, brNumber, csvDateSuffix } from '@/lib/exportCsv';
+import { patientPriceFromRepasse } from '@/lib/price';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { useToast } from '@/components/ui/use-toast';
 import DoctorInviteSection from '@/components/admin/DoctorInviteSection';
@@ -56,6 +57,11 @@ const ProfessionalsPage = () => {
   const [editTarget, setEditTarget] = useState(null);
   const [editForm, setEditForm] = useState({ name: '', public_name: '', specialty: '', crm: '', uf: '', phone_number: '' });
   const [isSavingEdit, setIsSavingEdit] = useState(false);
+  // Valor da consulta. Fica em `procedimentos`, e não em `medicos` — por isso
+  // não entra no diálogo de "Editar dados": é outra tabela e outra escrita.
+  const [precoTarget, setPrecoTarget] = useState(null);
+  const [precoValor, setPrecoValor] = useState('');
+  const [isSavingPreco, setIsSavingPreco] = useState(false);
 
   const handleExport = () => {
     downloadCsv(`profissionais_${csvDateSuffix()}`, [
@@ -67,7 +73,8 @@ const ProfessionalsPage = () => {
       { header: 'E-mail', value: (d) => d.email || '' },
       { header: 'Telefone', value: (d) => d.phone_number || '' },
       { header: 'Taxa (%)', value: (d) => (d.taxa_percent == null ? '' : brNumber(d.taxa_percent)) },
-      { header: 'Preço consulta', value: (d) => (proceduresPrices[d.id] == null ? '' : brNumber(proceduresPrices[d.id])) },
+      { header: 'Repasse', value: (d) => (proceduresPrices[d.id] == null ? '' : brNumber(proceduresPrices[d.id])) },
+      { header: 'Preço paciente', value: (d) => (proceduresPrices[d.id] == null ? '' : brNumber(patientPriceFromRepasse(proceduresPrices[d.id], taxaDe(d)))) },
       { header: 'Ativo', value: (d) => (d.is_active ? 'Sim' : 'Não') },
       { header: 'Visível', value: (d) => (d.is_public ? 'Sim' : 'Não') },
       { header: 'Cadastrado em', value: (d) => (d.created_at ? new Date(d.created_at).toLocaleDateString('pt-BR') : '') },
@@ -111,6 +118,74 @@ const ProfessionalsPage = () => {
       toast({ variant: 'destructive', title: 'Erro ao salvar', description: e.message });
     } finally {
       setIsSavingEdit(false);
+    }
+  };
+
+  const taxaDe = (doc) => Number(doc?.payment_settings?.platform_fee_percent) || 0;
+
+  const openPrecoModal = (doc) => {
+    setPrecoTarget(doc);
+    const atual = proceduresPrices[doc.id];
+    setPrecoValor(atual == null ? '' : String(atual).replace('.', ','));
+  };
+
+  /**
+   * Grava o valor da consulta principal do médico.
+   *
+   * O QUE ESTE CAMPO É — e não é.
+   * `procedimentos.preco` é o REPASSE: o que o médico recebe. O que o paciente
+   * paga sai dele com a taxa por cima, arredondado para o próximo R$ 0,50
+   * (ver src/lib/price.js). São dois números diferentes, e o diálogo mostra os
+   * dois para ninguém digitar um achando que está definindo o outro.
+   *
+   * POR QUE CONFERIR O RETORNO EM VEZ DE SÓ OLHAR O `error`.
+   * Quando a RLS barra um UPDATE, o Supabase NÃO devolve erro: devolve zero
+   * linhas afetadas. Sem o `.select()` e a conferência abaixo, a tela diria
+   * "preço atualizado" e o banco continuaria com o valor velho — o pior tipo de
+   * defeito num campo de dinheiro, porque some sem deixar rastro.
+   */
+  const handleSavePreco = async () => {
+    if (!precoTarget) return;
+    const valor = parseFloat(String(precoValor).replace(',', '.'));
+    if (!Number.isFinite(valor) || valor <= 0) {
+      toast({ variant: 'destructive', title: 'Valor inválido', description: 'Informe um valor maior que zero.' });
+      return;
+    }
+    setIsSavingPreco(true);
+    try {
+      const { data: principal, error: erroBusca } = await supabase
+        .from('procedimentos')
+        .select('id, preco')
+        .eq('medico_id', precoTarget.id)
+        .eq('principal', true)
+        .maybeSingle();
+      if (erroBusca) throw erroBusca;
+      if (!principal) {
+        throw new Error('Este profissional ainda não tem a consulta principal cadastrada. Ela nasce quando ele abre a tela de Procedimentos pela primeira vez.');
+      }
+
+      const { data: salvos, error } = await supabase
+        .from('procedimentos')
+        .update({ preco: valor })
+        .eq('id', principal.id)
+        .select('id, preco');
+      if (error) throw error;
+      if (!salvos || salvos.length === 0) {
+        throw new Error('O banco não aplicou a alteração. A permissão de escrita de administrador na tabela de procedimentos precisa estar liberada.');
+      }
+
+      const paciente = patientPriceFromRepasse(valor, taxaDe(precoTarget));
+      toast({
+        title: 'Valor da consulta atualizado',
+        description: `Repasse de ${formatPrice(valor)} — o paciente passa a pagar ${formatPrice(paciente)}.`,
+        variant: 'success',
+      });
+      setPrecoTarget(null);
+      fetchProfessionals();
+    } catch (e) {
+      toast({ variant: 'destructive', title: 'Erro ao salvar o valor', description: e.message });
+    } finally {
+      setIsSavingPreco(false);
     }
   };
 
@@ -449,6 +524,56 @@ const ProfessionalsPage = () => {
         </DialogContent>
       </Dialog>
 
+      <Dialog open={!!precoTarget} onOpenChange={(o) => !o && setPrecoTarget(null)}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Valor da consulta</DialogTitle>
+                <DialogDescription>
+                    Consulta principal de {precoTarget?.public_name || precoTarget?.name}. É o mesmo valor que ele vê na tela de Procedimentos.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="py-4 space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="pr-valor">Repasse ao profissional (R$)</Label>
+                    <div className="relative">
+                        <Input
+                            id="pr-valor"
+                            inputMode="decimal"
+                            value={precoValor}
+                            onChange={(e) => setPrecoValor(e.target.value)}
+                            placeholder="40,00"
+                        />
+                        <DollarSign className="absolute right-3 top-2.5 w-4 h-4 text-muted-foreground" />
+                    </div>
+                </div>
+                {/* O paciente NÃO paga o repasse: paga ele com a taxa por cima.
+                    Sem esta linha, quem digita 40 acha que acabou de anunciar
+                    R$ 40 na página pública. */}
+                <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-1">
+                    <div className="flex justify-between">
+                        <span className="text-muted-foreground">Taxa da plataforma</span>
+                        <span className="font-medium">{taxaDe(precoTarget)}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-muted-foreground">O paciente paga</span>
+                        <span className="font-bold text-brand-800">
+                            {formatPrice(patientPriceFromRepasse(parseFloat(String(precoValor).replace(',', '.')), taxaDe(precoTarget)))}
+                        </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground pt-1">
+                        O preço do paciente é arredondado para cima até o próximo R$ 0,50. Para mudar a taxa, use “Alterar Taxa”.
+                    </p>
+                </div>
+            </div>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setPrecoTarget(null)} disabled={isSavingPreco}>Cancelar</Button>
+                <Button onClick={handleSavePreco} disabled={isSavingPreco}>
+                    {isSavingPreco ? <Loader2 className="animate-spin w-4 h-4" /> : 'Salvar valor'}
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={isFeeOpen} onOpenChange={setIsFeeOpen}>
         <DialogContent>
             <DialogHeader>
@@ -515,7 +640,7 @@ const ProfessionalsPage = () => {
                     <TableHead className="w-[60px]">Foto</TableHead>
                     <TableHead>Profissional</TableHead>
                     <TableHead>Contatos</TableHead>
-                    <TableHead>Consulta</TableHead>
+                    <TableHead>Valor da consulta</TableHead>
                     <TableHead>Taxa (%)</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Documentos</TableHead>
@@ -545,8 +670,21 @@ const ProfessionalsPage = () => {
                             <span>{doc.perfis_usuarios?.whatsapp || '-'}</span>
                         </div>
                     </TableCell>
+                    {/* Dois números, não um. A coluna mostrava só o valor da
+                        tabela `procedimentos`, que é o REPASSE, sob o rótulo
+                        "Consulta" — quem batia o olho lia como o preço da
+                        página pública, que é sempre maior. */}
                     <TableCell>
-                        {formatPrice(proceduresPrices[doc.id])}
+                        {proceduresPrices[doc.id] == null ? '-' : (
+                            <div className="flex flex-col leading-tight">
+                                <span className="font-medium">
+                                    {formatPrice(patientPriceFromRepasse(proceduresPrices[doc.id], taxaDe(doc)))}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                    repasse {formatPrice(proceduresPrices[doc.id])}
+                                </span>
+                            </div>
+                        )}
                     </TableCell>
                     <TableCell>
                         <Badge variant="outline" className="font-mono">
@@ -571,6 +709,9 @@ const ProfessionalsPage = () => {
                                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
                                 <DropdownMenuItem onClick={() => openEditModal(doc)}>
                                     <Pencil className="mr-2 h-4 w-4" /> Editar dados
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => openPrecoModal(doc)}>
+                                    <DollarSign className="mr-2 h-4 w-4" /> Alterar valor da consulta
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => openFeeModal(doc)}>
                                     <Percent className="mr-2 h-4 w-4" /> Alterar Taxa
