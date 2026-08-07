@@ -20,6 +20,7 @@ que este cabeçalho existe.
 """
 import math
 import os
+import re
 import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
@@ -27,6 +28,19 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE = os.path.join(RAIZ, '.cache-fontes')
 SAIDA_MARCA = os.path.join(RAIZ, 'public', 'marca')
 SAIDA_PUB = os.path.join(RAIZ, 'public')
+
+def preco_a_partir_de():
+    """O preço anunciado, lido de src/config/preco.js — a fonte única.
+
+    Recopiar o número aqui é como as peças de anúncio passam a mostrar um valor
+    que o site não pratica mais. Ler custa três linhas e nunca desatualiza.
+    """
+    fonte = open(os.path.join(RAIZ, 'src', 'config', 'preco.js'), encoding='utf-8').read()
+    valor = re.search(r'PRECO_A_PARTIR_DE\s*=\s*([\d.]+)', fonte).group(1)
+    return int(float(valor))
+
+PRECO = preco_a_partir_de()
+
 
 # ── Cores — espelham src/config/brand.js ────────────────────────────────────
 TINTA = (21, 26, 32)
@@ -285,7 +299,7 @@ def gerar_og():
     # veda é cupom, sorteio e indicação premiada.
     rot = fonte('Geist.ttf', 30, 500)
     val = fonte('Geist.ttf', 40, 800)
-    t1, t2 = 'a partir de', 'R$ 40,00'
+    t1, t2 = 'a partir de', f'R$ {PRECO},00'
     w1, w2 = d.textlength(t1, font=rot), d.textlength(t2, font=val)
     lg, folga = w1 + w2 + 28, 34
     x0 = (L - lg) / 2 - folga
@@ -307,4 +321,10 @@ if __name__ == '__main__':
     print('Gerando arquivos de marca…')
     for f in gerar():
         print(f'  {os.path.relpath(f, RAIZ):<34} {os.path.getsize(f):>7} bytes')
-    print('\nog-image mudou de nome: atualize index.html e BlogArticlePage.jsx.')
+    # O nome do arquivo é fixo (og-image-v3.png) e as referências em index.html e
+    # BlogArticlePage.jsx já apontam para ele — não há nada a atualizar no código.
+    # O que precisa de atenção é outra coisa: WhatsApp, Facebook e LinkedIn
+    # guardam a imagem de compartilhamento em cache por dias. Trocar o conteúdo
+    # do arquivo não troca o que eles mostram.
+    print('\nog-image regravado. Para o WhatsApp e o Facebook mostrarem a versão')
+    print('nova, force a releitura no depurador de compartilhamento de cada um.')

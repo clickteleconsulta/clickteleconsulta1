@@ -16,6 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
 // Marca centralizada — ver src/config/brand.js
 const { BRAND } = await import('../src/config/brand.js');
+const { precoAPartirDe } = await import('../src/config/preco.js');
 // Regras de negócio importadas, não recopiadas: um cartão que mostrasse preço
 // ou tratamento diferente do site seria pior que cartão nenhum.
 const { patientPriceFromRepasse } = await import('../src/lib/price.js');
@@ -244,9 +245,9 @@ async function main() {
     {
       path: '/como-funciona',
       title: `Como funciona a teleconsulta · ${MARCA}`,
-      description: 'Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.',
+      description: `Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de ${precoAPartirDe}, com Pix ou cartão.`,
       corpo: `<h1>Como funciona a teleconsulta</h1>
-  <p>Escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.</p>
+  <p>Escolha o médico, agende e pague, e seja atendido online. A partir de ${precoAPartirDe}, com Pix ou cartão.</p>
   <h2>${esc(QUANDO_USAR.titulo)}</h2>
   <p>${esc(QUANDO_USAR.chamada)}</p>
   <ul>${QUANDO_USAR.situacoes.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
@@ -283,7 +284,7 @@ async function main() {
     {
       path: '/agendamentos',
       title: `Agendar Consulta · ${MARCA}`,
-      description: 'Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de R$ 40, com Pix ou cartão.',
+      description: `Encontre médicos parceiros, veja horários e agende sua teleconsulta online. A partir de ${precoAPartirDe}, com Pix ou cartão.`,
       corpo: corpoDeAgendamentos(fichas),
     },
     { path: '/suporte', title: `Suporte · ${MARCA}`, description: `Central de ajuda da ${MARCA}: dúvidas sobre agendamento, pagamento, reembolso e atendimento.` },

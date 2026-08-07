@@ -38,6 +38,7 @@ Uso:
     python3 tools/gerar-anuncios.py
 """
 import os
+import re
 import sys
 
 from PIL import Image, ImageDraw
@@ -57,6 +58,19 @@ import tempfile
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAIDA = os.path.join(RAIZ, 'public', 'marca', 'anuncios')
+
+def preco_a_partir_de():
+    """O preço anunciado, lido de src/config/preco.js — a fonte única.
+
+    Recopiar o número aqui é como as peças de anúncio passam a mostrar um valor
+    que o site não pratica mais. Ler custa três linhas e nunca desatualiza.
+    """
+    fonte = open(os.path.join(RAIZ, 'src', 'config', 'preco.js'), encoding='utf-8').read()
+    valor = re.search(r'PRECO_A_PARTIR_DE\s*=\s*([\d.]+)', fonte).group(1)
+    return int(float(valor))
+
+PRECO = preco_a_partir_de()
+
 
 ILUSTRA = os.path.join(RAIZ, 'public', 'ilustra')
 FONTES = os.path.join(RAIZ, 'public', 'marca', 'anuncios', 'fontes')
@@ -140,10 +154,10 @@ MENSAGENS = [
     dict(
         arquivo='preco',
         chapeu='TELECONSULTA',
-        titulo='A partir de\nR$ 40',
+        titulo=f'A partir de\nR$ {PRECO}',
         apoio='Você vê o preço antes de agendar.',
         escuro=False,
-        destaque='R$ 40',
+        destaque=f'R$ {PRECO}',
     ),
     dict(
         arquivo='agilidade',

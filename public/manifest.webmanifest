@@ -1,7 +1,7 @@
 {
   "name": "aviDoc — Agende sua teleconsulta",
   "short_name": "aviDoc",
-  "description": "Escolha um médico, veja preço e horários e agende sua consulta online. A partir de R$ 40, com Pix ou cartão.",
+  "description": "Escolha um médico, veja preço e horários e agende sua consulta online. A partir de R$ 65, com Pix ou cartão.",
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "/?utm_source=pwa",

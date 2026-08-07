@@ -18,6 +18,7 @@
 // perfis dos médicos vêm do mesmo lugar que o sitemap. Ao criar uma página
 // pública nova, acrescente aqui e lá.
 import { writeFileSync } from 'node:fs';
+import { precoAPartirDe } from '../src/config/preco.js';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -37,7 +38,7 @@ const slugify = (str = '') =>
 const PAGES = [
   { loc: '/', titulo: 'Início', desc: 'Marketplace de agendamento: escolha o profissional, veja preço e horários e agende em minutos. Pix ou cartão, sem mensalidade.' },
   { loc: '/agendamentos', titulo: 'Agendamentos', desc: 'Encontre profissionais disponíveis, compare preços e horários e agende sua teleconsulta em minutos.' },
-  { loc: '/como-funciona', titulo: 'Como funciona', desc: 'Como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.' },
+  { loc: '/como-funciona', titulo: 'Como funciona', desc: `Como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de ${precoAPartirDe}, com Pix ou cartão.` },
   { loc: '/quem-somos', titulo: 'Quem somos', desc: `O propósito de democratizar o acesso à saúde e o que a ${BRAND.name} é — e o que não é — como marketplace de agendamentos.` },
   { loc: '/perguntas-frequentes', titulo: 'Perguntas frequentes', desc: 'Dúvidas sobre como agendar, valores, pagamento, reembolso, receita e atestado, e proteção de dados.' },
   { loc: '/documentos-e-validade', titulo: 'Documentos e validade', desc: 'A validade legal da teleconsulta no Brasil, os documentos que o médico pode emitir (prescrição, pedido de exames e atestado) e como conferir a autenticidade em validar.iti.gov.br.' },

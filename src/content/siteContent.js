@@ -1,3 +1,4 @@
+import { precoAPartirDe } from '@/config/preco';
 import { BRAND } from '@/config/brand';
 // Conteúdo de SEO: FAQ e artigos do blog. Textos dentro das regras do CFM
 // (sem promessa de resultado/cupom/sorteio) e no posicionamento de marketplace.
@@ -13,7 +14,7 @@ export const FAQ = [
   },
   {
     q: 'Quanto custa uma teleconsulta?',
-    a: 'As consultas particulares começam a partir de R$ 40. O valor de cada médico aparece no perfil dele, antes de você confirmar. Você paga só quando usa, sem mensalidade nem assinatura.',
+    a: `As consultas particulares começam a partir de ${precoAPartirDe}. O valor de cada médico aparece no perfil dele, antes de você confirmar. Você paga só quando usa, sem mensalidade nem assinatura.`,
   },
   {
     q: 'Quais as formas de pagamento?',
@@ -115,13 +116,13 @@ export const ARTICLES = [
   {
     slug: 'consulta-medica-online-sem-convenio',
     title: 'Consulta médica online sem convênio',
-    description: 'Como funciona pagar particular por uma teleconsulta: preço visível antes de agendar, a partir de R$ 40, sem mensalidade e sem carência.',
+    description: `Como funciona pagar particular por uma teleconsulta: preço visível antes de agendar, a partir de ${precoAPartirDe}, sem mensalidade e sem carência.`,
     date: '2026-08-06',
     readMin: 3,
     body: [
       { t: 'p', c: 'Consultar sem plano de saúde não significa pagar caro nem esperar. No atendimento particular online você vê o valor antes de escolher, agenda direto com o profissional e não passa por autorização, carência ou rede credenciada.' },
       { t: 'h2', c: 'Não existe mensalidade' },
-      { t: 'p', c: `Na ${BRAND.name} você paga a consulta que marcar, e só ela. Não há taxa de adesão, assinatura nem fidelidade — quem consulta uma vez por ano paga uma vez por ano. As consultas começam em R$ 40.` },
+      { t: 'p', c: `Na ${BRAND.name} você paga a consulta que marcar, e só ela. Não há taxa de adesão, assinatura nem fidelidade — quem consulta uma vez por ano paga uma vez por ano. As consultas começam em ${precoAPartirDe}.` },
       { t: 'h2', c: 'O preço aparece antes da escolha' },
       { t: 'p', c: 'Cada profissional define quanto cobra, e o valor fica visível na lista, junto com os horários livres. Você compara e decide antes de criar conta ou informar qualquer dado de pagamento.' },
       { t: 'h2', c: 'Sem carência e sem autorização' },
@@ -200,11 +201,11 @@ export const ARTICLES = [
   {
     slug: 'quanto-custa-uma-teleconsulta',
     title: 'Quanto custa uma teleconsulta e como pagar',
-    description: 'Preço visível antes de agendar, a partir de R$ 40, com Pix ou cartão. Sem mensalidade e sem convênio — veja como funciona.',
+    description: `Preço visível antes de agendar, a partir de ${precoAPartirDe}, com Pix ou cartão. Sem mensalidade e sem convênio — veja como funciona.`,
     date: '2026-08-06',
     readMin: 3,
     body: [
-      { t: 'p', c: `Na ${BRAND.name} o valor aparece antes de você agendar, no próprio cartão do médico, junto com os horários livres. Não há mensalidade, taxa de adesão nem necessidade de convênio: você paga a consulta que marcar, e só ela. As consultas começam em R$ 40.` },
+      { t: 'p', c: `Na ${BRAND.name} o valor aparece antes de você agendar, no próprio cartão do médico, junto com os horários livres. Não há mensalidade, taxa de adesão nem necessidade de convênio: você paga a consulta que marcar, e só ela. As consultas começam em ${precoAPartirDe}.` },
       { t: 'h2', c: 'Por que cada médico tem um preço' },
       { t: 'p', c: 'Cada profissional define quanto cobra pelo próprio atendimento. Por isso os valores variam de um card para outro — e por isso o preço fica visível na lista, antes da escolha, em vez de aparecer só no fim.' },
       { t: 'h2', c: 'Formas de pagamento' },

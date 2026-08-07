@@ -1,4 +1,5 @@
 import React from 'react';
+import { precoAPartirDe } from '@/config/preco';
 import { BRAND } from '@/config/brand';
 import { QUANDO_USAR } from '@/content/siteContent';
 import { Helmet } from 'react-helmet';
@@ -13,7 +14,7 @@ const STEPS = [
 ];
 const BENEFITS = [
   { icon: Clock, title: 'Sem filas', text: 'Atendimento online, de onde você estiver, no seu tempo.' },
-  { icon: CreditCard, title: 'A partir de R$ 40', text: 'Você paga só quando usa — sem mensalidade nem assinatura.' },
+  { icon: CreditCard, title: `A partir de ${precoAPartirDe}`, text: 'Você paga só quando usa — sem mensalidade nem assinatura.' },
   { icon: ShieldCheck, title: 'Médicos com registro conferido', text: 'E seus dados protegidos conforme a LGPD.' },
 ];
 
@@ -27,7 +28,7 @@ const ComoFuncionaPage = () => {
     <>
       <Helmet>
         <title>{`Como funciona a teleconsulta · ${BRAND.name}`}</title>
-        <meta name="description" content="Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão." />
+        <meta name="description" content={`Veja como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de ${precoAPartirDe}, com Pix ou cartão.`} />
         <link rel="canonical" href={`${BRAND.url}/como-funciona`} />
         <script type="application/ld+json">{JSON.stringify(howto)}</script>
       </Helmet>

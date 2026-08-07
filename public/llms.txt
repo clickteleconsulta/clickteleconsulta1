@@ -16,7 +16,7 @@ Contato: undefined
 
 - [Início](https://avidoc.com.br/): Marketplace de agendamento: escolha o profissional, veja preço e horários e agende em minutos. Pix ou cartão, sem mensalidade.
 - [Agendamentos](https://avidoc.com.br/agendamentos): Encontre profissionais disponíveis, compare preços e horários e agende sua teleconsulta em minutos.
-- [Como funciona](https://avidoc.com.br/como-funciona): Como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 40, com Pix ou cartão.
+- [Como funciona](https://avidoc.com.br/como-funciona): Como agendar uma teleconsulta em 3 passos: escolha o médico, agende e pague, e seja atendido online. A partir de R$ 65, com Pix ou cartão.
 - [Quem somos](https://avidoc.com.br/quem-somos): O propósito de democratizar o acesso à saúde e o que a aviDoc é — e o que não é — como marketplace de agendamentos.
 - [Perguntas frequentes](https://avidoc.com.br/perguntas-frequentes): Dúvidas sobre como agendar, valores, pagamento, reembolso, receita e atestado, e proteção de dados.
 - [Documentos e validade](https://avidoc.com.br/documentos-e-validade): A validade legal da teleconsulta no Brasil, os documentos que o médico pode emitir (prescrição, pedido de exames e atestado) e como conferir a autenticidade em validar.iti.gov.br.

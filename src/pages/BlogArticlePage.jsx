@@ -1,4 +1,5 @@
 import React from 'react';
+import { precoAPartirDe } from '@/config/preco';
 import { BRAND } from '@/config/brand';
 import { Helmet } from 'react-helmet';
 import { Link, useParams, Navigate } from 'react-router-dom';
@@ -58,7 +59,7 @@ const BlogArticlePage = () => {
 
         <div className="mt-10 bg-brand-600 rounded-lg p-7 text-center text-white">
           <p className="text-lg font-bold">Precisa de atendimento?</p>
-          <p className="opacity-90 text-sm mt-1">Agende sua teleconsulta com um médico, a partir de R$ 40.</p>
+          <p className="opacity-90 text-sm mt-1">Agende sua teleconsulta com um médico, a partir de {precoAPartirDe}.</p>
           <Button asChild variant="secondary" className="mt-4 rounded-md bg-white text-slate-900 hover:bg-slate-100"><Link to="/agendamentos">Agendar consulta</Link></Button>
         </div>
 
