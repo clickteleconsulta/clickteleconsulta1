@@ -117,7 +117,10 @@ const corpoDeDocumentos = (D) => {
 };
 
 function setCorpo(html, corpo) {
-  return html.replace('<div id="root"></div>', `<div id="root">${corpo}</div>`);
+  // O marcador `data-estatico` é o que a regra de estilo do index.html usa para
+  // esconder este bloco de quem tem JavaScript — sem ele, o texto pisca na tela
+  // antes de o React montar.
+  return html.replace('<div id="root"></div>', `<div id="root"><div data-estatico>${corpo}</div></div>`);
 }
 
 function addJsonLd(html, obj) {

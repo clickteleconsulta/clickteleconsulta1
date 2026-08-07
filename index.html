@@ -1,7 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="sem-js">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- O CONTEÚDO ESTÁTICO NÃO PODE PISCAR.
+         O build grava dentro de #root uma versão em HTML de cada página, para
+         os robôs que não executam JavaScript (é o que fez o resumo do Google
+         parar de dizer que o site não existe). Só que o navegador PINTA esse
+         HTML enquanto baixa o bundle — e como ele não tem classe nenhuma,
+         aparecia o título do banner sem estilo por um instante, antes do React
+         montar por cima.
+
+         A regra abaixo esconde esse bloco assim que o script de duas linhas
+         troca a classe do <html>, o que acontece antes de o corpo ser pintado.
+         Quem não executa JavaScript fica com `sem-js` e continua enxergando
+         tudo.
+
+         NÃO É CONTEÚDO ESCONDIDO DE BUSCADOR: o texto é exatamente o mesmo que
+         o React renderiza, e o Googlebot executa JavaScript, então ele vê a
+         versão montada. E a rede de segurança embaixo devolve o conteúdo se o
+         aplicativo não montar. -->
+    <style>.com-js [data-estatico]{display:none!important}</style>
+    <script>
+      document.documentElement.className = 'com-js';
+      // Se em 6 segundos o React não tiver substituído o conteúdo de #root, o
+      // bundle não chegou — melhor mostrar o texto simples que uma tela branca.
+      setTimeout(function () {
+        if (document.querySelector('[data-estatico]')) {
+          document.documentElement.className = 'sem-js';
+        }
+      }, 6000);
+    </script>
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://meet.jit.si https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://analytics.tiktok.com https://challenges.cloudflare.com;
