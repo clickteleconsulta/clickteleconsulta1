@@ -26,6 +26,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import Estrelas from '@/components/Estrelas';
+import SeloAvaliacao from '@/components/SeloAvaliacao';
 import { DoctorScheduleCard } from '@/components/DoctorScheduleCard';
 import { slugify, doctorPath } from '@/lib/doctorSlug';
 import { formatDistanceToNow } from 'date-fns';
@@ -125,19 +126,9 @@ const ReviewsSection = ({ reviews, medicoParaAvaliar }) => {
             <div key={review.id} className="bg-muted/30 p-3 rounded-md border border-border/50">
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-1.5">
-                  {/* O SELO SÓ PARA QUEM VEIO DE UM AGENDAMENTO.
-                      Com a avaliação aberta, chamar todo mundo de verificado
-                      seria dizer que conferimos algo que não conferimos. Quem
-                      escreveu pelo formulário público aparece com o nome que
-                      informou — o telefone foi confirmado, o atendimento não. */}
-                  {review.origem === 'aberta' ? (
-                    <div className="font-medium text-xs">{review.autor_nome || 'Paciente'}</div>
-                  ) : (
-                    <div className="font-medium text-xs flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3 text-green-600" />
-                      Paciente verificado
-                    </div>
-                  )}
+                  <div className="font-medium text-xs">
+                    {review.origem === 'aberta' ? (review.autor_nome || 'Paciente') : 'Paciente'}
+                  </div>
                   <span className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(review.created_at), { addSuffix: true, locale: ptBR })}
                   </span>
@@ -149,6 +140,7 @@ const ReviewsSection = ({ reviews, medicoParaAvaliar }) => {
                 </div>
               </div>
               {review.comentario && <p className="text-xs text-foreground/80 mt-1 italic">"{review.comentario}"</p>}
+              <SeloAvaliacao origem={review.origem} className="mt-2" />
             </div>
           ))}
         </div>

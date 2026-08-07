@@ -6,6 +6,8 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar, Clock, User, ArrowLeft, CheckCircle2, AlertCircle, Video , Loader2 } from '@/components/ui/icones';
 import { Button } from '@/components/ui/button';
+import VerificacaoTelefone from '@/components/VerificacaoTelefone';
+import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useAppointments } from '@/contexts/AppointmentsContext';
 import { trackBooking } from '@/lib/analytics';
@@ -15,7 +17,20 @@ const AppointmentReviewPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { createConfirmedAppointment } = useAppointments();
+  const { profile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  // Confirmado agora, nesta tela. O perfil só recarrega depois, e esperar por
+  // isso deixaria o botão travado logo após a pessoa acertar o código.
+  const [confirmadoAgora, setConfirmadoAgora] = useState(false);
+
+  // O MÉDICO LIGA PARA ESTE NÚMERO.
+  // É o único canal do atendimento: número errado é consulta que não acontece,
+  // com o paciente tendo pago. Por isso a confirmação é exigida aqui, e não
+  // como sugestão em algum canto do painel — este é o último instante antes de
+  // o horário ser reservado.
+  // Contas criadas depois da verificação já chegam confirmadas; esta tela pega
+  // as antigas e quem trocou de número.
+  const telefoneConfirmado = Boolean(profile?.whatsapp_verificado_em) || confirmadoAgora;
 
   // Aceita os detalhes vindos da navegação OU do agendamento guardado (fluxo do convidado que
   // logou/cadastrou depois de escolher o horário). Consome o guardado uma única vez.
@@ -138,11 +153,23 @@ const AppointmentReviewPage = () => {
             </CardContent>
             
             <CardFooter className="p-6 bg-muted/10 flex flex-col gap-3">
+              {!telefoneConfirmado && (
+                <div className="w-full rounded-md border border-amber-200 bg-amber-50 p-4">
+                  <VerificacaoTelefone
+                    finalidade="cadastro"
+                    telefoneInicial={profile?.whatsapp || ''}
+                    email={profile?.email}
+                    titulo="Confirme seu WhatsApp para agendar"
+                    explicacao="O profissional entra em contato por este número. Confirmá-lo agora evita o atendimento não acontecer por um dígito errado."
+                    aoConfirmar={() => setConfirmadoAgora(true)}
+                  />
+                </div>
+              )}
               <Button 
                 size="lg" 
                 className="w-full text-lg font-bold h-12 shadow-lg transition-all hover:scale-[1.01]" 
                 onClick={handleConfirm}
-                disabled={isLoading}
+                disabled={isLoading || !telefoneConfirmado}
               >
                 {isLoading ? (
                   <>

@@ -5,7 +5,13 @@ Enquanto elas faltam, o comportamento é honesto e não silencioso: a pessoa vê
 "O envio por WhatsApp ainda não está ativo nesta instalação", e o código gerado
 aparece no log da função — dá para testar o fluxo inteiro sem enviar mensagem.
 
-## 1. Rodar o SQL
+## ✅ 1. Rodar o SQL — FEITO em 7 de agosto de 2026
+
+Conferido pela API: as colunas novas de `avaliacoes` respondem, a
+`verificacoes_telefone` existe e nega leitura ao anon (que é o esperado), e
+`perfis_usuarios.whatsapp_verificado_em` existe.
+
+<details><summary>O que o SQL criou</summary>
 
 `supabase/sql/verificacao-telefone.sql`, no SQL Editor. Ele cria:
 
@@ -17,6 +23,8 @@ aparece no log da função — dá para testar o fluxo inteiro sem enviar mensag
   profissional;
 - `perfis_usuarios.whatsapp_verificado_em` e o gatilho que a preenche quando a
   conta nasce.
+
+</details>
 
 ## 2. Publicar as duas funções
 
@@ -84,3 +92,16 @@ e o cadastro já é o ponto de maior perda. Acompanhe a taxa de conclusão nas
 primeiras semanas. Se cair de forma relevante, a alternativa é deixar a
 verificação opcional no cadastro e obrigatória só na avaliação, onde a fraude é
 o risco real.
+
+
+## Onde a verificação é exigida hoje
+
+| Lugar | Exigência | Por quê |
+|---|---|---|
+| Cadastro de paciente | **Obrigatória** | Identidade da conta |
+| Revisão do agendamento | **Obrigatória** | O médico liga para este número |
+| Avaliação pública | **Obrigatória** | Encarece a fraude em escala |
+| Avaliação pelo painel do paciente | Não | O vínculo com a consulta paga já prova mais |
+
+A da revisão do agendamento é a que pega as contas antigas e quem trocou de
+número — quem se cadastra a partir de agora já chega confirmado.
