@@ -140,8 +140,9 @@ médico. O 1057 é o robô: só envia, e quem responder a ele não é lido por
 ninguém. Se um dia alguém quiser "aproveitar" o 1057 para atendimento, ou migrar
 o 1034 para a API, é este parágrafo que explica por que não.
 
-> O 1057 ainda não está registrado na Meta. Enquanto não estiver, os testes
-> correm no número de teste que a Meta fornece (ver "Ambiente de teste").
+> ✅ O 1057 foi registrado na Meta em 7 de agosto de 2026 e está **Conectado**.
+> O ambiente de teste descrito adiante continua valendo como alternativa, mas já
+> não é necessário.
 
 O código está pronto e desligado. Ele só liga quando os segredos da Meta
 existirem — sem eles a função registra no log o que teria enviado e devolve
@@ -327,21 +328,30 @@ O que serve é o token de **usuário do sistema**:
 Se o seu token veio da tela de Configuração da API, refaça por aqui antes de
 seguir. Os dois parecem iguais e só um sobrevive à semana.
 
-## Etapa 1 — os dois IDs, que não são a mesma coisa
+## Etapa 1 — os dois IDs
 
-| valor | onde acha | para que serve |
+Já levantados no Gerenciador do WhatsApp em 7 de agosto de 2026:
+
+| valor | ID | onde conferir |
 |---|---|---|
-| **WABA ID** (conta) | WhatsApp Manager → Configurações da conta | criar os modelos |
-| **Phone Number ID** (número) | Painel do app → WhatsApp → Configuração da API | enviar as mensagens |
+| **WABA ID** — conta `aviDoc` | `1407190781284781` | Gerenciador do WhatsApp → seletor de conta |
+| **Phone Number ID** — número +55 33 93618-1057 | `1229716980229241` | Telefones → clicar no número → "Identificação do número de telefone" |
 
-Nenhum dos dois é o número de telefone. Trocar um pelo outro devolve erro 100
-sem dizer qual campo está errado — é o erro que mais custa tempo aqui.
+Nenhum dos dois é o número de telefone, e eles não são intercambiáveis: trocar
+um pelo outro devolve erro 100 sem dizer qual campo está errado.
+
+> Existe também uma **Test WhatsApp Business Account** (`1532311201523493`), com
+> número americano e limite de 5 destinatários. Não é essa que vai em produção —
+> confira o seletor de conta antes de copiar qualquer ID.
+
+**Estado do número:** Conectado, nome de exibição `aviDoc`. Pronto para enviar
+assim que houver modelo aprovado.
 
 ## Etapa 2 — criar os três modelos
 
 ```bash
 export META_WA_TOKEN='o token do usuário do sistema'
-export META_WABA_ID='o ID da conta'
+export META_WABA_ID='1407190781284781'
 node tools/criar-modelos-whatsapp.mjs
 ```
 
@@ -365,7 +375,7 @@ chega.
 | segredo | valor |
 |---|---|
 | `META_WA_TOKEN` | o token do usuário do sistema |
-| `META_WA_PHONE_ID` | o Phone Number ID (não o WABA) |
+| `META_WA_PHONE_ID` | `1229716980229241` |
 | `TELEFONE_PEPPER` | qualquer texto longo e aleatório — **escolha uma vez e nunca troque** |
 | `CANAL_VERIFICACAO` | `whatsapp` |
 
@@ -421,10 +431,11 @@ a confirmação.
 **Nessa ordem.** Ligar antes de o código chegar trava o agendamento — já
 aconteceu uma vez.
 
-## Dois limites de conta nova
+## Dois limites, medidos na conta em 7 de agosto de 2026
 
-- **250 conversas iniciadas por 24 h**, até a Meta subir o nível sozinha
-  conforme a qualidade do número.
-- Enquanto o negócio não estiver **verificado**, o alcance é limitado a poucos
-  destinatários distintos por dia. Para o volume de agora sobra; para o primeiro
-  mês de anúncio, não.
+- **0 de 250 conversas iniciadas** por 24 h. Sobe sozinho conforme a qualidade
+  do número.
+- **Empresa ainda não verificada.** O painel mostra "Verifique sua empresa" como
+  caminho para passar de 2.000 conversas. Para o volume de agora sobra; antes do
+  primeiro mês de anúncio, não — e a verificação leva dias, então vale iniciar
+  cedo.
