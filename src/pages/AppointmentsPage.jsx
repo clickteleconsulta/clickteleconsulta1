@@ -213,7 +213,7 @@ const AppointmentsPage = () => {
       // código escreve nela, hoje está NULA em quatro dos cinco médicos e
       // desatualizada no quinto. Como fallback ela era uma armadilha — um médico
       // que perdesse o procedimento principal passaria a ser exibido por
-      // R$ 129,00 (valor velho) ou por R$ 0,00 (nulo), e no segundo caso daria
+      // R$ 129,00 (valor velho, já zerado no banco) ou por R$ 0,00 (nulo), e no segundo caso daria
       // para agendar de graça. Sem preço, o médico não é vendável: ver o filtro
       // logo abaixo.
       const precoRepasse = mainProc ? Number(mainProc.preco) : 0;

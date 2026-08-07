@@ -2,8 +2,10 @@
 // `medicos` tem três resquícios de preço — preco, price_in_cents e
 // consulta_preco — de quando o valor morava no cadastro do médico. Hoje o preço
 // vem de `procedimentos.preco` com a taxa por cima (src/lib/price.js), e as três
-// colunas guardam números velhos: num dos cadastros, R$ 129,00 contra R$ 65,00
-// de preço real. Enquanto elas viajavam junto na consulta, bastava alguém
+// colunas guardaram números velhos até agosto de 2026 — num cadastro de 2025,
+// R$ 129,00 contra R$ 65,00 de preço praticado. Foram zeradas pelo
+// supabase/sql/preco-legado-medicos.sql; se você for procurar o valor no banco
+// hoje, não vai achar. Enquanto elas viajavam junto na consulta, bastava alguém
 // escrever `doctor.price_in_cents` para o site cobrar o valor errado — e foi
 // exatamente o que aconteceu na grade de horários do perfil público.
 // Não devolva nenhuma das três a esta lista.

@@ -24,6 +24,12 @@
 -- errado deixa de existir — e mantém a porta aberta. Apagar de vez, se for o
 -- caso, depois de um tempo sem ninguém sentir falta.
 --
+-- ALVO EXATO, medido em 7 de agosto de 2026: UMA linha. O cadastro mais antigo
+-- (criado em 27/08/2025) tem price_in_cents = 12900 e consulta_preco = 129. Os
+-- quatro profissionais criados a partir de julho de 2026 nasceram com as três
+-- colunas nulas — ou seja, nada no fluxo atual escreve nelas, e esta limpeza não
+-- precisa ser repetida.
+--
 -- ANTES DE RODAR, veja o que vai mudar:
 --
 --   select id, public_name, preco, price_in_cents, consulta_preco
