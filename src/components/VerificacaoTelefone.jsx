@@ -109,7 +109,7 @@ const VerificacaoTelefone = ({
 
       {etapa === 'telefone' ? (
         <div className="space-y-2">
-          <Label htmlFor="vt-telefone">Seu celular com DDD</Label>
+          <Label htmlFor="vt-telefone">Seu telefone com DDD</Label>
           <div className="flex gap-2">
             <span className="inline-flex items-center rounded-md border border-border bg-muted px-3 text-sm text-muted-foreground">
               +55

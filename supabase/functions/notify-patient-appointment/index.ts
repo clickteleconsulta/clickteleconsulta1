@@ -41,12 +41,31 @@ const API_VERSION = Deno.env.get("META_WA_API_VERSION") ?? "v21.0";
 
 const ACAO_ENVIADO = "whatsapp_paciente_enviado";
 
-/** Telefone brasileiro em E.164 sem o "+", como a Meta espera. */
+/**
+ * Número em formato E.164 sem o "+", como a Cloud API espera.
+ *
+ * ACEITA FIXO, E ISSO NÃO É DESCUIDO.
+ * A primeira versão desta função exigia celular — DDD + 9 + 8 dígitos. Estava
+ * errada: WhatsApp Business roda em linha fixa, e é o caso de um profissional
+ * real da plataforma, com número comprado justamente para isso, recebendo
+ * notificação automática de outra plataforma no mesmo formato. A regra certa é
+ * "tem cara de telefone brasileiro", não "é celular": 55 + DDD válido + 8 ou 9
+ * dígitos. Quem decide se há WhatsApp ali é a Meta, não a nossa expressão.
+ *
+ * O que a validação continua impedindo é o que importa: número torto vira
+ * mensagem entregue a um DESCONHECIDO, com nome do paciente, data e protocolo
+ * dentro.
+ */
 function normalizarTelefone(bruto: string): string {
-  const so = (bruto || "").replace(/\D/g, "");
-  const sem55 = so.startsWith("55") ? so.slice(2) : so;
-  if (!/^[1-9][0-9]9[0-9]{8}$/.test(sem55)) return "";
-  return `55${sem55}`;
+  let d = (bruto || "").replace(/\D/g, "");
+  if (!d) return "";
+  if (d.length <= 11) d = "55" + d;            // veio sem DDI
+  if (!d.startsWith("55")) return "";          // fora do Brasil: fora do escopo
+  const semDdi = d.slice(2);
+  if (semDdi.length !== 10 && semDdi.length !== 11) return "";
+  const ddd = Number(semDdi.slice(0, 2));
+  if (ddd < 11 || ddd > 99) return "";
+  return d;
 }
 
 /**

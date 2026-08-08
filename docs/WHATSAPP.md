@@ -542,3 +542,39 @@ Isso não acontece pela API. **É a razão prática para preferir
 `tools/criar-modelos-whatsapp.mjs`** ao formulário: o JSON vai exato, sem editor
 no meio. Se for preencher à mão, digite o texto sem as variáveis e use o botão
 "Adicionar variável" para cada uma.
+
+---
+
+# Fixo recebe WhatsApp — a validação estava errada
+
+Registrado em 7 de agosto de 2026, depois de um caso real.
+
+O WhatsApp Business de um dos profissionais é uma **linha fixa** — número
+comprado on-line justamente para isso, já recebendo notificação automática de
+outra plataforma no mesmo formato: `+55 21 3955-0563`, oito dígitos começando
+com 3.
+
+Duas das três funções recusavam esse número. A regra era
+`^[1-9][0-9]9[0-9]{8}$` — DDD + 9 + oito dígitos, ou seja, **só celular**. Um
+comentário no código chegava a afirmar que "fixo não recebe WhatsApp nem SMS".
+Falso.
+
+**Consequência, se tivesse ido ao ar assim:** o profissional nunca receberia
+aviso de agendamento. E nem apareceria como erro — a função registra
+`whatsapp_paciente_sem_telefone` no log e devolve `ok: false`. Ninguém olha log
+para descobrir que uma mensagem não saiu.
+
+A regra correta não é "é celular?", é "**tem cara de telefone brasileiro?**":
+55 + DDD entre 11 e 99 + 8 ou 9 dígitos. Quem sabe se existe WhatsApp naquele
+número é a Meta, e ela responde no envio. Era a regra que a
+`notify-doctor-new-appointment` já usava desde o início; as duas funções novas
+é que copiaram uma versão apertada demais.
+
+Conferido contra os números reais do projeto e contra entradas inválidas: o
+fixo do médico e o celular da plataforma passam; DDD 01, número curto e número
+longo continuam recusados.
+
+**A lição, que vale além do telefone:** validação estreita demais não protege
+nada — só exclui gente de verdade, e em silêncio. O que a validação precisa
+impedir aqui é número torto virando mensagem entregue a um desconhecido, com
+nome do paciente e protocolo dentro. Isso ela continua fazendo.

@@ -83,12 +83,26 @@ async function sha256(texto: string): Promise<string> {
  * "+5521999998888" são o mesmo número, e sem normalizar cada grafia geraria um
  * hash diferente — ou seja, a mesma pessoa poderia avaliar três vezes.
  */
+/**
+ * ACEITA FIXO. O comentário anterior aqui dizia "fixo não recebe WhatsApp" e
+ * estava errado: WhatsApp Business roda em linha fixa, e há profissional na
+ * plataforma usando exatamente isso — número comprado para esse fim, recebendo
+ * notificação automática de outra plataforma no mesmo formato.
+ *
+ * A pergunta certa não é "é celular?", é "tem cara de telefone brasileiro?".
+ * Quem sabe se existe WhatsApp naquele número é a Meta, e ela responde no envio.
+ * Regra: 55 + DDD entre 11 e 99 + 8 ou 9 dígitos.
+ */
 function normalizar(bruto: string): string | null {
-  const so = (bruto || "").replace(/\D/g, "");
-  const sem55 = so.startsWith("55") ? so.slice(2) : so;
-  // DDD (2) + celular (9, começando em 9). Fixo não recebe WhatsApp nem SMS.
-  if (!/^[1-9][0-9]9[0-9]{8}$/.test(sem55)) return null;
-  return `55${sem55}`;
+  let d = (bruto || "").replace(/\D/g, "");
+  if (!d) return null;
+  if (d.length <= 11) d = "55" + d;
+  if (!d.startsWith("55")) return null;
+  const semDdi = d.slice(2);
+  if (semDdi.length !== 10 && semDdi.length !== 11) return null;
+  const ddd = Number(semDdi.slice(0, 2));
+  if (ddd < 11 || ddd > 99) return null;
+  return d;
 }
 
 async function enviarWhatsapp(para: string, codigo: string) {
@@ -186,7 +200,7 @@ serve(async (req) => {
 
     const numero = normalizar(telefone);
     if (!numero) {
-      return json({ error: "Informe um celular com DDD, no formato (21) 99999-8888." }, 400);
+      return json({ error: "Informe um telefone com DDD, no formato (21) 99999-8888 ou (21) 3955-0563." }, 400);
     }
     const telHash = await sha256(`${numero}${PEPPER}`);
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
