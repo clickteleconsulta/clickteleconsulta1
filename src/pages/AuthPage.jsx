@@ -18,6 +18,8 @@ import { marcarEtapa, ETAPAS } from '@/lib/funil';
 import { useLoader } from '@/contexts/LoaderContext';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/lib/customSupabaseClient';
+import { dataBrParaISO } from '@/lib/masks';
+import { Label } from '@/components/ui/label';
 
 // Masked Input Component for CPF and Phone
 const MaskedInput = React.forwardRef(({ mask, onChange, value, ...props }, ref) => (
@@ -172,7 +174,7 @@ const AuthPage = ({
              const faltando = [
                [!fullName?.trim(), 'Nome completo'],
                [!cpf, 'CPF'],
-               [!birthDate, 'Data de nascimento'],
+               [!dataBrParaISO(birthDate), 'Data de nascimento (use DD/MM/AAAA)'],
                [!whatsapp, 'WhatsApp'],
                [!sexo, 'Sexo'],
                [!email?.trim(), 'E-mail'],
@@ -195,7 +197,7 @@ const AuthPage = ({
 
              // Apenas maiores de 18 anos podem se cadastrar
              {
-               const birth = new Date(birthDate);
+               const birth = new Date(`${dataBrParaISO(birthDate)}T00:00:00`);
                const now = new Date();
                let age = now.getFullYear() - birth.getFullYear();
                const md = now.getMonth() - birth.getMonth();
@@ -224,7 +226,7 @@ const AuthPage = ({
           full_name: fullName.trim(),
           cpf: cpf,
           whatsapp: whatsapp,
-          data_nasc: birthDate,
+          data_nasc: dataBrParaISO(birthDate),
           sexo: sexo
         };
 
@@ -329,32 +331,55 @@ const AuthPage = ({
                            />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <MaskedInput
-                                id="cpf"
-                                name="cpf"
-                                mask="000.000.000-00"
-                                value={cpf}
-                                onChange={e => setCpf(e.target.value)}
-                                placeholder="CPF"
-                                aria-label="CPF"
-                                inputMode="numeric"
-                                required
-                            />
-                            <Input
-                                id="birthDate"
-                                type="date"
-                                value={birthDate}
-                                onChange={e => setBirthDate(e.target.value)}
-                                required
-                                aria-label="Data de nascimento"
-                                autoComplete="bday"
-                                max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-                                className="h-11 rounded-md border-gray-300 focus:border-brand-500 focus:ring-brand-100 text-gray-500"
-                            />
+                        {/* UMA COLUNA NO CELULAR.
+                            CPF mascarado tem 14 caracteres e a data tem 10.
+                            Lado a lado numa tela de 375px os dois ficavam
+                            espremidos e o texto estourava a caixa. */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                                <Label htmlFor="cpf" className="text-xs font-medium text-gray-600">CPF</Label>
+                                <MaskedInput
+                                    id="cpf"
+                                    name="cpf"
+                                    mask="000.000.000-00"
+                                    value={cpf}
+                                    onChange={e => setCpf(e.target.value)}
+                                    placeholder="000.000.000-00"
+                                    aria-label="CPF"
+                                    inputMode="numeric"
+                                    required
+                                />
+                            </div>
+                            {/* DIGITADA, NÃO ESCOLHIDA NUM CALENDÁRIO.
+                                Era `type="date"`: no celular abre o seletor
+                                nativo no mês atual, e quem nasceu em 1985 tem
+                                que rolar quarenta anos para trás. São dezenas de
+                                toques por uma informação que se digita em cinco
+                                segundos — no meio do cadastro, que é onde mais
+                                se perde gente.
+                                O rótulo também é visível agora: antes existia só
+                                para leitor de tela, e quem enxerga via uma caixa
+                                cinza sem nome. */}
+                            <div className="space-y-1.5">
+                                <Label htmlFor="birthDate" className="text-xs font-medium text-gray-600">
+                                    Data de nascimento
+                                </Label>
+                                <MaskedInput
+                                    id="birthDate"
+                                    name="birthDate"
+                                    mask="00/00/0000"
+                                    value={birthDate}
+                                    onChange={e => setBirthDate(e.target.value)}
+                                    placeholder="DD/MM/AAAA"
+                                    aria-label="Data de nascimento"
+                                    inputMode="numeric"
+                                    autoComplete="bday"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <MaskedInput
                                 id="whatsapp"
                                 name="whatsapp"

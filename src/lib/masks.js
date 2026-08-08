@@ -47,3 +47,42 @@ export const isValidPhone = (v = '') => {
     const d = onlyDigits(v);
     return d.length === 10 || d.length === 11;
 };
+
+/**
+ * "12/06/1985" → "1985-06-12". Devolve '' se a data não existe.
+ *
+ * POR QUE DIGITAR EM VEZ DE ESCOLHER NO CALENDÁRIO
+ * O seletor nativo (`<input type="date">`) abre no mês atual. Para uma data de
+ * nascimento isso obriga a pessoa a rolar décadas para trás no celular — dezenas
+ * de toques para uma informação que ela digita em cinco segundos. É atrito no
+ * meio do cadastro, e cadastro é onde mais se perde gente.
+ *
+ * A CONFERÊNCIA NÃO É DECORATIVA
+ * `new Date('2024-02-31')` não dá erro em JavaScript: vira 2 de março. Um dia
+ * inválido digitado passaria batido e viraria idade errada — inclusive podendo
+ * furar a barreira de 18 anos. Por isso a data é remontada e comparada campo a
+ * campo com o que foi digitado.
+ */
+export const dataBrParaISO = (v = '') => {
+  const d = onlyDigits(v);
+  if (d.length !== 8) return '';
+  const dia = Number(d.slice(0, 2));
+  const mes = Number(d.slice(2, 4));
+  const ano = Number(d.slice(4, 8));
+  if (mes < 1 || mes > 12 || dia < 1 || dia > 31) return '';
+  if (ano < 1900 || ano > new Date().getFullYear()) return '';
+  const iso = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+  const teste = new Date(`${iso}T00:00:00`);
+  if (
+    teste.getFullYear() !== ano ||
+    teste.getMonth() + 1 !== mes ||
+    teste.getDate() !== dia
+  ) return '';
+  return iso;
+};
+
+/** "1985-06-12" → "12/06/1985", para reexibir o que já está salvo. */
+export const isoParaDataBr = (iso = '') => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : '';
+};
