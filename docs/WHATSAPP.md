@@ -435,9 +435,10 @@ celular → conferir.
 
 Não chegou? O log diz por quê:
 
-```bash
-npx supabase@latest functions logs verificar-telefone --project-ref fnzvopspcoefzybtmwlg
-```
+O CLI **não** tem `functions logs` (testado — o subcomando não existe). O log
+fica no painel:
+
+`supabase.com/dashboard/project/fnzvopspcoefzybtmwlg/functions/verificar-telefone/logs`
 
 | o que o log diz | o que é |
 |---|---|
