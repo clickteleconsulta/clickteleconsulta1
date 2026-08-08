@@ -384,6 +384,21 @@ os hashes existentes, e com eles a regra de "um número, uma avaliação".
 
 Segredo novo só vale para invocação nova — não precisa republicar função.
 
+## O `hello_world` NÃO serve para testar o número de produção
+
+Tentativa registrada em 7 de agosto de 2026:
+
+> (#131058) Hello World templates can only be sent from the Public Test Numbers
+
+O modelo de exemplo da Meta só sai dos números públicos de teste. Do número
+registrado, ele é barrado — não adianta usá-lo como "teste rápido enquanto os
+nossos não aprovam".
+
+**Mas o erro serve de diagnóstico.** Para a Meta chegar a avaliar essa regra,
+ela já validou token, Phone Number ID e permissão do ativo. Receber o 131058
+significa que só falta o modelo; tudo antes dele está certo. Um `190` seria
+token, um `100` seria ID errado.
+
 ## Etapa 4.5 — o disparo de ensaio, sem sujar o banco
 
 Antes de mexer em agendamento, prove que a mensagem chega:
